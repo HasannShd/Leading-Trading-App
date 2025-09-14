@@ -10,6 +10,21 @@ import '../Brands/Brands.css';
 const HomePage = () => {
   return (
     <main>
+      {/* Full-width hero background with overlay and centered text */}
+      <section className="homepage-full-hero" style={{ position: 'relative', overflow: 'hidden' }}>
+        <img 
+          src={import.meta.env.BASE_URL + 'home file.gif'} 
+          alt="Animated visual" 
+          className="homepage-full-hero-bg-gif" 
+          loading="lazy"
+        />
+        <div className="homepage-full-hero-overlay" style={{ zIndex: 2 }} />
+        <div className="homepage-full-hero-content" style={{ zIndex: 3, position: 'relative' }}>
+          <h1 className="homepage-full-hero-title">Empowering Healthcare with Trusted Supplies.</h1>
+          <p className="homepage-full-hero-desc">Your source for reliable healthcare supplies.</p>
+          <Link className="homepage-hero-btn" to="/products">View Our Categories List</Link>
+        </div>
+      </section>
       {/* Hero Section with background image */}
       <section className="homepage-hero-img">
         <div className="homepage-hero-content homepage-hero-content-row">
@@ -25,7 +40,7 @@ const HomePage = () => {
             <Link className="homepage-hero-btn" to="/about">Learn more about us</Link>
           </div>
           <div className="homepage-hero-img-col">
-            <img src={import.meta.env.BASE_URL + 'stethoscope.jpg'} alt="Stethoscope" className="homepage-hero-img-main" />
+            <img src={import.meta.env.BASE_URL + 'Stethescope.webp'} alt="Stethoscope" className="homepage-hero-img-main" loading="lazy" />
           </div>
         </div>
       </section>

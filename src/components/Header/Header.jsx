@@ -49,7 +49,7 @@ const Header = () => {
         </nav>
         <div className="header-flex-spacer" />
         <a className="btn" href="tel:+97339939582">Call</a>
-        <a className="btn primary" href="https://wa.me/97339939582" target="_blank" rel="noreferrer">WhatsApp</a>
+        <a className="btn primary" href="https://wa.me/97317210665" target="_blank" rel="noreferrer">WhatsApp</a>
       </div>
     </header>
   );

@@ -1,7 +1,7 @@
 /* ========== THEME VARIABLES ========== */
 :root {
   --primary-blue: #0548ac;
-  --primary-blue-dark: #022153;
+  --primary-blue-dark: #0a3986;
   --primary-blue-light: #eaf2fb;
   --white: #fff;
   --gray: #6b7280;
@@ -39,6 +39,7 @@ html, body, #root {
   background: var(--white);
   border-bottom: 1px solid var(--border);
   width: 100%;
+  color: var(--primary-blue-dark);
 }
 
 .header-row {
@@ -296,6 +297,78 @@ html, body, #root {
   }
 }
 
+/* ========== FULL HERO SECTION ========== */
+.homepage-full-hero {
+  position: relative;
+  width: 100vw;
+  min-height: 480px;
+  height: 60vh;
+  max-height: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  margin-bottom: 0;
+}
+.homepage-full-hero-bg {
+  position: absolute;
+  inset: 0;
+  background: url('../assets/clinic-bg.jpg') center center/cover no-repeat;
+  z-index: 1;
+  filter: grayscale(0.7) brightness(0.5);
+}
+.homepage-full-hero-bg-gif {
+  position: absolute;
+  top: 0;
+  left: 0; width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(1.2) contrast(1.1) saturate(1.2) drop-shadow(0 0 6px rgba(0,0,0,0.4));
+  object-fit: cover;
+  z-index: 1;
+  opacity: 1;
+  pointer-events: none;
+}
+.homepage-full-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: #222b;
+  z-index: 2;
+}
+.homepage-full-hero-content {
+  position: relative;
+  z-index: 3;
+  color: #fff;
+  text-align: left;
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 18px;
+}
+.homepage-full-hero-title {
+  font-size: 2.1rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: #fff;
+}
+.homepage-full-hero-desc {
+  font-size: 1.15rem;
+  color: #fff;
+  margin-bottom: 18px;
+}
+@media (max-width: 700px) {
+  .homepage-full-hero {
+    min-height: 320px;
+    height: 40vh;
+  }
+  .homepage-full-hero-title {
+    font-size: 1.2rem;
+  }
+}
+
 /* ========== CATEGORIES GRID ========== */
 .categories-section {
   padding: 28px 0;
@@ -376,8 +449,19 @@ textarea.input {
   gap: 6px;
 }
 .careers-form .input {
-  margin-top: 4px;
+  background: #fff;
+  color: #222;
+  border: 1.5px solid #d1d5db;
+  border-radius: 8px;
+  padding: 10px 14px;
   font-size: 1rem;
+  margin-top: 4px;
+  box-shadow: none;
+  outline: none;
+  transition: border 0.2s;
+}
+.careers-form .input:focus {
+  border: 1.5px solid #0b3a7e;
 }
 .careers-form button.btn {
   width: 100%;
