@@ -14,7 +14,7 @@ const About = () => (
         </div>
       </div>
       <div className="about-col about-col-img">
-        <img src={import.meta.env.BASE_URL + 'about-office.jpg'} alt="LTE Office" className="about-img" />
+        <img src={import.meta.env.BASE_URL + 'about page.webp'} alt="LTE Office" className="about-img" />
       </div>
     </div>
 

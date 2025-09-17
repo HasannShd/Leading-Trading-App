@@ -2,15 +2,15 @@ import './Brands.css';
 
 // Example brands data
 const brands = [
-  { name: 'Medstar', logo: '/public/medstar.jpg', url: '#' },
-  { name: 'ROMSONS', logo: '/public/romsons.png', url: '#' },
+  { name: 'Medstar', logo: '/public/Brands/medstar.jpg', url: '#' },
+  { name: 'ROMSONS', logo: '/public/Brands/romsons.png', url: '#' },
 //   { name: 'SPM', logo: '/public/brand-b.png', url: '#' },
-  { name: 'SMI', logo: '/public/Smi.png', url: '#' },
-  { name: 'Hermann Meditech', logo: '/public/Hermann.png', url: '#' },
-  { name: 'Rogin', logo: '/public/rogin.png', url: '#' },
-  { name: 'Zogear', logo: '/public/Zogear.png', url: '#' },
-  { name: 'OptimaCast', logo: '/public/brand-c.png', url: '#' },
-  { name: 'Osseous', logo: '/public/osseous.png', url: '#' },
+  { name: 'SMI', logo: '/public/Brands/Smi.png', url: '#' },
+  { name: 'Hermann Meditech', logo: '/public/Brands/Hermann.png', url: '#' },
+  { name: 'Rogin', logo: '/public/Brands/rogin.png', url: '#' },
+  { name: 'Zogear', logo: '/public/Brands/Zogear.png', url: '#' },
+  { name: 'OptimaCast', logo: '/public/Brands/brand-c.png', url: '#' },
+  { name: 'Osseous', logo: '/public/Brands/osseous.png', url: '#' },
 ];
 
 const Brands = () => (
