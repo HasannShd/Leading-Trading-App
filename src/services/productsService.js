@@ -1,150 +1,29 @@
-// Product list with categorySlug for mapping and image for each product
-export const products = [
-  // LAB DEVICES & CONSUMABLES
-  { name: "Pasteur transfer pipette", categorySlug: "lab-devices-consumables" },
-  { name: "Swab wooden applicator", categorySlug: "lab-devices-consumables" },
-  { name: "Sputum containers", categorySlug: "lab-devices-consumables" },
-  { name: "Blood collection tubes", categorySlug: "lab-devices-consumables" },
-  { name: "Blood collection needles", categorySlug: "lab-devices-consumables" },
-  { name: "Needle holder", categorySlug: "lab-devices-consumables" },
+import axios from 'axios';
+import { products } from './dataService';
 
-  // NON-WOVEN SURGICAL DISPOSABLES
-  { name: "Isolation gowns", categorySlug: "non-woven-surgical-disposables" },
-  { name: "SMS surgeons Gown", categorySlug: "non-woven-surgical-disposables" },
-  { name: "Patient gown", categorySlug: "non-woven-surgical-disposables" },
-  { name: "Non-woven surgical face mask earloop and tie on", categorySlug: "non-woven-surgical-disposables" },
-  { name: "PVC Apron", categorySlug: "non-woven-surgical-disposables" },
-  { name: "Face mask with eye shield", categorySlug: "non-woven-surgical-disposables" },
-  { name: "N95 mask", categorySlug: "non-woven-surgical-disposables" },
-  { name: "Dust proof face mask", categorySlug: "non-woven-surgical-disposables" },
-  { name: "Doctor/surgeon cap", categorySlug: "non-woven-surgical-disposables" },
-  { name: "Shoe cover", categorySlug: "non-woven-surgical-disposables" },
-  { name: "Non-woven bed sheet", categorySlug: "non-woven-surgical-disposables" },
-  { name: "Underpad 60x90", categorySlug: "non-woven-surgical-disposables" },
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
-  // RESPIRATORY & ANESTHESIA
-  { name: "Breathing circuits with catheter mount", categorySlug: "respiratory-anesthesia" },
-  { name: "Oxygen Masks", categorySlug: "respiratory-anesthesia" },
-  { name: "Nebulizer Masks", categorySlug: "respiratory-anesthesia" },
-  { name: "Oxygen Venturi Masks", categorySlug: "respiratory-anesthesia" },
-  { name: "Oxygen Recovery Kit 40%", categorySlug: "respiratory-anesthesia" },
-  { name: "Tracheostomy masks", categorySlug: "respiratory-anesthesia" },
-  { name: "Anesthesia Masks", categorySlug: "respiratory-anesthesia" },
-  { name: "Endotracheal tubes", categorySlug: "respiratory-anesthesia" },
-  { name: "Nasal preformed tracheal tubes", categorySlug: "respiratory-anesthesia" },
-  { name: "Oral preformed tracheal tubes", categorySlug: "respiratory-anesthesia" },
-  { name: "Pediatric endotracheal tubes", categorySlug: "respiratory-anesthesia" },
-  { name: "Suction connecting tubes", categorySlug: "respiratory-anesthesia" },
-  { name: "Suction catheters", categorySlug: "respiratory-anesthesia" },
-  { name: "Yankaur Handle", categorySlug: "respiratory-anesthesia" },
-  { name: "Bag valve masks", categorySlug: "respiratory-anesthesia" },
-  { name: "Resuscitator bags", categorySlug: "respiratory-anesthesia" },
-  { name: "Spirometry exerciser/spirometer", categorySlug: "respiratory-anesthesia" },
-  { name: "Oxygen concentrator", categorySlug: "respiratory-anesthesia" },
-  { name: "Suction Machine", categorySlug: "respiratory-anesthesia" },
-  { name: "PVC feeding tube/figle's tube", categorySlug: "respiratory-anesthesia" },
-  { name: "Urine bags", categorySlug: "respiratory-anesthesia" },
-  { name: "Enema set", categorySlug: "respiratory-anesthesia" },
-  { name: "Pediatric endotracheal tube", categorySlug: "respiratory-anesthesia" },
+// PUBLIC
+export const fetchProducts = (params = {}) =>
+  axios.get(`${API_URL}/products`, { params });
 
-  // HYPODERMIC DISPOSABLES
-  { name: "Disp. Syringes (normal, tuberculin, insulin)", categorySlug: "hypodermic-disposables" },
-  { name: "Scalp vein set", categorySlug: "hypodermic-disposables" },
-  { name: "Disp. Hypodermic needle", categorySlug: "hypodermic-disposables" },
-  { name: "Disp. Infusion administration set (IV set)", categorySlug: "hypodermic-disposables" },
-  { name: "Disp. Pediatric infusion set with burette", categorySlug: "hypodermic-disposables" },
-  { name: "Dental needle", categorySlug: "hypodermic-disposables" },
-  { name: "IV cannula", categorySlug: "hypodermic-disposables" },
-  { name: "Spinal needle", categorySlug: "hypodermic-disposables" },
-  { name: "3 way stop cock", categorySlug: "hypodermic-disposables" },
-  { name: "3 way stop cock with extention", categorySlug: "hypodermic-disposables" },
-  { name: "Heparin cap/IV stopper", categorySlug: "hypodermic-disposables" },
-  { name: "Epidural maniplack", categorySlug: "hypodermic-disposables" },
+export const fetchProduct = (id) =>
+  axios.get(`${API_URL}/products/${id}`);
 
-  // MEDICAL INSTRUMENTS
-  { name: "Sutures", categorySlug: "Surgical-instruments" },
-  { name: "Absorbable", categorySlug: "Surgical-instruments" },
-  { name: "Surgical 910", categorySlug: "Surgical-instruments" },
-  { name: "Surgical PGA", categorySlug: "Surgical-instruments" },
-  { name: "Surgical rapid", categorySlug: "Surgical-instruments" },
-  { name: "Surgical monofilament", categorySlug: "Surgical-instruments" },
-  { name: "Surgical chromic catgut", categorySlug: "Surgical-instruments" },
-  { name: "Catgut plain", categorySlug: "Surgical-instruments" },
-  { name: "Catgut chromic", categorySlug: "Surgical-instruments" },
-  { name: "Polypropylene blue", categorySlug: "Surgical-instruments" },
-  { name: "Daclon Nylon Blue", categorySlug: "Surgical-instruments" },
-  { name: "Silk braided black", categorySlug: "Surgical-instruments" },
-  { name: "Surgical blades", categorySlug: "Surgical-instruments" },
-  { name: "Stitch cutter", categorySlug: "Surgical-instruments" },
-  { name: "Scalpal blades", categorySlug: "Surgical-instruments" },
-  { name: "Disp. Razors", categorySlug: "Surgical-instruments" },
-  { name: "All types of forceps", categorySlug: "Surgical-instruments" },
-  { name: "Dressing set", categorySlug: "Surgical-instruments" },
-  { name: "Disp. Kidney Dish", categorySlug: "Surgical-instruments" },
-  { name: "Surgical skin marker", categorySlug: "Surgical-instruments" },
-  { name: "Nail brushes", categorySlug: "Surgical-instruments" },
-  { name: "Bandage Scissors", categorySlug: "Surgical-instruments" },
-  { name: "Simple scissors", categorySlug: "Surgical-instruments" },
+// Get products by category (sync from local data)
+export const getProductsByCategory = (categorySlug) =>
+  products.filter(p => p.category === categorySlug);
 
-  // MEDICAL DRESSINGS
-  { name: "Sterile gauze swab", categorySlug: "medical-dressings" },
-  { name: "Gauze swab/Gauze sponge", categorySlug: "medical-dressings" },
-  { name: "Sterile gauze swab", categorySlug: "medical-dressings" },
-  { name: "Laparotomy sponge", categorySlug: "medical-dressings" },
-  { name: "Gauze balls", categorySlug: "medical-dressings" },
-  { name: "Cotton balls", categorySlug: "medical-dressings" },
-  { name: "Alcohol swab pad", categorySlug: "medical-dressings" },
-  { name: "Elastic Crepe Bandage", categorySlug: "medical-dressings" },
-  { name: "PEAT conforming bandage", categorySlug: "medical-dressings" },
-  { name: "Orthopaedic cotton padding", categorySlug: "medical-dressings" },
-  { name: "Tubular Elastic Net bandages", categorySlug: "medical-dressings" },
-  { name: "Plaster of Paris/POP bandage", categorySlug: "medical-dressings" },
-  { name: "Orthopaedic Fiber glass casting", categorySlug: "medical-dressings" },
-  { name: "Microporous surgical tape non-woven", categorySlug: "medical-dressings" },
-  { name: "Transparent surgical tape PE", categorySlug: "medical-dressings" },
-  { name: "Silicone Non-woven Dressing Roll", categorySlug: "medical-dressings" },
-  { name: "PU transparent wound dressing", categorySlug: "medical-dressings" },
-  { name: "Elastic cloth Adhesive tape", categorySlug: "medical-dressings" },
-  { name: "Undercast padding/absorbent/sound plasters/plastersplints", categorySlug: "medical-dressings" },
-  { name: "Wound Dressings", categorySlug: "medical-dressings" },
+// ADMIN
+const authHeaders = () => ({
+  headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+});
 
-  // EXAMINATION DISP.
-  { name: "Blood Lancet", categorySlug: "examination-disp" },
-  { name: "Cotton Gloves", categorySlug: "examination-disp" },
-  { name: "Latex examination gloves", categorySlug: "examination-disp" },
-  { name: "Latest surgical gloves with powdered & powder free", categorySlug: "examination-disp" },
-  { name: "Nitrile gloves", categorySlug: "examination-disp" },
-  { name: "Wooden applicator sterile and nonsterile", categorySlug: "examination-disp" },
-  { name: "Vaginal speculum", categorySlug: "examination-disp" },
-  { name: "Patient ID bracelet", categorySlug: "examination-disp" },
-  { name: "Test Strips", categorySlug: "examination-disp" },
+export const createProduct = (data) =>
+  axios.post(`${API_URL}/products`, data, authHeaders());
 
-  // HOSPITAL FURNITURES & APPARATUS
-  { name: "Wheel chair", categorySlug: "hospital-furnitures-apparatus" },
-  { name: "Aluminum walker", categorySlug: "hospital-furnitures-apparatus" },
-  { name: "Commode", categorySlug: "hospital-furnitures-apparatus" },
-  { name: "Electrical steel treatment trolley", categorySlug: "hospital-furnitures-apparatus" },
-  { name: "Examination two parts and four parts", categorySlug: "hospital-furnitures-apparatus" },
-  { name: "Hospital beds", categorySlug: "hospital-furnitures-apparatus" },
-  { name: "Oxygen cylinders/gas tanks", categorySlug: "hospital-furnitures-apparatus" },
+export const updateProduct = (id, data) =>
+  axios.put(`${API_URL}/products/${id}`, data, authHeaders());
 
-  // FIRST AID KIT & OTHERS
-  { name: "Instant ice pack", categorySlug: "first-aid-kit-others" },
-  { name: "Stern sterilization indicator tape", categorySlug: "first-aid-kit-others" },
-  { name: "Tonguettes", categorySlug: "first-aid-kit-others" },
-  { name: "Safety Goggles", categorySlug: "first-aid-kit-others" },
-  { name: "Biohazard Bags", categorySlug: "first-aid-kit-others" },
-  { name: "Creepe Paper Roll", categorySlug: "first-aid-kit-others" },
-  { name: "ECG gel", categorySlug: "first-aid-kit-others" },
-  { name: "Flat solution bottle", categorySlug: "first-aid-kit-others" },
-  { name: "Sterile infusion pouch", categorySlug: "first-aid-kit-others" },
-  { name: "Flat solution bottle coupling gel", categorySlug: "first-aid-kit-others" },
-];
-
-export function getProducts() {
-  return products;
-}
-
-export function getProductsByCategory(slug) {
-  return products.filter(p => p.categorySlug === slug);
-}
+export const deleteProduct = (id) =>
+  axios.delete(`${API_URL}/products/${id}`, authHeaders());
