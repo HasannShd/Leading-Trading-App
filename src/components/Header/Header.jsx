@@ -1,30 +1,43 @@
-
 import { useState, useEffect, useRef } from 'react';
 import { NavLink, Link } from 'react-router-dom';
-import { getCategories } from '../../services/dataService';
 
 // Header: Top navigation bar with dropdown for categories
 const Header = () => {
-  // State for dropdown menu
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+
+  // State
+  const [categories, setCategories] = useState([]);
   const [dropdown, setDropdown] = useState(false);
-  // State for mobile nav
   const [mobileNav, setMobileNav] = useState(false);
 
-  // Get all categories (sync from service)
-  const categories = getCategories();
+  const navRef = useRef(null);
 
-  // Ref for nav to detect outside clicks
-  const navRef = useRef();
+  // Fetch categories once
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  const fetchCategories = async () => {
+    try {
+      const res = await fetch(`${API_URL}/categories`);
+      const data = await res.json();
+      setCategories(data);
+    } catch (err) {
+      console.error('Failed to load categories:', err);
+    }
+  };
 
   // Close mobile nav on outside click
   useEffect(() => {
     if (!mobileNav) return;
+
     function handleClick(e) {
       if (navRef.current && !navRef.current.contains(e.target)) {
         setMobileNav(false);
         setDropdown(false);
       }
     }
+
     document.addEventListener('mousedown', handleClick);
     return () => document.removeEventListener('mousedown', handleClick);
   }, [mobileNav]);
@@ -33,7 +46,8 @@ const Header = () => {
     <header className="header">
       <div className="container header-row">
         <Link className="brand" to="/">Leading Trading Est</Link>
-        {/* Hamburger for mobile */}
+
+        {/* Hamburger */}
         <button
           className={`header-hamburger${mobileNav ? ' open' : ''}`}
           aria-label={mobileNav ? 'Close navigation menu' : 'Open navigation menu'}
@@ -44,14 +58,26 @@ const Header = () => {
           <span className="header-hamburger-bar" />
           <span className="header-hamburger-bar" />
         </button>
-        {/* Overlay for mobile nav */}
-        {mobileNav && <div className="nav-mobile-overlay" onClick={() => { setMobileNav(false); setDropdown(false); }} />}
+
+        {/* Overlay */}
+        {mobileNav && (
+          <div
+            className="nav-mobile-overlay"
+            onClick={() => {
+              setMobileNav(false);
+              setDropdown(false);
+            }}
+          />
+        )}
+
         <nav
           ref={navRef}
           className={`nav nav-relative${mobileNav ? ' nav-mobile-active' : ''}`}
-          aria-hidden={!mobileNav && window.innerWidth <= 700}
         >
-          <NavLink to="/" end className={({ isActive }) => isActive ? 'active-link' : ''} onClick={() => setMobileNav(false)}>Home</NavLink>
+          <NavLink to="/" end onClick={() => setMobileNav(false)}>
+            Home
+          </NavLink>
+
           {/* Categories Dropdown */}
           <div
             className="nav-dropdown-wrapper"
@@ -60,19 +86,26 @@ const Header = () => {
           >
             <NavLink
               to="/categories"
-              className={({ isActive }) => isActive ? 'active-link nav-dropdown-toggle' : 'nav-dropdown-toggle'}
-              onClick={e => { e.preventDefault(); setDropdown(d => !d); }}
+              className="nav-dropdown-toggle"
+              onClick={e => {
+                e.preventDefault();
+                setDropdown(d => !d);
+              }}
             >
               Categories ▾
             </NavLink>
+
             {dropdown && (
               <div className="nav-dropdown-menu">
                 {categories.map(cat => (
                   <Link
-                    key={cat.slug}
-                    to={`/categories/${cat.slug}`}
+                    key={cat._id}
+                    to={`/categories/${cat._id}`}
                     className="nav-dropdown-item"
-                    onClick={() => { setDropdown(false); setMobileNav(false); }}
+                    onClick={() => {
+                      setDropdown(false);
+                      setMobileNav(false);
+                    }}
                   >
                     {cat.name}
                   </Link>
@@ -80,21 +113,44 @@ const Header = () => {
               </div>
             )}
           </div>
-          <NavLink to="/careers" className={({ isActive }) => isActive ? 'active-link' : ''} onClick={() => setMobileNav(false)}>Careers</NavLink>
-          <NavLink to="/contact" className={({ isActive }) => isActive ? 'active-link' : ''} onClick={() => setMobileNav(false)}>Contact Us</NavLink>
-          {/* Action buttons in mobile nav */}
+
+          <NavLink to="/careers" onClick={() => setMobileNav(false)}>
+            Careers
+          </NavLink>
+
+          <NavLink to="/contact" onClick={() => setMobileNav(false)}>
+            Contact Us
+          </NavLink>
+
+          {/* Mobile actions */}
           {mobileNav && (
             <div className="nav-mobile-actions">
               <a className="btn" href="tel:+97339939582">Call</a>
-              <a className="btn primary" href="https://wa.me/97317210665" target="_blank" rel="noreferrer">WhatsApp</a>
+              <a
+                className="btn primary"
+                href="https://wa.me/97317210665"
+                target="_blank"
+                rel="noreferrer"
+              >
+                WhatsApp
+              </a>
             </div>
           )}
         </nav>
+
         <div className="header-flex-spacer" />
-        {/* Only show action buttons on desktop */}
+
+        {/* Desktop actions */}
         <div className="header-actions-desktop">
           <a className="btn" href="tel:+97339939582">Call</a>
-          <a className="btn primary" href="https://wa.me/97317210665" target="_blank" rel="noreferrer">WhatsApp</a>
+          <a
+            className="btn primary"
+            href="https://wa.me/97317210665"
+            target="_blank"
+            rel="noreferrer"
+          >
+            WhatsApp
+          </a>
         </div>
       </div>
     </header>

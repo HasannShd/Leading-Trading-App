@@ -34,6 +34,7 @@ const AdminProducts = () => {
       const response = await fetch(`${API_URL}/products`);
       const data = await response.json();
       setProducts(data);
+      // console.log('Products:', data);
       setError(null);
     } catch (err) {
       setError('Failed to fetch products');
@@ -191,7 +192,7 @@ const AdminProducts = () => {
               >
                 <option value="">Select a category</option>
                 {categories.map(cat => (
-                  <option key={cat._id} value={cat.slug}>{cat.name}</option>
+                  <option key={cat._id} value={cat._id}>{cat.name}</option>
                 ))}
               </select>
             </div>
@@ -288,7 +289,7 @@ const AdminProducts = () => {
                 {products.map(product => (
                   <tr key={product._id}>
                     <td className="col-name">{product.name}</td>
-                    <td className="col-category">{product.categorySlug || '-'}</td>
+                    <td className="col-category">{product.categorySlug.name || '-'}</td>
                     <td className="col-brand">{product.brand || '-'}</td>
                     <td className="col-sku">{product.sku || '-'}</td>
                     <td className="col-status">

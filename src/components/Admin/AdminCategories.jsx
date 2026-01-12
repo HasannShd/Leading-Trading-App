@@ -11,7 +11,6 @@ const AdminCategories = () => {
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
-    slug: '',
     description: '',
   });
 
@@ -43,7 +42,7 @@ const AdminCategories = () => {
       ...prev,
       [name]: value,
       // Auto-generate slug from name
-      ...(name === 'name' && { slug: value.toLowerCase().replace(/\s+/g, '-') })
+      // ...(name === 'name' && { slug: value.toLowerCase().replace(/\s+/g, '-') })
     }));
   };
 
@@ -72,7 +71,7 @@ const AdminCategories = () => {
       }
 
       setError(null);
-      setFormData({ name: '', slug: '', description: '' });
+      setFormData({ name: '', description: '' });
       setEditingId(null);
       setShowForm(false);
       fetchCategories();
@@ -119,7 +118,7 @@ const AdminCategories = () => {
   const handleCancel = () => {
     setShowForm(false);
     setEditingId(null);
-    setFormData({ name: '', slug: '', description: '' });
+    setFormData({ name: '', description: '' });
   };
 
   return (
@@ -151,7 +150,7 @@ const AdminCategories = () => {
               />
             </div>
 
-            <div className="admin-form-group">
+            {/* <div className="admin-form-group">
               <label>Slug *</label>
               <input
                 type="text"
@@ -162,7 +161,7 @@ const AdminCategories = () => {
                 required
               />
               <small>Auto-generated from name, but you can edit it</small>
-            </div>
+            </div> */}
 
             <div className="admin-form-group">
               <label>Description</label>
@@ -200,7 +199,7 @@ const AdminCategories = () => {
               <thead>
                 <tr>
                   <th>Name</th>
-                  <th>Slug</th>
+                  {/* <th>Slug</th> */}
                   <th>Description</th>
                   <th>Created</th>
                   <th>Actions</th>
@@ -210,7 +209,7 @@ const AdminCategories = () => {
                 {categories.map(cat => (
                   <tr key={cat._id}>
                     <td className="col-name">{cat.name}</td>
-                    <td className="col-slug">{cat.slug}</td>
+                    {/* <td className="col-slug">{cat.slug}</td> */}
                     <td className="col-desc">{cat.description || '-'}</td>
                     <td className="col-date">
                       {new Date(cat.createdAt).toLocaleDateString()}
