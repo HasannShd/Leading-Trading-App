@@ -58,7 +58,7 @@ export const AdminProvider = ({ children }) => {
       const response = await fetch(`${API_URL}/auth/sign-in`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ identifier: username, password }),
       });
       const data = await response.json();
       

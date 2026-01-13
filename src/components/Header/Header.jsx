@@ -1,9 +1,11 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useContext } from 'react';
 import { NavLink, Link } from 'react-router-dom';
+import { AuthContext } from '../../context/AuthContext';
 
 // Header: Top navigation bar with dropdown for categories
 const Header = () => {
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+  const { user, logout } = useContext(AuthContext);
 
   // State
   const [categories, setCategories] = useState([]);
@@ -78,6 +80,10 @@ const Header = () => {
             Home
           </NavLink>
 
+          <NavLink to="/shop" onClick={() => setMobileNav(false)}>
+            Shop
+          </NavLink>
+
           {/* Categories Dropdown */}
           <div
             className="nav-dropdown-wrapper"
@@ -122,6 +128,16 @@ const Header = () => {
             Contact Us
           </NavLink>
 
+          <NavLink to="/cart" onClick={() => setMobileNav(false)}>
+            Cart
+          </NavLink>
+
+          {user && (
+            <NavLink to="/orders" onClick={() => setMobileNav(false)}>
+              Orders
+            </NavLink>
+          )}
+
           {/* Mobile actions */}
           {mobileNav && (
             <div className="nav-mobile-actions">
@@ -134,6 +150,14 @@ const Header = () => {
               >
                 WhatsApp
               </a>
+              {user ? (
+                <>
+                  <Link className="btn" to="/orders">Orders</Link>
+                  <button className="btn" onClick={logout}>Logout</button>
+                </>
+              ) : (
+                <Link className="btn" to="/sign-in">Sign In</Link>
+              )}
             </div>
           )}
         </nav>
@@ -151,6 +175,11 @@ const Header = () => {
           >
             WhatsApp
           </a>
+          {user ? (
+            <button className="btn" onClick={logout}>Logout</button>
+          ) : (
+            <Link className="btn" to="/sign-in">Sign In</Link>
+          )}
         </div>
       </div>
     </header>

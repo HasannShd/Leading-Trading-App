@@ -1,9 +1,9 @@
 import { useContext } from 'react';
 import { Navigate } from 'react-router-dom';
-import { AdminContext } from '../context/AdminContext';
+import { AuthContext } from '../context/AuthContext';
 
-const ProtectedAdminRoute = ({ element }) => {
-  const { admin, loading } = useContext(AdminContext);
+const ProtectedRoute = ({ element }) => {
+  const { user, loading } = useContext(AuthContext);
 
   if (loading) {
     return (
@@ -13,7 +13,7 @@ const ProtectedAdminRoute = ({ element }) => {
         justifyContent: 'center',
         minHeight: '100vh',
         background: 'var(--bg)',
-        fontSize: '1.2rem',
+        fontSize: '1.1rem',
         color: 'var(--navy-800)'
       }}>
         Loading...
@@ -21,11 +21,11 @@ const ProtectedAdminRoute = ({ element }) => {
     );
   }
 
-  if (!admin) {
-    return <Navigate to="/.well-known/admin-access-sh123456" replace />;
+  if (!user) {
+    return <Navigate to="/sign-in" replace />;
   }
 
   return element;
 };
 
-export default ProtectedAdminRoute;
+export default ProtectedRoute;

@@ -1,6 +1,7 @@
 import { useState, useEffect, useContext } from 'react';
 import { AdminContext } from '../../context/AdminContext';
 import './AdminProducts.css';
+import AdminTopNav from './AdminTopNav';
 
 const AdminProducts = () => {
   const { admin } = useContext(AdminContext);
@@ -10,6 +11,8 @@ const AdminProducts = () => {
   const [error, setError] = useState(null);
   const [editingId, setEditingId] = useState(null);
   const [showForm, setShowForm] = useState(false);
+  const [specs, setSpecs] = useState([]);
+  const [variants, setVariants] = useState([]);
   const [formData, setFormData] = useState({
     name: '',
     categorySlug: '',
@@ -17,6 +20,8 @@ const AdminProducts = () => {
     image: '',
     sku: '',
     brand: '',
+    basePrice: '',
+    featured: false,
     isActive: true,
   });
 
@@ -31,7 +36,9 @@ const AdminProducts = () => {
   const fetchProducts = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`${API_URL}/products`);
+      const response = await fetch(`${API_URL}/products/admin/all`, {
+        headers: { 'Authorization': `Bearer ${token}` },
+      });
       const data = await response.json();
       setProducts(data);
       // console.log('Products:', data);
@@ -62,6 +69,32 @@ const AdminProducts = () => {
     }));
   };
 
+  const handleImageUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setLoading(true);
+    try {
+      const data = new FormData();
+      data.append('image', file);
+      const response = await fetch(`${API_URL}/upload`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` },
+        body: data,
+      });
+      const resData = await response.json();
+      if (!response.ok) {
+        setError(resData.message || 'Upload failed');
+        return;
+      }
+      setFormData(prev => ({ ...prev, image: resData.url }));
+      setError(null);
+    } catch (err) {
+      setError('Upload failed');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -69,6 +102,18 @@ const AdminProducts = () => {
     try {
       const method = editingId ? 'PUT' : 'POST';
       const url = editingId ? `${API_URL}/products/${editingId}` : `${API_URL}/products`;
+      const normalizedVariants = variants.map(variant => ({
+        ...variant,
+        price: Number(variant.price || 0),
+        stock: Number(variant.stock || 0),
+        isActive: variant.isActive !== false,
+      }));
+      const payload = {
+        ...formData,
+        basePrice: Number(formData.basePrice || 0),
+        specs: specs.filter(spec => spec.label || spec.value),
+        variants: normalizedVariants,
+      };
 
       const response = await fetch(url, {
         method,
@@ -76,7 +121,7 @@ const AdminProducts = () => {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(payload),
       });
 
       const data = await response.json();
@@ -94,8 +139,12 @@ const AdminProducts = () => {
         image: '',
         sku: '',
         brand: '',
+        basePrice: '',
+        featured: false,
         isActive: true,
       });
+      setSpecs([]);
+      setVariants([]);
       setEditingId(null);
       setShowForm(false);
       fetchProducts();
@@ -108,7 +157,19 @@ const AdminProducts = () => {
   };
 
   const handleEdit = (product) => {
-    setFormData(product);
+    setFormData({
+      name: product.name || '',
+      categorySlug: product.categorySlug?._id || product.categorySlug || '',
+      description: product.description || '',
+      image: product.image || '',
+      sku: product.sku || '',
+      brand: product.brand || '',
+      basePrice: product.basePrice ?? '',
+      featured: product.featured ?? false,
+      isActive: product.isActive ?? true,
+    });
+    setSpecs(product.specs || []);
+    setVariants(product.variants || []);
     setEditingId(product._id);
     setShowForm(true);
   };
@@ -149,12 +210,41 @@ const AdminProducts = () => {
       image: '',
       sku: '',
       brand: '',
+      basePrice: '',
+      featured: false,
       isActive: true,
     });
+    setSpecs([]);
+    setVariants([]);
+  };
+
+  const addSpec = () => setSpecs(prev => [...prev, { label: '', value: '' }]);
+  const updateSpec = (index, key, value) => {
+    setSpecs(prev => prev.map((spec, i) => (i === index ? { ...spec, [key]: value } : spec)));
+  };
+  const removeSpec = (index) => {
+    setSpecs(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const addVariant = () => setVariants(prev => [...prev, {
+    name: '',
+    size: '',
+    sku: '',
+    price: '',
+    stock: '',
+    isActive: true,
+    specs: [],
+  }]);
+  const updateVariant = (index, key, value) => {
+    setVariants(prev => prev.map((variant, i) => (i === index ? { ...variant, [key]: value } : variant)));
+  };
+  const removeVariant = (index) => {
+    setVariants(prev => prev.filter((_, i) => i !== index));
   };
 
   return (
     <div className="admin-products">
+      <AdminTopNav />
       <div className="admin-page-header">
         <h1>📦 Products Management</h1>
         {!showForm && (
@@ -209,6 +299,18 @@ const AdminProducts = () => {
             </div>
 
             <div className="admin-form-group">
+              <label>Base Price (BHD)</label>
+              <input
+                type="number"
+                name="basePrice"
+                value={formData.basePrice}
+                onChange={handleInputChange}
+                placeholder="e.g., 1.250"
+                step="0.001"
+              />
+            </div>
+
+            <div className="admin-form-group">
               <label>SKU</label>
               <input
                 type="text"
@@ -228,6 +330,11 @@ const AdminProducts = () => {
                 onChange={handleInputChange}
                 placeholder="e.g., /Categories/gloves.webp"
               />
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+              />
             </div>
 
             <div className="admin-form-group full-width">
@@ -241,6 +348,95 @@ const AdminProducts = () => {
               />
             </div>
 
+            <div className="admin-form-group full-width">
+              <div className="admin-section-header">
+                <label>Specifications</label>
+                <button type="button" className="admin-btn-secondary" onClick={addSpec}>
+                  + Add Spec
+                </button>
+              </div>
+              <div className="admin-inline-grid">
+                {specs.map((spec, index) => (
+                  <div key={`spec-${index}`} className="admin-inline-row">
+                    <input
+                      type="text"
+                      placeholder="Label"
+                      value={spec.label || ''}
+                      onChange={(e) => updateSpec(index, 'label', e.target.value)}
+                    />
+                    <input
+                      type="text"
+                      placeholder="Value"
+                      value={spec.value || ''}
+                      onChange={(e) => updateSpec(index, 'value', e.target.value)}
+                    />
+                    <button type="button" className="btn-delete" onClick={() => removeSpec(index)}>
+                      Remove
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="admin-form-group full-width">
+              <div className="admin-section-header">
+                <label>Variants</label>
+                <button type="button" className="admin-btn-secondary" onClick={addVariant}>
+                  + Add Variant
+                </button>
+              </div>
+              {variants.map((variant, index) => (
+                <div key={`variant-${index}`} className="admin-variant-card">
+                  <div className="admin-inline-row">
+                    <input
+                      type="text"
+                      placeholder="Name"
+                      value={variant.name || ''}
+                      onChange={(e) => updateVariant(index, 'name', e.target.value)}
+                    />
+                    <input
+                      type="text"
+                      placeholder="Size"
+                      value={variant.size || ''}
+                      onChange={(e) => updateVariant(index, 'size', e.target.value)}
+                    />
+                    <input
+                      type="text"
+                      placeholder="SKU"
+                      value={variant.sku || ''}
+                      onChange={(e) => updateVariant(index, 'sku', e.target.value)}
+                    />
+                  </div>
+                  <div className="admin-inline-row">
+                    <input
+                      type="number"
+                      placeholder="Price (BHD)"
+                      value={variant.price ?? ''}
+                      step="0.001"
+                      onChange={(e) => updateVariant(index, 'price', e.target.value)}
+                    />
+                    <input
+                      type="number"
+                      placeholder="Stock"
+                      value={variant.stock ?? ''}
+                      onChange={(e) => updateVariant(index, 'stock', e.target.value)}
+                    />
+                    <label className="admin-inline-checkbox">
+                      <input
+                        type="checkbox"
+                        checked={variant.isActive !== false}
+                        onChange={(e) => updateVariant(index, 'isActive', e.target.checked)}
+                      />
+                      Active
+                    </label>
+                  </div>
+                  <button type="button" className="btn-delete" onClick={() => removeVariant(index)}>
+                    Remove Variant
+                  </button>
+                </div>
+              ))}
+            </div>
+
             <div className="admin-form-group checkbox">
               <input
                 type="checkbox"
@@ -250,6 +446,17 @@ const AdminProducts = () => {
                 onChange={handleInputChange}
               />
               <label htmlFor="isActive">Active (visible to customers)</label>
+            </div>
+
+            <div className="admin-form-group checkbox">
+              <input
+                type="checkbox"
+                id="featured"
+                name="featured"
+                checked={formData.featured}
+                onChange={handleInputChange}
+              />
+              <label htmlFor="featured">Featured on Shop</label>
             </div>
 
             <div className="admin-form-actions">
@@ -280,6 +487,7 @@ const AdminProducts = () => {
                   <th>Category</th>
                   <th>Brand</th>
                   <th>SKU</th>
+                  <th>Featured</th>
                   <th>Status</th>
                   <th>Created</th>
                   <th>Actions</th>
@@ -289,16 +497,17 @@ const AdminProducts = () => {
                 {products.map(product => (
                   <tr key={product._id}>
                     <td className="col-name">{product.name}</td>
-                    <td className="col-category">{product.categorySlug.name || '-'}</td>
+                    <td className="col-category">{product.categorySlug?.name || '-'}</td>
                     <td className="col-brand">{product.brand || '-'}</td>
                     <td className="col-sku">{product.sku || '-'}</td>
+                    <td>{product.featured ? 'Yes' : 'No'}</td>
                     <td className="col-status">
                       <span className={`status-badge ${product.isActive ? 'active' : 'inactive'}`}>
                         {product.isActive ? '✓ Active' : '○ Inactive'}
                       </span>
                     </td>
                     <td className="col-date">
-                      {new Date(product.createdAt).toLocaleDateString()}
+                      {product.createdAt ? new Date(product.createdAt).toLocaleDateString() : '-'}
                     </td>
                     <td className="col-actions">
                       <button

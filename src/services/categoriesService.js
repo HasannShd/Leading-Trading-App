@@ -6,7 +6,7 @@ export const fetchCategories = () =>
   axios.get(`${API_URL}/categories`);
 
 const authHeaders = () => ({
-  headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+  headers: { Authorization: `Bearer ${localStorage.getItem('adminToken')}` },
 });
 
 export const createCategory = (data) =>

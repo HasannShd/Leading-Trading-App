@@ -41,6 +41,18 @@ const AdminDashboard = () => {
           >
             📦 Products
           </button>
+          <button
+            className={`admin-nav-item ${activeSection === 'orders' ? 'active' : ''}`}
+            onClick={() => navigate('/.well-known/admin-orders-sh123456')}
+          >
+            🧾 Orders
+          </button>
+          <button
+            className={`admin-nav-item ${activeSection === 'marketing' ? 'active' : ''}`}
+            onClick={() => navigate('/.well-known/admin-marketing-sh123456')}
+          >
+            📣 Marketing
+          </button>
         </nav>
 
         <div className="admin-sidebar-footer">
@@ -87,6 +99,30 @@ const AdminDashboard = () => {
                 <p className="admin-card-action">
                   <button onClick={() => navigate('/.well-known/admin-products-sh123456')}>
                     Manage Products →
+                  </button>
+                </p>
+              </div>
+            </div>
+
+            <div className="admin-card">
+              <div className="admin-card-icon">🧾</div>
+              <div className="admin-card-content">
+                <h3>Orders</h3>
+                <p className="admin-card-action">
+                  <button onClick={() => navigate('/.well-known/admin-orders-sh123456')}>
+                    Manage Orders →
+                  </button>
+                </p>
+              </div>
+            </div>
+
+            <div className="admin-card">
+              <div className="admin-card-icon">📣</div>
+              <div className="admin-card-content">
+                <h3>Marketing</h3>
+                <p className="admin-card-action">
+                  <button onClick={() => navigate('/.well-known/admin-marketing-sh123456')}>
+                    Marketing List →
                   </button>
                 </p>
               </div>

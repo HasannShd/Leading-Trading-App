@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 // Careers page with application form
 const Careers = () => {
-  const [form, setForm] = useState({ name: '', phone: '', nationality: '', cv: null });
+  const [form, setForm] = useState({ name: '', email: '', phone: '', nationality: '', cv: null });
   const [submitted, setSubmitted] = useState(false);
 
   const handleChange = e => {
@@ -13,68 +13,114 @@ const Careers = () => {
     }));
   };
 
-  const handleSubmit = e => {
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+
+  const handleSubmit = async e => {
     e.preventDefault();
-    // Here you would send the form data to your backend or email service
-    setSubmitted(true);
+    try {
+      const data = new FormData();
+      data.append('name', form.name);
+      data.append('email', form.email);
+      data.append('phone', form.phone);
+      data.append('nationality', form.nationality);
+      data.append('cv', form.cv);
+      const response = await fetch(`${API_URL}/careers/apply`, {
+        method: 'POST',
+        body: data,
+      });
+      if (!response.ok) {
+        alert('Failed to submit application.');
+        return;
+      }
+      setSubmitted(true);
+    } catch (err) {
+      alert('Failed to submit application.');
+    }
   };
 
   return (
-    <div style={{padding: '2rem'}}>
-      <h2>Careers</h2>
-      <p>Interested in joining our team? Fill out the form below and upload your CV.</p>
-      {submitted ? (
-        <div style={{color: 'green', marginTop: 24}}>Thank you for your application!</div>
-      ) : (
-        <form className="careers-form" onSubmit={handleSubmit}>
-          <label>
-            Name
-            <input
-              type="text"
-              name="name"
-              value={form.name}
-              onChange={handleChange}
-              required
-              className="input"
-            />
-          </label>
-          <label>
-            Phone Number
-            <input
-              type="tel"
-              name="phone"
-              value={form.phone}
-              onChange={handleChange}
-              required
-              className="input"
-            />
-          </label>
-          <label>
-            Nationality
-            <input
-              type="text"
-              name="nationality"
-              value={form.nationality}
-              onChange={handleChange}
-              required
-              className="input"
-            />
-          </label>
-          <label>
-            Upload CV
-            <input
-              type="file"
-              name="cv"
-              accept=".pdf,.doc,.docx"
-              onChange={handleChange}
-              required
-              className="input"
-            />
-          </label>
-          <button type="submit" className="btn" style={{marginTop: 16}}>Submit</button>
-        </form>
-      )}
-    </div>
+    <main>
+      <section className="careers-hero">
+        <div className="careers-hero-content">
+          <h1>Join Our Team</h1>
+          <p>
+            We’re always looking for passionate people to help improve healthcare access.
+            Share your details and CV and we’ll get back to you.
+          </p>
+        </div>
+      </section>
+
+      <section className="careers-section">
+        {submitted ? (
+          <div className="careers-success">
+            <h2>Application received</h2>
+            <p>Thank you for your application. Our team will contact you soon.</p>
+          </div>
+        ) : (
+          <form className="careers-form" onSubmit={handleSubmit}>
+            <div className="careers-form-row">
+              <label>
+                Name
+                <input
+                  type="text"
+                  name="name"
+                  value={form.name}
+                  onChange={handleChange}
+                  required
+                  className="input"
+                />
+              </label>
+              <label>
+                Email
+                <input
+                  type="email"
+                  name="email"
+                  value={form.email}
+                  onChange={handleChange}
+                  className="input"
+                />
+              </label>
+            </div>
+            <div className="careers-form-row">
+              <label>
+                Phone Number
+                <input
+                  type="tel"
+                  name="phone"
+                  value={form.phone}
+                  onChange={handleChange}
+                  required
+                  className="input"
+                />
+              </label>
+              <label>
+                Nationality
+                <input
+                  type="text"
+                  name="nationality"
+                  value={form.nationality}
+                  onChange={handleChange}
+                  required
+                  className="input"
+                />
+              </label>
+            </div>
+            <label>
+              Upload CV
+              <input
+                type="file"
+                name="cv"
+                accept=".pdf,.doc,.docx"
+                onChange={handleChange}
+                required
+                className="input"
+              />
+            </label>
+            <button type="submit" className="btn">Submit Application</button>
+          </form>
+        )}
+      </section>
+    </main>
   );
 };
 

@@ -1,6 +1,7 @@
 import { useState, useEffect, useContext } from 'react';
 import { AdminContext } from '../../context/AdminContext';
 import './AdminCategories.css';
+import AdminTopNav from './AdminTopNav';
 
 const AdminCategories = () => {
   const { admin } = useContext(AdminContext);
@@ -12,6 +13,7 @@ const AdminCategories = () => {
   const [formData, setFormData] = useState({
     name: '',
     description: '',
+    image: '',
   });
 
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
@@ -46,6 +48,32 @@ const AdminCategories = () => {
     }));
   };
 
+  const handleImageUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setLoading(true);
+    try {
+      const data = new FormData();
+      data.append('image', file);
+      const response = await fetch(`${API_URL}/upload`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` },
+        body: data,
+      });
+      const resData = await response.json();
+      if (!response.ok) {
+        setError(resData.message || 'Upload failed');
+        return;
+      }
+      setFormData(prev => ({ ...prev, image: resData.url }));
+      setError(null);
+    } catch (err) {
+      setError('Upload failed');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -71,7 +99,7 @@ const AdminCategories = () => {
       }
 
       setError(null);
-      setFormData({ name: '', description: '' });
+      setFormData({ name: '', description: '', image: '' });
       setEditingId(null);
       setShowForm(false);
       fetchCategories();
@@ -84,7 +112,11 @@ const AdminCategories = () => {
   };
 
   const handleEdit = (category) => {
-    setFormData(category);
+    setFormData({
+      name: category.name || '',
+      description: category.description || '',
+      image: category.image || '',
+    });
     setEditingId(category._id);
     setShowForm(true);
   };
@@ -118,11 +150,12 @@ const AdminCategories = () => {
   const handleCancel = () => {
     setShowForm(false);
     setEditingId(null);
-    setFormData({ name: '', description: '' });
+    setFormData({ name: '', description: '', image: '' });
   };
 
   return (
     <div className="admin-categories">
+      <AdminTopNav />
       <div className="admin-page-header">
         <h1>📁 Categories Management</h1>
         {!showForm && (
@@ -171,6 +204,22 @@ const AdminCategories = () => {
                 onChange={handleInputChange}
                 placeholder="Category description..."
                 rows="4"
+              />
+            </div>
+
+            <div className="admin-form-group">
+              <label>Image URL</label>
+              <input
+                type="text"
+                name="image"
+                value={formData.image}
+                onChange={handleInputChange}
+                placeholder="e.g., /Categories/dental.webp"
+              />
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
               />
             </div>
 

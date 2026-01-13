@@ -16,7 +16,7 @@ export const getProductsByCategory = (categorySlug) =>
 
 // ADMIN
 const authHeaders = () => ({
-  headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+  headers: { Authorization: `Bearer ${localStorage.getItem('adminToken')}` },
 });
 
 export const createProduct = (data) =>

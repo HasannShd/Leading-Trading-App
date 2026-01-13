@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import Card from '../Common/Card';
 import Input from '../Common/Input';
 
@@ -50,12 +51,34 @@ const Categories = () => {
 
         <div className="categories-grid">
           {list.map(c => (
-            <Card key={c._id}>
-              <div className="categories-card-content">
-                <h3 className="categories-card-title">{c.name}</h3>
-                <p className="categories-card-desc">{c.description}</p>
-              </div>
-            </Card>
+            <Link
+              key={c._id}
+              to={`/categories/${c._id}`}
+              className="categories-card-link"
+              aria-label={`Open ${c.name}`}
+            >
+              <Card>
+                <div className="categories-card-image">
+                  {c.image ? (
+                    <img
+                      src={
+                        c.image.startsWith('http')
+                          ? c.image
+                          : `${import.meta.env.BASE_URL}${c.image.replace(/^\//, '')}`
+                      }
+                      alt={c.name}
+                      loading="lazy"
+                    />
+                  ) : (
+                    <span>{c.name[0]}</span>
+                  )}
+                </div>
+                <div className="categories-card-content">
+                  <h3 className="categories-card-title">{c.name}</h3>
+                  <p className="categories-card-desc">{c.description}</p>
+                </div>
+              </Card>
+            </Link>
           ))}
         </div>
 

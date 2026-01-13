@@ -1,7 +1,7 @@
 // Common Card component for consistent UI
-export default function Card({ children, style, ...props }) {
+export default function Card({ children, className = '', style, ...props }) {
   return (
-    <div className="card" style={{border:'1px solid #eee', borderRadius:8, padding:16, background:'#fff', ...style}} {...props}>
+    <div className={`card ${className}`.trim()} style={style} {...props}>
       {children}
     </div>
   );

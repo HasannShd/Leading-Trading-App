@@ -4,19 +4,19 @@
 /* Additional select styling */
 .admin-form-group select {
   padding: 12px 16px;
-  border: 2px solid #e5e7eb;
-  border-radius: 8px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
   font-size: 1rem;
   font-family: inherit;
-  transition: border-color 0.2s;
+  transition: border-color 0.2s, box-shadow 0.2s;
   background: white;
   cursor: pointer;
 }
 
 .admin-form-group select:focus {
   outline: none;
-  border-color: #0548ac;
-  background: #f0f4ff;
+  border-color: var(--navy-600);
+  box-shadow: 0 0 0 3px rgba(26, 60, 133, 0.16);
 }
 
 /* Checkbox styling */
@@ -40,6 +40,51 @@
   cursor: pointer;
 }
 
+.admin-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.admin-inline-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.admin-inline-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 10px;
+  align-items: center;
+}
+
+.admin-inline-row input {
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+.admin-inline-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.admin-variant-card {
+  padding: 14px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: #f9fbff;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
 /* Full width form group */
 .admin-form-group.full-width {
   grid-column: 1 / -1;
@@ -49,24 +94,24 @@
 .status-badge {
   display: inline-block;
   padding: 6px 12px;
-  border-radius: 6px;
+  border-radius: 999px;
   font-size: 0.85rem;
   font-weight: 600;
 }
 
 .status-badge.active {
-  background: #d4edda;
-  color: #155724;
+  background: #e8f3ee;
+  color: #0f5132;
 }
 
 .status-badge.inactive {
-  background: #f8d7da;
-  color: #721c24;
+  background: #fdeeee;
+  color: #8a1f2f;
 }
 
 .col-brand {
   font-weight: 500;
-  color: #0548ac;
+  color: var(--navy-700);
 }
 
 /* Mobile adjustments */
