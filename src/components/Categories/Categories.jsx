@@ -2,6 +2,7 @@ import { useState, useMemo, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Card from '../Common/Card';
 import Input from '../Common/Input';
+import './Categories.css';
 
 const Categories = () => {
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
@@ -53,7 +54,7 @@ const Categories = () => {
           {list.map(c => (
             <Link
               key={c._id}
-              to={`/categories/${c._id}`}
+              to={`/categories/${c.slug || c._id}`}
               className="categories-card-link"
               aria-label={`Open ${c.name}`}
             >

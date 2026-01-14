@@ -1,3 +1,5 @@
+import './Button.css';
+
 // Common Button component for consistent UI
 export default function Button({ children, className = '', ...props }) {
   return (

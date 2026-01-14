@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useContext } from 'react';
 import { NavLink, Link } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
+import './Header.css';
 
 // Header: Top navigation bar with dropdown for categories
 const Header = () => {
@@ -106,7 +107,7 @@ const Header = () => {
                 {categories.map(cat => (
                   <Link
                     key={cat._id}
-                    to={`/categories/${cat._id}`}
+                    to={`/categories/${cat.slug || cat._id}`}
                     className="nav-dropdown-item"
                     onClick={() => {
                       setDropdown(false);

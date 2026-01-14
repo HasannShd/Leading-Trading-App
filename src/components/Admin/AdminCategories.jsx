@@ -12,6 +12,7 @@ const AdminCategories = () => {
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
+    slug: '',
     description: '',
     image: '',
   });
@@ -38,13 +39,20 @@ const AdminCategories = () => {
     }
   };
 
+  const slugify = (value) =>
+    value
+      .toLowerCase()
+      .trim()
+      .replace(/[^\w\s-]/g, '')
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-');
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
       [name]: value,
-      // Auto-generate slug from name
-      // ...(name === 'name' && { slug: value.toLowerCase().replace(/\s+/g, '-') })
+      ...(name === 'name' && !prev.slug ? { slug: slugify(value) } : {}),
     }));
   };
 
@@ -99,7 +107,7 @@ const AdminCategories = () => {
       }
 
       setError(null);
-      setFormData({ name: '', description: '', image: '' });
+      setFormData({ name: '', slug: '', description: '', image: '' });
       setEditingId(null);
       setShowForm(false);
       fetchCategories();
@@ -114,6 +122,7 @@ const AdminCategories = () => {
   const handleEdit = (category) => {
     setFormData({
       name: category.name || '',
+      slug: category.slug || '',
       description: category.description || '',
       image: category.image || '',
     });
@@ -150,7 +159,7 @@ const AdminCategories = () => {
   const handleCancel = () => {
     setShowForm(false);
     setEditingId(null);
-    setFormData({ name: '', description: '', image: '' });
+    setFormData({ name: '', slug: '', description: '', image: '' });
   };
 
   return (
@@ -195,6 +204,17 @@ const AdminCategories = () => {
               />
               <small>Auto-generated from name, but you can edit it</small>
             </div> */}
+            <div className="admin-form-group">
+              <label>Slug</label>
+              <input
+                type="text"
+                name="slug"
+                value={formData.slug}
+                onChange={handleInputChange}
+                placeholder="e.g., surgical-instruments"
+              />
+              <small>Auto-generated from name, but you can edit it</small>
+            </div>
 
             <div className="admin-form-group">
               <label>Description</label>
@@ -248,7 +268,7 @@ const AdminCategories = () => {
               <thead>
                 <tr>
                   <th>Name</th>
-                  {/* <th>Slug</th> */}
+                  <th>Slug</th>
                   <th>Description</th>
                   <th>Created</th>
                   <th>Actions</th>
@@ -258,7 +278,7 @@ const AdminCategories = () => {
                 {categories.map(cat => (
                   <tr key={cat._id}>
                     <td className="col-name">{cat.name}</td>
-                    {/* <td className="col-slug">{cat.slug}</td> */}
+                    <td className="col-slug">{cat.slug || '-'}</td>
                     <td className="col-desc">{cat.description || '-'}</td>
                     <td className="col-date">
                       {new Date(cat.createdAt).toLocaleDateString()}

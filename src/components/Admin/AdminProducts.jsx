@@ -18,6 +18,7 @@ const AdminProducts = () => {
     categorySlug: '',
     description: '',
     image: '',
+    images: [],
     sku: '',
     brand: '',
     basePrice: '',
@@ -95,6 +96,51 @@ const AdminProducts = () => {
     }
   };
 
+  const handleGalleryUpload = async (e) => {
+    const files = Array.from(e.target.files || []);
+    if (files.length === 0) return;
+    setLoading(true);
+    try {
+      const uploaded = [];
+      for (const file of files) {
+        const data = new FormData();
+        data.append('image', file);
+        const response = await fetch(`${API_URL}/upload`, {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${token}` },
+          body: data,
+        });
+        const resData = await response.json();
+        if (!response.ok) {
+          setError(resData.message || 'Upload failed');
+          break;
+        }
+        uploaded.push(resData.url);
+      }
+      if (uploaded.length) {
+        setFormData(prev => ({
+          ...prev,
+          images: [...(prev.images || []), ...uploaded],
+          image: prev.image || uploaded[0],
+        }));
+      }
+      setError(null);
+    } catch (err) {
+      setError('Upload failed');
+    } finally {
+      setLoading(false);
+      e.target.value = '';
+    }
+  };
+
+  const removeGalleryImage = (url) => {
+    setFormData(prev => ({
+      ...prev,
+      images: (prev.images || []).filter(img => img !== url),
+      image: prev.image === url ? '' : prev.image,
+    }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -113,6 +159,7 @@ const AdminProducts = () => {
         basePrice: Number(formData.basePrice || 0),
         specs: specs.filter(spec => spec.label || spec.value),
         variants: normalizedVariants,
+        images: formData.images || [],
       };
 
       const response = await fetch(url, {
@@ -137,6 +184,7 @@ const AdminProducts = () => {
         categorySlug: '',
         description: '',
         image: '',
+        images: [],
         sku: '',
         brand: '',
         basePrice: '',
@@ -162,6 +210,7 @@ const AdminProducts = () => {
       categorySlug: product.categorySlug?._id || product.categorySlug || '',
       description: product.description || '',
       image: product.image || '',
+      images: product.images || [],
       sku: product.sku || '',
       brand: product.brand || '',
       basePrice: product.basePrice ?? '',
@@ -208,6 +257,7 @@ const AdminProducts = () => {
       categorySlug: '',
       description: '',
       image: '',
+      images: [],
       sku: '',
       brand: '',
       basePrice: '',
@@ -335,6 +385,32 @@ const AdminProducts = () => {
                 accept="image/*"
                 onChange={handleImageUpload}
               />
+            </div>
+
+            <div className="admin-form-group">
+              <label>Gallery Images</label>
+              <input
+                type="file"
+                accept="image/*"
+                multiple
+                onChange={handleGalleryUpload}
+              />
+              {formData.images?.length > 0 && (
+                <div className="admin-image-grid">
+                  {formData.images.map(img => (
+                    <div className="admin-image-thumb" key={img}>
+                      <img src={img} alt="Gallery" />
+                      <button
+                        type="button"
+                        className="admin-image-remove"
+                        onClick={() => removeGalleryImage(img)}
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
             <div className="admin-form-group full-width">

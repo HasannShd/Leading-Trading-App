@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import './Careers.css';
 
 // Careers page with application form
 const Careers = () => {

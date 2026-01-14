@@ -10,6 +10,34 @@ const AdminOrderDetails = () => {
   const [order, setOrder] = useState(null);
   const [error, setError] = useState(null);
 
+  const downloadInvoice = async () => {
+    if (!token) {
+      alert('Please sign in to download the invoice.');
+      return;
+    }
+    try {
+      const response = await fetch(`${API_URL}/orders/${id}/invoice`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!response.ok) {
+        const data = await response.json().catch(() => ({}));
+        alert(data.message || 'Failed to download invoice');
+        return;
+      }
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `invoice-${order?.invoiceNumber || 'order'}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      alert('Failed to download invoice');
+    }
+  };
+
   const fetchOrder = async () => {
     try {
       const response = await fetch(`${API_URL}/orders/${id}`, {
@@ -87,9 +115,9 @@ const AdminOrderDetails = () => {
         </div>
 
         <div className="admin-form-actions">
-          <a className="admin-btn-primary" href={`${API_URL}/orders/${order._id}/invoice`} target="_blank" rel="noreferrer">
+          <button className="admin-btn-primary" onClick={downloadInvoice}>
             Download Invoice
-          </a>
+          </button>
         </div>
       </div>
     </div>

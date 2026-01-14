@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import './CategoryDetails.css';
 
 // CategoryDetails: Shows all products for a given category
 const CategoryDetails = () => {

@@ -1,3 +1,5 @@
+import './Card.css';
+
 // Common Card component for consistent UI
 export default function Card({ children, className = '', style, ...props }) {
   return (

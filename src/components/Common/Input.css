@@ -1,0 +1,21 @@
+.input {
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  min-width: 240px;
+  font-size: 1rem;
+  background: #fff;
+  color: var(--ink);
+  outline: none;
+  transition: border 0.2s, box-shadow 0.2s, background 0.2s;
+}
+
+textarea.input {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.input:focus {
+  border-color: var(--navy-600);
+  box-shadow: 0 0 0 3px rgba(26, 60, 133, 0.18);
+}

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import './Orders.css';
 
 const Orders = () => {
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
@@ -8,14 +9,23 @@ const Orders = () => {
   const [loading, setLoading] = useState(false);
 
   const downloadInvoice = async (orderId, invoiceNumber) => {
+    if (!token) {
+      alert('Please sign in to download the invoice.');
+      return;
+    }
     try {
       const response = await fetch(`${API_URL}/orders/${orderId}/invoice`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      if (!response.ok) {
-        alert('Failed to download invoice');
-        return;
-      }
+        if (!response.ok) {
+          const data = await response.json().catch(() => ({}));
+          if (response.status === 401) {
+            alert('Session expired. Please sign in again.');
+            return;
+          }
+          alert(data.message || 'Failed to download invoice');
+          return;
+        }
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
@@ -63,7 +73,7 @@ const Orders = () => {
               <div key={order._id} className="order-card">
                 <div>
                   <h3>{order.invoiceNumber}</h3>
-                  <p>Status: {order.status}</p>
+                  <div className={`order-status ${order.status}`}>{order.status}</div>
                   <p>Total: {Number(order.total).toFixed(3)} BHD</p>
                 </div>
                 <div className="order-actions">

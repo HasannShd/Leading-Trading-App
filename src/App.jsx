@@ -29,7 +29,6 @@ import ProtectedAdminRoute from './components/ProtectedAdminRoute';
 import { AdminProvider } from './context/AdminContext';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
-import './components/Contact/ContactPage.css';
 
 const AppShell = () => {
   const location = useLocation();
