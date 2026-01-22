@@ -51,7 +51,13 @@ const Categories = () => {
         </div>
 
         <div className="categories-grid">
-          {list.map(c => (
+          {list.map(c => {
+            const categoryKey = (c.slug || c.name || '')
+              .toLowerCase()
+              .replace(/[^a-z0-9]+/g, '-')
+              .replace(/(^-|-$)+/g, '');
+
+            return (
             <Link
               key={c._id}
               to={`/categories/${c.slug || c._id}`}
@@ -59,9 +65,10 @@ const Categories = () => {
               aria-label={`Open ${c.name}`}
             >
               <Card>
-                <div className="categories-card-image">
+                <div className="categories-card-image" data-category={categoryKey}>
                   {c.image ? (
                     <img
+                      className={`categories-card-img${categoryKey ? ` categories-card-img--${categoryKey}` : ''}`}
                       src={
                         c.image.startsWith('http')
                           ? c.image
@@ -80,7 +87,8 @@ const Categories = () => {
                 </div>
               </Card>
             </Link>
-          ))}
+            );
+          })}
         </div>
 
         {list.length === 0 && (

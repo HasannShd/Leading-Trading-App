@@ -11,6 +11,7 @@ const AdminProducts = () => {
   const [error, setError] = useState(null);
   const [editingId, setEditingId] = useState(null);
   const [showForm, setShowForm] = useState(false);
+  const [selectedCategoryId, setSelectedCategoryId] = useState('');
   const [specs, setSpecs] = useState([]);
   const [variants, setVariants] = useState([]);
   const [formData, setFormData] = useState({
@@ -141,17 +142,50 @@ const AdminProducts = () => {
     }));
   };
 
+  const handleVariantImageUpload = async (variantIndex, file) => {
+    if (!file) return;
+    setLoading(true);
+    try {
+      const data = new FormData();
+      data.append('image', file);
+      const response = await fetch(`${API_URL}/upload`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` },
+        body: data,
+      });
+      const resData = await response.json();
+      if (!response.ok) {
+        setError(resData.message || 'Upload failed');
+        return;
+      }
+      setVariants(prev => prev.map((variant, i) => (
+        i === variantIndex ? { ...variant, image: resData.url } : variant
+      )));
+      setError(null);
+    } catch (err) {
+      setError('Upload failed');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     try {
+      if (!formData.categorySlug) {
+        setError('Please choose a category.');
+        setLoading(false);
+        return;
+      }
       const method = editingId ? 'PUT' : 'POST';
       const url = editingId ? `${API_URL}/products/${editingId}` : `${API_URL}/products`;
       const normalizedVariants = variants.map(variant => ({
         ...variant,
-        price: Number(variant.price || 0),
-        stock: Number(variant.stock || 0),
+        name: variant.name || variant.type,
+        price: Number(variant.price || formData.basePrice || 0),
+        sizes: (variant.sizes || []).filter(entry => entry.size || entry.inches || entry.color),
         isActive: variant.isActive !== false,
       }));
       const payload = {
@@ -205,9 +239,10 @@ const AdminProducts = () => {
   };
 
   const handleEdit = (product) => {
+    const categoryId = product.categorySlug?._id || product.categorySlug || '';
     setFormData({
       name: product.name || '',
-      categorySlug: product.categorySlug?._id || product.categorySlug || '',
+      categorySlug: categoryId,
       description: product.description || '',
       image: product.image || '',
       images: product.images || [],
@@ -218,8 +253,12 @@ const AdminProducts = () => {
       isActive: product.isActive ?? true,
     });
     setSpecs(product.specs || []);
-    setVariants(product.variants || []);
+    setVariants((product.variants || []).map(variant => ({
+      ...variant,
+      sizes: variant.sizes || [],
+    })));
     setEditingId(product._id);
+    setSelectedCategoryId(categoryId);
     setShowForm(true);
   };
 
@@ -277,19 +316,79 @@ const AdminProducts = () => {
   };
 
   const addVariant = () => setVariants(prev => [...prev, {
-    name: '',
-    size: '',
-    sku: '',
+    type: '',
+    image: '',
     price: '',
-    stock: '',
+    sizes: [{ size: '', inches: '', color: '', outOfStock: false }],
     isActive: true,
-    specs: [],
   }]);
   const updateVariant = (index, key, value) => {
     setVariants(prev => prev.map((variant, i) => (i === index ? { ...variant, [key]: value } : variant)));
   };
   const removeVariant = (index) => {
     setVariants(prev => prev.filter((_, i) => i !== index));
+  };
+  const addVariantSize = (variantIndex) => {
+    setVariants(prev => prev.map((variant, i) => (
+      i === variantIndex
+        ? { ...variant, sizes: [...(variant.sizes || []), { size: '', inches: '', color: '', outOfStock: false }] }
+        : variant
+    )));
+  };
+  const updateVariantSize = (variantIndex, sizeIndex, key, value) => {
+    setVariants(prev => prev.map((variant, i) => (
+      i === variantIndex
+        ? {
+            ...variant,
+            sizes: (variant.sizes || []).map((entry, j) => (
+              j === sizeIndex ? { ...entry, [key]: value } : entry
+            )),
+          }
+        : variant
+    )));
+  };
+  const removeVariantSize = (variantIndex, sizeIndex) => {
+    setVariants(prev => prev.map((variant, i) => (
+      i === variantIndex
+        ? { ...variant, sizes: (variant.sizes || []).filter((_, j) => j !== sizeIndex) }
+        : variant
+    )));
+  };
+
+  const resolveCategoryName = (categoryValue) => {
+    if (!categoryValue) return '';
+    const byId = categories.find(cat => cat._id === categoryValue);
+    if (byId) return byId.name || '';
+    const bySlug = categories.find(cat => cat.slug === categoryValue);
+    return bySlug?.name || '';
+  };
+
+  const buildAutoDescription = () => {
+    const name = formData.name.trim();
+    if (!name) {
+      setError('Add a product name before generating a description.');
+      return '';
+    }
+    const brand = formData.brand.trim();
+    const categoryName = resolveCategoryName(formData.categorySlug);
+    const leadRange = categoryName ? `our ${categoryName}` : 'our medical supplies';
+    const lead = `${name}${brand ? ` by ${brand}` : ''} is part of ${leadRange} range, built for reliable day-to-day use.`;
+    const specPairs = specs
+      .filter(spec => spec.label && spec.value)
+      .slice(0, 3)
+      .map(spec => `${spec.label}: ${spec.value}`);
+    const specLine = specPairs.length ? `Key specs: ${specPairs.join(', ')}.` : '';
+    const variantTypes = Array.from(new Set(variants.map(variant => variant.type).filter(Boolean)));
+    const variantLine = variantTypes.length ? `Available options include ${variantTypes.join(', ')}.` : '';
+    const skuLine = formData.sku.trim() ? `SKU: ${formData.sku.trim()}.` : '';
+    return [lead, specLine, variantLine, skuLine].filter(Boolean).join(' ');
+  };
+
+  const handleAutoDescription = () => {
+    const generated = buildAutoDescription();
+    if (!generated) return;
+    setFormData(prev => ({ ...prev, description: generated }));
+    setError(null);
   };
 
   return (
@@ -298,13 +397,61 @@ const AdminProducts = () => {
       <div className="admin-page-header">
         <h1>📦 Products Management</h1>
         {!showForm && (
-          <button className="admin-add-btn" onClick={() => setShowForm(true)}>
+          <button
+            className="admin-add-btn"
+            onClick={() => {
+              if (!selectedCategoryId) {
+                setError('Please choose a category before adding a product.');
+                return;
+              }
+              setFormData(prev => ({ ...prev, categorySlug: selectedCategoryId }));
+              setShowForm(true);
+            }}
+          >
             + Add New Product
           </button>
         )}
       </div>
 
       {error && <div className="admin-error">{error}</div>}
+
+      <div className="admin-category-section">
+        <div className="admin-category-header">
+          <h2>Categories</h2>
+          <p>Pick a category folder to create products inside it.</p>
+        </div>
+        <div className="admin-category-grid">
+          <button
+            type="button"
+            className={`admin-category-tile${selectedCategoryId ? '' : ' active'}`}
+            onClick={() => {
+              setSelectedCategoryId('');
+              if (!editingId) {
+                setFormData(prev => ({ ...prev, categorySlug: '' }));
+              }
+            }}
+          >
+            <span className="admin-category-icon">🗂️</span>
+            <span className="admin-category-name">All Categories</span>
+          </button>
+          {categories.map(cat => (
+            <button
+              key={cat._id}
+              type="button"
+              className={`admin-category-tile${selectedCategoryId === cat._id ? ' active' : ''}`}
+              onClick={() => {
+                setSelectedCategoryId(cat._id);
+                if (!editingId) {
+                  setFormData(prev => ({ ...prev, categorySlug: cat._id }));
+                }
+              }}
+            >
+              <span className="admin-category-icon">📁</span>
+              <span className="admin-category-name">{cat.name}</span>
+            </button>
+          ))}
+        </div>
+      </div>
 
       {showForm && (
         <div className="admin-form-container">
@@ -322,19 +469,11 @@ const AdminProducts = () => {
               />
             </div>
 
-            <div className="admin-form-group">
+            <div className="admin-form-group full-width">
               <label>Category *</label>
-              <select
-                name="categorySlug"
-                value={formData.categorySlug}
-                onChange={handleInputChange}
-                required
-              >
-                <option value="">Select a category</option>
-                {categories.map(cat => (
-                  <option key={cat._id} value={cat._id}>{cat.name}</option>
-                ))}
-              </select>
+              <div className="admin-category-selected">
+                {categories.find(cat => cat._id === formData.categorySlug)?.name || 'Select a category above'}
+              </div>
             </div>
 
             <div className="admin-form-group">
@@ -414,7 +553,12 @@ const AdminProducts = () => {
             </div>
 
             <div className="admin-form-group full-width">
-              <label>Description</label>
+              <div className="admin-section-header">
+                <label>Description</label>
+                <button type="button" className="admin-btn-secondary" onClick={handleAutoDescription}>
+                  Auto-generate
+                </button>
+              </div>
               <textarea
                 name="description"
                 value={formData.description}
@@ -461,29 +605,22 @@ const AdminProducts = () => {
                   + Add Variant
                 </button>
               </div>
+              <p className="admin-helper-text">Variants are types. Add sizes/colors under each type. Price is taken from Base Price.</p>
               {variants.map((variant, index) => (
                 <div key={`variant-${index}`} className="admin-variant-card">
                   <div className="admin-inline-row">
                     <input
                       type="text"
-                      placeholder="Name"
-                      value={variant.name || ''}
-                      onChange={(e) => updateVariant(index, 'name', e.target.value)}
+                      placeholder="Type (e.g., Adult / Kids)"
+                      value={variant.type || ''}
+                      onChange={(e) => updateVariant(index, 'type', e.target.value)}
                     />
                     <input
                       type="text"
-                      placeholder="Size"
-                      value={variant.size || ''}
-                      onChange={(e) => updateVariant(index, 'size', e.target.value)}
+                      placeholder="Type image URL"
+                      value={variant.image || ''}
+                      onChange={(e) => updateVariant(index, 'image', e.target.value)}
                     />
-                    <input
-                      type="text"
-                      placeholder="SKU"
-                      value={variant.sku || ''}
-                      onChange={(e) => updateVariant(index, 'sku', e.target.value)}
-                    />
-                  </div>
-                  <div className="admin-inline-row">
                     <input
                       type="number"
                       placeholder="Price (BHD)"
@@ -492,11 +629,64 @@ const AdminProducts = () => {
                       onChange={(e) => updateVariant(index, 'price', e.target.value)}
                     />
                     <input
-                      type="number"
-                      placeholder="Stock"
-                      value={variant.stock ?? ''}
-                      onChange={(e) => updateVariant(index, 'stock', e.target.value)}
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => {
+                        handleVariantImageUpload(index, e.target.files?.[0]);
+                        e.target.value = '';
+                      }}
                     />
+                  </div>
+                  <div className="admin-variant-sizes">
+                    <div className="admin-variant-sizes-header">
+                      <span>Sizes</span>
+                      <button
+                        type="button"
+                        className="admin-btn-secondary"
+                        onClick={() => addVariantSize(index)}
+                      >
+                        + Add Size
+                      </button>
+                    </div>
+                    {(variant.sizes || []).map((entry, sizeIndex) => (
+                      <div key={`variant-${index}-size-${sizeIndex}`} className="admin-inline-row">
+                        <input
+                          type="text"
+                          placeholder="Size"
+                          value={entry.size || ''}
+                          onChange={(e) => updateVariantSize(index, sizeIndex, 'size', e.target.value)}
+                        />
+                        <input
+                          type="text"
+                          placeholder="Inches"
+                          value={entry.inches || ''}
+                          onChange={(e) => updateVariantSize(index, sizeIndex, 'inches', e.target.value)}
+                        />
+                        <input
+                          type="text"
+                          placeholder="Color"
+                          value={entry.color || ''}
+                          onChange={(e) => updateVariantSize(index, sizeIndex, 'color', e.target.value)}
+                        />
+                        <label className="admin-inline-checkbox">
+                          <input
+                            type="checkbox"
+                            checked={entry.outOfStock === true}
+                            onChange={(e) => updateVariantSize(index, sizeIndex, 'outOfStock', e.target.checked)}
+                          />
+                          Out of stock
+                        </label>
+                        <button
+                          type="button"
+                          className="btn-delete"
+                          onClick={() => removeVariantSize(index, sizeIndex)}
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="admin-inline-row">
                     <label className="admin-inline-checkbox">
                       <input
                         type="checkbox"
@@ -548,7 +738,7 @@ const AdminProducts = () => {
       )}
 
       <div className="admin-products-list">
-        <h2>All Products ({products.length})</h2>
+        <h2>All Products ({products.filter(p => !selectedCategoryId || p.categorySlug?._id === selectedCategoryId || p.categorySlug === selectedCategoryId).length})</h2>
         
         {loading && !showForm && <p className="loading">Loading...</p>}
 
@@ -570,7 +760,9 @@ const AdminProducts = () => {
                 </tr>
               </thead>
               <tbody>
-                {products.map(product => (
+                {products
+                  .filter(product => !selectedCategoryId || product.categorySlug?._id === selectedCategoryId || product.categorySlug === selectedCategoryId)
+                  .map(product => (
                   <tr key={product._id}>
                     <td className="col-name">{product.name}</td>
                     <td className="col-category">{product.categorySlug?.name || '-'}</td>

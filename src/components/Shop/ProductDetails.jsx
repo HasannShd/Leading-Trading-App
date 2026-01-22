@@ -9,9 +9,12 @@ const ProductDetails = () => {
   const token = localStorage.getItem('token');
   const [product, setProduct] = useState(null);
   const [variantId, setVariantId] = useState('');
+  const [selectedSize, setSelectedSize] = useState('');
   const [activeImage, setActiveImage] = useState('');
   const [qty, setQty] = useState(1);
   const [loading, setLoading] = useState(false);
+
+  const buildSizeLabel = (entry) => [entry.size, entry.inches, entry.color].filter(Boolean).join(' / ');
 
   const fetchProduct = async () => {
     setLoading(true);
@@ -19,11 +22,18 @@ const ProductDetails = () => {
       const response = await fetch(`${API_URL}/products/${id}`);
       const data = await response.json();
       setProduct(data);
-      if (data?.variants?.length) {
-        setVariantId(data.variants[0]._id);
+      const variants = data?.variants || [];
+      if (variants.length) {
+        const first = variants[0];
+        setVariantId(first._id);
+        const firstSize = (first.sizes || []).find(entry => !entry.outOfStock) || first.sizes?.[0];
+        if (firstSize) {
+          setSelectedSize(buildSizeLabel(firstSize));
+        }
       }
-      const firstImage = data?.image || data?.images?.[0] || '';
-      setActiveImage(firstImage);
+      const gallery = [data?.image, ...(data?.images || [])].filter(Boolean);
+      const uniqueGallery = Array.from(new Set(gallery));
+      setActiveImage(uniqueGallery[0] || '');
     } catch (err) {
       console.error('Failed to load product:', err);
     } finally {
@@ -35,9 +45,32 @@ const ProductDetails = () => {
     fetchProduct();
   }, [id]);
 
+  const variants = product?.variants || [];
+  const selectedVariant = variants.find(v => v._id === variantId);
+  const sizeOptions = (selectedVariant?.sizes || []).filter(entry => entry.size || entry.inches || entry.color);
+  const hasTypes = variants.some(variant => (variant.type || '').trim());
+
+  useEffect(() => {
+    if (selectedVariant?.image) {
+      setActiveImage(selectedVariant.image);
+    }
+    if (selectedVariant?.sizes?.length) {
+      const labels = selectedVariant.sizes.map((entry) => buildSizeLabel(entry));
+      if (!selectedSize || !labels.includes(selectedSize)) {
+        const nextEntry = selectedVariant.sizes.find(entry => !entry.outOfStock) || selectedVariant.sizes[0];
+        const nextLabel = nextEntry ? buildSizeLabel(nextEntry) : '';
+        setSelectedSize(nextLabel);
+      }
+    }
+  }, [selectedVariant, selectedSize]);
+
   const handleAddToCart = async () => {
     if (!token) {
       navigate('/sign-in');
+      return;
+    }
+    if (sizeOptions.length && !selectedSize) {
+      alert('Please choose a size.');
       return;
     }
     try {
@@ -47,7 +80,7 @@ const ProductDetails = () => {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ productId: product._id, variantId, quantity: qty }),
+        body: JSON.stringify({ productId: product._id, variantId, quantity: qty, size: selectedSize }),
       });
       if (!response.ok) {
         const data = await response.json();
@@ -65,9 +98,23 @@ const ProductDetails = () => {
     return <main><p className="shop-empty">Loading product...</p></main>;
   }
 
-  const selectedVariant = product.variants?.find(v => v._id === variantId);
-  const displayPrice = selectedVariant?.price ?? product.basePrice ?? 0;
-  const gallery = [product.image, ...(product.images || [])].filter(Boolean);
+  const variantPriceValue = Number(selectedVariant?.price);
+  const fallbackVariantPrice = Number(variants[0]?.price);
+  const displayPrice = Number.isFinite(variantPriceValue) && variantPriceValue > 0
+    ? variantPriceValue
+    : (Number.isFinite(fallbackVariantPrice) && fallbackVariantPrice > 0
+        ? fallbackVariantPrice
+        : Number(product.basePrice || 0));
+  const gallery = Array.from(new Set([product.image, ...(product.images || [])].filter(Boolean)));
+  const handleTypeChange = (value) => {
+    setVariantId(value);
+    const nextVariant = variants.find(v => v._id === value);
+    if (nextVariant?.image) {
+      setActiveImage(nextVariant.image);
+    }
+    const nextSize = nextVariant?.sizes?.find(entry => !entry.outOfStock) || nextVariant?.sizes?.[0];
+    setSelectedSize(nextSize ? buildSizeLabel(nextSize) : '');
+  };
 
   return (
     <main>
@@ -111,16 +158,38 @@ const ProductDetails = () => {
           <p className="product-desc">{product.description}</p>
           <p className="product-price">{Number(displayPrice).toFixed(3)} BHD</p>
 
-          {product.variants?.length > 0 && (
+          {variants.length > 0 && (
             <div className="product-variant">
-              <label>Choose Variant</label>
-              <select value={variantId} onChange={(e) => setVariantId(e.target.value)}>
-                {product.variants.map(v => (
-                  <option key={v._id} value={v._id}>
-                    {v.name || v.size || v.sku} - {Number(v.price).toFixed(3)} BHD
-                  </option>
-                ))}
-              </select>
+              {hasTypes && (
+                <>
+                  <label>Choose Type</label>
+                  <select value={variantId} onChange={(e) => handleTypeChange(e.target.value)}>
+                    {variants.map(v => (
+                      <option key={v._id} value={v._id}>
+                        {v.type || v.name || v.sku}
+                      </option>
+                    ))}
+                  </select>
+                </>
+              )}
+              {sizeOptions.length > 0 && (
+                <>
+                  <label>Choose Size</label>
+                  <select
+                    value={selectedSize}
+                    onChange={(e) => setSelectedSize(e.target.value)}
+                  >
+                    {sizeOptions.map((entry, idx) => {
+                      const label = buildSizeLabel(entry);
+                      return (
+                        <option key={`${label}-${idx}`} value={label} disabled={entry.outOfStock}>
+                          {label}{entry.outOfStock ? ' (Out of stock)' : ''}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </>
+              )}
             </div>
           )}
 
@@ -138,7 +207,7 @@ const ProductDetails = () => {
             Add to Cart
           </button>
 
-          {(selectedVariant?.specs?.length || product.specs?.length) && (
+          {(selectedVariant?.specs?.length > 0 || product.specs?.length > 0) && (
             <div className="product-specs">
               <h3>Specifications</h3>
               <ul>

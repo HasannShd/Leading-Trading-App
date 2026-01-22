@@ -117,7 +117,11 @@ const Shop = () => {
                     <h3>{product.name}</h3>
                     <p>{product.brand || '—'}</p>
                     <p className="shop-card-price">
-                      {Number(product.basePrice || product.variants?.[0]?.price || 0).toFixed(3)} BHD
+                      {Number(
+                        product.variants?.length
+                          ? (Number(product.variants[0].price) > 0 ? product.variants[0].price : product.basePrice || 0)
+                          : product.basePrice || 0
+                      ).toFixed(3)} BHD
                     </p>
                   </div>
                 </Card>

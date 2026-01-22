@@ -77,14 +77,16 @@
   position: absolute;
   top: 100%;
   left: 0;
-  background: rgba(255, 255, 255, 0.6);
+  background: #ffffff;
   border: 1px solid rgba(12, 27, 58, 0.1);
   border-radius: 14px;
   min-width: 220px;
   padding: 6px;
   box-shadow: var(--shadow-sm);
-  backdrop-filter: blur(22px);
+  backdrop-filter: none;
   z-index: 100;
+  max-height: none;
+  overflow: visible;
 }
 
 .nav-dropdown-item {
@@ -248,7 +250,7 @@
 }
 
 .app.hero-page .header {
-  background: rgba(255, 255, 255, 0.28);
-  border-bottom-color: rgba(12, 27, 58, 0.08);
-  backdrop-filter: blur(14px);
+  background: transparent;
+  border-bottom-color: transparent;
+  backdrop-filter: none;
 }

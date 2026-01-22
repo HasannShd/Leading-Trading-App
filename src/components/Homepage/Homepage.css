@@ -356,12 +356,17 @@
   padding: 38px 16px 48px 16px;
   backdrop-filter: blur(10px);
 }
-.home-category-band-inner {
+.home-category-band-viewport {
   max-width: 1200px;
   margin: 0 auto;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 24px;
+  overflow: hidden;
+}
+.home-category-band-inner {
+  display: flex;
+  align-items: stretch;
+  gap: 26px;
+  width: max-content;
+  animation: featured-marquee 32s linear infinite;
 }
 .home-category-card {
   text-decoration: none;
@@ -369,21 +374,30 @@
   padding: 10px 6px;
   display: grid;
   gap: 12px;
+  justify-items: center;
+  text-align: center;
+  flex: 0 0 240px;
 }
 .home-category-icon {
-  width: 68px;
-  height: 68px;
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.14);
+  width: 170px;
+  height: 170px;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.85);
   display: grid;
   place-items: center;
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.2);
+  margin: 0 auto;
+  padding: 8px;
+  box-sizing: border-box;
 }
 .home-category-icon img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
+  display: block;
+  border-radius: 16px;
 }
 .home-category-icon span {
   font-size: 1.6rem;
@@ -391,11 +405,11 @@
   color: #ffffff;
 }
 .home-category-title {
-  font-size: 1.25rem;
+  font-size: 1.3rem;
   font-weight: 700;
 }
 .home-category-desc {
-  font-size: 0.95rem;
+  font-size: 0.98rem;
   color: rgba(255, 255, 255, 0.75);
   line-height: 1.5;
 }
@@ -467,8 +481,8 @@
   .modern-hero-title {
     font-size: 2.2rem;
   }
-  .home-category-band-inner {
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  .home-category-card {
+    flex-basis: 200px;
   }
 }
 
@@ -482,6 +496,24 @@
   }
   .home-trusted-inner h2 {
     font-size: 1.7rem;
+  }
+  .home-category-card {
+    flex-basis: 180px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-category-band-inner {
+    animation: none;
+  }
+}
+
+@keyframes featured-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
   }
 }
 .modern-hero-btn-row {
