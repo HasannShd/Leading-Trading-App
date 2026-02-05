@@ -1,13 +1,14 @@
 .input {
   padding: 10px 12px;
-  border: 1px solid var(--border);
+  border: 1px solid var(--glass-border);
   border-radius: 12px;
   min-width: 240px;
   font-size: 1rem;
-  background: #fff;
+  background: var(--glass-bg);
   color: var(--ink);
   outline: none;
   transition: border 0.2s, box-shadow 0.2s, background 0.2s;
+  backdrop-filter: blur(var(--glass-blur));
 }
 
 textarea.input {

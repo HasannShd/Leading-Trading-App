@@ -21,6 +21,7 @@ import AdminLogin from './components/Admin/AdminLogin';
 import AdminDashboard from './components/Admin/AdminDashboard';
 import AdminCategories from './components/Admin/AdminCategories';
 import AdminProducts from './components/Admin/AdminProducts';
+import AdminImportProducts from './components/Admin/AdminImportProducts';
 import AdminOrders from './components/Admin/AdminOrders';
 import AdminMarketing from './components/Admin/AdminMarketing';
 import AdminOrderDetails from './components/Admin/AdminOrderDetails';
@@ -62,6 +63,7 @@ const AppShell = () => {
           <Route path="/.well-known/admin-dashboard-sh123456" element={<ProtectedAdminRoute element={<AdminDashboard />} />} />
           <Route path="/.well-known/admin-categories-sh123456" element={<ProtectedAdminRoute element={<AdminCategories />} />} />
           <Route path="/.well-known/admin-products-sh123456" element={<ProtectedAdminRoute element={<AdminProducts />} />} />
+          <Route path="/.well-known/admin-import-sh123456" element={<ProtectedAdminRoute element={<AdminImportProducts />} />} />
           <Route path="/.well-known/admin-orders-sh123456" element={<ProtectedAdminRoute element={<AdminOrders />} />} />
           <Route path="/.well-known/admin-orders/:id" element={<ProtectedAdminRoute element={<AdminOrderDetails />} />} />
           <Route path="/.well-known/admin-marketing-sh123456" element={<ProtectedAdminRoute element={<AdminMarketing />} />} />

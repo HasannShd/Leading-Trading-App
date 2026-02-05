@@ -10,7 +10,7 @@ const Shop = () => {
   const [categories, setCategories] = useState([]);
   const [q, setQ] = useState('');
   const [category, setCategory] = useState('');
-  const [sort, setSort] = useState('name');
+  const [sort, setSort] = useState('random');
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -34,15 +34,22 @@ const Shop = () => {
       const response = await fetch(`${API_URL}/products?${params.toString()}`);
       const data = await response.json();
       const items = Array.isArray(data) ? data : (data.items || []);
-      const sorted = [...items].sort((a, b) => {
-        if (sort === 'price') {
+      let next = [...items];
+      if (sort === 'price') {
+        next.sort((a, b) => {
           const priceA = Number(a.basePrice || a.variants?.[0]?.price || 0);
           const priceB = Number(b.basePrice || b.variants?.[0]?.price || 0);
           return priceA - priceB;
+        });
+      } else if (sort === 'name') {
+        next.sort((a, b) => a.name.localeCompare(b.name));
+      } else {
+        for (let i = next.length - 1; i > 0; i -= 1) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [next[i], next[j]] = [next[j], next[i]];
         }
-        return a.name.localeCompare(b.name);
-      });
-      setProducts(sorted);
+      }
+      setProducts(next);
       setTotal(Array.isArray(data) ? data.length : (data.total || 0));
     } catch (err) {
       console.error('Failed to load products:', err);
@@ -82,6 +89,7 @@ const Shop = () => {
               ))}
             </select>
             <select value={sort} onChange={(e) => setSort(e.target.value)}>
+              <option value="random">Sort: Random</option>
               <option value="name">Sort: Name</option>
               <option value="price">Sort: Price</option>
             </select>

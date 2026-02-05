@@ -16,7 +16,10 @@ html, body, #root {
   min-height: 100%;
   margin: 0;
   padding: 0;
-  background: #f6f8fb;
+  background:
+    radial-gradient(900px 520px at 15% -10%, rgba(61, 95, 166, 0.18), transparent 60%),
+    radial-gradient(800px 520px at 85% 0%, rgba(30, 70, 150, 0.12), transparent 60%),
+    #f7f9fc;
   color: #0c1b3a;
 }
 

@@ -270,6 +270,7 @@ const AdminCategories = () => {
                   <th>Name</th>
                   <th>Slug</th>
                   <th>Description</th>
+                  <th>Desc?</th>
                   <th>Created</th>
                   <th>Actions</th>
                 </tr>
@@ -280,6 +281,7 @@ const AdminCategories = () => {
                     <td className="col-name">{cat.name}</td>
                     <td className="col-slug">{cat.slug || '-'}</td>
                     <td className="col-desc">{cat.description || '-'}</td>
+                    <td className="col-desc-flag">{cat.description?.trim() ? 'Yes' : 'No'}</td>
                     <td className="col-date">
                       {new Date(cat.createdAt).toLocaleDateString()}
                     </td>

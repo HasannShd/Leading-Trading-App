@@ -9,12 +9,16 @@ const ProductDetails = () => {
   const token = localStorage.getItem('token');
   const [product, setProduct] = useState(null);
   const [variantId, setVariantId] = useState('');
-  const [selectedSize, setSelectedSize] = useState('');
+  const [selectedSizeIndex, setSelectedSizeIndex] = useState('');
   const [activeImage, setActiveImage] = useState('');
   const [qty, setQty] = useState(1);
   const [loading, setLoading] = useState(false);
 
   const buildSizeLabel = (entry) => [entry.size, entry.inches, entry.color].filter(Boolean).join(' / ');
+  const getSizePrice = (entry) => {
+    const priceValue = Number(entry?.price);
+    return Number.isFinite(priceValue) && priceValue > 0 ? priceValue : null;
+  };
 
   const fetchProduct = async () => {
     setLoading(true);
@@ -26,9 +30,11 @@ const ProductDetails = () => {
       if (variants.length) {
         const first = variants[0];
         setVariantId(first._id);
-        const firstSize = (first.sizes || []).find(entry => !entry.outOfStock) || first.sizes?.[0];
-        if (firstSize) {
-          setSelectedSize(buildSizeLabel(firstSize));
+        const firstIndex = (first.sizes || []).findIndex(entry => !entry.outOfStock);
+        if (firstIndex >= 0) {
+          setSelectedSizeIndex(String(firstIndex));
+        } else if (first.sizes?.length) {
+          setSelectedSizeIndex('0');
         }
       }
       const gallery = [data?.image, ...(data?.images || [])].filter(Boolean);
@@ -55,24 +61,24 @@ const ProductDetails = () => {
       setActiveImage(selectedVariant.image);
     }
     if (selectedVariant?.sizes?.length) {
-      const labels = selectedVariant.sizes.map((entry) => buildSizeLabel(entry));
-      if (!selectedSize || !labels.includes(selectedSize)) {
-        const nextEntry = selectedVariant.sizes.find(entry => !entry.outOfStock) || selectedVariant.sizes[0];
-        const nextLabel = nextEntry ? buildSizeLabel(nextEntry) : '';
-        setSelectedSize(nextLabel);
+      const nextIndex = selectedVariant.sizes.findIndex(entry => !entry.outOfStock);
+      if (selectedSizeIndex === '' || Number(selectedSizeIndex) >= selectedVariant.sizes.length) {
+        setSelectedSizeIndex(nextIndex >= 0 ? String(nextIndex) : '0');
       }
     }
-  }, [selectedVariant, selectedSize]);
+  }, [selectedVariant, selectedSizeIndex]);
 
   const handleAddToCart = async () => {
     if (!token) {
       navigate('/sign-in');
       return;
     }
-    if (sizeOptions.length && !selectedSize) {
+    if (sizeOptions.length && (selectedSizeIndex === '' || Number.isNaN(Number(selectedSizeIndex)))) {
       alert('Please choose a size.');
       return;
     }
+    const selectedEntry = sizeOptions[Number(selectedSizeIndex)];
+    const selectedLabel = selectedEntry ? buildSizeLabel(selectedEntry) : '';
     try {
       const response = await fetch(`${API_URL}/cart/items`, {
         method: 'POST',
@@ -80,7 +86,12 @@ const ProductDetails = () => {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ productId: product._id, variantId, quantity: qty, size: selectedSize }),
+        body: JSON.stringify({
+          productId: product._id,
+          variantId,
+          quantity: qty,
+          size: selectedLabel,
+        }),
       });
       if (!response.ok) {
         const data = await response.json();
@@ -98,13 +109,18 @@ const ProductDetails = () => {
     return <main><p className="shop-empty">Loading product...</p></main>;
   }
 
+  const selectedEntry = sizeOptions[Number(selectedSizeIndex)];
+  const selectedSizePrice = getSizePrice(selectedEntry);
   const variantPriceValue = Number(selectedVariant?.price);
   const fallbackVariantPrice = Number(variants[0]?.price);
-  const displayPrice = Number.isFinite(variantPriceValue) && variantPriceValue > 0
-    ? variantPriceValue
-    : (Number.isFinite(fallbackVariantPrice) && fallbackVariantPrice > 0
-        ? fallbackVariantPrice
-        : Number(product.basePrice || 0));
+  const basePriceValue = Number(product.basePrice || 0);
+  const displayPrice = Number.isFinite(selectedSizePrice) && selectedSizePrice > 0
+    ? selectedSizePrice
+    : (Number.isFinite(variantPriceValue) && variantPriceValue > 0
+        ? variantPriceValue
+        : (Number.isFinite(fallbackVariantPrice) && fallbackVariantPrice > 0
+            ? fallbackVariantPrice
+            : basePriceValue));
   const gallery = Array.from(new Set([product.image, ...(product.images || [])].filter(Boolean)));
   const handleTypeChange = (value) => {
     setVariantId(value);
@@ -112,8 +128,12 @@ const ProductDetails = () => {
     if (nextVariant?.image) {
       setActiveImage(nextVariant.image);
     }
-    const nextSize = nextVariant?.sizes?.find(entry => !entry.outOfStock) || nextVariant?.sizes?.[0];
-    setSelectedSize(nextSize ? buildSizeLabel(nextSize) : '');
+    if (nextVariant?.sizes?.length) {
+      const nextIndex = nextVariant.sizes.findIndex(entry => !entry.outOfStock);
+      setSelectedSizeIndex(nextIndex >= 0 ? String(nextIndex) : '0');
+    } else {
+      setSelectedSizeIndex('');
+    }
   };
 
   return (
@@ -164,11 +184,14 @@ const ProductDetails = () => {
                 <>
                   <label>Choose Type</label>
                   <select value={variantId} onChange={(e) => handleTypeChange(e.target.value)}>
-                    {variants.map(v => (
-                      <option key={v._id} value={v._id}>
-                        {v.type || v.name || v.sku}
-                      </option>
-                    ))}
+                    {variants.map(v => {
+                      const priceTag = Number(v.price);
+                      return (
+                        <option key={v._id} value={v._id}>
+                          {v.type || v.name || v.sku}{Number.isFinite(priceTag) && priceTag > 0 ? ` — ${priceTag.toFixed(3)} BHD` : ''}
+                        </option>
+                      );
+                    })}
                   </select>
                 </>
               )}
@@ -176,14 +199,15 @@ const ProductDetails = () => {
                 <>
                   <label>Choose Size</label>
                   <select
-                    value={selectedSize}
-                    onChange={(e) => setSelectedSize(e.target.value)}
+                    value={selectedSizeIndex}
+                    onChange={(e) => setSelectedSizeIndex(e.target.value)}
                   >
                     {sizeOptions.map((entry, idx) => {
                       const label = buildSizeLabel(entry);
+                      const priceTag = getSizePrice(entry);
                       return (
-                        <option key={`${label}-${idx}`} value={label} disabled={entry.outOfStock}>
-                          {label}{entry.outOfStock ? ' (Out of stock)' : ''}
+                        <option key={`${label}-${idx}`} value={String(idx)} disabled={entry.outOfStock}>
+                          {label}{priceTag ? ` — ${priceTag.toFixed(3)} BHD` : ''}{entry.outOfStock ? ' (Out of stock)' : ''}
                         </option>
                       );
                     })}

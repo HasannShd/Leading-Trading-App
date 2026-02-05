@@ -12,6 +12,7 @@ const AdminProducts = () => {
   const [editingId, setEditingId] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [selectedCategoryId, setSelectedCategoryId] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
   const [specs, setSpecs] = useState([]);
   const [variants, setVariants] = useState([]);
   const [formData, setFormData] = useState({
@@ -185,7 +186,15 @@ const AdminProducts = () => {
         ...variant,
         name: variant.name || variant.type,
         price: Number(variant.price || formData.basePrice || 0),
-        sizes: (variant.sizes || []).filter(entry => entry.size || entry.inches || entry.color),
+        sizes: (variant.sizes || [])
+          .filter(entry => entry.size || entry.inches || entry.color)
+          .map(entry => ({
+            ...entry,
+            price: entry.price === '' || entry.price === null || typeof entry.price === 'undefined'
+              ? undefined
+              : Number(entry.price),
+            outOfStock: entry.outOfStock === true,
+          })),
         isActive: variant.isActive !== false,
       }));
       const payload = {
@@ -331,7 +340,7 @@ const AdminProducts = () => {
   const addVariantSize = (variantIndex) => {
     setVariants(prev => prev.map((variant, i) => (
       i === variantIndex
-        ? { ...variant, sizes: [...(variant.sizes || []), { size: '', inches: '', color: '', outOfStock: false }] }
+        ? { ...variant, sizes: [...(variant.sizes || []), { size: '', inches: '', color: '', price: '', outOfStock: false }] }
         : variant
     )));
   };
@@ -605,7 +614,7 @@ const AdminProducts = () => {
                   + Add Variant
                 </button>
               </div>
-              <p className="admin-helper-text">Variants are types. Add sizes/colors under each type. Price is taken from Base Price.</p>
+              <p className="admin-helper-text">Variants are types. Add sizes/colors under each type. Size price overrides the variant/base price when set.</p>
               {variants.map((variant, index) => (
                 <div key={`variant-${index}`} className="admin-variant-card">
                   <div className="admin-inline-row">
@@ -667,6 +676,13 @@ const AdminProducts = () => {
                           placeholder="Color"
                           value={entry.color || ''}
                           onChange={(e) => updateVariantSize(index, sizeIndex, 'color', e.target.value)}
+                        />
+                        <input
+                          type="number"
+                          placeholder="Size Price (BHD)"
+                          value={entry.price ?? ''}
+                          step="0.001"
+                          onChange={(e) => updateVariantSize(index, sizeIndex, 'price', e.target.value)}
                         />
                         <label className="admin-inline-checkbox">
                           <input
@@ -739,6 +755,15 @@ const AdminProducts = () => {
 
       <div className="admin-products-list">
         <h2>All Products ({products.filter(p => !selectedCategoryId || p.categorySlug?._id === selectedCategoryId || p.categorySlug === selectedCategoryId).length})</h2>
+        <div className="admin-import-field">
+          <label>Search products</label>
+          <input
+            type="text"
+            placeholder="Search by name, brand, or SKU"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
         
         {loading && !showForm && <p className="loading">Loading...</p>}
 
@@ -753,6 +778,7 @@ const AdminProducts = () => {
                   <th>Category</th>
                   <th>Brand</th>
                   <th>SKU</th>
+                  <th>Desc?</th>
                   <th>Featured</th>
                   <th>Status</th>
                   <th>Created</th>
@@ -762,12 +788,23 @@ const AdminProducts = () => {
               <tbody>
                 {products
                   .filter(product => !selectedCategoryId || product.categorySlug?._id === selectedCategoryId || product.categorySlug === selectedCategoryId)
+                  .filter(product => {
+                    const needle = searchTerm.trim().toLowerCase();
+                    if (!needle) return true;
+                    const haystack = [
+                      product.name,
+                      product.brand,
+                      product.sku,
+                    ].join(' ').toLowerCase();
+                    return haystack.includes(needle);
+                  })
                   .map(product => (
                   <tr key={product._id}>
                     <td className="col-name">{product.name}</td>
                     <td className="col-category">{product.categorySlug?.name || '-'}</td>
                     <td className="col-brand">{product.brand || '-'}</td>
                     <td className="col-sku">{product.sku || '-'}</td>
+                    <td className="col-desc-flag">{product.description?.trim() ? 'Yes' : 'No'}</td>
                     <td>{product.featured ? 'Yes' : 'No'}</td>
                     <td className="col-status">
                       <span className={`status-badge ${product.isActive ? 'active' : 'inactive'}`}>

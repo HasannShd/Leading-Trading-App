@@ -1,9 +1,9 @@
 .brands-section {
   padding: 64px 16px 48px 16px;
-  background: rgba(255, 255, 255, 0.42);
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-  backdrop-filter: blur(22px);
+  background: var(--glass-bg);
+  border-top: 1px solid var(--glass-border);
+  border-bottom: 1px solid var(--glass-border);
+  backdrop-filter: blur(var(--glass-blur));
 }
 .brands-header {
   max-width: 1100px;
@@ -28,10 +28,10 @@
   gap: 20px;
 }
 .brand-card {
-  background: rgba(255, 255, 255, 0.48);
+  background: var(--glass-bg);
   border-radius: 16px;
-  border: 1px solid rgba(12, 27, 58, 0.08);
-  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
   padding: 18px 16px;
   display: flex;
   flex-direction: column;
@@ -39,10 +39,10 @@
   text-decoration: none;
   color: var(--navy-900);
   transition: transform 0.2s, box-shadow 0.2s;
-  backdrop-filter: blur(22px);
+  backdrop-filter: blur(var(--glass-blur));
 }
 .brand-card.secondary {
-  background: rgba(255, 255, 255, 0.42);
+  background: var(--glass-bg);
 }
 .brand-card:hover {
   transform: translateY(-4px);

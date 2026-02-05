@@ -42,6 +42,12 @@ const AdminDashboard = () => {
             📦 Products
           </button>
           <button
+            className={`admin-nav-item ${activeSection === 'import' ? 'active' : ''}`}
+            onClick={() => navigate('/.well-known/admin-import-sh123456')}
+          >
+            📥 Import
+          </button>
+          <button
             className={`admin-nav-item ${activeSection === 'orders' ? 'active' : ''}`}
             onClick={() => navigate('/.well-known/admin-orders-sh123456')}
           >
@@ -99,6 +105,18 @@ const AdminDashboard = () => {
                 <p className="admin-card-action">
                   <button onClick={() => navigate('/.well-known/admin-products-sh123456')}>
                     Manage Products →
+                  </button>
+                </p>
+              </div>
+            </div>
+
+            <div className="admin-card">
+              <div className="admin-card-icon">📥</div>
+              <div className="admin-card-content">
+                <h3>Import</h3>
+                <p className="admin-card-action">
+                  <button onClick={() => navigate('/.well-known/admin-import-sh123456')}>
+                    Import Products →
                   </button>
                 </p>
               </div>

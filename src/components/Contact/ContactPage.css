@@ -10,13 +10,13 @@
 .contact-form-block {
   flex: 1 1 340px;
   max-width: 420px;
-  background: rgba(255, 255, 255, 0.8);
+  background: var(--glass-bg-strong);
   border-radius: 18px;
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
   padding: 32px 32px 24px 32px;
   min-width: 320px;
-  backdrop-filter: blur(14px);
+  backdrop-filter: blur(var(--glass-blur));
 }
 .contact-form-title-row {
   display: flex;
@@ -54,13 +54,14 @@
 .contact-form textarea {
   width: 100%;
   padding: 10px 12px;
-  border: 1px solid rgba(15, 37, 87, 0.16);
+  border: 1px solid var(--glass-border);
   border-radius: 12px;
   font-size: 1rem;
   margin-top: 4px;
   margin-bottom: 2px;
   box-sizing: border-box;
-  background: rgba(255, 255, 255, 0.9);
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
 }
 .contact-form textarea {
   min-height: 80px;
@@ -99,16 +100,16 @@
 .contact-info-block {
   flex: 1 1 340px;
   max-width: 420px;
-  background: rgba(239, 244, 255, 0.8);
+  background: var(--glass-bg);
   border-radius: 18px;
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
   padding: 24px 24px 16px 24px;
   min-width: 320px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  backdrop-filter: blur(14px);
+  backdrop-filter: blur(var(--glass-blur));
 }
 .contact-map {
   width: 100%;

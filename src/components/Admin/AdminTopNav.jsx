@@ -16,6 +16,7 @@ const AdminTopNav = () => {
           <Link to="/.well-known/admin-dashboard-sh123456">Overview</Link>
           <Link to="/.well-known/admin-categories-sh123456">Categories</Link>
           <Link to="/.well-known/admin-products-sh123456">Products</Link>
+          <Link to="/.well-known/admin-import-sh123456">Import</Link>
           <Link to="/.well-known/admin-orders-sh123456">Orders</Link>
           <Link to="/.well-known/admin-marketing-sh123456">Marketing</Link>
           <Link to="/.well-known/admin-account-sh123456">Account</Link>

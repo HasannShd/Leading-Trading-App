@@ -9,13 +9,18 @@
   --white: #ffffff;
   --ink: #0c1b3a;
   --muted: #5f6b85;
-  --border: #e2e7f2;
+  --border: rgba(31, 79, 166, 0.14);
   --bg: #f7f9fc;
-  --card: #ffffff;
-  --shadow-sm: 0 10px 24px rgba(9, 23, 57, 0.06);
-  --shadow-md: 0 22px 48px rgba(9, 23, 57, 0.12);
+  --card: rgba(255, 255, 255, 0.75);
+  --shadow-sm: 0 12px 28px rgba(9, 23, 57, 0.08);
+  --shadow-md: 0 24px 52px rgba(9, 23, 57, 0.14);
   --accent: #3d5fa6;
   --accent-soft: #e6edff;
+  --glass-bg: rgba(255, 255, 255, 0.66);
+  --glass-bg-strong: rgba(255, 255, 255, 0.82);
+  --glass-border: rgba(31, 79, 166, 0.2);
+  --glass-shadow: 0 24px 55px rgba(10, 26, 54, 0.12);
+  --glass-blur: 16px;
 }
 
 /* ========== GLOBAL ========== */
@@ -45,9 +50,9 @@ a, button, input, textarea, select {
 .app {
   min-height: 100vh;
   background:
-    radial-gradient(900px 520px at 10% -10%, rgba(61, 95, 166, 0.22), transparent 60%),
-    radial-gradient(800px 520px at 90% 0%, rgba(30, 70, 150, 0.18), transparent 60%),
-    linear-gradient(180deg, #f7f9fc 0%, #eef3ff 50%, #f7f9fc 100%);
+    radial-gradient(900px 520px at 10% -10%, rgba(61, 95, 166, 0.2), transparent 60%),
+    radial-gradient(800px 520px at 90% 0%, rgba(30, 70, 150, 0.16), transparent 60%),
+    linear-gradient(180deg, #f8faff 0%, #eef3ff 50%, #f7f9fc 100%);
   padding-top: 0;
 }
 

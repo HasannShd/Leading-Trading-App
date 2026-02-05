@@ -1,12 +1,12 @@
 .card {
-  background: rgba(255, 255, 255, 0.46);
-  border: 1px solid rgba(12, 27, 58, 0.08);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
   border-radius: 20px;
   padding: 18px;
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--glass-shadow);
   transition: transform 0.18s, box-shadow 0.2s, border 0.2s;
   overflow: hidden;
-  backdrop-filter: blur(22px);
+  backdrop-filter: blur(var(--glass-blur));
 }
 
 .card:hover {

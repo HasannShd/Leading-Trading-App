@@ -235,6 +235,31 @@ const Checkout = () => {
 
           <div className="checkout-summary">
             <h2>Order Summary</h2>
+            <div className="checkout-items">
+              {cart.items.map(item => (
+                <div className="checkout-item" key={item._id}>
+                  <div className="checkout-item-media">
+                    {item.image ? (
+                      <img
+                        src={item.image.startsWith('http') ? item.image : `${import.meta.env.BASE_URL}${item.image.replace(/^\//, '')}`}
+                        alt={item.name}
+                        loading="lazy"
+                      />
+                    ) : (
+                      <div className="checkout-item-fallback">No image</div>
+                    )}
+                  </div>
+                  <div className="checkout-item-info">
+                    <div className="checkout-item-title">{item.name}</div>
+                    {item.size && <div className="checkout-item-meta">{item.size}</div>}
+                    <div className="checkout-item-qty">Qty {item.quantity}</div>
+                  </div>
+                  <div className="checkout-item-price">
+                    {(Number(item.price) * Number(item.quantity || 0)).toFixed(3)} BHD
+                  </div>
+                </div>
+              ))}
+            </div>
             <div className="checkout-summary-row">
               <span>Subtotal</span>
               <span>{subtotal.toFixed(3)} BHD</span>

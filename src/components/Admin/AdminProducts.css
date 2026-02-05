@@ -102,9 +102,9 @@
 }
 
 .admin-category-tile {
-  border: 1px solid var(--border);
+  border: 1px solid var(--glass-border);
   border-radius: 14px;
-  background: #fff;
+  background: var(--glass-bg);
   padding: 12px;
   display: grid;
   grid-template-columns: 24px 1fr;
@@ -113,6 +113,7 @@
   cursor: pointer;
   text-align: left;
   transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+  backdrop-filter: blur(var(--glass-blur));
 }
 
 .admin-category-tile:hover {
@@ -179,10 +180,11 @@
 .admin-image-thumb {
   position: relative;
   border-radius: 12px;
-  border: 1px solid var(--border);
-  background: #fff;
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg);
   padding: 6px;
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: blur(var(--glass-blur));
 }
 
 .admin-image-thumb img {

@@ -2,12 +2,12 @@
 .about-section {
   max-width: 1200px;
   margin: 48px auto;
-  background: rgba(255, 255, 255, 0.46);
+  background: var(--glass-bg);
   border-radius: 20px;
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
   padding: 44px 36px 64px 36px;
-  backdrop-filter: blur(22px);
+  backdrop-filter: blur(var(--glass-blur));
 }
 .about-title {
   font-size: 2.1rem;
@@ -46,8 +46,8 @@
   height: 370px;
   object-fit: cover;
   border-radius: 16px;
-  box-shadow: 0 16px 32px rgba(12, 27, 58, 0.12);
-  background: #fff;
+  box-shadow: var(--glass-shadow);
+  background: var(--glass-bg);
 }
 .about-block {
   margin-bottom: 0;

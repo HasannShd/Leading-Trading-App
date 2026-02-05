@@ -71,24 +71,46 @@ const Cart = () => {
         ) : (
           <div className="cart-grid">
             <div className="cart-items">
-              {cart.items.map(item => (
-                <div className="cart-item" key={item._id}>
-                  <div className="cart-item-info">
-                    <h3>{item.name}</h3>
-                    <p>{item.size || item.sku}</p>
-                    <p>{Number(item.price).toFixed(3)} BHD</p>
+              {cart.items.map(item => {
+                const lineTotal = Number(item.price) * Number(item.quantity || 0);
+                return (
+                  <div className="cart-item" key={item._id}>
+                    <div className="cart-item-media">
+                      {item.image ? (
+                        <img
+                          src={item.image.startsWith('http') ? item.image : `${import.meta.env.BASE_URL}${item.image.replace(/^\//, '')}`}
+                          alt={item.name}
+                          loading="lazy"
+                        />
+                      ) : (
+                        <div className="cart-item-fallback">No image</div>
+                      )}
+                    </div>
+                    <div className="cart-item-info">
+                      <div className="cart-item-title-row">
+                        <h3>{item.name}</h3>
+                        <span className="cart-item-price">{Number(item.price).toFixed(3)} BHD</span>
+                      </div>
+                      <div className="cart-item-meta">
+                        {item.size && <span className="cart-chip">{item.size}</span>}
+                        {item.sku && <span className="cart-chip subtle">SKU: {item.sku}</span>}
+                      </div>
+                      <div className="cart-item-subtotal">
+                        Line total: {lineTotal.toFixed(3)} BHD
+                      </div>
+                    </div>
+                    <div className="cart-item-actions">
+                      <input
+                        type="number"
+                        min="1"
+                        value={item.quantity}
+                        onChange={(e) => updateQuantity(item._id, Number(e.target.value))}
+                      />
+                      <button className="btn" onClick={() => removeItem(item._id)}>Remove</button>
+                    </div>
                   </div>
-                  <div className="cart-item-actions">
-                    <input
-                      type="number"
-                      min="1"
-                      value={item.quantity}
-                      onChange={(e) => updateQuantity(item._id, Number(e.target.value))}
-                    />
-                    <button className="btn" onClick={() => removeItem(item._id)}>Remove</button>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
             <div className="cart-summary">
               <h2>Summary</h2>

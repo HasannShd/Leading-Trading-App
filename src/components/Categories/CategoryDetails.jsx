@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import Input from '../Common/Input';
 import './CategoryDetails.css';
 
 // CategoryDetails: Shows all products for a given category
@@ -9,10 +10,12 @@ const CategoryDetails = () => {
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
   const [category, setCategory] = useState(null);
   const [products, setProducts] = useState([]);
+  const [q, setQ] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    setQ('');
     const fetchCategoryAndProducts = async () => {
       setLoading(true);
       setError(null);
@@ -26,7 +29,7 @@ const CategoryDetails = () => {
         const categoryData = await categoryRes.json();
         setCategory(categoryData);
 
-        const productsRes = await fetch(`${API_URL}/products?category=${categoryData._id}`);
+        const productsRes = await fetch(`${API_URL}/products?category=${categoryData._id}&limit=200`);
         const productsData = await productsRes.json();
         setProducts(Array.isArray(productsData) ? productsData : (productsData.items || []));
       } catch (err) {
@@ -39,6 +42,16 @@ const CategoryDetails = () => {
 
     fetchCategoryAndProducts();
   }, [API_URL, slug]);
+
+  const filteredProducts = useMemo(() => {
+    const s = q.toLowerCase().trim();
+    if (!s) return products;
+    return products.filter(p =>
+      [p.name, p.description, p.brand, p.sku]
+        .filter(Boolean)
+        .some(field => field.toLowerCase().includes(s))
+    );
+  }, [products, q]);
 
   // If category not found
   if (!loading && !category) {
@@ -66,27 +79,43 @@ const CategoryDetails = () => {
         )}
 
         {/* Products List */}
-        <h2 className="category-details-products-title">Products</h2>
+        <div className="category-details-products-header">
+          <h2 className="category-details-products-title">Products</h2>
+          <div className="category-details-products-spacer" />
+          <Input
+            className="category-details-search"
+            placeholder="Search products…"
+            value={q}
+            onChange={e => setQ(e.target.value)}
+            disabled={loading || products.length === 0}
+          />
+        </div>
         {loading ? (
           <p className="category-details-empty">Loading...</p>
         ) : products.length === 0 ? (
           <p className="category-details-empty">No products in this category yet.</p>
+        ) : filteredProducts.length === 0 ? (
+          <p className="category-details-empty">
+            No products match {q.trim() ? `"${q.trim()}"` : 'your search'}.
+          </p>
         ) : (
           <ul className="category-details-products-list">
-            {products.map((p) => (
+            {filteredProducts.map((p) => (
               <li key={p._id} className="category-details-product-item">
                 <Link to={`/product/${p._id}`} className="categories-card-link">
                   {(p.image || p.images?.[0]) && (
-                    <img
-                      src={
-                        (p.image || p.images?.[0]).startsWith('http')
-                          ? (p.image || p.images?.[0])
-                          : `${import.meta.env.BASE_URL}${(p.image || p.images?.[0]).replace(/^\//, '')}`
-                      }
-                      alt={p.name}
-                      className="category-details-product-img"
-                      loading="lazy"
-                    />
+                    <div className="category-details-product-media">
+                      <img
+                        src={
+                          (p.image || p.images?.[0]).startsWith('http')
+                            ? (p.image || p.images?.[0])
+                            : `${import.meta.env.BASE_URL}${(p.image || p.images?.[0]).replace(/^\//, '')}`
+                        }
+                        alt={p.name}
+                        className="category-details-product-img"
+                        loading="lazy"
+                      />
+                    </div>
                   )}
                   <strong>{p.name}</strong>
                 </Link>

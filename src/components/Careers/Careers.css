@@ -30,12 +30,12 @@
   gap: 18px;
   max-width: 720px;
   margin: 0 auto;
-  background: rgba(255, 255, 255, 0.8);
+  background: var(--glass-bg-strong);
   padding: 32px 24px;
   border-radius: 18px;
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow-sm);
-  backdrop-filter: blur(14px);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: blur(var(--glass-blur));
 }
 
 .careers-form label {
@@ -55,20 +55,21 @@
 .careers-success {
   max-width: 720px;
   margin: 0 auto;
-  background: rgba(255, 255, 255, 0.8);
+  background: var(--glass-bg-strong);
   border-radius: 18px;
   padding: 32px;
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow-sm);
-  backdrop-filter: blur(14px);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: blur(var(--glass-blur));
 }
 
 .careers-form input,
 .careers-form textarea {
   border-radius: 12px;
-  border: 1px solid rgba(15, 37, 87, 0.16);
+  border: 1px solid var(--glass-border);
   padding: 12px 14px;
-  background: rgba(255, 255, 255, 0.9);
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
 }
 
 .careers-form button {

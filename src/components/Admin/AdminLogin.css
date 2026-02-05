@@ -96,6 +96,7 @@
   padding: 16px;
   font-size: 0.95rem;
   color: var(--ink);
+  backdrop-filter: blur(var(--glass-blur));
 }
 
 .admin-login-help p {
@@ -105,7 +106,7 @@
 
 .admin-login-help code {
   display: block;
-  background: #fff;
+  background: var(--glass-bg);
   padding: 8px 12px;
   border-radius: 4px;
   font-family: 'Courier New', monospace;
@@ -113,6 +114,8 @@
   color: var(--navy-800);
   overflow-x: auto;
   margin: 0;
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(var(--glass-blur));
 }
 
 @media (max-width: 600px) {

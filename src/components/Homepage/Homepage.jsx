@@ -1,25 +1,12 @@
 import { Link } from 'react-router-dom';
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import './Homepage.css';
 
 // HomePage: Main landing page for the app
 const HomePage = () => {
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
-  const [categories, setCategories] = useState([]);
   const [featuredProducts, setFeaturedProducts] = useState([]);
-
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await fetch(`${API_URL}/categories`);
-        const data = await response.json();
-        setCategories(Array.isArray(data) ? data : []);
-      } catch (err) {
-        console.error('Failed to load categories', err);
-      }
-    };
-    fetchCategories();
-  }, [API_URL]);
+  const [shuffleTick, setShuffleTick] = useState(0);
 
   useEffect(() => {
     const fetchFeatured = async () => {
@@ -34,6 +21,22 @@ const HomePage = () => {
     };
     fetchFeatured();
   }, [API_URL]);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setShuffleTick(tick => tick + 1);
+    }, 8000);
+    return () => clearInterval(id);
+  }, []);
+
+  const shuffledFeatured = useMemo(() => {
+    const next = [...featuredProducts];
+    for (let i = next.length - 1; i > 0; i -= 1) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [next[i], next[j]] = [next[j], next[i]];
+    }
+    return next;
+  }, [featuredProducts, shuffleTick]);
   const mainBrands = [
     { name: 'Medstar', logo: `${import.meta.env.BASE_URL}Brands/medstar.jpg` },
     { name: 'Rogin', logo: `${import.meta.env.BASE_URL}Brands/rogin.png` },
@@ -59,6 +62,43 @@ const HomePage = () => {
     { name: 'Dar Al Hayat', logo: `${import.meta.env.BASE_URL}clients/dar al hayat.jpg` },
     { name: 'Resalah', logo: `${import.meta.env.BASE_URL}clients/resalah.jpg` },
     { name: 'Shifa Al Jazeera', logo: `${import.meta.env.BASE_URL}clients/shifa al jazeera.jpg` },
+  ];
+  const heroStats = [
+    { value: '10+', label: 'Years of trusted supply' },
+    { value: '3,000+', label: 'Medical & industrial SKUs' },
+    { value: '24h', label: 'Rapid quotation turnaround' },
+    { value: '99%', label: 'On-time fulfillment rate' },
+  ];
+  const valueProps = [
+    {
+      title: 'Regulatory-ready sourcing',
+      description: 'NHRA aligned procurement with full documentation and product traceability.'
+    },
+    {
+      title: 'Specialist product advisors',
+      description: 'Dedicated team to match hospitals and industry with the right equipment.'
+    },
+    {
+      title: 'End-to-end logistics',
+      description: 'Warehousing, inventory planning, and delivery built for critical timelines.'
+    },
+  ];
+  const processSteps = [
+    {
+      step: 'Step 01',
+      title: 'Discover & scope',
+      description: 'Align on requirements, compliance, and preferred brands.'
+    },
+    {
+      step: 'Step 02',
+      title: 'Source & verify',
+      description: 'Confirm availability, certifications, and lead times before quoting.'
+    },
+    {
+      step: 'Step 03',
+      title: 'Deliver & support',
+      description: 'Coordinate fulfillment and after-sales assistance for long-term success.'
+    },
   ];
 
   return (
@@ -95,13 +135,63 @@ const HomePage = () => {
             /> */}
           </div>
         </div>
+        <div className="modern-hero-stats">
+          {heroStats.map(stat => (
+            <div className="modern-hero-stat" key={stat.label}>
+              <div className="modern-hero-stat-num">{stat.value}</div>
+              <div className="modern-hero-stat-label">{stat.label}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="home-section">
+        <div className="home-section-inner">
+          <div className="home-section-head">
+            <span className="home-section-eyebrow">Why Leading Trading</span>
+            <h2>Enterprise-grade supply for healthcare and industry.</h2>
+            <p>
+              We combine deep product access with regulatory discipline to keep your teams fully equipped and compliant.
+            </p>
+          </div>
+          <div className="home-feature-grid">
+            {valueProps.map((item, index) => (
+              <div className="home-feature-card" key={item.title}>
+                <div className="home-feature-icon">0{index + 1}</div>
+                <h3>{item.title}</h3>
+                <p>{item.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="home-section home-process">
+        <div className="home-section-inner home-process-grid">
+          <div className="home-process-copy">
+            <span className="home-section-eyebrow">How we work</span>
+            <h3>Structured procurement, built for mission-critical environments.</h3>
+            <p>
+              From consultation to delivery, our process is designed to reduce risk and accelerate fulfillment.
+            </p>
+          </div>
+          <div className="home-process-steps">
+            {processSteps.map(item => (
+              <div className="home-process-step" key={item.step}>
+                <span>{item.step}</span>
+                <h4>{item.title}</h4>
+                <p>{item.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
       </section>
 
       <section className="home-category-band">
         <div className="home-category-band-viewport">
           <div className="home-category-band-inner">
-            {[...featuredProducts, ...featuredProducts].map((product, index) => {
-              const isDuplicate = index >= featuredProducts.length;
+            {[...shuffledFeatured, ...shuffledFeatured].map((product, index) => {
+              const isDuplicate = index >= shuffledFeatured.length;
               return (
                 <Link
                   key={`${product._id}-${index}`}
@@ -160,6 +250,19 @@ const HomePage = () => {
                 </div>
               )
             ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="home-cta">
+        <div className="home-cta-inner">
+          <div>
+            <h2>Ready to build a resilient supply plan?</h2>
+            <p>Let us help you source and scale with confidence.</p>
+          </div>
+          <div className="home-cta-actions">
+            <Link className="primary" to="/contact">Request a Quote</Link>
+            <Link className="outline" to="/products">Browse Catalog</Link>
           </div>
         </div>
       </section>
