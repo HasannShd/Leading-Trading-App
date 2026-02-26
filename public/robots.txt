@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+
+# Keep private, user-specific, and admin paths out of search.
+Disallow: /cart
+Disallow: /checkout
+Disallow: /orders
+Disallow: /sign-in
+Disallow: /sign-up
+Disallow: /.well-known/
+
+Sitemap: https://www.lte-bh.com/sitemap.xml
