@@ -321,14 +321,16 @@ const HomePage = () => {
 
         <div className="premium-logo-block">
           <div className="premium-logo-title">Manufacturers</div>
-          <div className="premium-logo-grid">
+          <div className="premium-logo-grid premium-logo-grid--brands">
             {mainBrands.map((brand) => (
               brand.logo ? (
-                <div className="premium-logo-card" key={brand.name}>
-                  <img src={brand.logo} alt={brand.name} loading="lazy" />
+                <div className="premium-logo-card premium-logo-card--brand" key={brand.name}>
+                  <div className="premium-logo-media">
+                    <img src={brand.logo} alt={brand.name} loading="lazy" />
+                  </div>
                 </div>
               ) : (
-                <div className="premium-logo-card premium-logo-fallback" key={brand.name}>
+                <div className="premium-logo-card premium-logo-card--brand premium-logo-fallback" key={brand.name}>
                   {brand.name.slice(0, 2).toUpperCase()}
                 </div>
               )
@@ -338,14 +340,16 @@ const HomePage = () => {
 
         <div className="premium-logo-block">
           <div className="premium-logo-title">Institutions supplied</div>
-          <div className="premium-logo-grid">
+          <div className="premium-logo-grid premium-logo-grid--clients">
             {clients.map((client) => (
               client.logo ? (
-                <div className="premium-logo-card" key={client.name}>
-                  <img src={client.logo} alt={client.name} loading="lazy" />
+                <div className="premium-logo-card premium-logo-card--client" key={client.name}>
+                  <div className="premium-logo-media">
+                    <img src={client.logo} alt={client.name} loading="lazy" />
+                  </div>
                 </div>
               ) : (
-                <div className="premium-logo-card premium-logo-fallback" key={client.name}>
+                <div className="premium-logo-card premium-logo-card--client premium-logo-fallback" key={client.name}>
                   {client.name.slice(0, 2).toUpperCase()}
                 </div>
               )

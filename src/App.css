@@ -61,7 +61,7 @@ a, button, input, textarea, select {
 }
 
 .app:not(.hero-page) .app-main {
-  padding-top: 88px;
+  padding-top: 108px;
 }
 
 .app.admin-app .app-main {
@@ -78,4 +78,11 @@ a, button, input, textarea, select {
 
 
 
+}
+
+.app:not(.hero-page) {
+  background:
+    radial-gradient(960px 540px at 8% -8%, rgba(168, 119, 68, 0.1), transparent 58%),
+    radial-gradient(760px 460px at 92% 0%, rgba(20, 44, 67, 0.12), transparent 58%),
+    linear-gradient(180deg, #f6f0e8 0%, #f2f0ec 52%, #f7f4ee 100%);
 }

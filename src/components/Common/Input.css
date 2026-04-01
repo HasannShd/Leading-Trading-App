@@ -1,14 +1,13 @@
 .input {
-  padding: 10px 12px;
-  border: 1px solid var(--glass-border);
-  border-radius: 12px;
+  padding: 12px 14px;
+  border: 1px solid rgba(19, 48, 78, 0.12);
+  border-radius: 16px;
   min-width: 240px;
   font-size: 1rem;
-  background: var(--glass-bg);
+  background: rgba(255, 255, 255, 0.82);
   color: var(--ink);
   outline: none;
   transition: border 0.2s, box-shadow 0.2s, background 0.2s;
-  backdrop-filter: blur(var(--glass-blur));
 }
 
 textarea.input {
@@ -17,6 +16,6 @@ textarea.input {
 }
 
 .input:focus {
-  border-color: var(--navy-600);
-  box-shadow: 0 0 0 3px rgba(26, 60, 133, 0.18);
+  border-color: rgba(168, 119, 68, 0.45);
+  box-shadow: 0 0 0 3px rgba(168, 119, 68, 0.14);
 }
