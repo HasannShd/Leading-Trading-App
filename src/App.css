@@ -1,26 +1,26 @@
 /* ========== THEME VARIABLES ========== */
 :root {
-  --navy-900: #0a1b3f;
-  --navy-800: #0f2557;
-  --navy-700: #12306d;
-  --navy-600: #1a3c85;
-  --sky-200: #dbe7ff;
-  --sky-100: #eef3ff;
+  --navy-900: #07111f;
+  --navy-800: #0c1d32;
+  --navy-700: #13304e;
+  --navy-600: #1d466f;
+  --sky-200: #d6e7f5;
+  --sky-100: #eef5fa;
   --white: #ffffff;
-  --ink: #0c1b3a;
-  --muted: #5f6b85;
-  --border: rgba(31, 79, 166, 0.14);
-  --bg: #f7f9fc;
-  --card: rgba(255, 255, 255, 0.75);
-  --shadow-sm: 0 12px 28px rgba(9, 23, 57, 0.08);
-  --shadow-md: 0 24px 52px rgba(9, 23, 57, 0.14);
-  --accent: #3d5fa6;
-  --accent-soft: #e6edff;
-  --glass-bg: rgba(255, 255, 255, 0.66);
-  --glass-bg-strong: rgba(255, 255, 255, 0.82);
-  --glass-border: rgba(31, 79, 166, 0.2);
-  --glass-shadow: 0 24px 55px rgba(10, 26, 54, 0.12);
-  --glass-blur: 16px;
+  --ink: #091525;
+  --muted: #637185;
+  --border: rgba(19, 48, 78, 0.14);
+  --bg: #f3f0e9;
+  --card: rgba(255, 255, 255, 0.72);
+  --shadow-sm: 0 14px 34px rgba(7, 17, 31, 0.08);
+  --shadow-md: 0 28px 60px rgba(7, 17, 31, 0.16);
+  --accent: #a87744;
+  --accent-soft: rgba(168, 119, 68, 0.12);
+  --glass-bg: rgba(245, 241, 232, 0.64);
+  --glass-bg-strong: rgba(248, 244, 236, 0.86);
+  --glass-border: rgba(168, 119, 68, 0.18);
+  --glass-shadow: 0 28px 60px rgba(7, 17, 31, 0.14);
+  --glass-blur: 18px;
 }
 
 /* ========== GLOBAL ========== */
@@ -50,9 +50,9 @@ a, button, input, textarea, select {
 .app {
   min-height: 100vh;
   background:
-    radial-gradient(900px 520px at 10% -10%, rgba(61, 95, 166, 0.2), transparent 60%),
-    radial-gradient(800px 520px at 90% 0%, rgba(30, 70, 150, 0.16), transparent 60%),
-    linear-gradient(180deg, #f8faff 0%, #eef3ff 50%, #f7f9fc 100%);
+    radial-gradient(900px 520px at 8% -12%, rgba(168, 119, 68, 0.14), transparent 60%),
+    radial-gradient(860px 560px at 96% 0%, rgba(23, 51, 77, 0.16), transparent 60%),
+    linear-gradient(180deg, #f5f0e8 0%, #eef1ef 48%, #f7f5f0 100%);
   padding-top: 0;
 }
 

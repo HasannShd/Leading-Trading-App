@@ -1,5 +1,5 @@
-import { useState, useEffect, useRef, useContext } from 'react';
-import { NavLink, Link } from 'react-router-dom';
+import { useState, useEffect, useRef, useContext, useCallback } from 'react';
+import { NavLink, Link, useLocation } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 import './Header.css';
 
@@ -7,20 +7,18 @@ import './Header.css';
 const Header = () => {
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
   const { user, logout } = useContext(AuthContext);
+  const location = useLocation();
 
   // State
   const [categories, setCategories] = useState([]);
   const [dropdown, setDropdown] = useState(false);
   const [mobileNav, setMobileNav] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
 
   const navRef = useRef(null);
+  const isHome = location.pathname === '/';
 
-  // Fetch categories once
-  useEffect(() => {
-    fetchCategories();
-  }, []);
-
-  const fetchCategories = async () => {
+  const fetchCategories = useCallback(async () => {
     try {
       const res = await fetch(`${API_URL}/categories`);
       const data = await res.json();
@@ -28,7 +26,12 @@ const Header = () => {
     } catch (err) {
       console.error('Failed to load categories:', err);
     }
-  };
+  }, [API_URL]);
+
+  // Fetch categories once
+  useEffect(() => {
+    fetchCategories();
+  }, [fetchCategories]);
 
   // Close mobile nav on outside click
   useEffect(() => {
@@ -45,10 +48,27 @@ const Header = () => {
     return () => document.removeEventListener('mousedown', handleClick);
   }, [mobileNav]);
 
+  useEffect(() => {
+    const syncScroll = () => setIsScrolled(window.scrollY > 24);
+
+    syncScroll();
+    window.addEventListener('scroll', syncScroll, { passive: true });
+
+    return () => window.removeEventListener('scroll', syncScroll);
+  }, [location.pathname]);
+
   return (
-    <header className="header">
+    <header className={`header${isHome ? ' header-home' : ''}${isScrolled ? ' scrolled' : ''}`}>
       <div className="container header-row">
-        <Link className="brand" to="/">Leading Trading Est</Link>
+        <Link className="brand" to="/">
+          <span className="brand-mark">
+            <img src={`${import.meta.env.BASE_URL}company-logo.png`} alt="Leading Trading Est" />
+          </span>
+          <span className="brand-copy">
+            <strong>Leading Trading Est</strong>
+            <span>Medical, dental & industrial supply</span>
+          </span>
+        </Link>
 
         {/* Hamburger */}
         <button
@@ -82,7 +102,7 @@ const Header = () => {
           </NavLink>
 
           <NavLink to="/shop" onClick={() => setMobileNav(false)}>
-            Shop
+            Products
           </NavLink>
 
           {/* Categories Dropdown */}
@@ -126,7 +146,7 @@ const Header = () => {
           </NavLink>
 
           <NavLink to="/contact" onClick={() => setMobileNav(false)}>
-            Contact Us
+            Contact
           </NavLink>
 
           <NavLink to="/cart" onClick={() => setMobileNav(false)}>
