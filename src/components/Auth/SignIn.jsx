@@ -32,6 +32,8 @@ const SignIn = () => {
               type="text"
               value={identifier}
               onChange={(e) => setIdentifier(e.target.value)}
+              placeholder="Enter your email or username"
+              autoComplete="username"
               required
             />
           </label>
@@ -41,6 +43,7 @@ const SignIn = () => {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              autoComplete="current-password"
               required
             />
           </label>

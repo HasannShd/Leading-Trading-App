@@ -7,6 +7,7 @@ const SignUp = () => {
   const { register, error } = useContext(AuthContext);
   const [form, setForm] = useState({
     name: '',
+    username: '',
     email: '',
     phone: '',
     password: '',
@@ -50,12 +51,25 @@ const SignUp = () => {
             />
           </label>
           <label>
+            Username
+            <input
+              type="text"
+              name="username"
+              value={form.username}
+              onChange={handleChange}
+              placeholder="Choose a username"
+              autoComplete="username"
+              required
+            />
+          </label>
+          <label>
             Email
             <input
               type="email"
               name="email"
               value={form.email}
               onChange={handleChange}
+              autoComplete="email"
               required
             />
           </label>
@@ -66,6 +80,7 @@ const SignUp = () => {
               name="phone"
               value={form.phone}
               onChange={handleChange}
+              autoComplete="tel"
               required
             />
           </label>
@@ -76,6 +91,7 @@ const SignUp = () => {
               name="password"
               value={form.password}
               onChange={handleChange}
+              autoComplete="new-password"
               required
             />
           </label>

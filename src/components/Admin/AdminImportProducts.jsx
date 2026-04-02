@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useDeferredValue, useEffect, useMemo, useState } from 'react';
 import * as XLSX from 'xlsx';
 import AdminTopNav from './AdminTopNav';
 import './AdminCategories.css';
@@ -170,6 +170,7 @@ const AdminImportProducts = () => {
       return acc;
     }, []);
   }, [rows, nameCol, categoryCol, categorySlugCol, brandCol, imageCol, priceCol, descriptionCol, categoryMap, useHeadings]);
+  const deferredParsedRows = useDeferredValue(parsedRows);
 
   const matchedRows = parsedRows.filter(row => row.name && row.categoryId);
   const unmatchedRows = parsedRows.filter(row => row.name && !row.categoryId);
@@ -294,114 +295,123 @@ const AdminImportProducts = () => {
   return (
     <div className="admin-import">
       <AdminTopNav />
-      <div className="admin-page-header">
-        <h1>📥 Import Products</h1>
-      </div>
-
-      {error && <div className="admin-error">{error}</div>}
-      {status && <div className="admin-success">{status}</div>}
-
-      <div className="admin-import-panel">
-        <div className="admin-import-upload">
-          <label className="admin-import-label">Upload Excel/CSV</label>
-          <input type="file" accept=".xlsx,.xls,.csv" onChange={handleFile} />
-          <p className="admin-import-help">
-            The file must include a product name column and a category column.
-            Categories are matched to the existing categories in the website (by name or slug).
-          </p>
-          <button
-            className="admin-btn-secondary"
-            type="button"
-            onClick={handleDownload}
-            disabled={downloading}
-          >
-            {downloading ? 'Downloading...' : 'Download current list (CSV)'}
-          </button>
+      <div className="admin-import-shell">
+        <div className="admin-page-header">
+          <div>
+            <p className="admin-import-kicker">Catalog Operations</p>
+            <h1>Import Products</h1>
+          </div>
+          {rows.length > 0 && (
+            <div className="admin-import-badge">
+              {rows.length.toLocaleString()} source rows loaded
+            </div>
+          )}
         </div>
 
-        {rows.length > 0 && (
-          <div className="admin-import-map">
-            <div className="admin-import-field">
-              <label>Product name column</label>
-              <select value={nameCol} onChange={(e) => setNameCol(e.target.value)}>
-                <option value="">Select column</option>
-                {columns.map(col => (
-                  <option key={`name-${col.value}`} value={col.value}>{col.label}</option>
-                ))}
-              </select>
-            </div>
-            <div className="admin-import-field">
-              <label>Category column</label>
-              <select value={categoryCol} onChange={(e) => setCategoryCol(e.target.value)}>
-                <option value="">Select column</option>
-                {columns.map(col => (
-                  <option key={`cat-${col.value}`} value={col.value}>{col.label}</option>
-                ))}
-              </select>
-            </div>
-            <div className="admin-import-field">
-              <label>Category slug column (optional)</label>
-              <select value={categorySlugCol} onChange={(e) => setCategorySlugCol(e.target.value)}>
-                <option value="">Select column</option>
-                {columns.map(col => (
-                  <option key={`catslug-${col.value}`} value={col.value}>{col.label}</option>
-                ))}
-              </select>
-            </div>
-            <div className="admin-import-field">
-              <label>Brand column (optional)</label>
-              <select value={brandCol} onChange={(e) => setBrandCol(e.target.value)}>
-                <option value="">Select column</option>
-                {columns.map(col => (
-                  <option key={`brand-${col.value}`} value={col.value}>{col.label}</option>
-                ))}
-              </select>
-            </div>
-            <div className="admin-import-field">
-              <label>Image column (optional)</label>
-              <select value={imageCol} onChange={(e) => setImageCol(e.target.value)}>
-                <option value="">Select column</option>
-                {columns.map(col => (
-                  <option key={`image-${col.value}`} value={col.value}>{col.label}</option>
-                ))}
-              </select>
-            </div>
-            <div className="admin-import-field">
-              <label>Price column (optional)</label>
-              <select value={priceCol} onChange={(e) => setPriceCol(e.target.value)}>
-                <option value="">Select column</option>
-                {columns.map(col => (
-                  <option key={`price-${col.value}`} value={col.value}>{col.label}</option>
-                ))}
-              </select>
-            </div>
-            <div className="admin-import-field">
-              <label>Description column (optional)</label>
-              <select value={descriptionCol} onChange={(e) => setDescriptionCol(e.target.value)}>
-                <option value="">Select column</option>
-                {columns.map(col => (
-                  <option key={`desc-${col.value}`} value={col.value}>{col.label}</option>
-                ))}
-              </select>
-            </div>
-            <label className="admin-import-checkbox">
-              <input
-                type="checkbox"
-                checked={useHeadings}
-                onChange={(e) => setUseHeadings(e.target.checked)}
-              />
-              Treat category-only rows as section headings (useful for lists grouped by category)
-            </label>
-            <label className="admin-import-checkbox">
-              <input
-                type="checkbox"
-                checked={createMissing}
-                onChange={(e) => setCreateMissing(e.target.checked)}
-              />
-              Create missing categories from the file before importing
-            </label>
+        {error && <div className="admin-error">{error}</div>}
+        {status && <div className="admin-success">{status}</div>}
+
+        <div className="admin-import-panel">
+          <div className="admin-import-upload">
+            <label className="admin-import-label">Upload Excel or CSV</label>
+            <input type="file" accept=".xlsx,.xls,.csv" onChange={handleFile} />
+            <p className="admin-import-help">
+              The file must include a product name column and a category column.
+              Categories are matched to the existing categories in the website by name or slug.
+            </p>
+            <button
+              className="admin-btn-secondary"
+              type="button"
+              onClick={handleDownload}
+              disabled={downloading}
+            >
+              {downloading ? 'Downloading...' : 'Download current list (CSV)'}
+            </button>
           </div>
-        )}
+
+          {rows.length > 0 && (
+            <div className="admin-import-map">
+              <div className="admin-import-field">
+                <label>Product name column</label>
+                <select value={nameCol} onChange={(e) => setNameCol(e.target.value)}>
+                  <option value="">Select column</option>
+                  {columns.map(col => (
+                    <option key={`name-${col.value}`} value={col.value}>{col.label}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="admin-import-field">
+                <label>Category column</label>
+                <select value={categoryCol} onChange={(e) => setCategoryCol(e.target.value)}>
+                  <option value="">Select column</option>
+                  {columns.map(col => (
+                    <option key={`cat-${col.value}`} value={col.value}>{col.label}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="admin-import-field">
+                <label>Category slug column (optional)</label>
+                <select value={categorySlugCol} onChange={(e) => setCategorySlugCol(e.target.value)}>
+                  <option value="">Select column</option>
+                  {columns.map(col => (
+                    <option key={`catslug-${col.value}`} value={col.value}>{col.label}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="admin-import-field">
+                <label>Brand column (optional)</label>
+                <select value={brandCol} onChange={(e) => setBrandCol(e.target.value)}>
+                  <option value="">Select column</option>
+                  {columns.map(col => (
+                    <option key={`brand-${col.value}`} value={col.value}>{col.label}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="admin-import-field">
+                <label>Image column (optional)</label>
+                <select value={imageCol} onChange={(e) => setImageCol(e.target.value)}>
+                  <option value="">Select column</option>
+                  {columns.map(col => (
+                    <option key={`image-${col.value}`} value={col.value}>{col.label}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="admin-import-field">
+                <label>Price column (optional)</label>
+                <select value={priceCol} onChange={(e) => setPriceCol(e.target.value)}>
+                  <option value="">Select column</option>
+                  {columns.map(col => (
+                    <option key={`price-${col.value}`} value={col.value}>{col.label}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="admin-import-field">
+                <label>Description column (optional)</label>
+                <select value={descriptionCol} onChange={(e) => setDescriptionCol(e.target.value)}>
+                  <option value="">Select column</option>
+                  {columns.map(col => (
+                    <option key={`desc-${col.value}`} value={col.value}>{col.label}</option>
+                  ))}
+                </select>
+              </div>
+              <label className="admin-import-checkbox">
+                <input
+                  type="checkbox"
+                  checked={useHeadings}
+                  onChange={(e) => setUseHeadings(e.target.checked)}
+                />
+                Treat category-only rows as section headings (useful for lists grouped by category)
+              </label>
+              <label className="admin-import-checkbox">
+                <input
+                  type="checkbox"
+                  checked={createMissing}
+                  onChange={(e) => setCreateMissing(e.target.checked)}
+                />
+                Create missing categories from the file before importing
+              </label>
+            </div>
+          )}
 
         {parsedRows.length > 0 && (
           <div className="admin-import-summary">
@@ -424,35 +434,45 @@ const AdminImportProducts = () => {
           </div>
         )}
 
-        {parsedRows.length > 0 && (
-          <div className="admin-import-preview">
-            <h3>Preview (first 20 rows)</h3>
-            <table className="admin-table">
-              <thead>
-                <tr>
-                  <th>Product</th>
-                  <th>Category</th>
-                  <th>Matched</th>
-                </tr>
-              </thead>
-              <tbody>
-                {parsedRows.slice(0, 20).map((row, index) => (
-                  <tr key={`${row.name}-${index}`}>
-                    <td>{row.name || '-'}</td>
-                    <td>{row.categoryRaw || '-'}</td>
-                    <td>{row.categoryId ? 'Yes' : 'No'}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            {unmatchedRows.length > 0 && (
-              <p className="admin-import-warning">
-                Unmatched rows are skipped. Update your category names or fix the file and re-upload.
-                {createMissing && ' Missing categories will be created on import.'}
-              </p>
-            )}
-          </div>
-        )}
+          {parsedRows.length > 0 && (
+            <div className="admin-import-preview">
+              <div className="admin-import-preview-header">
+                <div>
+                  <h3>Imported File Preview</h3>
+                  <p className="admin-import-help">
+                    Showing all {parsedRows.length.toLocaleString()} parsed rows from the uploaded file.
+                  </p>
+                </div>
+              </div>
+              <div className="categories-table-wrapper admin-import-table-wrap">
+                <table className="admin-table">
+                  <thead>
+                    <tr>
+                      <th>Product</th>
+                      <th>Category</th>
+                      <th>Matched</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {deferredParsedRows.map((row, index) => (
+                      <tr key={`${row.name}-${index}`}>
+                        <td>{row.name || '-'}</td>
+                        <td>{row.categoryRaw || '-'}</td>
+                        <td>{row.categoryId ? 'Yes' : 'No'}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              {unmatchedRows.length > 0 && (
+                <p className="admin-import-warning">
+                  Unmatched rows are skipped. Update your category names or fix the file and re-upload.
+                  {createMissing && ' Missing categories will be created on import.'}
+                </p>
+              )}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
