@@ -4,7 +4,7 @@ import { AdminContext } from '../../context/AdminContext';
 import './AdminLogin.css';
 
 const AdminLogin = () => {
-  const [username, setUsername] = useState('');
+  const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { login, error } = useContext(AdminContext);
@@ -13,7 +13,7 @@ const AdminLogin = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    const success = await login(username, password);
+    const success = await login(identifier, password);
     setIsLoading(false);
     if (success) {
       navigate('/.well-known/admin-dashboard-sh123456');
@@ -29,13 +29,14 @@ const AdminLogin = () => {
         
         <form className="admin-login-form" onSubmit={handleSubmit}>
           <label className="admin-form-label">
-            Username
+            Email or username
             <input
               type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              value={identifier}
+              onChange={(e) => setIdentifier(e.target.value)}
               className="admin-form-input"
-              placeholder="Enter your username"
+              placeholder="Enter your account email"
+              autoComplete="username"
               required
             />
           </label>
@@ -48,6 +49,7 @@ const AdminLogin = () => {
               onChange={(e) => setPassword(e.target.value)}
               className="admin-form-input"
               placeholder="Enter your password"
+              autoComplete="current-password"
               required
             />
           </label>
@@ -62,6 +64,7 @@ const AdminLogin = () => {
         </form>
 
         <div className="admin-login-help">
+          <p>Use the same account email and password created on the website. The account must have role <code>admin</code>.</p>
           <p>Need to promote a user to admin? Use the backend script:</p>
           <code>node scripts/promoteAdmin.js &lt;username&gt;</code>
         </div>
