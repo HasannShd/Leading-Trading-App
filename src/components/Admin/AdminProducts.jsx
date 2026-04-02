@@ -62,6 +62,12 @@ const AdminProducts = () => {
     fetchCategories();
   }, [fetchProducts, fetchCategories]);
 
+  const formatDate = (value) => {
+    if (!value) return '-';
+    const date = new Date(value);
+    return Number.isNaN(date.getTime()) ? '-' : date.toLocaleDateString();
+  };
+
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData(prev => ({
@@ -810,7 +816,7 @@ const AdminProducts = () => {
                       </span>
                     </td>
                     <td className="col-date">
-                      {product.createdAt ? new Date(product.createdAt).toLocaleDateString() : '-'}
+                      {formatDate(product.createdAt)}
                     </td>
                     <td className="col-actions">
                       <button

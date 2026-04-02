@@ -37,6 +37,12 @@ const AdminCategories = () => {
     fetchCategories();
   }, [fetchCategories]);
 
+  const formatDate = (value) => {
+    if (!value) return '-';
+    const date = new Date(value);
+    return Number.isNaN(date.getTime()) ? '-' : date.toLocaleDateString();
+  };
+
   const slugify = (value) =>
     value
       .toLowerCase()
@@ -281,7 +287,7 @@ const AdminCategories = () => {
                     <td className="col-desc">{cat.description || '-'}</td>
                     <td className="col-desc-flag">{cat.description?.trim() ? 'Yes' : 'No'}</td>
                     <td className="col-date">
-                      {new Date(cat.createdAt).toLocaleDateString()}
+                      {formatDate(cat.createdAt)}
                     </td>
                     <td className="col-actions">
                       <button

@@ -112,6 +112,12 @@ select:focus-visible {
     linear-gradient(180deg, #f6f0e8 0%, #f2f0ec 52%, #f4efe6 78%, #ebe4d8 100%);
 }
 
+.app.admin-app:not(.hero-page) {
+  background:
+    radial-gradient(840px 420px at 8% 0%, rgba(168, 119, 68, 0.12), transparent 50%),
+    linear-gradient(180deg, #08111d 0%, #0f1d31 100%);
+}
+
 @media (max-width: 780px) {
   .app:not(.hero-page) .app-main {
     padding-top: 88px;

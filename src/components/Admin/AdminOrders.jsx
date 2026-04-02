@@ -34,6 +34,12 @@ const AdminOrders = () => {
     fetchOrders();
   }, [fetchOrders]);
 
+  const formatDate = (value) => {
+    if (!value) return '-';
+    const date = new Date(value);
+    return Number.isNaN(date.getTime()) ? '-' : date.toLocaleDateString();
+  };
+
   const updateStatus = async (orderId, status) => {
     try {
       const response = await fetch(`${API_URL}/orders/${orderId}/status`, {
@@ -102,7 +108,7 @@ const AdminOrders = () => {
                     </td>
                     <td>{order.paymentMethod}</td>
                     <td className="col-date">
-                      {new Date(order.createdAt).toLocaleDateString()}
+                      {formatDate(order.createdAt)}
                     </td>
                     <td className="col-actions">
                       <Link className="btn-edit" to={`/.well-known/admin-orders/${order._id}`}>

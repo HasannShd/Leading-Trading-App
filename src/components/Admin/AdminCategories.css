@@ -2,6 +2,7 @@
   max-width: 1240px;
   margin: 0 auto;
   padding: 0 20px 32px;
+  min-height: 100vh;
   color: #f8f3eb;
 }
 
@@ -109,6 +110,28 @@
   font-family: inherit;
   background: rgba(255, 255, 255, 0.88);
   color: var(--ink);
+}
+
+.admin-form-group input[type="file"],
+.admin-import-upload input[type="file"] {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px dashed rgba(248, 243, 235, 0.18);
+  border-radius: 16px;
+  background: rgba(248, 243, 235, 0.04);
+  color: rgba(231, 218, 201, 0.84);
+}
+
+.admin-form-group input[type="file"]::file-selector-button,
+.admin-import-upload input[type="file"]::file-selector-button {
+  margin-right: 12px;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #d39d63 0%, #b57b43 58%, #875625 100%);
+  color: #ffffff;
+  font-weight: 700;
+  cursor: pointer;
 }
 
 .admin-form-group input:focus,
@@ -262,11 +285,20 @@
 
 .admin-category-section {
   margin-bottom: 24px;
+  padding: 24px;
+  border-radius: 26px;
+  background: linear-gradient(180deg, rgba(18, 34, 55, 0.9), rgba(11, 22, 38, 0.88));
+  border: 1px solid rgba(248, 243, 235, 0.08);
+  box-shadow: 0 18px 36px rgba(7, 17, 31, 0.18);
 }
 
 .admin-category-header h2 {
   margin: 0 0 4px;
   color: #ffffff;
+}
+
+.admin-category-header {
+  margin-bottom: 16px;
 }
 
 .admin-category-grid {
@@ -357,7 +389,8 @@
   }
 
   .admin-form-container,
-  .admin-categories-list {
+  .admin-categories-list,
+  .admin-category-section {
     padding: 20px;
     border-radius: 22px;
   }

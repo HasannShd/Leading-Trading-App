@@ -108,14 +108,23 @@ const Careers = () => {
             </div>
             <label>
               Upload CV
-              <input
-                type="file"
-                name="cv"
-                accept=".pdf,.doc,.docx"
-                onChange={handleChange}
-                required
-                className="input"
-              />
+              <div className="careers-file-input">
+                <input
+                  id="careers-cv-upload"
+                  type="file"
+                  name="cv"
+                  accept=".pdf,.doc,.docx"
+                  onChange={handleChange}
+                  required
+                  className="careers-file-native"
+                />
+                <label htmlFor="careers-cv-upload" className="careers-file-trigger">
+                  Choose File
+                </label>
+                <span className="careers-file-name">
+                  {form.cv?.name || 'No file chosen'}
+                </span>
+              </div>
             </label>
             <button type="submit" className="btn">Submit Application</button>
           </form>
