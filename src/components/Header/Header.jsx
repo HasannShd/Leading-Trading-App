@@ -14,6 +14,9 @@ const Header = () => {
   const [dropdown, setDropdown] = useState(false);
   const [mobileNav, setMobileNav] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileViewport, setIsMobileViewport] = useState(
+    typeof window !== 'undefined' ? window.innerWidth <= 780 : false
+  );
 
   const navRef = useRef(null);
   const isHome = location.pathname === '/';
@@ -57,6 +60,27 @@ const Header = () => {
     return () => window.removeEventListener('scroll', syncScroll);
   }, [location.pathname]);
 
+  useEffect(() => {
+    const syncViewport = () => setIsMobileViewport(window.innerWidth <= 780);
+
+    syncViewport();
+    window.addEventListener('resize', syncViewport);
+
+    return () => window.removeEventListener('resize', syncViewport);
+  }, []);
+
+  useEffect(() => {
+    setMobileNav(false);
+    setDropdown(false);
+  }, [location.pathname]);
+
+  const toggleMobileNav = () => {
+    setMobileNav((open) => {
+      if (open) setDropdown(false);
+      return !open;
+    });
+  };
+
   return (
     <header className={`header${isHome ? ' header-home' : ''}${isScrolled ? ' scrolled' : ''}`}>
       <div className="container header-row">
@@ -75,7 +99,7 @@ const Header = () => {
           className={`header-hamburger${mobileNav ? ' open' : ''}`}
           aria-label={mobileNav ? 'Close navigation menu' : 'Open navigation menu'}
           aria-expanded={mobileNav}
-          onClick={() => setMobileNav(m => !m)}
+          onClick={toggleMobileNav}
         >
           <span className="header-hamburger-bar" />
           <span className="header-hamburger-bar" />
@@ -111,19 +135,42 @@ const Header = () => {
             onMouseEnter={() => setDropdown(true)}
             onMouseLeave={() => setDropdown(false)}
           >
-            <NavLink
-              to="/categories"
-              className="nav-dropdown-toggle"
-              onClick={e => {
-                e.preventDefault();
-                setDropdown(d => !d);
-              }}
-            >
-              Categories ▾
-            </NavLink>
+            {isMobileViewport ? (
+              <button
+                type="button"
+                className="nav-dropdown-toggle nav-dropdown-button"
+                aria-expanded={dropdown}
+                onClick={() => setDropdown((d) => !d)}
+              >
+                Categories ▾
+              </button>
+            ) : (
+              <NavLink
+                to="/categories"
+                className="nav-dropdown-toggle"
+                onClick={e => {
+                  e.preventDefault();
+                  setDropdown(d => !d);
+                }}
+              >
+                Categories ▾
+              </NavLink>
+            )}
 
             {dropdown && (
               <div className="nav-dropdown-menu">
+                {isMobileViewport && (
+                  <Link
+                    to="/products"
+                    className="nav-dropdown-item nav-dropdown-item-all"
+                    onClick={() => {
+                      setDropdown(false);
+                      setMobileNav(false);
+                    }}
+                  >
+                    All Categories
+                  </Link>
+                )}
                 {categories.map(cat => (
                   <Link
                     key={cat._id}
