@@ -112,19 +112,46 @@ const HomePage = () => {
 
   const workflowSteps = [
     {
-      label: 'Brief',
-      title: 'Define the requirement clearly',
-      description: 'We align on department, use case, certifications, quantities, and brand preferences before pricing or sourcing commitments are made.',
+      phase: '01',
+      label: 'Market demand',
+      title: 'Demand is identified before sourcing starts',
+      description: 'We track what the market, our sectors, and our customers actively need so procurement starts from real demand instead of guesswork.',
+      note: 'Signals from hospitals, clinics, practices, and operational buyers',
     },
     {
-      label: 'Source',
-      title: 'Verify availability and documentation',
-      description: 'Our team validates lead times, origin, and supporting paperwork to keep procurement decisions grounded and defensible.',
+      phase: '02',
+      label: 'Supplier search',
+      title: 'Suitable suppliers are shortlisted',
+      description: 'Once a product need is clear, we search for manufacturers and suppliers that can meet the expected quality, reliability, and documentation level.',
+      note: 'Supplier network review, origin review, product fit',
     },
     {
-      label: 'Deliver',
-      title: 'Fulfill with follow-through',
-      description: 'Orders are coordinated around urgency, continuity, and long-term account support rather than a simple handoff.',
+      phase: '03',
+      label: 'Assessment',
+      title: 'Quality, pricing, and suitability are validated',
+      description: 'Product quality, commercial value, and supply practicality are assessed together before a sourcing decision is confirmed.',
+      note: 'Quality, price, documentation, continuity',
+    },
+    {
+      phase: '04',
+      label: 'Order confirmation',
+      title: 'Orders are placed with a defined arrival window',
+      description: 'Once approved, orders are confirmed with supplier timing and expected delivery duration so downstream planning is clear.',
+      note: 'Lead time and arrival commitment established',
+    },
+    {
+      phase: '05',
+      label: 'Logistics and stock',
+      title: 'Logistics, inventory, and storage are prepared',
+      description: 'Incoming goods are coordinated against stock count, handling readiness, storage conditions, and internal inventory control.',
+      note: 'Stock checks, storage readiness, inventory discipline',
+    },
+    {
+      phase: '06',
+      label: 'Fulfillment',
+      title: 'Orders move into delivery execution',
+      description: 'Once stock is ready, products are allocated and handed to delivery operations for final fulfillment to the customer.',
+      note: 'Prepared inventory flows into delivery teams',
     },
   ];
 
@@ -253,21 +280,43 @@ const HomePage = () => {
       <section className="premium-section premium-workflow">
         <div className="premium-workflow-copy">
           <span className="premium-eyebrow">How we operate</span>
-          <h2>Structured enough for regulated environments. Flexible enough for urgent supply needs.</h2>
+          <h2>From market demand to final delivery, the workflow stays visible all the way through.</h2>
           <p>
-            The process is straightforward on purpose: understand the requirement, verify the sourcing path, and deliver with accountability.
+            The process is designed to reduce blind spots. Demand is identified first, suppliers are evaluated properly, logistics are coordinated early, and stock is controlled before delivery moves.
           </p>
           <Link className="premium-inline-link" to="/about">Learn more about our company</Link>
         </div>
 
-        <div className="premium-workflow-rail">
-          {workflowSteps.map((step) => (
-            <article className="premium-workflow-step" key={step.label}>
-              <span>{step.label}</span>
-              <h3>{step.title}</h3>
-              <p>{step.description}</p>
-            </article>
-          ))}
+        <div className="premium-workflow-diagram">
+          <div className="premium-workflow-spine">
+            <span className="premium-workflow-spine-label">Operations flow</span>
+            <strong>Demand → Source → Assess → Confirm → Stock → Deliver</strong>
+            <p>
+              Every stage is connected so sourcing decisions, arrival timing, inventory handling, and delivery execution stay aligned.
+            </p>
+            <div className="premium-workflow-track">
+              {workflowSteps.map((step) => (
+                <div className="premium-workflow-track-node" key={`track-${step.phase}`}>
+                  <span>{step.phase}</span>
+                  <small>{step.label}</small>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="premium-workflow-rail">
+            {workflowSteps.map((step) => (
+              <article className="premium-workflow-step" key={step.label}>
+                <div className="premium-workflow-step-top">
+                  <span>{step.label}</span>
+                  <strong>{step.phase}</strong>
+                </div>
+                <h3>{step.title}</h3>
+                <p>{step.description}</p>
+                <small>{step.note}</small>
+              </article>
+            ))}
+          </div>
         </div>
       </section>
 

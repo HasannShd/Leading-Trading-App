@@ -558,9 +558,107 @@
   text-decoration: none;
 }
 
-.premium-workflow-rail {
+.premium-workflow-diagram {
   display: grid;
   gap: 18px;
+}
+
+.premium-workflow-spine {
+  padding: 28px 30px;
+  border-radius: 30px;
+  background:
+    radial-gradient(circle at top right, rgba(198, 145, 89, 0.18), transparent 26%),
+    linear-gradient(135deg, #0b1626 0%, #10253c 50%, #14314c 100%);
+  box-shadow: 0 24px 46px rgba(7, 17, 31, 0.16);
+}
+
+.premium-workflow-spine-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: rgba(236, 214, 191, 0.84);
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+}
+
+.premium-workflow-spine-label::before {
+  content: '';
+  width: 34px;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(198, 145, 89, 0.9), rgba(198, 145, 89, 0));
+}
+
+.premium-workflow-spine strong {
+  display: block;
+  margin-top: 16px;
+  font-size: clamp(1.5rem, 2.8vw, 2.2rem);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  color: #f8f3eb;
+}
+
+.premium-workflow-spine p {
+  margin: 14px 0 0;
+  color: rgba(231, 218, 201, 0.74);
+  line-height: 1.8;
+}
+
+.premium-workflow-track {
+  margin-top: 22px;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 18px;
+  position: relative;
+}
+
+.premium-workflow-track::before {
+  content: '';
+  position: absolute;
+  left: 6%;
+  right: 6%;
+  top: 22px;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(198, 145, 89, 0.16), rgba(198, 145, 89, 0.5), rgba(198, 145, 89, 0.16));
+}
+
+.premium-workflow-track-node {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  text-align: center;
+}
+
+.premium-workflow-track-node span {
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #d39d63 0%, #b57b43 58%, #875625 100%);
+  color: #fffdf8;
+  font-size: 0.88rem;
+  font-weight: 800;
+  box-shadow: 0 16px 30px rgba(135, 86, 37, 0.2);
+}
+
+.premium-workflow-track-node small {
+  color: rgba(231, 218, 201, 0.78);
+  font-size: 0.76rem;
+  line-height: 1.5;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.premium-workflow-rail {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  position: relative;
 }
 
 .premium-workflow-step {
@@ -570,6 +668,50 @@
     linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(244, 240, 232, 0.86));
   border: 1px solid rgba(19, 48, 78, 0.08);
   box-shadow: 0 20px 42px rgba(7, 17, 31, 0.06);
+  position: relative;
+  overflow: hidden;
+}
+
+.premium-workflow-step::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at top right, rgba(198, 145, 89, 0.12), transparent 34%);
+}
+
+.premium-workflow-step-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  position: relative;
+  z-index: 1;
+}
+
+.premium-workflow-step-top strong {
+  color: #876342;
+  font-size: 0.88rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+}
+
+.premium-workflow-step p,
+.premium-workflow-step h3,
+.premium-workflow-step small {
+  position: relative;
+  z-index: 1;
+}
+
+.premium-workflow-step small {
+  display: block;
+  margin-top: 14px;
+  color: #876342;
+  font-size: 0.86rem;
+  line-height: 1.6;
+}
+
+.premium-workflow-step:nth-child(2n) {
+  transform: translateY(18px);
 }
 
 .premium-section-heading-inline {
@@ -803,6 +945,18 @@
     position: static;
   }
 
+  .premium-workflow-track {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .premium-workflow-rail {
+    grid-template-columns: 1fr;
+  }
+
+  .premium-workflow-step:nth-child(2n) {
+    transform: none;
+  }
+
   .premium-logo-grid {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
@@ -923,6 +1077,20 @@
   .premium-cta-card {
     padding: 22px;
     border-radius: 22px;
+  }
+
+  .premium-workflow-spine {
+    padding: 22px;
+    border-radius: 22px;
+  }
+
+  .premium-workflow-track {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px 12px;
+  }
+
+  .premium-workflow-track::before {
+    display: none;
   }
 
   .premium-product-media {
