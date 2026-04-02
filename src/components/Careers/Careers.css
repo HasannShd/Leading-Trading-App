@@ -70,6 +70,10 @@
   padding: 34px;
 }
 
+.careers-feedback {
+  margin-bottom: 6px;
+}
+
 .careers-form input,
 .careers-form textarea {
   border-radius: 16px;

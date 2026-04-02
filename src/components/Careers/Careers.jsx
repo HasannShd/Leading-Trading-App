@@ -1,10 +1,12 @@
 import { useState } from 'react';
+import StatePanel from '../Common/StatePanel';
 import './Careers.css';
 
 // Careers page with application form
 const Careers = () => {
   const [form, setForm] = useState({ name: '', email: '', phone: '', nationality: '', cv: null });
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState('');
 
   const handleChange = e => {
     const { name, value, files } = e.target;
@@ -18,6 +20,7 @@ const Careers = () => {
 
   const handleSubmit = async e => {
     e.preventDefault();
+    setError('');
     try {
       const data = new FormData();
       data.append('name', form.name);
@@ -30,12 +33,12 @@ const Careers = () => {
         body: data,
       });
       if (!response.ok) {
-        alert('Failed to submit application.');
+        setError('Failed to submit application. Please try again.');
         return;
       }
       setSubmitted(true);
     } catch (err) {
-      alert('Failed to submit application.');
+      setError('Failed to submit application. Please try again.');
     }
   };
 
@@ -53,12 +56,24 @@ const Careers = () => {
 
       <section className="careers-section">
         {submitted ? (
-          <div className="careers-success">
-            <h2>Application received</h2>
-            <p>Thank you for your application. Our team will contact you soon.</p>
-          </div>
+          <StatePanel
+            eyebrow="Application Sent"
+            title="Application received"
+            description="Thank you for your application. Our team will contact you soon."
+            variant="success"
+            className="careers-success"
+          />
         ) : (
           <form className="careers-form" onSubmit={handleSubmit}>
+            {error ? (
+              <StatePanel
+                eyebrow="Submission Error"
+                title="We couldn’t send your application"
+                description={error}
+                variant="error"
+                className="careers-feedback"
+              />
+            ) : null}
             <div className="careers-form-row">
               <label>
                 Name

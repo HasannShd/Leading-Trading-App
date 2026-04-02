@@ -220,6 +220,14 @@
   color: #ffffff;
 }
 
+.admin-card-metric {
+  margin-bottom: 10px;
+  font-size: 2.1rem;
+  line-height: 1;
+  font-weight: 800;
+  color: #ffffff;
+}
+
 .admin-card-desc,
 .admin-info-box li {
   color: rgba(231, 218, 201, 0.76);
@@ -243,6 +251,16 @@
 
 .admin-info-box {
   border-left: 1px solid rgba(248, 243, 235, 0.08);
+}
+
+.admin-info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.admin-info-box--accent {
+  background: linear-gradient(180deg, rgba(198, 145, 89, 0.14), rgba(11, 22, 38, 0.94));
 }
 
 .admin-info-box ul {
@@ -287,6 +305,10 @@
   .admin-main {
     margin-left: 0;
     padding: 16px;
+  }
+
+  .admin-info-grid {
+    grid-template-columns: 1fr;
   }
 
   .admin-sidebar-close,

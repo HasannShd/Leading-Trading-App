@@ -8,6 +8,7 @@ const AdminMarketing = () => {
   const [list, setList] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState('');
 
   const fetchList = useCallback(async () => {
     setLoading(true);
@@ -37,9 +38,9 @@ const AdminMarketing = () => {
     const emails = list.map(item => item.email).filter(Boolean).join(', ');
     try {
       await navigator.clipboard.writeText(emails);
-      alert('Emails copied');
+      setStatus('Emails copied to clipboard.');
     } catch (err) {
-      alert('Copy failed');
+      setStatus('Copy failed. Please try again.');
     }
   };
 
@@ -52,6 +53,7 @@ const AdminMarketing = () => {
       </div>
 
       {error && <div className="admin-error">{error}</div>}
+      {status && <div className="admin-success">{status}</div>}
 
       <div className="admin-categories-list">
         <h2>Opted-in Users ({list.length})</h2>
