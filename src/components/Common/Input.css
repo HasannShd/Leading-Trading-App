@@ -4,10 +4,10 @@
   border-radius: 16px;
   min-width: 240px;
   font-size: 1rem;
-  background: rgba(255, 255, 255, 0.82);
+  background: rgba(255, 255, 255, 0.88);
   color: var(--ink);
   outline: none;
-  transition: border 0.2s, box-shadow 0.2s, background 0.2s;
+  transition: border 0.2s, box-shadow 0.2s, background 0.2s, transform 0.2s;
 }
 
 textarea.input {
@@ -18,4 +18,8 @@ textarea.input {
 .input:focus {
   border-color: rgba(168, 119, 68, 0.45);
   box-shadow: 0 0 0 3px rgba(168, 119, 68, 0.14);
+}
+
+.input:hover {
+  border-color: rgba(19, 48, 78, 0.18);
 }

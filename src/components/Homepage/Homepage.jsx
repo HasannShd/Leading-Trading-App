@@ -324,7 +324,10 @@ const HomePage = () => {
           <div className="premium-logo-grid premium-logo-grid--brands">
             {mainBrands.map((brand) => (
               brand.logo ? (
-                <div className="premium-logo-card premium-logo-card--brand" key={brand.name}>
+                <div
+                  className={`premium-logo-card premium-logo-card--brand premium-logo-card--${brand.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`}
+                  key={brand.name}
+                >
                   <div className="premium-logo-media">
                     <img src={brand.logo} alt={brand.name} loading="lazy" />
                   </div>
@@ -343,7 +346,10 @@ const HomePage = () => {
           <div className="premium-logo-grid premium-logo-grid--clients">
             {clients.map((client) => (
               client.logo ? (
-                <div className="premium-logo-card premium-logo-card--client" key={client.name}>
+                <div
+                  className={`premium-logo-card premium-logo-card--client premium-logo-card--${client.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`}
+                  key={client.name}
+                >
                   <div className="premium-logo-media">
                     <img src={client.logo} alt={client.name} loading="lazy" />
                   </div>
