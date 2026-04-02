@@ -688,7 +688,7 @@
 }
 
 .premium-logo-card--client img {
-  max-height: 66px;
+  max-height: 74px;
 }
 
 .premium-logo-card--medstar img,
@@ -717,6 +717,25 @@
 .premium-logo-card--zogear img,
 .premium-logo-card--aster img {
   max-height: 78px;
+}
+
+.premium-logo-card--kims-muharraq img,
+.premium-logo-card--hilal-hospital img,
+.premium-logo-card--ibn-al-nafees img,
+.premium-logo-card--dar-al-hayat img,
+.premium-logo-card--resalah img {
+  max-height: 98px;
+  max-width: 96%;
+}
+
+.premium-logo-card--al-salam img {
+  max-height: 94px;
+  max-width: 92%;
+}
+
+.premium-logo-card--shifa-al-jazeera img {
+  max-height: 92px;
+  max-width: 98%;
 }
 
 .premium-logo-card:hover {
