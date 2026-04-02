@@ -57,7 +57,7 @@ a, button, input, textarea, select {
 }
 
 .app-main {
-  min-height: 70vh;
+  min-height: 0;
 }
 
 .app:not(.hero-page) .app-main {
@@ -66,6 +66,12 @@ a, button, input, textarea, select {
 
 .app.admin-app .app-main {
   padding-top: 0;
+}
+
+.app.admin-app {
+  background:
+    radial-gradient(840px 420px at 8% 0%, rgba(168, 119, 68, 0.12), transparent 50%),
+    linear-gradient(180deg, #08111d 0%, #0f1d31 100%);
 }
 
 .container {
@@ -84,5 +90,11 @@ a, button, input, textarea, select {
   background:
     radial-gradient(960px 540px at 8% -8%, rgba(168, 119, 68, 0.1), transparent 58%),
     radial-gradient(760px 460px at 92% 0%, rgba(20, 44, 67, 0.12), transparent 58%),
-    linear-gradient(180deg, #f6f0e8 0%, #f2f0ec 52%, #f7f4ee 100%);
+    linear-gradient(180deg, #f6f0e8 0%, #f2f0ec 52%, #f4efe6 78%, #ebe4d8 100%);
+}
+
+@media (max-width: 780px) {
+  .app:not(.hero-page) .app-main {
+    padding-top: 88px;
+  }
 }
