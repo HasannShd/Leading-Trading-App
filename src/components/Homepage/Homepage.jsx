@@ -70,7 +70,7 @@ const HomePage = () => {
   const heroStats = [
     { value: '10+', label: 'Years supporting mission-critical buyers' },
     { value: '3,000+', label: 'Medical, dental & industrial SKUs' },
-    { value: 'NHRA', label: 'Documentation-aware procurement approach' },
+    { value: 'NHRA', label: 'Approved' },
     { value: '24h', label: 'Fast quotation response for priority requests' },
   ];
 
@@ -179,7 +179,7 @@ const HomePage = () => {
               <Link className="premium-btn premium-btn-secondary" to="/products">Explore Categories</Link>
             </div>
             <div className="premium-hero-notes">
-              <span>NHRA-aware sourcing</span>
+              <span>NHRA-Approved</span>
               <span>Trusted manufacturer network</span>
               <span>Responsive account support</span>
             </div>
