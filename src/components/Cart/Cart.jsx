@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './Cart.css';
 
@@ -9,7 +9,7 @@ const Cart = () => {
   const [cart, setCart] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const fetchCart = async () => {
+  const fetchCart = useCallback(async () => {
     setLoading(true);
     try {
       const response = await fetch(`${API_URL}/cart`, {
@@ -22,7 +22,7 @@ const Cart = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [API_URL, token]);
 
   useEffect(() => {
     if (!token) {
@@ -30,7 +30,7 @@ const Cart = () => {
       return;
     }
     fetchCart();
-  }, []);
+  }, [fetchCart, navigate, token]);
 
   const updateQuantity = async (itemId, quantity) => {
     if (quantity < 1) return;

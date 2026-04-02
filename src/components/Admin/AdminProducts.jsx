@@ -1,10 +1,8 @@
-import { useState, useEffect, useContext } from 'react';
-import { AdminContext } from '../../context/AdminContext';
+import { useState, useEffect, useCallback } from 'react';
 import './AdminProducts.css';
 import AdminTopNav from './AdminTopNav';
 
 const AdminProducts = () => {
-  const { admin } = useContext(AdminContext);
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -31,12 +29,7 @@ const AdminProducts = () => {
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
   const token = localStorage.getItem('adminToken');
 
-  useEffect(() => {
-    fetchProducts();
-    fetchCategories();
-  }, []);
-
-  const fetchProducts = async () => {
+  const fetchProducts = useCallback(async () => {
     setLoading(true);
     try {
       const response = await fetch(`${API_URL}/products/admin/all`, {
@@ -52,9 +45,9 @@ const AdminProducts = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [API_URL, token]);
 
-  const fetchCategories = async () => {
+  const fetchCategories = useCallback(async () => {
     try {
       const response = await fetch(`${API_URL}/categories`);
       const data = await response.json();
@@ -62,7 +55,12 @@ const AdminProducts = () => {
     } catch (err) {
       console.error('Failed to fetch categories:', err);
     }
-  };
+  }, [API_URL]);
+
+  useEffect(() => {
+    fetchProducts();
+    fetchCategories();
+  }, [fetchProducts, fetchCategories]);
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;

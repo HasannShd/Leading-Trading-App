@@ -3,48 +3,86 @@
   justify-content: space-between;
   align-items: center;
   gap: 16px;
-  padding: 14px 20px;
-  margin-bottom: 20px;
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  border-radius: 14px;
-  box-shadow: var(--glass-shadow);
-  backdrop-filter: blur(var(--glass-blur));
+  padding: 16px 20px;
+  margin-bottom: 24px;
+  background: rgba(12, 24, 40, 0.9);
+  border: 1px solid rgba(248, 243, 235, 0.08);
+  border-radius: 20px;
+  box-shadow: 0 18px 36px rgba(7, 17, 31, 0.18);
 }
 
 .admin-topnav-left {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 18px;
   flex-wrap: wrap;
 }
 
 .admin-topnav-logo {
   font-weight: 700;
-  color: var(--navy-900);
+  color: #f8f3eb;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .admin-topnav-links {
   display: flex;
-  gap: 12px;
+  gap: 10px;
   flex-wrap: wrap;
 }
 
 .admin-topnav-links a {
-  padding: 6px 10px;
-  border-radius: 8px;
-  color: var(--navy-800);
+  padding: 8px 12px;
+  border-radius: 999px;
+  color: rgba(231, 218, 201, 0.84);
   font-weight: 600;
+  background: rgba(248, 243, 235, 0.04);
+  border: 1px solid transparent;
 }
 
 .admin-topnav-links a:hover {
-  background: var(--sky-100);
+  background: rgba(198, 145, 89, 0.14);
+  border-color: rgba(198, 145, 89, 0.2);
 }
 
 .admin-topnav-user {
-  padding: 6px 10px;
-  background: var(--sky-100);
-  border-radius: 8px;
-  color: var(--navy-800);
+  padding: 8px 12px;
+  background: rgba(198, 145, 89, 0.14);
+  border-radius: 999px;
+  color: #f8f3eb;
   font-weight: 600;
+  border: 1px solid rgba(198, 145, 89, 0.18);
+}
+
+@media (max-width: 768px) {
+  .admin-topnav {
+    padding: 14px;
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .admin-topnav-left {
+    width: 100%;
+    gap: 10px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .admin-topnav-links {
+    width: 100%;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 6px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .admin-topnav-links a {
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .admin-topnav-user {
+    width: 100%;
+    text-align: center;
+  }
 }

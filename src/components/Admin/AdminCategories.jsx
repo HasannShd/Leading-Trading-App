@@ -1,10 +1,8 @@
-import { useState, useEffect, useContext } from 'react';
-import { AdminContext } from '../../context/AdminContext';
+import { useState, useEffect, useCallback } from 'react';
 import './AdminCategories.css';
 import AdminTopNav from './AdminTopNav';
 
 const AdminCategories = () => {
-  const { admin } = useContext(AdminContext);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -20,11 +18,7 @@ const AdminCategories = () => {
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
   const token = localStorage.getItem('adminToken');
 
-  useEffect(() => {
-    fetchCategories();
-  }, []);
-
-  const fetchCategories = async () => {
+  const fetchCategories = useCallback(async () => {
     setLoading(true);
     try {
       const response = await fetch(`${API_URL}/categories`);
@@ -37,7 +31,11 @@ const AdminCategories = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [API_URL]);
+
+  useEffect(() => {
+    fetchCategories();
+  }, [fetchCategories]);
 
   const slugify = (value) =>
     value

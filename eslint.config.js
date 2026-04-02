@@ -22,18 +22,23 @@ export default defineConfig([
         sourceType: 'module',
       },
     },
-       rules: {
+    rules: {
       ...js.configs.recommended.rules,
-      ...react.configs.recommended.rules,
-      ...react.configs['jsx-runtime'].rules,
       ...reactHooks.configs.recommended.rules,
-      'react/jsx-no-target-blank': 'off',
+      'no-unused-vars': ['error', {
+        varsIgnorePattern: '^[A-Z]',
+        caughtErrors: 'none',
+      }],
       'react-refresh/only-export-components': [
         'warn',
         { allowConstantExport: true },
       ],
-      'react/prop-types': 'off', // add this line
-      'react/no-unescaped-entities': 'off', // add this line
+    },
+  },
+  {
+    files: ['src/context/*.jsx'],
+    rules: {
+      'react-refresh/only-export-components': 'off',
     },
   },
 ])

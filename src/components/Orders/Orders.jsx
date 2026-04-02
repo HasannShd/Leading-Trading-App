@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import './Orders.css';
 
@@ -40,7 +40,7 @@ const Orders = () => {
     }
   };
 
-  const fetchOrders = async () => {
+  const fetchOrders = useCallback(async () => {
     setLoading(true);
     try {
       const response = await fetch(`${API_URL}/orders`, {
@@ -53,11 +53,11 @@ const Orders = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [API_URL, token]);
 
   useEffect(() => {
     if (token) fetchOrders();
-  }, []);
+  }, [fetchOrders, token]);
 
   return (
     <main>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import Input from '../Common/Input';
 import Card from '../Common/Card';
@@ -12,10 +12,11 @@ const Shop = () => {
   const [category, setCategory] = useState('');
   const [sort, setSort] = useState('random');
   const [page, setPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState('');
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
 
-  const fetchCategories = async () => {
+  const fetchCategories = useCallback(async () => {
     try {
       const response = await fetch(`${API_URL}/categories`);
       const data = await response.json();
@@ -23,13 +24,13 @@ const Shop = () => {
     } catch (err) {
       console.error('Failed to load categories:', err);
     }
-  };
+  }, [API_URL]);
 
-  const fetchProducts = async () => {
+  const fetchProducts = useCallback(async () => {
     setLoading(true);
     try {
       const params = new URLSearchParams({ page, limit: 12, featured: 'true' });
-      if (q) params.set('search', q);
+      if (searchQuery) params.set('search', searchQuery);
       if (category) params.set('category', category);
       const response = await fetch(`${API_URL}/products?${params.toString()}`);
       const data = await response.json();
@@ -56,17 +57,20 @@ const Shop = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [API_URL, page, searchQuery, category, sort]);
 
   useEffect(() => {
     fetchCategories();
+  }, [fetchCategories]);
+
+  useEffect(() => {
     fetchProducts();
-  }, [page, sort, category]);
+  }, [fetchProducts]);
 
   const handleSearch = (e) => {
     e.preventDefault();
     setPage(1);
-    fetchProducts();
+    setSearchQuery(q.trim());
   };
 
   const totalPages = Math.ceil(total / 12);
@@ -107,19 +111,22 @@ const Shop = () => {
               <Link key={product._id} to={`/product/${product._id}`} className="shop-card-link">
                 <Card>
                   <div className="shop-card-media">
-                    {product.image || product.images?.[0] ? (
+                    {(() => {
+                      const productImage = product.image || product.images?.[0] || '';
+                      return productImage ? (
                       <img
                         src={
-                          (product.image || product.images?.[0]).startsWith('http')
-                            ? (product.image || product.images?.[0])
-                            : `${import.meta.env.BASE_URL}${(product.image || product.images?.[0]).replace(/^\//, '')}`
+                          productImage.startsWith('http')
+                            ? productImage
+                            : `${import.meta.env.BASE_URL}${productImage.replace(/^\//, '')}`
                         }
                         alt={product.name}
                         loading="lazy"
                       />
-                    ) : (
+                      ) : (
                       <div className="shop-card-placeholder">No image</div>
-                    )}
+                      );
+                    })()}
                   </div>
                   <div className="shop-card-body">
                     <h3>{product.name}</h3>

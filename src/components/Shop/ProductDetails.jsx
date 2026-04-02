@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './ProductDetails.css';
 
@@ -20,7 +20,7 @@ const ProductDetails = () => {
     return Number.isFinite(priceValue) && priceValue > 0 ? priceValue : null;
   };
 
-  const fetchProduct = async () => {
+  const fetchProduct = useCallback(async () => {
     setLoading(true);
     try {
       const response = await fetch(`${API_URL}/products/${id}`);
@@ -45,11 +45,11 @@ const ProductDetails = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [API_URL, id]);
 
   useEffect(() => {
     fetchProduct();
-  }, [id]);
+  }, [fetchProduct]);
 
   const variants = product?.variants || [];
   const selectedVariant = variants.find(v => v._id === variantId);

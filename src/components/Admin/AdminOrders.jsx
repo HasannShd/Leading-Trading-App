@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import './AdminCategories.css';
 import AdminTopNav from './AdminTopNav';
@@ -10,7 +10,7 @@ const AdminOrders = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const fetchOrders = async () => {
+  const fetchOrders = useCallback(async () => {
     setLoading(true);
     try {
       const response = await fetch(`${API_URL}/orders/admin`, {
@@ -28,11 +28,11 @@ const AdminOrders = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [API_URL, token]);
 
   useEffect(() => {
     fetchOrders();
-  }, []);
+  }, [fetchOrders]);
 
   const updateStatus = async (orderId, status) => {
     try {

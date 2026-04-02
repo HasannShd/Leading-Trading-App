@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import './AdminCategories.css';
 import AdminTopNav from './AdminTopNav';
@@ -38,7 +38,7 @@ const AdminOrderDetails = () => {
     }
   };
 
-  const fetchOrder = async () => {
+  const fetchOrder = useCallback(async () => {
     try {
       const response = await fetch(`${API_URL}/orders/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -53,11 +53,11 @@ const AdminOrderDetails = () => {
     } catch (err) {
       setError('Failed to load order');
     }
-  };
+  }, [API_URL, id, token]);
 
   useEffect(() => {
     fetchOrder();
-  }, [id]);
+  }, [fetchOrder]);
 
   if (!order) {
     return (

@@ -7,55 +7,78 @@ const AdminDashboard = () => {
   const { admin, logout } = useContext(AdminContext);
   const navigate = useNavigate();
   const [activeSection, setActiveSection] = useState('overview');
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const handleLogout = () => {
     logout();
     navigate('/.well-known/admin-access-sh123456');
   };
 
+  const goTo = (path) => {
+    setSidebarOpen(false);
+    navigate(path);
+  };
+
   return (
     <div className="admin-dashboard">
+      {sidebarOpen && (
+        <button
+          className="admin-sidebar-backdrop"
+          aria-label="Close admin menu"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
       {/* Sidebar */}
-      <aside className="admin-sidebar">
+      <aside className={`admin-sidebar${sidebarOpen ? ' open' : ''}`}>
         <div className="admin-sidebar-header">
           <h2>Admin Panel</h2>
-          <button className="admin-sidebar-close" onClick={() => {}}>✕</button>
+          <button
+            className="admin-sidebar-close"
+            aria-label="Close admin menu"
+            onClick={() => setSidebarOpen(false)}
+          >
+            ✕
+          </button>
         </div>
 
         <nav className="admin-nav">
           <button
             className={`admin-nav-item ${activeSection === 'overview' ? 'active' : ''}`}
-            onClick={() => setActiveSection('overview')}
+            onClick={() => {
+              setActiveSection('overview');
+              setSidebarOpen(false);
+            }}
           >
             📊 Overview
           </button>
           <button
             className={`admin-nav-item ${activeSection === 'categories' ? 'active' : ''}`}
-            onClick={() => navigate('/.well-known/admin-categories-sh123456')}
+            onClick={() => goTo('/.well-known/admin-categories-sh123456')}
           >
             📁 Categories
           </button>
           <button
             className={`admin-nav-item ${activeSection === 'products' ? 'active' : ''}`}
-            onClick={() => navigate('/.well-known/admin-products-sh123456')}
+            onClick={() => goTo('/.well-known/admin-products-sh123456')}
           >
             📦 Products
           </button>
           <button
             className={`admin-nav-item ${activeSection === 'import' ? 'active' : ''}`}
-            onClick={() => navigate('/.well-known/admin-import-sh123456')}
+            onClick={() => goTo('/.well-known/admin-import-sh123456')}
           >
             📥 Import
           </button>
           <button
             className={`admin-nav-item ${activeSection === 'orders' ? 'active' : ''}`}
-            onClick={() => navigate('/.well-known/admin-orders-sh123456')}
+            onClick={() => goTo('/.well-known/admin-orders-sh123456')}
           >
             🧾 Orders
           </button>
           <button
             className={`admin-nav-item ${activeSection === 'marketing' ? 'active' : ''}`}
-            onClick={() => navigate('/.well-known/admin-marketing-sh123456')}
+            onClick={() => goTo('/.well-known/admin-marketing-sh123456')}
           >
             📣 Marketing
           </button>
@@ -78,7 +101,16 @@ const AdminDashboard = () => {
       {/* Main Content */}
       <main className="admin-main">
         <div className="admin-header">
-          <h1>Welcome, {admin?.username}!</h1>
+          <div className="admin-header-row">
+            <button
+              className="admin-sidebar-toggle"
+              aria-label="Open admin menu"
+              onClick={() => setSidebarOpen(true)}
+            >
+              ☰
+            </button>
+            <h1>Welcome, {admin?.username}!</h1>
+          </div>
           <div className="admin-header-info">
             <span className="admin-status">✓ Admin Access Granted</span>
           </div>
@@ -91,7 +123,7 @@ const AdminDashboard = () => {
               <div className="admin-card-content">
                 <h3>Categories</h3>
                 <p className="admin-card-action">
-                  <button onClick={() => navigate('/.well-known/admin-categories-sh123456')}>
+                  <button onClick={() => goTo('/.well-known/admin-categories-sh123456')}>
                     Manage Categories →
                   </button>
                 </p>
@@ -103,7 +135,7 @@ const AdminDashboard = () => {
               <div className="admin-card-content">
                 <h3>Products</h3>
                 <p className="admin-card-action">
-                  <button onClick={() => navigate('/.well-known/admin-products-sh123456')}>
+                  <button onClick={() => goTo('/.well-known/admin-products-sh123456')}>
                     Manage Products →
                   </button>
                 </p>
@@ -115,7 +147,7 @@ const AdminDashboard = () => {
               <div className="admin-card-content">
                 <h3>Import</h3>
                 <p className="admin-card-action">
-                  <button onClick={() => navigate('/.well-known/admin-import-sh123456')}>
+                  <button onClick={() => goTo('/.well-known/admin-import-sh123456')}>
                     Import Products →
                   </button>
                 </p>
@@ -127,7 +159,7 @@ const AdminDashboard = () => {
               <div className="admin-card-content">
                 <h3>Orders</h3>
                 <p className="admin-card-action">
-                  <button onClick={() => navigate('/.well-known/admin-orders-sh123456')}>
+                  <button onClick={() => goTo('/.well-known/admin-orders-sh123456')}>
                     Manage Orders →
                   </button>
                 </p>
@@ -139,7 +171,7 @@ const AdminDashboard = () => {
               <div className="admin-card-content">
                 <h3>Marketing</h3>
                 <p className="admin-card-action">
-                  <button onClick={() => navigate('/.well-known/admin-marketing-sh123456')}>
+                  <button onClick={() => goTo('/.well-known/admin-marketing-sh123456')}>
                     Marketing List →
                   </button>
                 </p>

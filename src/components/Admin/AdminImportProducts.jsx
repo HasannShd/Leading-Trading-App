@@ -18,7 +18,6 @@ const AdminImportProducts = () => {
   const [imageCol, setImageCol] = useState('');
   const [priceCol, setPriceCol] = useState('');
   const [descriptionCol, setDescriptionCol] = useState('');
-  const [hasHeader, setHasHeader] = useState(false);
   const [useHeadings, setUseHeadings] = useState(true);
   const [createMissing, setCreateMissing] = useState(false);
   const [error, setError] = useState('');
@@ -98,8 +97,6 @@ const AdminImportProducts = () => {
       }
 
       const headerPresent = detectHeader(cleaned[0]);
-      setHasHeader(headerPresent);
-
       const maxCols = Math.max(...cleaned.map(r => r.length), 0);
       const headerRow = cleaned[0] || [];
       const options = Array.from({ length: maxCols }, (_, i) => ({
@@ -176,6 +173,8 @@ const AdminImportProducts = () => {
 
   const matchedRows = parsedRows.filter(row => row.name && row.categoryId);
   const unmatchedRows = parsedRows.filter(row => row.name && !row.categoryId);
+  const creatableRows = parsedRows.filter(row => row.name && row.categoryRaw);
+  const importReadyCount = createMissing ? creatableRows.length : matchedRows.length;
 
   const handleImport = async () => {
     setImporting(true);
@@ -233,7 +232,7 @@ const AdminImportProducts = () => {
         }));
 
       if (!items.length) {
-        setError('No matched rows to import.');
+        setError(createMissing ? 'No rows with category names available to import.' : 'No matched rows to import.');
         return;
       }
 
@@ -418,9 +417,9 @@ const AdminImportProducts = () => {
             <button
               className="admin-btn-primary"
               onClick={handleImport}
-              disabled={importing || matchedRows.length === 0}
+              disabled={importing || importReadyCount === 0}
             >
-              {importing ? 'Importing...' : 'Import Matched Products'}
+              {importing ? 'Importing...' : createMissing ? 'Create Categories & Import Products' : 'Import Matched Products'}
             </button>
           </div>
         )}

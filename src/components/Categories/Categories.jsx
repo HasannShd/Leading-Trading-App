@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import Card from '../Common/Card';
 import Input from '../Common/Input';
@@ -10,11 +10,7 @@ const Categories = () => {
   const [categories, setCategories] = useState([]);
   const [q, setQ] = useState('');
 
-  useEffect(() => {
-    fetchCategories();
-  }, []);
-
-  const fetchCategories = async () => {
+  const fetchCategories = useCallback(async () => {
     try {
       const response = await fetch(`${API_URL}/categories`);
       const data = await response.json();
@@ -23,7 +19,11 @@ const Categories = () => {
     } catch (err) {
       console.error('Failed to fetch categories:', err);
     }
-  };
+  }, [API_URL]);
+
+  useEffect(() => {
+    fetchCategories();
+  }, [fetchCategories]);
 
   // Filtered list based on search
   const list = useMemo(() => {

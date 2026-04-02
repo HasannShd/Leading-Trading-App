@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import './AdminCategories.css';
 import AdminTopNav from './AdminTopNav';
 
@@ -9,7 +9,7 @@ const AdminMarketing = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const fetchList = async () => {
+  const fetchList = useCallback(async () => {
     setLoading(true);
     try {
       const response = await fetch(`${API_URL}/users/marketing`, {
@@ -27,11 +27,11 @@ const AdminMarketing = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [API_URL, token]);
 
   useEffect(() => {
     fetchList();
-  }, []);
+  }, [fetchList]);
 
   const copyEmails = async () => {
     const emails = list.map(item => item.email).filter(Boolean).join(', ');

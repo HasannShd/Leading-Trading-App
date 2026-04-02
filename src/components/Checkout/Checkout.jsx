@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Checkout.css';
 
@@ -21,15 +21,15 @@ const Checkout = () => {
   const [notes, setNotes] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const fetchCart = async () => {
+  const fetchCart = useCallback(async () => {
     const response = await fetch(`${API_URL}/cart`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     const data = await response.json();
     setCart(data);
-  };
+  }, [API_URL, token]);
 
-  const fetchTapReady = async () => {
+  const fetchTapReady = useCallback(async () => {
     try {
       const response = await fetch(`${API_URL}/orders/tap/ready`);
       const data = await response.json();
@@ -37,7 +37,7 @@ const Checkout = () => {
     } catch (err) {
       setTapReady(false);
     }
-  };
+  }, [API_URL]);
 
   useEffect(() => {
     if (!token) {
@@ -46,7 +46,7 @@ const Checkout = () => {
     }
     fetchCart();
     fetchTapReady();
-  }, []);
+  }, [fetchCart, fetchTapReady, navigate, token]);
 
   const subtotal = cart?.items?.reduce((sum, item) => sum + item.price * item.quantity, 0) || 0;
   const shippingFee = subtotal < 10 ? 1 : 0;

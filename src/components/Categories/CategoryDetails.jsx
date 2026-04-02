@@ -103,20 +103,23 @@ const CategoryDetails = () => {
             {filteredProducts.map((p) => (
               <li key={p._id} className="category-details-product-item">
                 <Link to={`/product/${p._id}`} className="categories-card-link">
-                  {(p.image || p.images?.[0]) && (
+                  {(() => {
+                    const productImage = p.image || p.images?.[0] || '';
+                    return productImage ? (
                     <div className="category-details-product-media">
                       <img
                         src={
-                          (p.image || p.images?.[0]).startsWith('http')
-                            ? (p.image || p.images?.[0])
-                            : `${import.meta.env.BASE_URL}${(p.image || p.images?.[0]).replace(/^\//, '')}`
+                          productImage.startsWith('http')
+                            ? productImage
+                            : `${import.meta.env.BASE_URL}${productImage.replace(/^\//, '')}`
                         }
                         alt={p.name}
                         className="category-details-product-img"
                         loading="lazy"
                       />
                     </div>
-                  )}
+                    ) : null;
+                  })()}
                   <strong>{p.name}</strong>
                 </Link>
               </li>
