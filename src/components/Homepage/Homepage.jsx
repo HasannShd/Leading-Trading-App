@@ -70,8 +70,8 @@ const HomePage = () => {
   const heroStats = [
     { value: '10+', label: 'Years supporting mission-critical buyers' },
     { value: '3,000+', label: 'Medical, dental & industrial SKUs' },
-    { value: 'NHRA', label: 'Approved' },
-    { value: '24h', label: 'Fast quotation response for priority requests' },
+    { value: 'License', label: '& Certified' },
+    { value: '24h', label: 'Fast quotation resdponse for priority requests' },
   ];
 
   const sectorCards = [

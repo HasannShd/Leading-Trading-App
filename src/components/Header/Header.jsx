@@ -132,15 +132,19 @@ const Header = () => {
           {/* Categories Dropdown */}
           <div
             className="nav-dropdown-wrapper"
-            onMouseEnter={() => setDropdown(true)}
-            onMouseLeave={() => setDropdown(false)}
+            onMouseEnter={!isMobileViewport ? () => setDropdown(true) : undefined}
+            onMouseLeave={!isMobileViewport ? () => setDropdown(false) : undefined}
           >
             {isMobileViewport ? (
               <button
                 type="button"
                 className="nav-dropdown-toggle nav-dropdown-button"
                 aria-expanded={dropdown}
-                onClick={() => setDropdown((d) => !d)}
+                aria-controls="mobile-categories-menu"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setDropdown((d) => !d);
+                }}
               >
                 Categories ▾
               </button>
@@ -158,7 +162,10 @@ const Header = () => {
             )}
 
             {dropdown && (
-              <div className="nav-dropdown-menu">
+              <div
+                id={isMobileViewport ? 'mobile-categories-menu' : undefined}
+                className="nav-dropdown-menu"
+              >
                 {isMobileViewport && (
                   <Link
                     to="/products"

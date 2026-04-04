@@ -1,4 +1,5 @@
 import { createContext, useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export const AdminContext = createContext();
 
@@ -6,16 +7,28 @@ export const AdminProvider = ({ children }) => {
   const [admin, setAdmin] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const adminLoginPath = '/.well-known/admin-access-sh123456';
+  const isAdminRoute = location.pathname.startsWith('/.well-known/');
+
+  const resetAdminSession = () => {
+    localStorage.removeItem('adminToken');
+    setAdmin(null);
+    if (isAdminRoute && location.pathname !== adminLoginPath) {
+      navigate(adminLoginPath, { replace: true });
+    }
+  };
 
   // Prevent access to admin pages without authentication
   useEffect(() => {
-    if (typeof window !== 'undefined' && window.location.pathname.includes('.well-known/admin')) {
+    if (typeof window !== 'undefined' && location.pathname.includes('.well-known/admin')) {
       const token = localStorage.getItem('adminToken');
-      if (!token && window.location.pathname !== '/.well-known/admin-access-sh123456') {
-        window.location.href = '/.well-known/admin-access-sh123456';
+      if (!token && location.pathname !== adminLoginPath) {
+        navigate(adminLoginPath, { replace: true });
       }
     }
-  }, []);
+  }, [adminLoginPath, location.pathname, navigate]);
 
   useEffect(() => {
     const token = localStorage.getItem('adminToken');
@@ -37,14 +50,14 @@ export const AdminProvider = ({ children }) => {
         if (data.user.role === 'admin') {
           setAdmin(data.user);
         } else {
-          localStorage.removeItem('adminToken');
+          resetAdminSession();
         }
       } else {
-        localStorage.removeItem('adminToken');
+        resetAdminSession();
       }
     } catch (err) {
       console.error('Auth verification failed:', err);
-      localStorage.removeItem('adminToken');
+      resetAdminSession();
     } finally {
       setLoading(false);
     }
@@ -76,8 +89,8 @@ export const AdminProvider = ({ children }) => {
       });
       const meData = await meResponse.json();
 
-      if (meData.user.role !== 'admin') {
-        localStorage.removeItem('adminToken');
+      if (!meResponse.ok || meData.user.role !== 'admin') {
+        resetAdminSession();
         setError('Only admins can access this area');
         return false;
       }
@@ -93,8 +106,7 @@ export const AdminProvider = ({ children }) => {
   };
 
   const logout = () => {
-    localStorage.removeItem('adminToken');
-    setAdmin(null);
+    resetAdminSession();
   };
 
   return (

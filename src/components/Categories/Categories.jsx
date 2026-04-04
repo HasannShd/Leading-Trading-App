@@ -50,11 +50,10 @@ const Categories = () => {
       <section className="categories-shell">
         <section className="categories-hero">
           <div className="categories-hero-copy">
-            <span className="categories-eyebrow">Supply Landscape</span>
-            <h1 className="categories-title">Explore sourcing categories built for healthcare, dental, and operational buyers.</h1>
+            <span className="categories-eyebrow">Our Categories</span>
+            <h1 className="categories-title">Explore our medical, dental, and industrial categories.</h1>
             <p className="categories-subtitle">
-              Browse the structure of our catalog the same way a procurement team thinks: by department,
-              use case, and recurring supply need.
+              Browse the main categories in our catalog and open each one to view the products available inside it.
             </p>
           </div>
 
@@ -72,7 +71,7 @@ const Categories = () => {
               </div>
               <div className="categories-stat">
                 <strong>{withDescriptions}</strong>
-                <span>with curated descriptions</span>
+                <span>with descriptions</span>
               </div>
             </div>
           </div>
@@ -106,7 +105,7 @@ const Categories = () => {
           <>
             <div className="categories-results-bar">
               <span>{list.length} category{list.length === 1 ? '' : 'ies'} available</span>
-              <p>Open a category to review the products, brands, and request pathways inside it.</p>
+              <p>Open a category to view the products available inside it.</p>
             </div>
 
             <div className="categories-grid">
@@ -147,7 +146,7 @@ const Categories = () => {
                         </div>
                         <h3 className="categories-card-title">{c.name}</h3>
                         <p className="categories-card-desc">
-                          {c.description?.trim() || 'Browse the products and request support for this category.'}
+                          {c.description?.trim() || 'Browse the products available in this category.'}
                         </p>
                       </div>
                     </Card>

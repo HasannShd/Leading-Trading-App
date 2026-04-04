@@ -394,6 +394,11 @@
     gap: 4px;
   }
 
+  .nav.nav-mobile-active .nav-dropdown-button {
+    justify-content: space-between;
+    text-align: left;
+  }
+
   .nav-dropdown-menu {
     position: static;
     margin-top: 4px;
@@ -404,6 +409,10 @@
     box-shadow: none;
     display: grid;
     gap: 4px;
+  }
+
+  .nav.nav-mobile-active .nav-dropdown-menu {
+    width: 100%;
   }
 
   .nav-dropdown-item {

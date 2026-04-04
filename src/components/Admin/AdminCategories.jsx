@@ -16,7 +16,14 @@ const AdminCategories = () => {
   });
 
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
-  const token = localStorage.getItem('adminToken');
+  const adminLoginPath = '/.well-known/admin-access-sh123456';
+
+  const getAdminToken = () => localStorage.getItem('adminToken');
+  const handleUnauthorized = () => {
+    localStorage.removeItem('adminToken');
+    setError('Admin session expired. Please sign in again.');
+    window.location.href = adminLoginPath;
+  };
 
   const fetchCategories = useCallback(async () => {
     setLoading(true);
@@ -67,6 +74,11 @@ const AdminCategories = () => {
     try {
       const data = new FormData();
       data.append('image', file);
+      const token = getAdminToken();
+      if (!token) {
+        handleUnauthorized();
+        return;
+      }
       const response = await fetch(`${API_URL}/upload`, {
         method: 'POST',
         headers: { Authorization: `Bearer ${token}` },
@@ -74,6 +86,10 @@ const AdminCategories = () => {
       });
       const resData = await response.json();
       if (!response.ok) {
+        if (response.status === 401) {
+          handleUnauthorized();
+          return;
+        }
         setError(resData.message || 'Upload failed');
         return;
       }
@@ -91,6 +107,11 @@ const AdminCategories = () => {
     setLoading(true);
 
     try {
+      const token = getAdminToken();
+      if (!token) {
+        handleUnauthorized();
+        return;
+      }
       const method = editingId ? 'PUT' : 'POST';
       const url = editingId ? `${API_URL}/categories/${editingId}` : `${API_URL}/categories`;
 
@@ -106,6 +127,10 @@ const AdminCategories = () => {
       const data = await response.json();
 
       if (!response.ok) {
+        if (response.status === 401) {
+          handleUnauthorized();
+          return;
+        }
         setError(data.message || 'Operation failed');
         return;
       }
@@ -139,6 +164,11 @@ const AdminCategories = () => {
 
     setLoading(true);
     try {
+      const token = getAdminToken();
+      if (!token) {
+        handleUnauthorized();
+        return;
+      }
       const response = await fetch(`${API_URL}/categories/${id}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` },
@@ -146,6 +176,10 @@ const AdminCategories = () => {
 
       if (!response.ok) {
         const data = await response.json();
+        if (response.status === 401) {
+          handleUnauthorized();
+          return;
+        }
         setError(data.message || 'Failed to delete');
         return;
       }
