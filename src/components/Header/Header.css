@@ -146,6 +146,8 @@
 .nav-dropdown-wrapper {
   position: relative;
   z-index: 70;
+  padding-bottom: 12px;
+  margin-bottom: -12px;
 }
 
 .nav .nav-dropdown-toggle {
@@ -166,7 +168,7 @@
 
 .nav-dropdown-menu {
   position: absolute;
-  top: calc(100% + 10px);
+  top: calc(100% + 2px);
   left: 0;
   min-width: 240px;
   display: grid;
@@ -430,6 +432,8 @@
     display: flex;
     flex-direction: column;
     gap: 4px;
+    padding-bottom: 0;
+    margin-bottom: 0;
   }
 
   .nav.nav-mobile-active .nav-dropdown-button {
