@@ -13,7 +13,15 @@ const normalizeImageSrc = (value) => {
 
   if (/^https?:\/\//i.test(trimmed)) {
     try {
-      return new URL(trimmed).toString();
+      const url = new URL(trimmed);
+      const pathname = url.pathname.toLowerCase();
+      const isCloudinaryAsset = url.hostname.includes('res.cloudinary.com') && pathname.includes('/image/upload/');
+
+      if (isCloudinaryAsset && (pathname.endsWith('.heic') || pathname.endsWith('.heif'))) {
+        url.pathname = url.pathname.replace('/image/upload/', '/image/upload/f_jpg,q_auto/');
+      }
+
+      return url.toString();
     } catch {
       return encodeURI(trimmed);
     }
