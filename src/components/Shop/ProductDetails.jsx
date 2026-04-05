@@ -5,6 +5,23 @@ import './ProductDetails.css';
 
 const buildSizeLabel = (entry) => [entry.size, entry.inches, entry.color].filter(Boolean).join(' / ');
 
+const normalizeImageSrc = (value) => {
+  if (!value) return '';
+
+  const trimmed = String(value).trim();
+  if (!trimmed) return '';
+
+  if (/^https?:\/\//i.test(trimmed)) {
+    try {
+      return new URL(trimmed).toString();
+    } catch {
+      return encodeURI(trimmed);
+    }
+  }
+
+  return `${import.meta.env.BASE_URL}${trimmed.replace(/^\//, '')}`;
+};
+
 const getSizePrice = (entry) => {
   const priceValue = Number(entry?.price);
   return Number.isFinite(priceValue) && priceValue > 0 ? priceValue : null;
@@ -21,6 +38,8 @@ const ProductDetails = () => {
   const [variantId, setVariantId] = useState('');
   const [selectedSizeIndex, setSelectedSizeIndex] = useState('');
   const [activeImage, setActiveImage] = useState('');
+  const [brokenImages, setBrokenImages] = useState([]);
+  const [brokenRelatedImages, setBrokenRelatedImages] = useState({});
   const [qty, setQty] = useState(1);
   const [loading, setLoading] = useState(false);
   const [notice, setNotice] = useState(null);
@@ -47,6 +66,8 @@ const ProductDetails = () => {
       const gallery = [data?.image, ...(data?.images || [])].filter(Boolean);
       const uniqueGallery = Array.from(new Set(gallery));
       setActiveImage(uniqueGallery[0] || '');
+      setBrokenImages([]);
+      setBrokenRelatedImages({});
 
       const categoryId = data?.categorySlug?._id || data?.categorySlug;
       if (categoryId) {
@@ -107,6 +128,11 @@ const ProductDetails = () => {
     () => Array.from(new Set([product?.image, ...(product?.images || []), selectedVariant?.image].filter(Boolean))),
     [product, selectedVariant]
   );
+  const availableGallery = useMemo(
+    () => gallery.filter((img) => !brokenImages.includes(img)),
+    [brokenImages, gallery]
+  );
+  const resolvedActiveImage = normalizeImageSrc(activeImage);
 
   const productSpecs = useMemo(
     () => (selectedVariant?.specs?.length ? selectedVariant.specs : product?.specs || []).filter((spec) => spec?.label || spec?.value),
@@ -122,6 +148,17 @@ const ProductDetails = () => {
       setSelectedSizeIndex(nextIndex >= 0 ? String(nextIndex) : '0');
     } else {
       setSelectedSizeIndex('');
+    }
+  };
+
+  const handleImageFailure = (failedImage) => {
+    if (!failedImage) return;
+
+    setBrokenImages((prev) => (prev.includes(failedImage) ? prev : [...prev, failedImage]));
+
+    if (activeImage === failedImage) {
+      const nextImage = availableGallery.find((img) => img !== failedImage);
+      setActiveImage(nextImage || '');
     }
   };
 
@@ -221,15 +258,12 @@ const ProductDetails = () => {
       <section className="product-details-shell">
         <section className="product-details">
           <div className="product-media">
-            {activeImage ? (
+            {resolvedActiveImage ? (
               <img
-                src={
-                  activeImage.startsWith('http')
-                    ? activeImage
-                    : `${import.meta.env.BASE_URL}${activeImage.replace(/^\//, '')}`
-                }
+                src={resolvedActiveImage}
                 alt={product.name}
                 loading="lazy"
+                onError={() => handleImageFailure(activeImage)}
               />
             ) : (
               <div className="product-media-empty">
@@ -239,9 +273,9 @@ const ProductDetails = () => {
               </div>
             )}
 
-            {gallery.length > 1 && (
+            {availableGallery.length > 1 && (
               <div className="product-gallery">
-                {gallery.map((img, idx) => (
+                {availableGallery.map((img, idx) => (
                   <button
                     key={`${img}-${idx}`}
                     type="button"
@@ -249,9 +283,10 @@ const ProductDetails = () => {
                     onClick={() => setActiveImage(img)}
                   >
                     <img
-                      src={img.startsWith('http') ? img : `${import.meta.env.BASE_URL}${img.replace(/^\//, '')}`}
+                      src={normalizeImageSrc(img)}
                       alt={`${product.name} ${idx + 1}`}
                       loading="lazy"
+                      onError={() => handleImageFailure(img)}
                     />
                   </button>
                 ))}
@@ -391,15 +426,19 @@ const ProductDetails = () => {
               {relatedProducts.map((item) => {
                 const image = item.image || item.images?.[0] || '';
                 const price = Number(item.basePrice || item.variants?.[0]?.price || 0);
+                const imageFailed = brokenRelatedImages[item._id] === true;
 
                 return (
                   <Link key={item._id} to={`/product/${item._id}`} className="product-related-card">
                     <div className="product-related-media">
-                      {image ? (
+                      {image && !imageFailed ? (
                         <img
-                          src={image.startsWith('http') ? image : `${import.meta.env.BASE_URL}${image.replace(/^\//, '')}`}
+                          src={normalizeImageSrc(image)}
                           alt={item.name}
                           loading="lazy"
+                          onError={() => {
+                            setBrokenRelatedImages((prev) => ({ ...prev, [item._id]: true }));
+                          }}
                         />
                       ) : (
                         <span>{item.name?.[0] || 'P'}</span>
