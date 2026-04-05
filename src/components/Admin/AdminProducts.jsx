@@ -61,7 +61,7 @@ const AdminProducts = () => {
     } finally {
       setLoading(false);
     }
-  }, [API_URL, token]);
+  }, [API_URL]);
 
   const fetchCategories = useCallback(async () => {
     try {
@@ -332,6 +332,11 @@ const AdminProducts = () => {
 
     setLoading(true);
     try {
+      const token = getAdminToken();
+      if (!token) {
+        handleUnauthorized();
+        return;
+      }
       const response = await fetch(`${API_URL}/products/${id}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` },
@@ -339,6 +344,10 @@ const AdminProducts = () => {
 
       if (!response.ok) {
         const data = await response.json();
+        if (response.status === 401) {
+          handleUnauthorized();
+          return;
+        }
         setError(data.message || 'Failed to delete');
         return;
       }
