@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import Input from '../Common/Input';
 import Card from '../Common/Card';
 import StatePanel from '../Common/StatePanel';
+import { normalizeImageSrc } from '../../utils/normalizeImageSrc';
 import './Shop.css';
 
 const getProductPrice = (product) => {
@@ -25,6 +26,7 @@ const Shop = () => {
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [brokenImages, setBrokenImages] = useState({});
 
   const deferredQuery = useDeferredValue(q);
 
@@ -41,6 +43,7 @@ const Shop = () => {
   const fetchProducts = useCallback(async () => {
     setLoading(true);
     setError('');
+    setBrokenImages({});
     try {
       const params = new URLSearchParams({ page, limit: 12 });
       if (searchQuery) params.set('search', searchQuery);
@@ -193,20 +196,20 @@ const Shop = () => {
             {products.map((product) => {
               const productImage = product.image || product.images?.[0] || '';
               const price = getProductPrice(product);
+              const imageFailed = brokenImages[product._id] === true;
 
               return (
                 <Link key={product._id} to={`/product/${product._id}`} className="shop-card-link">
                   <Card className="shop-card">
                     <div className="shop-card-media">
-                      {productImage ? (
+                      {productImage && !imageFailed ? (
                         <img
-                          src={
-                            productImage.startsWith('http')
-                              ? productImage
-                              : `${import.meta.env.BASE_URL}${productImage.replace(/^\//, '')}`
-                          }
+                          src={normalizeImageSrc(productImage)}
                           alt={product.name}
                           loading="lazy"
+                          onError={() => {
+                            setBrokenImages((prev) => ({ ...prev, [product._id]: true }));
+                          }}
                         />
                       ) : (
                         <div className="shop-card-placeholder">

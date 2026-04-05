@@ -2,6 +2,7 @@ import { useDeferredValue, useEffect, useMemo, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Input from '../Common/Input';
 import StatePanel from '../Common/StatePanel';
+import { normalizeImageSrc } from '../../utils/normalizeImageSrc';
 import './CategoryDetails.css';
 
 const CategoryDetails = () => {
@@ -12,11 +13,13 @@ const CategoryDetails = () => {
   const [q, setQ] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [brokenImages, setBrokenImages] = useState({});
 
   const deferredQuery = useDeferredValue(q);
 
   useEffect(() => {
     setQ('');
+    setBrokenImages({});
     const fetchCategoryAndProducts = async () => {
       setLoading(true);
       setError(null);
@@ -140,21 +143,21 @@ const CategoryDetails = () => {
                 {filteredProducts.map((p) => {
                   const productImage = p.image || p.images?.[0] || '';
                   const price = Number(p.basePrice || p.variants?.[0]?.price || 0);
+                  const imageFailed = brokenImages[p._id] === true;
 
                   return (
                     <li key={p._id} className="category-details-product-item">
                       <Link to={`/product/${p._id}`} className="category-details-product-link">
-                        {productImage ? (
+                        {productImage && !imageFailed ? (
                           <div className="category-details-product-media">
                             <img
-                              src={
-                                productImage.startsWith('http')
-                                  ? productImage
-                                  : `${import.meta.env.BASE_URL}${productImage.replace(/^\//, '')}`
-                              }
+                              src={normalizeImageSrc(productImage)}
                               alt={p.name}
                               className="category-details-product-img"
                               loading="lazy"
+                              onError={() => {
+                                setBrokenImages((prev) => ({ ...prev, [p._id]: true }));
+                              }}
                             />
                           </div>
                         ) : (
