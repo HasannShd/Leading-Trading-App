@@ -232,7 +232,11 @@ const ProductDetails = () => {
                 loading="lazy"
               />
             ) : (
-              <div className="shop-card-placeholder">No image</div>
+              <div className="product-media-empty">
+                <span>{product.brand || 'Leading Trading Est'}</span>
+                <strong>Image available on request</strong>
+                <p>Contact our team for visuals, specifications, and availability details.</p>
+              </div>
             )}
 
             {gallery.length > 1 && (
