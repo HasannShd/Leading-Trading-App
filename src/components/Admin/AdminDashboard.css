@@ -307,6 +307,20 @@
     padding: 16px;
   }
 
+  .admin-header h1 {
+    font-size: clamp(1.8rem, 9vw, 2.5rem);
+  }
+
+  .admin-overview-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-card,
+  .admin-info-box {
+    padding: 20px;
+    border-radius: 20px;
+  }
+
   .admin-info-grid {
     grid-template-columns: 1fr;
   }
@@ -323,5 +337,26 @@
     border: none;
     background: rgba(0, 0, 0, 0.4);
     z-index: 1100;
+  }
+}
+
+@media (max-width: 520px) {
+  .admin-main {
+    padding: 12px;
+  }
+
+  .admin-header {
+    margin-bottom: 20px;
+  }
+
+  .admin-header-row {
+    align-items: flex-start;
+  }
+
+  .admin-status {
+    display: inline-flex;
+    width: 100%;
+    justify-content: center;
+    text-align: center;
   }
 }

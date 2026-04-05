@@ -388,6 +388,10 @@
     align-items: stretch;
   }
 
+  .admin-page-header h1 {
+    font-size: clamp(1.8rem, 10vw, 2.5rem);
+  }
+
   .admin-form-container,
   .admin-categories-list,
   .admin-category-section {
@@ -395,7 +399,54 @@
     border-radius: 22px;
   }
 
+  .admin-add-btn,
+  .admin-btn-primary,
+  .admin-btn-secondary {
+    width: 100%;
+    justify-content: center;
+  }
+
   .admin-form-actions {
     flex-direction: column;
+  }
+
+  .categories-table-wrapper {
+    margin: 0 -6px;
+    padding: 0 6px 6px;
+  }
+
+  .admin-table {
+    min-width: 640px;
+  }
+}
+
+@media (max-width: 520px) {
+  .admin-categories {
+    padding: 0 10px 20px;
+  }
+
+  .admin-form-container,
+  .admin-categories-list,
+  .admin-category-section {
+    padding: 16px;
+    border-radius: 18px;
+  }
+
+  .admin-form {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .admin-page-header {
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+
+  .admin-form-group input,
+  .admin-form-group textarea,
+  .admin-form-group select,
+  .admin-inline-row input,
+  .admin-table select {
+    font-size: 16px;
   }
 }

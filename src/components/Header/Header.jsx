@@ -74,6 +74,19 @@ const Header = () => {
     setDropdown(false);
   }, [location.pathname]);
 
+  useEffect(() => {
+    if (!mobileNav) {
+      document.body.style.overflow = '';
+      return undefined;
+    }
+
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [mobileNav]);
+
   const toggleMobileNav = () => {
     setMobileNav((open) => {
       if (open) setDropdown(false);
@@ -82,7 +95,7 @@ const Header = () => {
   };
 
   return (
-    <header className={`header${isHome ? ' header-home' : ''}${isScrolled ? ' scrolled' : ''}`}>
+    <header className={`header${isHome ? ' header-home' : ''}${isScrolled ? ' scrolled' : ''}${mobileNav ? ' mobile-open' : ''}`}>
       <div className="container header-row">
         <Link className="brand" to="/">
           <span className="brand-mark">
@@ -96,10 +109,16 @@ const Header = () => {
 
         {/* Hamburger */}
         <button
+          type="button"
           className={`header-hamburger${mobileNav ? ' open' : ''}`}
           aria-label={mobileNav ? 'Close navigation menu' : 'Open navigation menu'}
           aria-expanded={mobileNav}
-          onClick={toggleMobileNav}
+          aria-controls="site-navigation"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            toggleMobileNav();
+          }}
         >
           <span className="header-hamburger-bar" />
           <span className="header-hamburger-bar" />
@@ -118,6 +137,7 @@ const Header = () => {
         )}
 
         <nav
+          id="site-navigation"
           ref={navRef}
           className={`nav nav-relative${mobileNav ? ' nav-mobile-active' : ''}`}
         >

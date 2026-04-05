@@ -15,7 +15,7 @@
   display: flex;
   align-items: center;
   gap: 18px;
-  flex-wrap: wrap;
+  min-width: 0;
 }
 
 .admin-topnav-logo {
@@ -25,10 +25,33 @@
   text-transform: uppercase;
 }
 
+.admin-topnav-toggle {
+  display: none;
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  border: 1px solid rgba(248, 243, 235, 0.1);
+  background: rgba(248, 243, 235, 0.05);
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.admin-topnav-toggle span {
+  width: 18px;
+  height: 2px;
+  border-radius: 999px;
+  background: #f8f3eb;
+}
+
 .admin-topnav-links {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
+  flex: 1;
 }
 
 .admin-topnav-links a {
@@ -45,6 +68,10 @@
   border-color: rgba(198, 145, 89, 0.2);
 }
 
+.admin-topnav-right {
+  flex-shrink: 0;
+}
+
 .admin-topnav-user {
   padding: 8px 12px;
   background: rgba(198, 145, 89, 0.14);
@@ -52,31 +79,46 @@
   color: #f8f3eb;
   font-weight: 600;
   border: 1px solid rgba(198, 145, 89, 0.18);
+  max-width: min(280px, 100%);
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 @media (max-width: 768px) {
   .admin-topnav {
     padding: 14px;
-    align-items: flex-start;
+    align-items: stretch;
     flex-direction: column;
+    gap: 12px;
   }
 
   .admin-topnav-left {
     width: 100%;
-    gap: 10px;
-    flex-direction: column;
-    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .admin-topnav-toggle {
+    display: inline-flex;
   }
 
   .admin-topnav-links {
     width: 100%;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    padding-bottom: 6px;
-    -webkit-overflow-scrolling: touch;
+    display: none;
+    flex-direction: column;
+    gap: 8px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(248, 243, 235, 0.08);
+  }
+
+  .admin-topnav-links.open {
+    display: flex;
   }
 
   .admin-topnav-links a {
+    min-height: 46px;
+    display: flex;
+    align-items: center;
     white-space: nowrap;
     flex-shrink: 0;
   }
