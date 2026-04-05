@@ -727,6 +727,203 @@
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
+.premium-featured-showcase {
+  margin-top: 34px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
+  gap: 20px;
+}
+
+.premium-featured-lead,
+.premium-featured-mini,
+.premium-featured-rail,
+.premium-product-empty {
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(19, 48, 78, 0.08);
+  box-shadow: 0 18px 36px rgba(7, 17, 31, 0.06);
+}
+
+.premium-featured-lead {
+  display: grid;
+  grid-template-columns: minmax(260px, 0.95fr) minmax(0, 1.05fr);
+  gap: 20px;
+  padding: 20px;
+  border-radius: 30px;
+  text-decoration: none;
+  color: inherit;
+  background:
+    radial-gradient(circle at top right, rgba(198, 145, 89, 0.12), transparent 26%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(244, 240, 232, 0.92));
+}
+
+.premium-featured-lead:hover,
+.premium-featured-mini:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 24px 46px rgba(7, 17, 31, 0.1);
+  border-color: rgba(168, 119, 68, 0.2);
+}
+
+.premium-featured-lead-media {
+  min-height: 340px;
+  border-radius: 24px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, rgba(243, 240, 233, 1), rgba(231, 235, 238, 1));
+}
+
+.premium-featured-lead-media img,
+.premium-featured-mini-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.premium-featured-lead-media span,
+.premium-featured-mini-media span {
+  font-size: 3rem;
+  font-weight: 800;
+  color: var(--navy-700);
+}
+
+.premium-featured-lead-copy {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.premium-featured-lead-top,
+.premium-featured-mini-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.premium-featured-lead-top span,
+.premium-featured-mini-copy span,
+.premium-featured-rail-intro span,
+.premium-featured-rail-footer span {
+  color: #876342;
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+}
+
+.premium-featured-lead-top strong {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  min-height: 34px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: rgba(12, 29, 50, 0.06);
+  color: var(--navy-700);
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.premium-featured-lead-copy h3 {
+  margin: 0;
+  font-size: clamp(2rem, 3.2vw, 3rem);
+  line-height: 1.02;
+  letter-spacing: -0.04em;
+  color: var(--navy-900);
+}
+
+.premium-featured-lead-copy p,
+.premium-featured-rail-intro p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.8;
+}
+
+.premium-featured-lead-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(19, 48, 78, 0.08);
+}
+
+.premium-featured-lead-meta small {
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.premium-featured-lead-meta em {
+  color: #875625;
+  font-style: normal;
+  font-weight: 700;
+}
+
+.premium-featured-rail {
+  display: grid;
+  gap: 16px;
+  padding: 22px;
+  border-radius: 30px;
+  background:
+    radial-gradient(circle at top right, rgba(198, 145, 89, 0.14), transparent 28%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(244, 240, 232, 0.92));
+}
+
+.premium-featured-stack {
+  display: grid;
+  gap: 14px;
+}
+
+.premium-featured-mini {
+  display: grid;
+  grid-template-columns: 112px minmax(0, 1fr);
+  gap: 14px;
+  align-items: center;
+  padding: 12px;
+  border-radius: 22px;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.premium-featured-mini-media {
+  height: 92px;
+  border-radius: 18px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, rgba(243, 240, 233, 1), rgba(231, 235, 238, 1));
+}
+
+.premium-featured-mini-copy strong,
+.premium-featured-rail-footer strong {
+  color: var(--navy-900);
+  font-size: 1rem;
+  line-height: 1.35;
+}
+
+.premium-featured-rail-footer {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 18px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(19, 48, 78, 0.08);
+}
+
+.premium-btn-dark {
+  min-height: 48px;
+  padding: 0 20px;
+  border: 1px solid rgba(19, 48, 78, 0.08);
+  background: rgba(12, 29, 50, 0.94);
+  color: #f8f3eb;
+  box-shadow: 0 18px 32px rgba(7, 17, 31, 0.12);
+}
+
 .premium-product-card {
   display: flex;
   flex-direction: column;
@@ -933,7 +1130,8 @@
 
 @media (max-width: 1100px) {
   .premium-hero-grid,
-  .premium-workflow {
+  .premium-workflow,
+  .premium-featured-showcase {
     grid-template-columns: 1fr;
   }
 
@@ -989,13 +1187,21 @@
   .premium-sector-strip,
   .premium-proof-grid,
   .premium-capability-grid,
-  .premium-product-grid,
   .premium-logo-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .premium-featured-lead {
+    grid-template-columns: 1fr;
+  }
+
+  .premium-featured-lead-media {
+    min-height: 280px;
+  }
+
   .premium-section-heading-inline,
-  .premium-cta-card {
+  .premium-cta-card,
+  .premium-featured-rail-footer {
     flex-direction: column;
     align-items: start;
   }
@@ -1050,9 +1256,26 @@
   .premium-sector-strip,
   .premium-proof-grid,
   .premium-capability-grid,
-  .premium-product-grid,
   .premium-logo-grid {
     grid-template-columns: 1fr;
+  }
+
+  .premium-featured-showcase {
+    gap: 16px;
+  }
+
+  .premium-featured-lead,
+  .premium-featured-rail {
+    padding: 18px;
+    border-radius: 24px;
+  }
+
+  .premium-featured-mini {
+    grid-template-columns: 88px minmax(0, 1fr);
+  }
+
+  .premium-featured-mini-media {
+    height: 78px;
   }
 
   .premium-stage-overlay {
@@ -1061,21 +1284,26 @@
   }
 
   .premium-logo-card {
-    min-height: 116px;
-    padding: 16px;
+    min-height: 132px;
+    padding: 14px;
   }
 
   .premium-logo-media {
-    min-height: 84px;
+    min-height: 96px;
     aspect-ratio: 16 / 6;
-    padding: 10px 16px;
+    padding: 12px 18px;
   }
 
   .premium-logo-card .premium-logo-media img {
-    width: 100%;
-    height: 100%;
-    max-width: 100%;
-    max-height: 100%;
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
+  }
+
+  .premium-logo-card[class*="premium-logo-card--"] img {
+    max-width: 100% !important;
+    max-height: 100% !important;
   }
 
   .premium-stage-overlay p {

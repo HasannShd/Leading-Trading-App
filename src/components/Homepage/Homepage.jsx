@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useEffect, useMemo, useState } from 'react';
+import { normalizeImageSrc } from '../../utils/normalizeImageSrc';
 import './Homepage.css';
 
 const HomePage = () => {
@@ -70,7 +71,7 @@ const HomePage = () => {
   const heroStats = [
     { value: '10+', label: 'Years supporting mission-critical buyers' },
     { value: '3,000+', label: 'Medical, dental & industrial SKUs' },
-    { value: 'License', label: '& Certified' },
+    { value: 'Licensed', label: '& Certified' },
     { value: '24h', label: 'Fast quotation resdponse for priority requests' },
   ];
 
@@ -162,6 +163,9 @@ const HomePage = () => {
   ];
 
   const spotlightProducts = shuffledFeatured.slice(0, 6);
+  const leadProduct = spotlightProducts[0] || null;
+  const secondaryProducts = spotlightProducts.slice(1, 5);
+  const overflowCount = Math.max(0, featuredProducts.length - 5);
 
   return (
     <main className="premium-home">
@@ -324,36 +328,86 @@ const HomePage = () => {
         <div className="premium-section-heading premium-section-heading-inline">
           <div>
             <span className="premium-eyebrow">Product spotlight</span>
-            <h2>Featured categories and products from the catalog.</h2>
+            <h2>A curated look at selected products, not the whole catalog at once.</h2>
           </div>
           <Link className="premium-inline-link" to="/shop">View full catalog</Link>
         </div>
 
-        <div className="premium-product-grid">
-          {spotlightProducts.length > 0 ? (
-            spotlightProducts.map((product) => (
-              <Link className="premium-product-card" key={product._id} to={`/product/${product._id}`}>
-                <div className="premium-product-media">
-                  {product.image ? (
+        <div className="premium-featured-showcase">
+          {leadProduct ? (
+            <>
+              <Link className="premium-featured-lead" key={leadProduct._id} to={`/product/${leadProduct._id}`}>
+                <div className="premium-featured-lead-media">
+                  {leadProduct.image ? (
                     <img
-                      src={
-                        product.image.startsWith('http')
-                          ? product.image
-                          : `${baseUrl}${product.image.replace(/^\//, '')}`
-                      }
-                      alt={product.name}
+                      src={normalizeImageSrc(leadProduct.image)}
+                      alt={leadProduct.name}
                       loading="lazy"
                     />
                   ) : (
-                    <span>{product.name?.[0] || 'P'}</span>
+                    <span>{leadProduct.name?.[0] || 'P'}</span>
                   )}
                 </div>
-                <div className="premium-product-copy">
-                  <strong>{product.name}</strong>
-                  <span>{product.brand || 'Featured product'}</span>
+
+                <div className="premium-featured-lead-copy">
+                  <div className="premium-featured-lead-top">
+                    <span>{leadProduct.brand || leadProduct.categorySlug?.name || 'Featured selection'}</span>
+                    <strong>Lead feature</strong>
+                  </div>
+                  <h3>{leadProduct.name}</h3>
+                  <p>
+                    {leadProduct.description?.trim() ||
+                      'A highlighted catalog product selected to represent the range, quality, and direction of the current featured lineup.'}
+                  </p>
+                  <div className="premium-featured-lead-meta">
+                    <small>{leadProduct.categorySlug?.name || 'Catalog product'}</small>
+                    <em>Open product</em>
+                  </div>
                 </div>
               </Link>
-            ))
+
+              <div className="premium-featured-rail">
+                <div className="premium-featured-rail-intro">
+                  <span>Current shortlist</span>
+                  <p>Rotate the featured lineup while keeping the homepage focused and premium.</p>
+                </div>
+
+                <div className="premium-featured-stack">
+                  {secondaryProducts.map((product) => (
+                    <Link className="premium-featured-mini" key={product._id} to={`/product/${product._id}`}>
+                      <div className="premium-featured-mini-media">
+                        {product.image ? (
+                          <img
+                            src={normalizeImageSrc(product.image)}
+                            alt={product.name}
+                            loading="lazy"
+                          />
+                        ) : (
+                          <span>{product.name?.[0] || 'P'}</span>
+                        )}
+                      </div>
+
+                      <div className="premium-featured-mini-copy">
+                        <span>{product.brand || 'Featured product'}</span>
+                        <strong>{product.name}</strong>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+
+                <div className="premium-featured-rail-footer">
+                  <div>
+                    <span>Catalog flow</span>
+                    <strong>
+                      {overflowCount > 0
+                        ? `+${overflowCount} more featured products available in the full catalog`
+                        : 'Explore the full catalog for the wider product range'}
+                    </strong>
+                  </div>
+                  <Link className="premium-btn premium-btn-dark" to="/shop">Browse Products</Link>
+                </div>
+              </div>
+            </>
           ) : (
             <div className="premium-product-empty">
               Featured products will appear here once catalog items are marked as featured.
