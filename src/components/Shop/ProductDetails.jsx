@@ -1,34 +1,10 @@
 import { useEffect, useMemo, useState, useCallback, startTransition } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import StatePanel from '../Common/StatePanel';
+import { normalizeImageSrc } from '../../utils/normalizeImageSrc';
 import './ProductDetails.css';
 
 const buildSizeLabel = (entry) => [entry.size, entry.inches, entry.color].filter(Boolean).join(' / ');
-
-const normalizeImageSrc = (value) => {
-  if (!value) return '';
-
-  const trimmed = String(value).trim();
-  if (!trimmed) return '';
-
-  if (/^https?:\/\//i.test(trimmed)) {
-    try {
-      const url = new URL(trimmed);
-      const pathname = url.pathname.toLowerCase();
-      const isCloudinaryAsset = url.hostname.includes('res.cloudinary.com') && pathname.includes('/image/upload/');
-
-      if (isCloudinaryAsset && (pathname.endsWith('.heic') || pathname.endsWith('.heif'))) {
-        url.pathname = url.pathname.replace('/image/upload/', '/image/upload/f_jpg,q_auto/');
-      }
-
-      return url.toString();
-    } catch {
-      return encodeURI(trimmed);
-    }
-  }
-
-  return `${import.meta.env.BASE_URL}${trimmed.replace(/^\//, '')}`;
-};
 
 const getSizePrice = (entry) => {
   const priceValue = Number(entry?.price);
