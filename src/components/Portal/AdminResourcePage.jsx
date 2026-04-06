@@ -84,10 +84,17 @@ const AdminResourcePage = ({ config }) => {
       record.date,
       record.assignedDate,
       record.visitDate,
+      record.visitTime,
+      record.startTime,
+      record.endTime,
+      record.checkInTime ? `In ${new Date(record.checkInTime).toLocaleString()}` : '',
+      record.checkOutTime ? `Out ${new Date(record.checkOutTime).toLocaleString()}` : '',
       record.expenseDate,
       record.dueDate,
       record.createdAt ? new Date(record.createdAt).toLocaleString() : '',
       record.amount !== undefined ? `${record.amount} BHD` : '',
+      record.mileageWeekStart !== undefined && record.mileageWeekStart !== null ? `Start km ${record.mileageWeekStart}` : '',
+      record.mileageWeekEnd !== undefined && record.mileageWeekEnd !== null ? `End km ${record.mileageWeekEnd}` : '',
       record.proposedPrice !== undefined && record.proposedPrice !== null ? `${record.proposedPrice} BHD` : '',
     ].filter(Boolean);
 

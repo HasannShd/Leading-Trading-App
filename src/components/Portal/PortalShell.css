@@ -18,7 +18,7 @@
 }
 
 .portal-shell.staff-shell {
-  padding-bottom: 5.5rem;
+  padding-bottom: 2rem;
 }
 
 .portal-shell.admin-shell {
@@ -77,6 +77,44 @@
   width: min(1180px, calc(100% - 1rem));
   margin: 0 auto;
   padding: 1rem 0 2rem;
+}
+
+.portal-staff-nav-wrap {
+  position: sticky;
+  top: 69px;
+  z-index: 35;
+  backdrop-filter: blur(18px);
+  background: rgba(248, 245, 238, 0.92);
+  border-bottom: 1px solid rgba(13, 26, 43, 0.08);
+}
+
+.portal-staff-nav {
+  display: flex;
+  gap: 0.65rem;
+  overflow-x: auto;
+  padding: 0.75rem 0 0.85rem;
+  scrollbar-width: none;
+}
+
+.portal-staff-nav::-webkit-scrollbar {
+  display: none;
+}
+
+.portal-staff-link {
+  flex: 0 0 auto;
+  padding: 0.72rem 1rem;
+  border-radius: 999px;
+  text-decoration: none;
+  color: var(--navy-700);
+  background: white;
+  border: 1px solid rgba(13, 26, 43, 0.08);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.portal-staff-link.active {
+  color: white;
+  background: var(--navy-800);
 }
 
 .portal-quick-links {
@@ -324,38 +362,6 @@
   color: var(--bronze-700);
 }
 
-.portal-bottom-nav {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 60;
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 0.3rem;
-  padding: 0.55rem 0.7rem calc(0.55rem + env(safe-area-inset-bottom));
-  background: rgba(8, 24, 41, 0.96);
-  backdrop-filter: blur(18px);
-}
-
-.portal-bottom-link {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.2rem;
-  border-radius: 1rem;
-  min-height: 3.3rem;
-  color: rgba(255, 255, 255, 0.72);
-  text-decoration: none;
-  font-size: 0.72rem;
-}
-
-.portal-bottom-link.active {
-  color: white;
-  background: rgba(255, 255, 255, 0.08);
-}
-
 .portal-admin-nav {
   display: flex;
   flex-wrap: wrap;
@@ -402,6 +408,11 @@
 @media (min-width: 720px) {
   .portal-content {
     width: min(1240px, calc(100% - 2rem));
+  }
+
+  .portal-staff-nav {
+    flex-wrap: wrap;
+    overflow: visible;
   }
 
   .portal-grid.stats {

@@ -41,7 +41,9 @@ const StaffDashboard = () => {
         <div className="portal-grid stats" style={{ marginTop: '1rem' }}>
           <div className="portal-stat">
             <div className="portal-stat-value">{data.attendanceStatus?.checkedIn ? 'Checked In' : 'Not In'}</div>
-            <div className="portal-stat-label">Attendance today</div>
+            <div className="portal-stat-label">
+              {data.attendanceStatus?.checkInTime ? new Date(data.attendanceStatus.checkInTime).toLocaleString() : 'Attendance today'}
+            </div>
           </div>
           <div className="portal-stat">
             <div className="portal-stat-value">{data.quickStats.pendingFollowUps}</div>
@@ -55,6 +57,14 @@ const StaffDashboard = () => {
             <div className="portal-stat-value">{data.schedules.length}</div>
             <div className="portal-stat-label">Schedule items today</div>
           </div>
+        </div>
+        <div className="portal-actions" style={{ marginTop: '1rem' }}>
+          <Link className="portal-button primary" to="/staff/attendance">
+            {data.attendanceStatus?.checkedOut ? 'Attendance Complete' : data.attendanceStatus?.checkedIn ? 'Open Check Out' : 'Open Check In'}
+          </Link>
+          <Link className="portal-button ghost" to="/staff/schedule">
+            View Today&apos;s Schedule
+          </Link>
         </div>
       </div>
 
