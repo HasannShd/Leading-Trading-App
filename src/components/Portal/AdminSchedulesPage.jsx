@@ -55,6 +55,23 @@ const AdminSchedulesPage = () => {
 
   return (
     <section className="portal-page">
+      <div className="portal-card portal-help-card">
+        <div className="portal-section-head">
+          <div>
+            <div className="portal-brand-kicker">Schedule Planning</div>
+            <h2 className="portal-section-title" style={{ fontSize: '1.45rem' }}>Assign work clearly</h2>
+            <p className="portal-section-copy">
+              Keep schedules short and clear. Staff should be able to read the task name and understand what to do immediately.
+            </p>
+          </div>
+        </div>
+        <ul className="portal-help-list">
+          <li>Use simple titles like “Visit King Hamad Hospital” or “Follow up with Bapco clinic”.</li>
+          <li>Add a location and time whenever possible.</li>
+          <li>Keep the description focused on what the staff member should do next.</li>
+        </ul>
+      </div>
+
       <div className="portal-card">
         <div className="portal-section-head">
           <div>
@@ -128,17 +145,32 @@ const AdminSchedulesPage = () => {
           </div>
         </div>
         <div className="portal-record-list" style={{ marginTop: '1rem' }}>
-          {schedules.map((schedule) => (
-            <div className="portal-record-card" key={schedule._id}>
-              <h3 className="portal-record-title">{schedule.title}</h3>
-              <div className="portal-record-meta">
-                <span>{schedule.user?.name || schedule.user?.username}</span>
-                <span>{schedule.assignedDate}</span>
-                {schedule.startTime && <span>{schedule.startTime}</span>}
-                <span className="portal-badge status">{schedule.status}</span>
+          {schedules.length ? (
+            schedules.map((schedule) => (
+              <div className="portal-record-card" key={schedule._id}>
+                <h3 className="portal-record-title">{schedule.title}</h3>
+                <div className="portal-record-meta">
+                  <span>{schedule.user?.name || schedule.user?.username}</span>
+                  <span>{schedule.assignedDate}</span>
+                  {schedule.startTime && <span>{schedule.startTime}</span>}
+                  {schedule.location && <span>{schedule.location}</span>}
+                  <span className="portal-badge status">{schedule.status}</span>
+                </div>
+                {(schedule.description || schedule.notes) && (
+                  <div className="portal-record-copy">
+                    {schedule.description || schedule.notes}
+                  </div>
+                )}
               </div>
+            ))
+          ) : (
+            <div className="portal-empty-state">
+              <h3 className="portal-empty-title">No schedules assigned yet</h3>
+              <p className="portal-empty-copy">
+                Create the first schedule above. Assigned tasks will appear here and on the staff member&apos;s phone.
+              </p>
             </div>
-          ))}
+          )}
         </div>
       </div>
     </section>

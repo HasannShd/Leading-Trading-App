@@ -6,7 +6,7 @@ import './PortalShell.css';
 const links = [
   { section: 'Operations' },
   { to: '/admin/dashboard', label: 'Overview' },
-  { to: '/admin/staff', label: 'Staff' },
+  { to: '/admin/staff', label: 'Staff Team' },
   { to: '/admin/attendance', label: 'Attendance' },
   { to: '/admin/schedules', label: 'Schedules' },
   { to: '/admin/reports', label: 'Reports' },
@@ -47,19 +47,30 @@ const AdminPortalLayout = () => {
           </button>
         </div>
       </header>
-      <div className="portal-content portal-page">
-        <nav className="portal-admin-nav">
-          {links.map((link) => (
-            link.section ? (
-              <div key={link.section} className="portal-admin-nav-section">{link.section}</div>
-            ) : (
-              <NavLink key={link.to} to={link.to} className={({ isActive }) => `portal-admin-link${isActive ? ' active' : ''}`}>
-                {link.label}
-              </NavLink>
-            )
-          ))}
-        </nav>
-        <Outlet />
+      <div className="portal-content portal-admin-layout">
+        <aside className="portal-admin-sidebar">
+          <div className="portal-card portal-admin-sidebar-card">
+            <div className="portal-brand-kicker">Admin Navigation</div>
+            <h2 className="portal-section-title" style={{ fontSize: '1.35rem' }}>Everything in one place</h2>
+            <p className="portal-section-copy">
+              Start with staff operations, then move to website control. Each section below opens a full page with clear actions and recent records.
+            </p>
+            <nav className="portal-admin-nav">
+              {links.map((link) => (
+                link.section ? (
+                  <div key={link.section} className="portal-admin-nav-section">{link.section}</div>
+                ) : (
+                  <NavLink key={link.to} to={link.to} className={({ isActive }) => `portal-admin-link${isActive ? ' active' : ''}`}>
+                    {link.label}
+                  </NavLink>
+                )
+              ))}
+            </nav>
+          </div>
+        </aside>
+        <main className="portal-admin-main">
+          <Outlet />
+        </main>
       </div>
     </div>
   );

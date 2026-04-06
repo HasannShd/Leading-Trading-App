@@ -97,18 +97,56 @@ const AdminResourcePage = ({ config }) => {
       record.mileageWeekEnd !== undefined && record.mileageWeekEnd !== null ? `End km ${record.mileageWeekEnd}` : '',
       record.proposedPrice !== undefined && record.proposedPrice !== null ? `${record.proposedPrice} BHD` : '',
     ].filter(Boolean);
+  const pendingStatuses = new Set(['submitted', 'pending', 'under_review', 'reviewed', 'draft', 'partial', 'missed', 'overdue']);
+  const pendingCount = records.filter((record) => pendingStatuses.has(record.status)).length;
+  const assignedPeople = new Set(records.map((record) => record.user?._id).filter(Boolean)).size;
 
   return (
     <section className="portal-page">
+      <div className="portal-card portal-help-card">
+        <div className="portal-section-head">
+          <div>
+            <div className="portal-brand-kicker">How To Use This Page</div>
+            <h2 className="portal-section-title" style={{ fontSize: '1.45rem' }}>Simple admin view</h2>
+            <p className="portal-section-copy">
+              Use the filters first, then review the latest entries below. If nothing is showing yet, it usually means staff have not submitted anything in this section yet.
+            </p>
+          </div>
+        </div>
+        <ul className="portal-help-list">
+          <li>Use `All staff` to see everything, or choose one person to focus on.</li>
+          {config.supportsStatus && <li>Use the status filter to find pending work faster.</li>}
+          {config.supportsDate && <li>Use the date filter to review one day at a time.</li>}
+          {config.statusPatch && <li>You can update statuses directly from the cards below.</li>}
+        </ul>
+      </div>
+
       <div className="portal-card">
         <div className="portal-section-head">
           <div>
             <div className="portal-brand-kicker">Admin View</div>
             <h1 className="portal-section-title" style={{ fontSize: '1.8rem' }}>{config.title}</h1>
+            <p className="portal-section-copy">
+              Review entries below, use the filters to narrow the list, and update statuses from the cards when needed.
+            </p>
           </div>
           {['attendance', 'reports', 'expenses', 'orders', 'visits', 'followups'].includes(config.exportKey || configKey) && (
             <button className="portal-inline-button ghost" type="button" onClick={handleExport}>Export CSV</button>
           )}
+        </div>
+        <div className="portal-grid stats portal-module-stats" style={{ marginTop: '1rem' }}>
+          <div className="portal-stat light">
+            <div className="portal-stat-value">{records.length}</div>
+            <div className="portal-stat-label">Visible records</div>
+          </div>
+          <div className="portal-stat light">
+            <div className="portal-stat-value">{pendingCount}</div>
+            <div className="portal-stat-label">Need review</div>
+          </div>
+          <div className="portal-stat light">
+            <div className="portal-stat-value">{assignedPeople}</div>
+            <div className="portal-stat-label">Staff shown</div>
+          </div>
         </div>
         {(config.supportsUser || config.supportsStatus || config.supportsDate) && (
           <div className="portal-filter-bar">
@@ -139,35 +177,44 @@ const AdminResourcePage = ({ config }) => {
         )}
         {message && <div className="portal-badge status" style={{ marginTop: '1rem' }}>{message}</div>}
         <div className="portal-record-list" style={{ marginTop: '1rem' }}>
-          {records.map((record) => (
-            <div className="portal-record-card" key={record._id}>
-              <h3 className="portal-record-title">{recordTitle(record)}</h3>
-              <div className="portal-record-meta">
-                {recordMeta(record).map((item) => (
-                  <span key={`${record._id}-${item}`}>{item}</span>
-                ))}
-                {record.status && <span className="portal-badge status">{record.status}</span>}
+          {records.length ? (
+            records.map((record) => (
+              <div className="portal-record-card" key={record._id}>
+                <h3 className="portal-record-title">{recordTitle(record)}</h3>
+                <div className="portal-record-meta">
+                  {recordMeta(record).map((item) => (
+                    <span key={`${record._id}-${item}`}>{item}</span>
+                  ))}
+                  {record.status && <span className="portal-badge status">{record.status}</span>}
+                </div>
+                {(record.notes || record.note || record.description || record.summary || record.message) && (
+                  <div className="portal-record-copy">
+                    {record.notes || record.note || record.description || record.summary || record.message}
+                  </div>
+                )}
+                {config.statusPatch && record.status && (
+                  <div className="portal-inline-actions">
+                    <select
+                      value={statusDrafts[record._id] || record.status}
+                      onChange={(e) => setStatusDrafts((current) => ({ ...current, [record._id]: e.target.value }))}
+                    >
+                      {(config.statusOptions || ['submitted', 'under_review', 'approved', 'rejected', 'paid', 'reviewed', 'emailed', 'confirmed', 'delivered', 'cancelled', 'pending', 'partial', 'collected', 'overdue', 'resolved', 'closed', 'fulfilled']).map((value) => (
+                        <option key={value} value={value}>{value}</option>
+                      ))}
+                    </select>
+                    <button className="portal-inline-button secondary" type="button" onClick={() => handleStatusUpdate(record)}>Update</button>
+                  </div>
+                )}
               </div>
-              {(record.notes || record.note || record.description || record.summary || record.message) && (
-                <div className="portal-record-copy">
-                  {record.notes || record.note || record.description || record.summary || record.message}
-                </div>
-              )}
-              {config.statusPatch && record.status && (
-                <div className="portal-inline-actions">
-                  <select
-                    value={statusDrafts[record._id] || record.status}
-                    onChange={(e) => setStatusDrafts((current) => ({ ...current, [record._id]: e.target.value }))}
-                  >
-                    {(config.statusOptions || ['submitted', 'under_review', 'approved', 'rejected', 'paid', 'reviewed', 'emailed', 'confirmed', 'delivered', 'cancelled', 'pending', 'partial', 'collected', 'overdue', 'resolved', 'closed', 'fulfilled']).map((value) => (
-                      <option key={value} value={value}>{value}</option>
-                    ))}
-                  </select>
-                  <button className="portal-inline-button secondary" type="button" onClick={() => handleStatusUpdate(record)}>Update</button>
-                </div>
-              )}
+            ))
+          ) : (
+            <div className="portal-empty-state">
+              <h3 className="portal-empty-title">Nothing to review yet</h3>
+              <p className="portal-empty-copy">
+                Nothing has been submitted in <strong>{config.title}</strong> yet. Once staff start using the portal, their entries will appear here automatically. If this is your first setup, create staff users first and guide them to the staff portal.
+              </p>
             </div>
-          ))}
+          )}
         </div>
       </div>
     </section>

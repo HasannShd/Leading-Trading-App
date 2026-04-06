@@ -68,6 +68,18 @@ const StaffDashboard = () => {
         </div>
       </div>
 
+      <div className="portal-card portal-help-card">
+        <div className="portal-section-head">
+          <div>
+            <div className="portal-brand-kicker">Daily Routine</div>
+            <h2 className="portal-section-title" style={{ fontSize: '1.45rem' }}>Start here each day</h2>
+            <p className="portal-section-copy">
+              Begin with attendance, then check your schedule, log visits, and submit reports or orders before the day ends. Use the buttons below for the most common actions.
+            </p>
+          </div>
+        </div>
+      </div>
+
       <div className="portal-actions">
         {quickLinks.map((link) => (
           <Link key={link.to} className="portal-button ghost" to={link.to}>
@@ -91,13 +103,19 @@ const StaffDashboard = () => {
                 <div className="portal-record-meta">
                   <span>{item.assignedDate}</span>
                   {item.startTime && <span>{item.startTime}</span>}
+                  {item.endTime && <span>to {item.endTime}</span>}
                   {item.location && <span>{item.location}</span>}
                 </div>
                 <span className="portal-badge status">{item.status}</span>
               </div>
             ))
           ) : (
-            <div className="portal-record-card">No schedule items assigned for today.</div>
+            <div className="portal-empty-state">
+              <h3 className="portal-empty-title">No schedule items for today</h3>
+              <p className="portal-empty-copy">
+                Nothing has been assigned yet for today. If you are expecting work, call the office or check again after schedules are assigned.
+              </p>
+            </div>
           )}
         </div>
       </div>
@@ -120,7 +138,12 @@ const StaffDashboard = () => {
               </div>
             ))
           ) : (
-            <div className="portal-record-card">No recent activity yet.</div>
+            <div className="portal-empty-state">
+              <h3 className="portal-empty-title">No recent activity yet</h3>
+              <p className="portal-empty-copy">
+                Once you check in, submit a report, log a visit, or create an order, your recent activity will appear here.
+              </p>
+            </div>
           )}
         </div>
       </div>

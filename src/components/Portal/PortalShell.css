@@ -53,7 +53,7 @@
 }
 
 .portal-brand-title {
-  font-size: 1.15rem;
+  font-size: 1.25rem;
   font-weight: 700;
   color: var(--navy-900);
 }
@@ -79,6 +79,25 @@
   padding: 1rem 0 2rem;
 }
 
+.portal-admin-layout {
+  display: grid;
+  gap: 1rem;
+}
+
+.portal-admin-sidebar {
+  display: grid;
+  gap: 1rem;
+}
+
+.portal-admin-main {
+  min-width: 0;
+}
+
+.portal-admin-sidebar-card {
+  position: sticky;
+  top: 82px;
+}
+
 .portal-staff-nav-wrap {
   position: sticky;
   top: 69px;
@@ -102,7 +121,7 @@
 
 .portal-staff-link {
   flex: 0 0 auto;
-  padding: 0.72rem 1rem;
+  padding: 0.82rem 1.1rem;
   border-radius: 999px;
   text-decoration: none;
   color: var(--navy-700);
@@ -152,7 +171,7 @@
   background: white;
   border: 1px solid rgba(13, 26, 43, 0.08);
   border-radius: 1.5rem;
-  padding: 1rem;
+  padding: 1.1rem;
   box-shadow: 0 24px 70px rgba(12, 24, 42, 0.08);
 }
 
@@ -177,8 +196,10 @@
 }
 
 .portal-section-copy {
-  margin: 0.35rem 0 0;
+  margin: 0.45rem 0 0;
   color: var(--navy-600);
+  line-height: 1.65;
+  font-size: 1rem;
 }
 
 .portal-grid {
@@ -188,6 +209,10 @@
 
 .portal-grid.stats {
   grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.portal-module-stats {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .portal-stat {
@@ -225,9 +250,9 @@
 .portal-inline-button {
   border: 0;
   border-radius: 999px;
-  padding: 0.95rem 1rem;
+  padding: 1rem 1.1rem;
   font-weight: 700;
-  font-size: 0.98rem;
+  font-size: 1rem;
   cursor: pointer;
   transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
 }
@@ -267,6 +292,20 @@
   gap: 0.85rem;
 }
 
+.portal-help-card {
+  background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(248,245,238,0.92));
+  border: 1px solid rgba(13, 26, 43, 0.08);
+}
+
+.portal-help-list {
+  margin: 0.85rem 0 0;
+  padding-left: 1.1rem;
+  display: grid;
+  gap: 0.5rem;
+  color: var(--navy-700);
+  line-height: 1.55;
+}
+
 .portal-field {
   display: grid;
   gap: 0.45rem;
@@ -275,13 +314,14 @@
 .portal-field label {
   font-weight: 600;
   color: var(--navy-800);
+  font-size: 0.98rem;
 }
 
 .portal-field input,
 .portal-field textarea,
 .portal-field select {
   width: 100%;
-  min-height: 3.1rem;
+  min-height: 3.2rem;
   border-radius: 1rem;
   border: 1px solid rgba(13, 26, 43, 0.12);
   background: white;
@@ -311,6 +351,16 @@
   flex-wrap: wrap;
 }
 
+.portal-filter-bar select,
+.portal-filter-bar input {
+  min-height: 3rem;
+  border-radius: 0.95rem;
+  border: 1px solid rgba(13, 26, 43, 0.12);
+  padding: 0.75rem 0.95rem;
+  font: inherit;
+  background: white;
+}
+
 .portal-inline-list,
 .portal-record-list {
   display: grid;
@@ -321,7 +371,7 @@
   border: 1px solid rgba(13, 26, 43, 0.08);
   background: white;
   border-radius: 1.2rem;
-  padding: 0.95rem;
+  padding: 1rem;
   display: grid;
   gap: 0.55rem;
 }
@@ -333,7 +383,7 @@
 
 .portal-record-title {
   margin: 0;
-  font-size: 1rem;
+  font-size: 1.08rem;
   line-height: 1.2;
 }
 
@@ -362,15 +412,36 @@
   color: var(--bronze-700);
 }
 
+.portal-empty-state {
+  display: grid;
+  gap: 0.8rem;
+  padding: 1.2rem;
+  border-radius: 1.2rem;
+  border: 1px dashed rgba(13, 26, 43, 0.14);
+  background: var(--cream-100);
+}
+
+.portal-empty-title {
+  margin: 0;
+  font-size: 1.2rem;
+  color: var(--navy-900);
+}
+
+.portal-empty-copy {
+  margin: 0;
+  color: var(--navy-700);
+  line-height: 1.65;
+}
+
 .portal-admin-nav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.6rem;
+  display: grid;
+  gap: 0.55rem;
+  margin-top: 1rem;
 }
 
 .portal-admin-nav-section {
   width: 100%;
-  margin-top: 0.45rem;
+  margin-top: 0.8rem;
   font-size: 0.76rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -378,8 +449,8 @@
 }
 
 .portal-admin-link {
-  padding: 0.72rem 1rem;
-  border-radius: 999px;
+  padding: 0.95rem 1rem;
+  border-radius: 1rem;
   text-decoration: none;
   color: var(--navy-700);
   background: white;
@@ -429,5 +500,10 @@
 
   .portal-quick-links {
     grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .portal-admin-layout {
+    grid-template-columns: 280px minmax(0, 1fr);
+    align-items: start;
   }
 }

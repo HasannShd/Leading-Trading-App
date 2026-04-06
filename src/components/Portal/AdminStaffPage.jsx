@@ -50,6 +50,23 @@ const AdminStaffPage = () => {
 
   return (
     <section className="portal-page">
+      <div className="portal-card portal-help-card">
+        <div className="portal-section-head">
+          <div>
+            <div className="portal-brand-kicker">Staff Setup</div>
+            <h2 className="portal-section-title" style={{ fontSize: '1.45rem' }}>Make access simple</h2>
+            <p className="portal-section-copy">
+              Create staff users here. Give them a simple username and password, then ask them to sign in from the staff portal on their phone.
+            </p>
+          </div>
+        </div>
+        <ul className="portal-help-list">
+          <li>Use short usernames staff can remember easily.</li>
+          <li>Keep department names simple, like Sales, Medical, Dental, or Delivery.</li>
+          <li>If someone should stop using the portal, press Deactivate instead of deleting them.</li>
+        </ul>
+      </div>
+
       <div className="portal-card">
         <div className="portal-section-head">
           <div>
@@ -90,20 +107,29 @@ const AdminStaffPage = () => {
           </div>
         </div>
         <div className="portal-record-list" style={{ marginTop: '1rem' }}>
-          {staff.map((member) => (
-            <div className="portal-record-card" key={member._id}>
-              <h3 className="portal-record-title">{member.name || member.username}</h3>
-              <div className="portal-record-meta">
-                <span>{member.email}</span>
-                <span>{member.phone}</span>
-                <span>{member.department || 'No department'}</span>
-                <span className="portal-badge status">{member.isActive ? 'active' : 'inactive'}</span>
+          {staff.length ? (
+            staff.map((member) => (
+              <div className="portal-record-card" key={member._id}>
+                <h3 className="portal-record-title">{member.name || member.username}</h3>
+                <div className="portal-record-meta">
+                  <span>{member.email}</span>
+                  <span>{member.phone}</span>
+                  <span>{member.department || 'No department'}</span>
+                  <span className="portal-badge status">{member.isActive ? 'active' : 'inactive'}</span>
+                </div>
+                <button className="portal-inline-button secondary" type="button" onClick={() => toggleStatus(member)}>
+                  {member.isActive ? 'Deactivate User' : 'Activate User'}
+                </button>
               </div>
-              <button className="portal-inline-button secondary" type="button" onClick={() => toggleStatus(member)}>
-                {member.isActive ? 'Deactivate' : 'Activate'}
-              </button>
+            ))
+          ) : (
+            <div className="portal-empty-state">
+              <h3 className="portal-empty-title">No staff users yet</h3>
+              <p className="portal-empty-copy">
+                Create the first staff user above. After that, they can sign in at <strong>/staff/login</strong> and start using the field portal.
+              </p>
             </div>
-          ))}
+          )}
         </div>
       </div>
     </section>

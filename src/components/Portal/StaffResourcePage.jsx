@@ -121,11 +121,23 @@ const StaffResourcePage = ({ config }) => {
         </div>
       </div>
 
+      <div className="portal-card portal-help-card">
+        <div className="portal-section-head">
+          <div>
+            <div className="portal-brand-kicker">Easy Use</div>
+            <h2 className="portal-section-title" style={{ fontSize: '1.4rem' }}>Fill this in like a simple form</h2>
+            <p className="portal-section-copy">
+              Complete the main details, then press save. If you have a receipt or document, upload it first. Your saved entries will appear below so you can review what you already submitted.
+            </p>
+          </div>
+        </div>
+      </div>
+
       <div className="portal-card">
         <div className="portal-section-head">
           <div>
             <div className="portal-brand-kicker">New Entry</div>
-            <h2 className="portal-section-title" style={{ fontSize: '1.45rem' }}>Create</h2>
+            <h2 className="portal-section-title" style={{ fontSize: '1.45rem' }}>Create New Entry</h2>
           </div>
         </div>
         <form className="portal-form" onSubmit={handleSubmit} style={{ marginTop: '1rem' }}>
@@ -211,7 +223,12 @@ const StaffResourcePage = ({ config }) => {
               </div>
             ))
           ) : (
-            <div className="portal-record-card">No entries yet.</div>
+            <div className="portal-empty-state">
+              <h3 className="portal-empty-title">No entries yet</h3>
+              <p className="portal-empty-copy">
+                Use the form above to create your first <strong>{config.title.replace(/s$/, '').toLowerCase()}</strong>. After saving, it will appear here in your history.
+              </p>
+            </div>
           )}
         </div>
       </div>

@@ -39,26 +39,56 @@ const StaffSchedulePage = () => {
           </div>
         </div>
       </div>
+      <div className="portal-card portal-help-card">
+        <div className="portal-section-head">
+          <div>
+            <div className="portal-brand-kicker">Simple Steps</div>
+            <h2 className="portal-section-title" style={{ fontSize: '1.4rem' }}>How to use your schedule</h2>
+            <p className="portal-section-copy">
+              Check the date, time, and location, then press the matching status button. Use <strong>Start Now</strong> when you are on the way or at the visit, and use <strong>Mark Complete</strong> once the task is done.
+            </p>
+          </div>
+        </div>
+      </div>
       {message && <div className="portal-badge status">{message}</div>}
       <div className="portal-record-list">
-        {schedules.map((schedule) => (
-          <div className="portal-record-card" key={schedule._id}>
-            <h3 className="portal-record-title">{schedule.title}</h3>
-            <div className="portal-record-meta">
-              <span>{schedule.assignedDate}</span>
-              {schedule.startTime && <span>{schedule.startTime}</span>}
-              {schedule.location && <span>{schedule.location}</span>}
-              <span className="portal-badge status">{schedule.status}</span>
+        {schedules.length ? (
+          schedules.map((schedule) => (
+            <div className="portal-record-card" key={schedule._id}>
+              <h3 className="portal-record-title">{schedule.title}</h3>
+              <div className="portal-record-meta">
+                <span>{schedule.assignedDate}</span>
+                {schedule.startTime && <span>{schedule.startTime}</span>}
+                {schedule.endTime && <span>to {schedule.endTime}</span>}
+                {schedule.location && <span>{schedule.location}</span>}
+                <span className="portal-badge status">{schedule.status}</span>
+              </div>
+              {(schedule.description || schedule.notes || schedule.client) && (
+                <div className="portal-record-copy">
+                  {[schedule.client, schedule.description, schedule.notes].filter(Boolean).join(' • ')}
+                </div>
+              )}
+              <div className="portal-file-row">
+                {[
+                  ['pending', 'Mark Pending'],
+                  ['in_progress', 'Start Now'],
+                  ['completed', 'Mark Complete'],
+                ].map(([status, label]) => (
+                  <button key={status} className="portal-inline-button ghost" type="button" onClick={() => updateSchedule(schedule, status)}>
+                    {label}
+                  </button>
+                ))}
+              </div>
             </div>
-            <div className="portal-file-row">
-              {['pending', 'in_progress', 'completed'].map((status) => (
-                <button key={status} className="portal-inline-button ghost" type="button" onClick={() => updateSchedule(schedule, status)}>
-                  {status}
-                </button>
-              ))}
-            </div>
+          ))
+        ) : (
+          <div className="portal-empty-state">
+            <h3 className="portal-empty-title">No schedule for now</h3>
+            <p className="portal-empty-copy">
+              The office has not assigned any schedule items yet. Once they create your plan, your visits and tasks will appear here.
+            </p>
           </div>
-        ))}
+        )}
       </div>
     </section>
   );

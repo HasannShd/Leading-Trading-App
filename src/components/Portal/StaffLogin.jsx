@@ -24,18 +24,21 @@ const StaffLogin = () => {
               <div className="portal-brand-kicker">LTE Field Access</div>
               <h1 className="portal-section-title">Staff Sign In</h1>
               <p className="portal-section-copy" style={{ color: 'rgba(255,255,255,0.76)' }}>
-                Mobile-first access for schedules, visits, orders, reports, and field activity.
+                Simple sign-in for schedules, visits, orders, reports, and daily field work.
               </p>
             </div>
           </div>
+          <div className="portal-badge status" style={{ marginBottom: '1rem', width: 'fit-content' }}>
+            Use your staff username and password given by the office
+          </div>
           <form className="portal-form" onSubmit={handleSubmit}>
             <div className="portal-field">
-              <label>Email, username, or phone</label>
-              <input value={identifier} onChange={(e) => setIdentifier(e.target.value)} placeholder="staff login" />
+              <label>Username, email, or phone</label>
+              <input value={identifier} onChange={(e) => setIdentifier(e.target.value)} placeholder="Enter your username" autoComplete="username" />
             </div>
             <div className="portal-field">
               <label>Password</label>
-              <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" />
+              <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Enter your password" autoComplete="current-password" />
             </div>
             {error && <div className="portal-badge status">{error}</div>}
             <button className="portal-button primary" type="submit" disabled={loading}>

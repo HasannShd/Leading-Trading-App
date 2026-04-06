@@ -18,6 +18,16 @@ const AdminDashboardPage = () => {
   if (!data) return <div className="portal-loading">Loading admin dashboard...</div>;
 
   const metrics = data.metrics || {};
+  const operationsLinks = [
+    { label: 'Open Staff Team', to: '/admin/staff' },
+    { label: 'Open Attendance', to: '/admin/attendance' },
+    { label: 'Open Schedules', to: '/admin/schedules' },
+    { label: 'Open Reports', to: '/admin/reports' },
+    { label: 'Open Staff Orders', to: '/admin/orders' },
+    { label: 'Open Expenses', to: '/admin/expenses' },
+    { label: 'Open Visits', to: '/admin/visits' },
+    { label: 'Open Follow-ups', to: '/admin/followups' },
+  ];
 
   return (
     <section className="portal-page">
@@ -44,6 +54,26 @@ const AdminDashboardPage = () => {
               <div className="portal-stat-value">{value ?? 0}</div>
               <div className="portal-stat-label">{label}</div>
             </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="portal-card portal-help-card">
+        <div className="portal-section-head">
+          <div>
+            <div className="portal-brand-kicker">Simple Admin Workflow</div>
+            <h2 className="portal-section-title" style={{ fontSize: '1.5rem' }}>What to do first</h2>
+            <p className="portal-section-copy">
+              If the team is new to the portal, begin by creating staff users, assigning schedules, and checking attendance. Once staff start using the system, reports, visits, orders, expenses, and follow-ups will appear automatically.
+            </p>
+          </div>
+        </div>
+        <div className="portal-grid stats" style={{ marginTop: '1rem' }}>
+          {operationsLinks.map((item) => (
+            <Link key={item.to} to={item.to} className="portal-stat light" style={{ textDecoration: 'none', color: 'inherit' }}>
+              <div className="portal-stat-value" style={{ fontSize: '1.02rem', lineHeight: 1.2 }}>{item.label}</div>
+              <div className="portal-stat-label">Go to page</div>
+            </Link>
           ))}
         </div>
       </div>
@@ -93,6 +123,7 @@ const AdminDashboardPage = () => {
             { label: 'Import', to: '/admin/catalog/import' },
             { label: 'Website Orders', to: '/admin/site-orders' },
             { label: 'Marketing', to: '/admin/marketing' },
+            { label: 'Account', to: '/admin/account' },
           ].map((item) => (
             <Link key={item.to} to={item.to} className="portal-stat light" style={{ textDecoration: 'none', color: 'inherit' }}>
               <div className="portal-stat-value" style={{ fontSize: '1.05rem', lineHeight: 1.2 }}>{item.label}</div>
