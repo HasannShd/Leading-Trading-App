@@ -9,8 +9,9 @@ export const AdminProvider = ({ children }) => {
   const [error, setError] = useState(null);
   const location = useLocation();
   const navigate = useNavigate();
-  const adminLoginPath = '/.well-known/admin-access-sh123456';
-  const isAdminRoute = location.pathname.startsWith('/.well-known/');
+  const isVisibleAdminRoute = location.pathname.startsWith('/admin');
+  const adminLoginPath = isVisibleAdminRoute ? '/admin/login' : '/.well-known/admin-access-sh123456';
+  const isAdminRoute = location.pathname.startsWith('/.well-known/') || isVisibleAdminRoute;
 
   const resetAdminSession = () => {
     localStorage.removeItem('adminToken');
@@ -22,7 +23,10 @@ export const AdminProvider = ({ children }) => {
 
   // Prevent access to admin pages without authentication
   useEffect(() => {
-    if (typeof window !== 'undefined' && location.pathname.includes('.well-known/admin')) {
+    if (
+      typeof window !== 'undefined' &&
+      (location.pathname.includes('.well-known/admin') || location.pathname.startsWith('/admin'))
+    ) {
       const token = localStorage.getItem('adminToken');
       if (!token && location.pathname !== adminLoginPath) {
         navigate(adminLoginPath, { replace: true });

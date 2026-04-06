@@ -1,9 +1,10 @@
 import { useContext } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 import { AdminContext } from '../context/AdminContext';
 
 const ProtectedAdminRoute = ({ element }) => {
   const { admin, loading } = useContext(AdminContext);
+  const location = useLocation();
 
   if (loading) {
     return (
@@ -22,7 +23,7 @@ const ProtectedAdminRoute = ({ element }) => {
   }
 
   if (!admin) {
-    return <Navigate to="/.well-known/admin-access-sh123456" replace />;
+    return <Navigate to={location.pathname.startsWith('/admin') ? '/admin/login' : '/.well-known/admin-access-sh123456'} replace />;
   }
 
   return element;

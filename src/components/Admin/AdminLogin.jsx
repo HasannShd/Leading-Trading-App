@@ -16,7 +16,7 @@ const AdminLogin = () => {
     const success = await login(identifier, password);
     setIsLoading(false);
     if (success) {
-      navigate('/.well-known/admin-dashboard-sh123456');
+      navigate(window.location.pathname.startsWith('/admin') ? '/admin/dashboard' : '/.well-known/admin-dashboard-sh123456');
     }
   };
 
