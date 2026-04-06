@@ -250,6 +250,42 @@ const HomePage = () => {
         ))}
       </section>
 
+      <section className="premium-section premium-company-intro">
+        <div className="premium-company-panel">
+          <div className="premium-company-copy">
+            <span className="premium-eyebrow">About LTE</span>
+            <h2>Get to know the company behind the supply operation before you scroll any further.</h2>
+            <p>
+              Leading Trading Est supports Bahrain&apos;s medical, dental, and industrial buyers through a structured workflow that connects sourcing, inventory control, and delivery execution.
+            </p>
+            <p>
+              The company is led by Shahid Majeed and supported by sales, accounts, HR, and delivery teams that keep quotations, stock handling, and customer service aligned.
+            </p>
+            <Link className="premium-btn premium-btn-primary" to="/about">Learn More About Us</Link>
+          </div>
+
+          <div className="premium-company-grid">
+            <article className="premium-company-card">
+              <small>Leadership</small>
+              <h3>Managing Director & CEO</h3>
+              <p>Shahid Majeed leads the company direction, supplier relationships, and growth strategy.</p>
+            </article>
+
+            <article className="premium-company-card">
+              <small>Commercial and support</small>
+              <h3>Sales, Accounts & HR</h3>
+              <p>Customer response, account coordination, and internal administration stay connected under one operating flow.</p>
+            </article>
+
+            <article className="premium-company-card">
+              <small>Execution</small>
+              <h3>Delivery and fulfillment</h3>
+              <p>Once stock is ready, the delivery team takes products through the final step to the customer site.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
       <section className="premium-section premium-story">
         <div className="premium-section-heading">
           <span className="premium-eyebrow">Why buyers stay with us</span>
@@ -421,18 +457,9 @@ const HomePage = () => {
       </section>
 
       <section className="premium-section premium-trust">
-        <div className="premium-trust-top">
-          <div className="premium-section-heading">
-            <span className="premium-eyebrow">Selected relationships</span>
-            <h2>Supported by established manufacturers and trusted by local institutions.</h2>
-          </div>
-
-          <aside className="premium-about-callout">
-            <small>Company profile</small>
-            <h3>See the people and departments behind the supply operation.</h3>
-            <p>Learn more about the company, leadership, sales, accounts, HR, and delivery structure behind LTE.</p>
-            <Link className="premium-inline-link" to="/about">Learn more about our company</Link>
-          </aside>
+        <div className="premium-section-heading">
+          <span className="premium-eyebrow">Selected relationships</span>
+          <h2>Supported by established manufacturers and trusted by local institutions.</h2>
         </div>
 
         <div className="premium-logo-block">
