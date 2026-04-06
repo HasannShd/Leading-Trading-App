@@ -33,14 +33,12 @@ import ProtectedRoute from './components/ProtectedRoute';
 import { StaffProvider } from './context/StaffContext';
 import ProtectedStaffRoute from './components/ProtectedStaffRoute';
 import StaffLayout from './components/Portal/StaffLayout';
-import AdminPortalLayout from './components/Portal/AdminPortalLayout';
 import StaffLogin from './components/Portal/StaffLogin';
 import StaffDashboard from './components/Portal/StaffDashboard';
 import StaffAttendance from './components/Portal/StaffAttendance';
 import StaffSchedulePage from './components/Portal/StaffSchedulePage';
 import StaffNotificationsPage from './components/Portal/StaffNotificationsPage';
 import StaffResourcePage from './components/Portal/StaffResourcePage';
-import AdminDashboardPage from './components/Portal/AdminDashboardPage';
 import AdminStaffPage from './components/Portal/AdminStaffPage';
 import AdminSchedulesPage from './components/Portal/AdminSchedulesPage';
 import AdminResourcePage from './components/Portal/AdminResourcePage';
@@ -110,36 +108,34 @@ const AppShell = () => {
             <Route path="notifications" element={<StaffNotificationsPage />} />
           </Route>
 
-          {/* Admin operations portal */}
+          {/* Visible admin routes */}
           <Route path="/admin/login" element={<AdminLogin />} />
-          <Route path="/admin" element={<ProtectedAdminRoute element={<AdminPortalLayout />} />}>
-            <Route index element={<Navigate to="/admin/dashboard" replace />} />
-            <Route path="dashboard" element={<AdminDashboardPage />} />
-            <Route path="catalog" element={<AdminDashboard />} />
-            <Route path="catalog/categories" element={<AdminCategories />} />
-            <Route path="catalog/products" element={<AdminProducts />} />
-            <Route path="catalog/import" element={<AdminImportProducts />} />
-            <Route path="site-orders" element={<AdminOrders />} />
-            <Route path="site-orders/:id" element={<AdminOrderDetails />} />
-            <Route path="marketing" element={<AdminMarketing />} />
-            <Route path="account" element={<AdminAccount />} />
-            <Route path="staff" element={<AdminStaffPage />} />
-            <Route path="attendance" element={<AdminResourcePage config={{ ...adminModuleConfigs.attendance, exportKey: 'attendance' }} />} />
-            <Route path="schedules" element={<AdminSchedulesPage />} />
-            <Route path="reports" element={<AdminResourcePage config={{ ...adminModuleConfigs.reports, exportKey: 'reports' }} />} />
-            <Route path="orders" element={<AdminResourcePage config={{ ...adminModuleConfigs.orders, exportKey: 'orders' }} />} />
-            <Route path="expenses" element={<AdminResourcePage config={{ ...adminModuleConfigs.expenses, exportKey: 'expenses' }} />} />
-            <Route path="clients" element={<AdminResourcePage config={adminModuleConfigs.clients} />} />
-            <Route path="visits" element={<AdminResourcePage config={{ ...adminModuleConfigs.visits, exportKey: 'visits' }} />} />
-            <Route path="followups" element={<AdminResourcePage config={{ ...adminModuleConfigs.followups, exportKey: 'followups' }} />} />
-            <Route path="quotations" element={<AdminResourcePage config={adminModuleConfigs.quotations} />} />
-            <Route path="collections" element={<AdminResourcePage config={adminModuleConfigs.collections} />} />
-            <Route path="requests" element={<AdminResourcePage config={adminModuleConfigs.requests} />} />
-            <Route path="demand" element={<AdminResourcePage config={adminModuleConfigs.demand} />} />
-            <Route path="issues" element={<AdminResourcePage config={adminModuleConfigs.issues} />} />
-            <Route path="notifications" element={<AdminResourcePage config={adminModuleConfigs.notifications} />} />
-            <Route path="logs" element={<AdminResourcePage config={adminModuleConfigs.logs} />} />
-          </Route>
+          <Route path="/admin" element={<Navigate to="/admin/dashboard" replace />} />
+          <Route path="/admin/dashboard" element={<ProtectedAdminRoute element={<AdminDashboard />} />} />
+          <Route path="/admin/catalog" element={<ProtectedAdminRoute element={<AdminDashboard />} />} />
+          <Route path="/admin/catalog/categories" element={<ProtectedAdminRoute element={<AdminCategories />} />} />
+          <Route path="/admin/catalog/products" element={<ProtectedAdminRoute element={<AdminProducts />} />} />
+          <Route path="/admin/catalog/import" element={<ProtectedAdminRoute element={<AdminImportProducts />} />} />
+          <Route path="/admin/site-orders" element={<ProtectedAdminRoute element={<AdminOrders />} />} />
+          <Route path="/admin/site-orders/:id" element={<ProtectedAdminRoute element={<AdminOrderDetails />} />} />
+          <Route path="/admin/marketing" element={<ProtectedAdminRoute element={<AdminMarketing />} />} />
+          <Route path="/admin/account" element={<ProtectedAdminRoute element={<AdminAccount />} />} />
+          <Route path="/admin/staff" element={<ProtectedAdminRoute element={<AdminStaffPage />} />} />
+          <Route path="/admin/attendance" element={<ProtectedAdminRoute element={<AdminResourcePage config={{ ...adminModuleConfigs.attendance, exportKey: 'attendance' }} />} />} />
+          <Route path="/admin/schedules" element={<ProtectedAdminRoute element={<AdminSchedulesPage />} />} />
+          <Route path="/admin/reports" element={<ProtectedAdminRoute element={<AdminResourcePage config={{ ...adminModuleConfigs.reports, exportKey: 'reports' }} />} />} />
+          <Route path="/admin/orders" element={<ProtectedAdminRoute element={<AdminResourcePage config={{ ...adminModuleConfigs.orders, exportKey: 'orders' }} />} />} />
+          <Route path="/admin/expenses" element={<ProtectedAdminRoute element={<AdminResourcePage config={{ ...adminModuleConfigs.expenses, exportKey: 'expenses' }} />} />} />
+          <Route path="/admin/clients" element={<ProtectedAdminRoute element={<AdminResourcePage config={adminModuleConfigs.clients} />} />} />
+          <Route path="/admin/visits" element={<ProtectedAdminRoute element={<AdminResourcePage config={{ ...adminModuleConfigs.visits, exportKey: 'visits' }} />} />} />
+          <Route path="/admin/followups" element={<ProtectedAdminRoute element={<AdminResourcePage config={{ ...adminModuleConfigs.followups, exportKey: 'followups' }} />} />} />
+          <Route path="/admin/quotations" element={<ProtectedAdminRoute element={<AdminResourcePage config={adminModuleConfigs.quotations} />} />} />
+          <Route path="/admin/collections" element={<ProtectedAdminRoute element={<AdminResourcePage config={adminModuleConfigs.collections} />} />} />
+          <Route path="/admin/requests" element={<ProtectedAdminRoute element={<AdminResourcePage config={adminModuleConfigs.requests} />} />} />
+          <Route path="/admin/demand" element={<ProtectedAdminRoute element={<AdminResourcePage config={adminModuleConfigs.demand} />} />} />
+          <Route path="/admin/issues" element={<ProtectedAdminRoute element={<AdminResourcePage config={adminModuleConfigs.issues} />} />} />
+          <Route path="/admin/notifications" element={<ProtectedAdminRoute element={<AdminResourcePage config={adminModuleConfigs.notifications} />} />} />
+          <Route path="/admin/logs" element={<ProtectedAdminRoute element={<AdminResourcePage config={adminModuleConfigs.logs} />} />} />
         </Routes>
       </main>
       {!isPortalRoute && <Footer />}

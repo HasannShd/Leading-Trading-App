@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import { portalApi } from '../../services/portalApi';
+import AdminTopNav from '../Admin/AdminTopNav';
+import '../Admin/AdminCategories.css';
 import './PortalShell.css';
 
 const emptyForm = {
@@ -54,7 +56,9 @@ const AdminSchedulesPage = () => {
   };
 
   return (
-    <section className="portal-page">
+    <div className="admin-categories">
+      <AdminTopNav />
+      <section className="portal-page">
       <div className="portal-card portal-help-card">
         <div className="portal-section-head">
           <div>
@@ -173,7 +177,8 @@ const AdminSchedulesPage = () => {
           )}
         </div>
       </div>
-    </section>
+      </section>
+    </div>
   );
 };
 

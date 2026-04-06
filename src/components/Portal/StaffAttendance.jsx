@@ -5,6 +5,7 @@ import './PortalShell.css';
 const StaffAttendance = () => {
   const [records, setRecords] = useState([]);
   const [note, setNote] = useState('');
+  const [mileageNote, setMileageNote] = useState('');
   const [mileageWeekStart, setMileageWeekStart] = useState('');
   const [mileageWeekEnd, setMileageWeekEnd] = useState('');
   const [status, setStatus] = useState('');
@@ -36,11 +37,30 @@ const StaffAttendance = () => {
     try {
       const payload = {
         note,
-        ...(mileageWeekStart !== '' ? { mileageWeekStart: Number(mileageWeekStart) } : {}),
-        ...(mileageWeekEnd !== '' ? { mileageWeekEnd: Number(mileageWeekEnd) } : {}),
       };
       const response = await portalApi.post(path, payload, 'sales_staff');
       setStatus(response.message);
+      setNote('');
+      await load();
+    } catch (err) {
+      setStatus(err.message);
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const saveMileage = async () => {
+    setBusy(true);
+    setStatus('');
+    try {
+      const payload = {
+        ...(mileageWeekStart !== '' ? { mileageWeekStart: Number(mileageWeekStart) } : {}),
+        ...(mileageWeekEnd !== '' ? { mileageWeekEnd: Number(mileageWeekEnd) } : {}),
+        note: mileageNote,
+      };
+      const response = await portalApi.post('/staff-portal/attendance/mileage', payload, 'sales_staff');
+      setStatus(response.message);
+      setMileageNote('');
       await load();
     } catch (err) {
       setStatus(err.message);
@@ -57,7 +77,7 @@ const StaffAttendance = () => {
             <div className="portal-brand-kicker">Attendance</div>
             <h1 className="portal-section-title">Check In / Check Out</h1>
             <p className="portal-section-copy" style={{ color: 'rgba(255,255,255,0.76)' }}>
-              Button-first attendance for field teams, with optional instructions and weekly car mileage capture.
+              Button-first attendance for field teams, with optional notes. Weekly car mileage is saved separately below.
             </p>
           </div>
         </div>
@@ -72,21 +92,11 @@ const StaffAttendance = () => {
           </div>
           <div className="portal-stat">
             <div className="portal-stat-value">{todayRecord?.mileageWeekStart ?? '-'}</div>
-            <div className="portal-stat-label">Week start mileage</div>
+            <div className="portal-stat-label">Week start km</div>
           </div>
           <div className="portal-stat">
             <div className="portal-stat-value">{todayRecord?.mileageWeekEnd ?? '-'}</div>
-            <div className="portal-stat-label">Week end mileage</div>
-          </div>
-        </div>
-        <div className="portal-form-grid two" style={{ marginTop: '1rem' }}>
-          <div className="portal-field">
-            <label>Car mileage week start</label>
-            <input type="number" value={mileageWeekStart} onChange={(e) => setMileageWeekStart(e.target.value)} placeholder="Enter start mileage" />
-          </div>
-          <div className="portal-field">
-            <label>Car mileage week end</label>
-            <input type="number" value={mileageWeekEnd} onChange={(e) => setMileageWeekEnd(e.target.value)} placeholder="Enter end mileage" />
+            <div className="portal-stat-label">Week end km</div>
           </div>
         </div>
         <div className="portal-field" style={{ marginTop: '1rem' }}>
@@ -102,6 +112,37 @@ const StaffAttendance = () => {
           </button>
         </div>
         {status && <div className="portal-badge status" style={{ marginTop: '1rem' }}>{status}</div>}
+      </div>
+
+      <div className="portal-card portal-help-card">
+        <div className="portal-section-head">
+          <div>
+            <div className="portal-brand-kicker">Weekly Mileage</div>
+            <h2 className="portal-section-title" style={{ fontSize: '1.45rem' }}>Save this only once at the start and end of the week</h2>
+            <p className="portal-section-copy">
+              Use <strong>week start km</strong> one time when the work week begins and <strong>week end km</strong> one time when the work week finishes. You do not need to fill this every day.
+            </p>
+          </div>
+        </div>
+        <div className="portal-form-grid two" style={{ marginTop: '1rem' }}>
+          <div className="portal-field">
+            <label>Car mileage week start</label>
+            <input type="number" value={mileageWeekStart} onChange={(e) => setMileageWeekStart(e.target.value)} placeholder="Enter week start mileage" />
+          </div>
+          <div className="portal-field">
+            <label>Car mileage week end</label>
+            <input type="number" value={mileageWeekEnd} onChange={(e) => setMileageWeekEnd(e.target.value)} placeholder="Enter week end mileage" />
+          </div>
+        </div>
+        <div className="portal-field" style={{ marginTop: '1rem' }}>
+          <label>Mileage note</label>
+          <textarea value={mileageNote} onChange={(e) => setMileageNote(e.target.value)} placeholder="Optional note for office records" />
+        </div>
+        <div className="portal-actions" style={{ marginTop: '1rem' }}>
+          <button className="portal-button secondary" type="button" onClick={saveMileage} disabled={busy}>
+            {busy ? 'Saving...' : 'Save Weekly Mileage'}
+          </button>
+        </div>
       </div>
 
       <div className="portal-card">

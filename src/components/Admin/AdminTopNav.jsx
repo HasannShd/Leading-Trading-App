@@ -1,4 +1,4 @@
-import { Link, useLocation } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { useContext, useState } from 'react';
 import { AdminContext } from '../../context/AdminContext';
 import { getAdminPaths } from './adminPaths';
@@ -10,10 +10,40 @@ const AdminTopNav = () => {
   const location = useLocation();
   const isVisibleAdminRoute = location.pathname.startsWith('/admin');
   const paths = getAdminPaths(isVisibleAdminRoute);
-
-  if (isVisibleAdminRoute) {
-    return null;
-  }
+  const links = isVisibleAdminRoute
+    ? [
+        { to: paths.dashboard, label: 'Overview' },
+        { to: '/admin/staff', label: 'Staff' },
+        { to: '/admin/attendance', label: 'Attendance' },
+        { to: '/admin/schedules', label: 'Schedules' },
+        { to: '/admin/reports', label: 'Reports' },
+        { to: '/admin/orders', label: 'Staff Orders' },
+        { to: '/admin/expenses', label: 'Expenses' },
+        { to: '/admin/clients', label: 'Clients' },
+        { to: '/admin/visits', label: 'Visits' },
+        { to: '/admin/followups', label: 'Follow-ups' },
+        { to: '/admin/quotations', label: 'Quotations' },
+        { to: '/admin/collections', label: 'Collections' },
+        { to: '/admin/requests', label: 'Requests' },
+        { to: '/admin/demand', label: 'Demand' },
+        { to: '/admin/issues', label: 'Issues' },
+        { to: '/admin/logs', label: 'Logs' },
+        { to: paths.categories, label: 'Categories' },
+        { to: paths.products, label: 'Products' },
+        { to: paths.import, label: 'Import' },
+        { to: paths.siteOrders, label: 'Website Orders' },
+        { to: paths.marketing, label: 'Marketing' },
+        { to: paths.account, label: 'Account' },
+      ]
+    : [
+        { to: paths.dashboard, label: 'Overview' },
+        { to: paths.categories, label: 'Categories' },
+        { to: paths.products, label: 'Products' },
+        { to: paths.import, label: 'Import' },
+        { to: paths.siteOrders, label: 'Orders' },
+        { to: paths.marketing, label: 'Marketing' },
+        { to: paths.account, label: 'Account' },
+      ];
 
   const handleLinkClick = () => {
     setMobileOpen(false);
@@ -22,9 +52,9 @@ const AdminTopNav = () => {
   return (
     <div className={`admin-topnav${mobileOpen ? ' is-open' : ''}`}>
       <div className="admin-topnav-left">
-        <Link to={paths.dashboard} className="admin-topnav-logo" onClick={handleLinkClick}>
+        <NavLink to={paths.dashboard} className="admin-topnav-logo" onClick={handleLinkClick}>
           Admin Panel
-        </Link>
+        </NavLink>
         <button
           type="button"
           className="admin-topnav-toggle"
@@ -38,13 +68,11 @@ const AdminTopNav = () => {
         </button>
       </div>
       <nav id="admin-topnav-links" className={`admin-topnav-links${mobileOpen ? ' open' : ''}`}>
-        <Link to={paths.dashboard} onClick={handleLinkClick}>Overview</Link>
-        <Link to={paths.categories} onClick={handleLinkClick}>Categories</Link>
-        <Link to={paths.products} onClick={handleLinkClick}>Products</Link>
-        <Link to={paths.import} onClick={handleLinkClick}>Import</Link>
-        <Link to={paths.siteOrders} onClick={handleLinkClick}>Orders</Link>
-        <Link to={paths.marketing} onClick={handleLinkClick}>Marketing</Link>
-        <Link to={paths.account} onClick={handleLinkClick}>Account</Link>
+        {links.map((link) => (
+          <NavLink key={link.to} to={link.to} onClick={handleLinkClick} className={({ isActive }) => (isActive ? 'active' : '')}>
+            {link.label}
+          </NavLink>
+        ))}
       </nav>
       <div className="admin-topnav-right">
         <div className="admin-topnav-user">

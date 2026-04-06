@@ -68,6 +68,12 @@
   border-color: rgba(198, 145, 89, 0.2);
 }
 
+.admin-topnav-links a.active {
+  background: rgba(198, 145, 89, 0.18);
+  border-color: rgba(198, 145, 89, 0.26);
+  color: #ffffff;
+}
+
 .admin-topnav-right {
   flex-shrink: 0;
 }
