@@ -1,11 +1,19 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useContext, useState } from 'react';
 import { AdminContext } from '../../context/AdminContext';
+import { getAdminPaths } from './adminPaths';
 import './AdminTopNav.css';
 
 const AdminTopNav = () => {
   const { admin } = useContext(AdminContext);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const location = useLocation();
+  const isVisibleAdminRoute = location.pathname.startsWith('/admin');
+  const paths = getAdminPaths(isVisibleAdminRoute);
+
+  if (isVisibleAdminRoute) {
+    return null;
+  }
 
   const handleLinkClick = () => {
     setMobileOpen(false);
@@ -14,7 +22,7 @@ const AdminTopNav = () => {
   return (
     <div className={`admin-topnav${mobileOpen ? ' is-open' : ''}`}>
       <div className="admin-topnav-left">
-        <Link to="/.well-known/admin-dashboard-sh123456" className="admin-topnav-logo" onClick={handleLinkClick}>
+        <Link to={paths.dashboard} className="admin-topnav-logo" onClick={handleLinkClick}>
           Admin Panel
         </Link>
         <button
@@ -30,13 +38,13 @@ const AdminTopNav = () => {
         </button>
       </div>
       <nav id="admin-topnav-links" className={`admin-topnav-links${mobileOpen ? ' open' : ''}`}>
-        <Link to="/.well-known/admin-dashboard-sh123456" onClick={handleLinkClick}>Overview</Link>
-        <Link to="/.well-known/admin-categories-sh123456" onClick={handleLinkClick}>Categories</Link>
-        <Link to="/.well-known/admin-products-sh123456" onClick={handleLinkClick}>Products</Link>
-        <Link to="/.well-known/admin-import-sh123456" onClick={handleLinkClick}>Import</Link>
-        <Link to="/.well-known/admin-orders-sh123456" onClick={handleLinkClick}>Orders</Link>
-        <Link to="/.well-known/admin-marketing-sh123456" onClick={handleLinkClick}>Marketing</Link>
-        <Link to="/.well-known/admin-account-sh123456" onClick={handleLinkClick}>Account</Link>
+        <Link to={paths.dashboard} onClick={handleLinkClick}>Overview</Link>
+        <Link to={paths.categories} onClick={handleLinkClick}>Categories</Link>
+        <Link to={paths.products} onClick={handleLinkClick}>Products</Link>
+        <Link to={paths.import} onClick={handleLinkClick}>Import</Link>
+        <Link to={paths.siteOrders} onClick={handleLinkClick}>Orders</Link>
+        <Link to={paths.marketing} onClick={handleLinkClick}>Marketing</Link>
+        <Link to={paths.account} onClick={handleLinkClick}>Account</Link>
       </nav>
       <div className="admin-topnav-right">
         <div className="admin-topnav-user">

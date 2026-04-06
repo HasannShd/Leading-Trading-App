@@ -4,12 +4,13 @@ import { AdminContext } from '../../context/AdminContext';
 import './PortalShell.css';
 
 const links = [
+  { section: 'Operations' },
   { to: '/admin/dashboard', label: 'Overview' },
   { to: '/admin/staff', label: 'Staff' },
   { to: '/admin/attendance', label: 'Attendance' },
   { to: '/admin/schedules', label: 'Schedules' },
   { to: '/admin/reports', label: 'Reports' },
-  { to: '/admin/orders', label: 'Orders' },
+  { to: '/admin/orders', label: 'Staff Orders' },
   { to: '/admin/expenses', label: 'Expenses' },
   { to: '/admin/clients', label: 'Clients' },
   { to: '/admin/visits', label: 'Visits' },
@@ -20,6 +21,14 @@ const links = [
   { to: '/admin/demand', label: 'Demand' },
   { to: '/admin/issues', label: 'Issues' },
   { to: '/admin/logs', label: 'Logs' },
+  { section: 'Website Control' },
+  { to: '/admin/catalog', label: 'Catalog Overview' },
+  { to: '/admin/catalog/categories', label: 'Categories' },
+  { to: '/admin/catalog/products', label: 'Products' },
+  { to: '/admin/catalog/import', label: 'Import' },
+  { to: '/admin/site-orders', label: 'Website Orders' },
+  { to: '/admin/marketing', label: 'Marketing' },
+  { to: '/admin/account', label: 'Account' },
 ];
 
 const AdminPortalLayout = () => {
@@ -41,9 +50,13 @@ const AdminPortalLayout = () => {
       <div className="portal-content portal-page">
         <nav className="portal-admin-nav">
           {links.map((link) => (
-            <NavLink key={link.to} to={link.to} className={({ isActive }) => `portal-admin-link${isActive ? ' active' : ''}`}>
-              {link.label}
-            </NavLink>
+            link.section ? (
+              <div key={link.section} className="portal-admin-nav-section">{link.section}</div>
+            ) : (
+              <NavLink key={link.to} to={link.to} className={({ isActive }) => `portal-admin-link${isActive ? ' active' : ''}`}>
+                {link.label}
+              </NavLink>
+            )
           ))}
         </nav>
         <Outlet />

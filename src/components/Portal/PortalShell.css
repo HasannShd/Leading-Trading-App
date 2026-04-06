@@ -362,6 +362,15 @@
   gap: 0.6rem;
 }
 
+.portal-admin-nav-section {
+  width: 100%;
+  margin-top: 0.45rem;
+  font-size: 0.76rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--bronze-700);
+}
+
 .portal-admin-link {
   padding: 0.72rem 1rem;
   border-radius: 999px;

@@ -1,11 +1,15 @@
 import { useContext, useState, useEffect, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { AdminContext } from '../../context/AdminContext';
+import { getAdminPaths } from './adminPaths';
 import './AdminDashboard.css';
 
 const AdminDashboard = () => {
   const { admin, logout } = useContext(AdminContext);
   const navigate = useNavigate();
+  const location = useLocation();
+  const isVisibleAdminRoute = location.pathname.startsWith('/admin');
+  const adminPaths = getAdminPaths(isVisibleAdminRoute);
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
   const token = localStorage.getItem('adminToken');
 
@@ -23,7 +27,7 @@ const AdminDashboard = () => {
 
   const handleLogout = () => {
     logout();
-    navigate('/.well-known/admin-access-sh123456');
+    navigate(adminPaths.login);
   };
 
   const goTo = (path) => {
@@ -82,7 +86,7 @@ const AdminDashboard = () => {
       title: 'Categories',
       value: metrics.categories,
       description: 'Keep the catalog structure clean and buyer-friendly.',
-      action: () => goTo('/.well-known/admin-categories-sh123456'),
+      action: () => goTo(adminPaths.categories),
       label: 'Manage Categories',
     },
     {
@@ -90,7 +94,7 @@ const AdminDashboard = () => {
       title: 'Products',
       value: metrics.products,
       description: `${metrics.activeProducts} active products currently visible in the catalog.`,
-      action: () => goTo('/.well-known/admin-products-sh123456'),
+      action: () => goTo(adminPaths.products),
       label: 'Manage Products',
     },
     {
@@ -98,7 +102,7 @@ const AdminDashboard = () => {
       title: 'Import',
       value: loadingMetrics ? '...' : 'Bulk',
       description: 'Bring catalog changes in faster with mapped imports and validation.',
-      action: () => goTo('/.well-known/admin-import-sh123456'),
+      action: () => goTo(adminPaths.import),
       label: 'Open Import',
     },
     {
@@ -106,7 +110,7 @@ const AdminDashboard = () => {
       title: 'Orders',
       value: metrics.orders,
       description: 'Monitor the current order volume and move quickly on new requests.',
-      action: () => goTo('/.well-known/admin-orders-sh123456'),
+      action: () => goTo(adminPaths.siteOrders),
       label: 'Manage Orders',
     },
     {
@@ -114,7 +118,7 @@ const AdminDashboard = () => {
       title: 'Marketing',
       value: metrics.marketingUsers,
       description: 'Review opted-in contacts and reuse the list for outreach.',
-      action: () => goTo('/.well-known/admin-marketing-sh123456'),
+      action: () => goTo(adminPaths.marketing),
       label: 'Open Marketing',
     },
     {
@@ -122,7 +126,7 @@ const AdminDashboard = () => {
       title: 'Needs Attention',
       value: metrics.incompleteProducts,
       description: 'Products missing descriptions, images, or category data.',
-      action: () => goTo('/.well-known/admin-products-sh123456'),
+      action: () => goTo(adminPaths.products),
       label: 'Review Products',
     },
   ];
@@ -159,11 +163,11 @@ const AdminDashboard = () => {
           >
             📊 Overview
           </button>
-          <button className="admin-nav-item" onClick={() => goTo('/.well-known/admin-categories-sh123456')}>📁 Categories</button>
-          <button className="admin-nav-item" onClick={() => goTo('/.well-known/admin-products-sh123456')}>📦 Products</button>
-          <button className="admin-nav-item" onClick={() => goTo('/.well-known/admin-import-sh123456')}>📥 Import</button>
-          <button className="admin-nav-item" onClick={() => goTo('/.well-known/admin-orders-sh123456')}>🧾 Orders</button>
-          <button className="admin-nav-item" onClick={() => goTo('/.well-known/admin-marketing-sh123456')}>📣 Marketing</button>
+          <button className="admin-nav-item" onClick={() => goTo(adminPaths.categories)}>📁 Categories</button>
+          <button className="admin-nav-item" onClick={() => goTo(adminPaths.products)}>📦 Products</button>
+          <button className="admin-nav-item" onClick={() => goTo(adminPaths.import)}>📥 Import</button>
+          <button className="admin-nav-item" onClick={() => goTo(adminPaths.siteOrders)}>🧾 Orders</button>
+          <button className="admin-nav-item" onClick={() => goTo(adminPaths.marketing)}>📣 Marketing</button>
         </nav>
 
         <div className="admin-sidebar-footer">

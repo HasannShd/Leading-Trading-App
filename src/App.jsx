@@ -115,6 +115,14 @@ const AppShell = () => {
           <Route path="/admin" element={<ProtectedAdminRoute element={<AdminPortalLayout />} />}>
             <Route index element={<Navigate to="/admin/dashboard" replace />} />
             <Route path="dashboard" element={<AdminDashboardPage />} />
+            <Route path="catalog" element={<AdminDashboard />} />
+            <Route path="catalog/categories" element={<AdminCategories />} />
+            <Route path="catalog/products" element={<AdminProducts />} />
+            <Route path="catalog/import" element={<AdminImportProducts />} />
+            <Route path="site-orders" element={<AdminOrders />} />
+            <Route path="site-orders/:id" element={<AdminOrderDetails />} />
+            <Route path="marketing" element={<AdminMarketing />} />
+            <Route path="account" element={<AdminAccount />} />
             <Route path="staff" element={<AdminStaffPage />} />
             <Route path="attendance" element={<AdminResourcePage config={{ ...adminModuleConfigs.attendance, exportKey: 'attendance' }} />} />
             <Route path="schedules" element={<AdminSchedulesPage />} />

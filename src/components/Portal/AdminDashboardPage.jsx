@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { portalApi } from '../../services/portalApi';
 import './PortalShell.css';
 
@@ -54,16 +55,49 @@ const AdminDashboardPage = () => {
             <h2 className="portal-section-title" style={{ fontSize: '1.5rem' }}>Audit snapshot</h2>
           </div>
         </div>
-        <div className="portal-record-list" style={{ marginTop: '1rem' }}>
-          {(data.recentActivity || []).map((item) => (
-            <div className="portal-record-card" key={item._id}>
-              <h3 className="portal-record-title">{item.action}</h3>
-              <div className="portal-record-meta">
-                <span>{item.user?.name || item.user?.username || '-'}</span>
-                <span>{item.module}</span>
-                <span>{new Date(item.createdAt).toLocaleString()}</span>
+        {data.recentActivity?.length ? (
+          <div className="portal-record-list" style={{ marginTop: '1rem' }}>
+            {data.recentActivity.map((item) => (
+              <div className="portal-record-card" key={item._id}>
+                <h3 className="portal-record-title">{item.action}</h3>
+                <div className="portal-record-meta">
+                  <span>{item.user?.name || item.user?.username || '-'}</span>
+                  <span>{item.module}</span>
+                  <span>{new Date(item.createdAt).toLocaleString()}</span>
+                </div>
               </div>
-            </div>
+            ))}
+          </div>
+        ) : (
+          <p className="portal-section-copy" style={{ marginTop: '1rem' }}>
+            No staff activity has been logged yet. Create staff users, assign schedules, or open the website control tools below.
+          </p>
+        )}
+      </div>
+
+      <div className="portal-card">
+        <div className="portal-section-head">
+          <div>
+            <div className="portal-brand-kicker">Website Control</div>
+            <h2 className="portal-section-title" style={{ fontSize: '1.5rem' }}>Catalog and site management</h2>
+            <p className="portal-section-copy">
+              Use the same admin area for product, category, import, website order, and marketing control.
+            </p>
+          </div>
+        </div>
+        <div className="portal-grid stats" style={{ marginTop: '1rem' }}>
+          {[
+            { label: 'Catalog Overview', to: '/admin/catalog' },
+            { label: 'Categories', to: '/admin/catalog/categories' },
+            { label: 'Products', to: '/admin/catalog/products' },
+            { label: 'Import', to: '/admin/catalog/import' },
+            { label: 'Website Orders', to: '/admin/site-orders' },
+            { label: 'Marketing', to: '/admin/marketing' },
+          ].map((item) => (
+            <Link key={item.to} to={item.to} className="portal-stat light" style={{ textDecoration: 'none', color: 'inherit' }}>
+              <div className="portal-stat-value" style={{ fontSize: '1.05rem', lineHeight: 1.2 }}>{item.label}</div>
+              <div className="portal-stat-label">Open tool</div>
+            </Link>
           ))}
         </div>
       </div>

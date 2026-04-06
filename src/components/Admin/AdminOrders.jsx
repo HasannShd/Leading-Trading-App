@@ -1,9 +1,12 @@
 import { useEffect, useState, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import './AdminCategories.css';
 import AdminTopNav from './AdminTopNav';
+import { getAdminPaths } from './adminPaths';
 
 const AdminOrders = () => {
+  const location = useLocation();
+  const adminPaths = getAdminPaths(location.pathname.startsWith('/admin'));
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
   const token = localStorage.getItem('adminToken');
   const [orders, setOrders] = useState([]);
@@ -111,7 +114,7 @@ const AdminOrders = () => {
                       {formatDate(order.createdAt)}
                     </td>
                     <td className="col-actions">
-                      <Link className="btn-edit" to={`/.well-known/admin-orders/${order._id}`}>
+                      <Link className="btn-edit" to={adminPaths.siteOrderDetails(order._id)}>
                         View
                       </Link>
                     </td>

@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useLocation } from 'react-router-dom';
 import './AdminCategories.css';
 import AdminTopNav from './AdminTopNav';
+import { getAdminPaths } from './adminPaths';
 
 const AdminCategories = () => {
   const [categories, setCategories] = useState([]);
@@ -16,9 +18,10 @@ const AdminCategories = () => {
     parent: '',
     sortOrder: 0,
   });
+  const location = useLocation();
+  const adminLoginPath = getAdminPaths(location.pathname.startsWith('/admin')).login;
 
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
-  const adminLoginPath = '/.well-known/admin-access-sh123456';
 
   const getAdminToken = () => localStorage.getItem('adminToken');
   const handleUnauthorized = () => {
