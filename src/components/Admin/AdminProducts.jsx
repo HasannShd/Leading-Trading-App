@@ -92,6 +92,15 @@ const AdminProducts = () => {
     }));
   };
 
+  const handleCategorySelect = (value) => {
+    setSelectedCategoryId(value);
+    setFormData(prev => ({
+      ...prev,
+      categorySlug: value,
+    }));
+    setError(null);
+  };
+
   const handleImageUpload = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -514,10 +523,7 @@ const AdminProducts = () => {
               type="button"
               className={`admin-category-tile${selectedCategoryId === cat._id ? ' active' : ''}`}
               onClick={() => {
-                setSelectedCategoryId(cat._id);
-                if (!editingId) {
-                  setFormData(prev => ({ ...prev, categorySlug: cat._id }));
-                }
+                handleCategorySelect(cat._id);
               }}
             >
               <span className="admin-category-icon">📁</span>
@@ -545,8 +551,21 @@ const AdminProducts = () => {
 
             <div className="admin-form-group full-width">
               <label>Category *</label>
+              <select
+                name="categorySlug"
+                value={formData.categorySlug}
+                onChange={(e) => handleCategorySelect(e.target.value)}
+                required
+              >
+                <option value="">Select a category</option>
+                {categories.map((cat) => (
+                  <option key={cat._id} value={cat._id}>
+                    {cat.name}
+                  </option>
+                ))}
+              </select>
               <div className="admin-category-selected">
-                {categories.find(cat => cat._id === formData.categorySlug)?.name || 'Select a category above'}
+                {categories.find(cat => cat._id === formData.categorySlug)?.name || 'Choose a category to place this product correctly.'}
               </div>
             </div>
 
