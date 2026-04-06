@@ -293,7 +293,6 @@ const HomePage = () => {
           <p>
             The process is designed to reduce blind spots. Demand is identified first, suppliers are evaluated properly, logistics are coordinated early, and stock is controlled before delivery moves.
           </p>
-          <Link className="premium-inline-link" to="/about">Learn more about our company</Link>
         </div>
 
         <div className="premium-workflow-diagram">
@@ -422,9 +421,18 @@ const HomePage = () => {
       </section>
 
       <section className="premium-section premium-trust">
-        <div className="premium-section-heading">
-          <span className="premium-eyebrow">Selected relationships</span>
-          <h2>Supported by established manufacturers and trusted by local institutions.</h2>
+        <div className="premium-trust-top">
+          <div className="premium-section-heading">
+            <span className="premium-eyebrow">Selected relationships</span>
+            <h2>Supported by established manufacturers and trusted by local institutions.</h2>
+          </div>
+
+          <aside className="premium-about-callout">
+            <small>Company profile</small>
+            <h3>See the people and departments behind the supply operation.</h3>
+            <p>Learn more about the company, leadership, sales, accounts, HR, and delivery structure behind LTE.</p>
+            <Link className="premium-inline-link" to="/about">Learn more about our company</Link>
+          </aside>
         </div>
 
         <div className="premium-logo-block">
