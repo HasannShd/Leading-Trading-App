@@ -1,5 +1,67 @@
 @import './AdminCategories.css';
 
+.admin-products-toolbar {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.admin-products-toolbar label {
+  font-weight: 600;
+  color: rgba(248, 243, 235, 0.84);
+}
+
+.admin-search-control {
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid rgba(248, 243, 235, 0.1);
+  border-radius: 16px;
+  background: rgba(248, 243, 235, 0.06);
+  max-width: 560px;
+}
+
+.admin-search-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(231, 218, 201, 0.62);
+  font-size: 1rem;
+}
+
+.admin-search-control input {
+  min-width: 0;
+  border: none;
+  background: transparent;
+  color: #f8f3eb;
+  font: inherit;
+}
+
+.admin-search-control input::placeholder {
+  color: rgba(231, 218, 201, 0.52);
+}
+
+.admin-search-control input:focus {
+  outline: none;
+}
+
+.admin-search-control:focus-within {
+  border-color: rgba(198, 145, 89, 0.32);
+  box-shadow: 0 0 0 3px rgba(198, 145, 89, 0.12);
+}
+
+.admin-search-clear {
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(248, 243, 235, 0.1);
+  background: rgba(248, 243, 235, 0.08);
+  color: #f8f3eb;
+  font-weight: 600;
+  cursor: pointer;
+}
+
 .admin-form-group select {
   cursor: pointer;
 }
@@ -9,4 +71,15 @@
   height: 20px;
   cursor: pointer;
   margin: 0;
+}
+
+@media (max-width: 640px) {
+  .admin-search-control {
+    grid-template-columns: 22px minmax(0, 1fr);
+  }
+
+  .admin-search-clear {
+    grid-column: 1 / -1;
+    width: 100%;
+  }
 }

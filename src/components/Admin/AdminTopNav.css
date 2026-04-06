@@ -1,9 +1,9 @@
 .admin-topnav {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   gap: 16px;
-  padding: 16px 20px;
+  padding: 18px 22px;
   margin-bottom: 24px;
   background: rgba(12, 24, 40, 0.9);
   border: 1px solid rgba(248, 243, 235, 0.08);
@@ -13,9 +13,10 @@
 
 .admin-topnav-left {
   display: flex;
-  align-items: center;
-  gap: 18px;
+  align-items: flex-start;
+  gap: 14px;
   min-width: 0;
+  padding-top: 26px;
 }
 
 .admin-topnav-logo {
@@ -23,6 +24,8 @@
   color: #f8f3eb;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+  white-space: nowrap;
+  font-size: 0.95rem;
 }
 
 .admin-topnav-toggle {
@@ -48,10 +51,29 @@
 }
 
 .admin-topnav-links {
+  display: grid;
+  gap: 14px;
+  flex: 1;
+  min-width: 0;
+}
+
+.admin-topnav-group {
+  display: grid;
+  gap: 10px;
+}
+
+.admin-topnav-group-label {
+  font-size: 0.74rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(231, 218, 201, 0.56);
+  padding-left: 4px;
+}
+
+.admin-topnav-group-links {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
-  flex: 1;
 }
 
 .admin-topnav-links a {
@@ -61,6 +83,7 @@
   font-weight: 600;
   background: rgba(248, 243, 235, 0.04);
   border: 1px solid transparent;
+  white-space: nowrap;
 }
 
 .admin-topnav-links a:hover {
@@ -76,6 +99,7 @@
 
 .admin-topnav-right {
   flex-shrink: 0;
+  padding-top: 24px;
 }
 
 .admin-topnav-user {
@@ -102,6 +126,8 @@
     width: 100%;
     justify-content: space-between;
     gap: 12px;
+    padding-top: 0;
+    align-items: center;
   }
 
   .admin-topnav-toggle {
@@ -111,14 +137,17 @@
   .admin-topnav-links {
     width: 100%;
     display: none;
-    flex-direction: column;
     gap: 8px;
     padding-top: 8px;
     border-top: 1px solid rgba(248, 243, 235, 0.08);
   }
 
   .admin-topnav-links.open {
-    display: flex;
+    display: grid;
+  }
+
+  .admin-topnav-group-links {
+    flex-direction: column;
   }
 
   .admin-topnav-links a {
@@ -127,6 +156,10 @@
     align-items: center;
     white-space: nowrap;
     flex-shrink: 0;
+  }
+
+  .admin-topnav-right {
+    padding-top: 0;
   }
 
   .admin-topnav-user {

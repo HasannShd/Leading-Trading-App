@@ -868,14 +868,27 @@ const AdminProducts = () => {
 
       <div className="admin-products-list">
         <h2>All Products ({products.filter(p => !selectedCategoryId || p.categorySlug?._id === selectedCategoryId || p.categorySlug === selectedCategoryId).length})</h2>
-        <div className="admin-import-field">
-          <label>Search products</label>
-          <input
-            type="text"
-            placeholder="Search by name, brand, or SKU"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
+        <div className="admin-products-toolbar">
+          <label htmlFor="admin-product-search">Search products</label>
+          <div className="admin-search-control">
+            <span className="admin-search-icon" aria-hidden="true">⌕</span>
+            <input
+              id="admin-product-search"
+              type="text"
+              placeholder="Search by name, brand, or SKU"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            {searchTerm && (
+              <button
+                type="button"
+                className="admin-search-clear"
+                onClick={() => setSearchTerm('')}
+              >
+                Clear
+              </button>
+            )}
+          </div>
         </div>
         
         {loading && !showForm && <p className="loading">Loading...</p>}
