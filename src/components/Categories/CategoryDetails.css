@@ -50,10 +50,11 @@
 
 .category-details-breadcrumb {
   margin-top: 14px;
-  display: inline-flex;
+  display: flex;
   align-items: center;
   gap: 10px;
   color: var(--muted);
+  width: fit-content;
 }
 
 .category-details-breadcrumb a {
