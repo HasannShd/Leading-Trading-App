@@ -4,6 +4,7 @@ import Input from '../Common/Input';
 import Card from '../Common/Card';
 import StatePanel from '../Common/StatePanel';
 import { normalizeImageSrc } from '../../utils/normalizeImageSrc';
+import { buildCategoryTree } from '../../utils/categoryTree';
 import './Shop.css';
 
 const getProductPrice = (product) => {
@@ -101,6 +102,8 @@ const Shop = () => {
     [products]
   );
 
+  const categoryTree = useMemo(() => buildCategoryTree(categories), [categories]);
+
   return (
     <main>
       <section className="shop-shell">
@@ -120,8 +123,8 @@ const Shop = () => {
               <span>products available</span>
             </div>
             <div className="shop-hero-stat">
-              <strong>{categories.length}</strong>
-              <span>catalog categories</span>
+              <strong>{categoryTree.length}</strong>
+              <span>main categories</span>
             </div>
             <div className="shop-hero-stat">
               <strong>{featuredCount}</strong>
@@ -139,8 +142,17 @@ const Shop = () => {
             />
             <select value={category} onChange={(e) => { setCategory(e.target.value); setPage(1); }}>
               <option value="">All Categories</option>
-              {categories.map((cat) => (
-                <option key={cat._id} value={cat._id}>{cat.name}</option>
+              {categoryTree.map((parent) => (
+                parent.children?.length ? (
+                  <optgroup key={parent._id} label={parent.name}>
+                    <option value={parent._id}>{parent.name} (All)</option>
+                    {parent.children.map((child) => (
+                      <option key={child._id} value={child._id}>{child.name}</option>
+                    ))}
+                  </optgroup>
+                ) : (
+                  <option key={parent._id} value={parent._id}>{parent.name}</option>
+                )
               ))}
             </select>
             <select value={sort} onChange={(e) => setSort(e.target.value)}>

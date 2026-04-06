@@ -13,6 +13,8 @@ const AdminCategories = () => {
     slug: '',
     description: '',
     image: '',
+    parent: '',
+    sortOrder: 0,
   });
 
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
@@ -136,7 +138,7 @@ const AdminCategories = () => {
       }
 
       setError(null);
-      setFormData({ name: '', slug: '', description: '', image: '' });
+      setFormData({ name: '', slug: '', description: '', image: '', parent: '', sortOrder: 0 });
       setEditingId(null);
       setShowForm(false);
       fetchCategories();
@@ -154,6 +156,8 @@ const AdminCategories = () => {
       slug: category.slug || '',
       description: category.description || '',
       image: category.image || '',
+      parent: category.parent?._id || category.parent || '',
+      sortOrder: Number(category.sortOrder || 0),
     });
     setEditingId(category._id);
     setShowForm(true);
@@ -197,8 +201,10 @@ const AdminCategories = () => {
   const handleCancel = () => {
     setShowForm(false);
     setEditingId(null);
-    setFormData({ name: '', slug: '', description: '', image: '' });
+    setFormData({ name: '', slug: '', description: '', image: '', parent: '', sortOrder: 0 });
   };
+
+  const parentOptions = categories.filter((category) => category._id !== editingId);
 
   return (
     <div className="admin-categories">
@@ -266,6 +272,33 @@ const AdminCategories = () => {
             </div>
 
             <div className="admin-form-group">
+              <label>Parent Category</label>
+              <select
+                name="parent"
+                value={formData.parent}
+                onChange={handleInputChange}
+              >
+                <option value="">None (top-level category)</option>
+                {parentOptions.map((category) => (
+                  <option key={category._id} value={category._id}>
+                    {category.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="admin-form-group">
+              <label>Sort Order</label>
+              <input
+                type="number"
+                name="sortOrder"
+                value={formData.sortOrder}
+                onChange={handleInputChange}
+                placeholder="0"
+              />
+            </div>
+
+            <div className="admin-form-group">
               <label>Image URL</label>
               <input
                 type="text"
@@ -306,6 +339,8 @@ const AdminCategories = () => {
               <thead>
                 <tr>
                   <th>Name</th>
+                  <th>Parent</th>
+                  <th>Level</th>
                   <th>Slug</th>
                   <th>Description</th>
                   <th>Desc?</th>
@@ -317,6 +352,8 @@ const AdminCategories = () => {
                 {categories.map(cat => (
                   <tr key={cat._id}>
                     <td className="col-name">{cat.name}</td>
+                    <td className="col-slug">{cat.parent?.name || '-'}</td>
+                    <td className="col-desc-flag">{cat.parent ? 'Sub' : 'Main'}</td>
                     <td className="col-slug">{cat.slug || '-'}</td>
                     <td className="col-desc">{cat.description || '-'}</td>
                     <td className="col-desc-flag">{cat.description?.trim() ? 'Yes' : 'No'}</td>

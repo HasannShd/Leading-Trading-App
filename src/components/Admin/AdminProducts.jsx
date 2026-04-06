@@ -446,6 +446,21 @@ const AdminProducts = () => {
     return bySlug?.name || '';
   };
 
+  const leafCategories = categories.filter((category) =>
+    !categories.some((candidate) => (candidate.parent?._id || candidate.parent) === category._id)
+  );
+
+  const parentCategories = categories.filter((category) => !category.parent);
+
+  const groupedLeafCategories = parentCategories
+    .map((parent) => ({
+      parent,
+      children: leafCategories.filter((category) => (category.parent?._id || category.parent) === parent._id),
+    }))
+    .filter((group) => group.children.length > 0);
+
+  const ungroupedLeafCategories = leafCategories.filter((category) => !category.parent);
+
   const buildAutoDescription = () => {
     const name = formData.name.trim();
     if (!name) {
@@ -517,7 +532,7 @@ const AdminProducts = () => {
             <span className="admin-category-icon">🗂️</span>
             <span className="admin-category-name">All Categories</span>
           </button>
-          {categories.map(cat => (
+          {leafCategories.map(cat => (
             <button
               key={cat._id}
               type="button"
@@ -558,14 +573,25 @@ const AdminProducts = () => {
                 required
               >
                 <option value="">Select a category</option>
-                {categories.map((cat) => (
+                {ungroupedLeafCategories.map((cat) => (
                   <option key={cat._id} value={cat._id}>
                     {cat.name}
                   </option>
                 ))}
+                {groupedLeafCategories.map((group) => (
+                  <optgroup key={group.parent._id} label={group.parent.name}>
+                    {group.children.map((cat) => (
+                      <option key={cat._id} value={cat._id}>
+                        {cat.name}
+                      </option>
+                    ))}
+                  </optgroup>
+                ))}
               </select>
               <div className="admin-category-selected">
-                {categories.find(cat => cat._id === formData.categorySlug)?.name || 'Choose a category to place this product correctly.'}
+                {categories.find(cat => cat._id === formData.categorySlug)?.parent?.name
+                  ? `${categories.find(cat => cat._id === formData.categorySlug)?.parent?.name} → ${categories.find(cat => cat._id === formData.categorySlug)?.name}`
+                  : (categories.find(cat => cat._id === formData.categorySlug)?.name || 'Choose a category to place this product correctly.')}
               </div>
             </div>
 

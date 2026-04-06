@@ -1,6 +1,7 @@
-import { useState, useEffect, useRef, useContext, useCallback } from 'react';
+import { useState, useEffect, useRef, useContext, useCallback, useMemo } from 'react';
 import { NavLink, Link, useLocation } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
+import { buildCategoryTree } from '../../utils/categoryTree';
 import './Header.css';
 
 // Header: Top navigation bar with dropdown for categories
@@ -20,6 +21,7 @@ const Header = () => {
 
   const navRef = useRef(null);
   const isHome = location.pathname === '/';
+  const categoryTree = useMemo(() => buildCategoryTree(categories), [categories]);
 
   const fetchCategories = useCallback(async () => {
     try {
@@ -188,7 +190,7 @@ const Header = () => {
               >
                 {isMobileViewport && (
                   <Link
-                    to="/products"
+                    to="/categories"
                     className="nav-dropdown-item nav-dropdown-item-all"
                     onClick={() => {
                       setDropdown(false);
@@ -198,18 +200,32 @@ const Header = () => {
                     All Categories
                   </Link>
                 )}
-                {categories.map(cat => (
-                  <Link
-                    key={cat._id}
-                    to={`/categories/${cat.slug || cat._id}`}
-                    className="nav-dropdown-item"
-                    onClick={() => {
-                      setDropdown(false);
-                      setMobileNav(false);
-                    }}
-                  >
-                    {cat.name}
-                  </Link>
+                {categoryTree.map((parent) => (
+                  <div key={parent._id} className="nav-dropdown-group">
+                    <Link
+                      to={`/categories/${parent.slug || parent._id}`}
+                      className="nav-dropdown-item nav-dropdown-item-parent"
+                      onClick={() => {
+                        setDropdown(false);
+                        setMobileNav(false);
+                      }}
+                    >
+                      {parent.name}
+                    </Link>
+                    {parent.children?.map((child) => (
+                      <Link
+                        key={child._id}
+                        to={`/categories/${child.slug || child._id}`}
+                        className="nav-dropdown-item nav-dropdown-item-child"
+                        onClick={() => {
+                          setDropdown(false);
+                          setMobileNav(false);
+                        }}
+                      >
+                        {child.name}
+                      </Link>
+                    ))}
+                  </div>
                 ))}
               </div>
             )}

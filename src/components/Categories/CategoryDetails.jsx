@@ -89,9 +89,16 @@ const CategoryDetails = () => {
             <section className="category-details-hero">
               <div className="category-details-hero-copy">
                 <span className="category-details-eyebrow">Category Focus</span>
+                {category.parent ? (
+                  <div className="category-details-breadcrumb">
+                    <Link to={`/categories/${category.parent.slug || category.parent._id}`}>{category.parent.name}</Link>
+                    <span>/</span>
+                    <strong>{category.name}</strong>
+                  </div>
+                ) : null}
                 <h1 className="category-details-title">{category.name}</h1>
                 <p className="category-details-desc">
-                  {category.description?.trim() || 'Browse the products available in this sourcing category and request support for matching specifications.'}
+                  {category.description?.trim() || 'Browse the products available in this category and request support for matching specifications.'}
                 </p>
               </div>
 
@@ -108,9 +115,29 @@ const CategoryDetails = () => {
               </div>
             </section>
 
+            {category.children?.length ? (
+              <section className="category-details-subcategories">
+                <div className="category-details-subcategories-head">
+                  <h2>Subcategories inside {category.name}</h2>
+                  <p>Open a subcategory to narrow the catalog further, or keep scrolling to review products across the full group.</p>
+                </div>
+                <div className="category-details-subcategories-grid">
+                  {category.children.map((child) => (
+                    <Link key={child._id} to={`/categories/${child.slug || child._id}`} className="category-details-subcategory-card">
+                      <span>Subcategory</span>
+                      <strong>{child.name}</strong>
+                      <p>{child.description?.trim() || 'Open this subcategory to review the dedicated product set.'}</p>
+                    </Link>
+                  ))}
+                </div>
+              </section>
+            ) : null}
+
             <div className="category-details-products-header">
               <div>
-                <h2 className="category-details-products-title">Products in this category</h2>
+                <h2 className="category-details-products-title">
+                  {category.children?.length ? 'Products across this main category' : 'Products in this category'}
+                </h2>
                 <p className="category-details-products-copy">
                   Filter by name, brand, description, or SKU to narrow the category quickly.
                 </p>
@@ -167,7 +194,11 @@ const CategoryDetails = () => {
                         )}
 
                         <div className="category-details-product-copy">
-                          <span>{p.brand || 'Sourcing item'}</span>
+                          <span>
+                            {p.categorySlug?.parent?.name
+                              ? `${p.categorySlug.parent.name} / ${p.categorySlug?.name || ''}`
+                              : (p.brand || 'Catalog item')}
+                          </span>
                           <strong>{p.name}</strong>
                           <p>{p.description?.trim() || 'Open the product to review specifications, variants, and request options.'}</p>
                         </div>

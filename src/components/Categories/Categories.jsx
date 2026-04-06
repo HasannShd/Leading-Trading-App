@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import Card from '../Common/Card';
 import Input from '../Common/Input';
 import StatePanel from '../Common/StatePanel';
+import { buildCategoryTree } from '../../utils/categoryTree';
 import './Categories.css';
 
 const Categories = () => {
@@ -35,12 +36,17 @@ const Categories = () => {
 
   const list = useMemo(() => {
     const s = deferredQuery.toLowerCase().trim();
+    const tree = buildCategoryTree(categories);
     return s
-      ? categories.filter((c) =>
-          c.name.toLowerCase().includes(s) ||
-          (c.description || '').toLowerCase().includes(s)
+      ? tree.filter((parent) =>
+          parent.name.toLowerCase().includes(s) ||
+          (parent.description || '').toLowerCase().includes(s) ||
+          parent.children.some((child) =>
+            child.name.toLowerCase().includes(s) ||
+            (child.description || '').toLowerCase().includes(s)
+          )
         )
-      : categories;
+      : tree;
   }, [deferredQuery, categories]);
 
   const withDescriptions = categories.filter((category) => category.description?.trim()).length;
@@ -105,7 +111,7 @@ const Categories = () => {
           <>
             <div className="categories-results-bar">
               <span>{list.length} category{list.length === 1 ? '' : 'ies'} available</span>
-              <p>Open a category to view the products available inside it.</p>
+              <p>Open a main category to browse its subcategories and products.</p>
             </div>
 
             <div className="categories-grid">
@@ -141,13 +147,21 @@ const Categories = () => {
                       </div>
                       <div className="categories-card-content">
                         <div className="categories-card-topline">
-                          <span>Category</span>
+                          <span>Main Category</span>
                           <strong>Open</strong>
                         </div>
                         <h3 className="categories-card-title">{c.name}</h3>
                         <p className="categories-card-desc">
-                          {c.description?.trim() || 'Browse the products available in this category.'}
+                          {c.description?.trim() || 'Browse the subcategories and products available inside this main category.'}
                         </p>
+                        {c.children?.length ? (
+                          <div className="categories-card-children">
+                            {c.children.slice(0, 4).map((child) => (
+                              <span key={child._id}>{child.name}</span>
+                            ))}
+                            {c.children.length > 4 ? <strong>+{c.children.length - 4} more</strong> : null}
+                          </div>
+                        ) : null}
                       </div>
                     </Card>
                   </Link>

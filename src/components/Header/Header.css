@@ -182,6 +182,11 @@
   backdrop-filter: blur(14px);
 }
 
+.nav-dropdown-group {
+  display: grid;
+  gap: 4px;
+}
+
 .nav-dropdown-item {
   display: block;
   padding: 12px 14px;
@@ -189,6 +194,19 @@
   color: rgba(244, 240, 232, 0.88);
   background: transparent;
 }
+
+.nav-dropdown-item-parent {
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.nav-dropdown-item-child {
+  margin-left: 10px;
+  padding-left: 18px;
+  font-size: 0.94rem;
+  color: rgba(226, 216, 201, 0.84);
+ }
 
 .nav-dropdown-item:hover {
   background: rgba(168, 119, 68, 0.14);

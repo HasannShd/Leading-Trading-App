@@ -189,6 +189,26 @@
   line-height: 1.7;
 }
 
+.categories-card-children {
+  margin-top: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.categories-card-children span,
+.categories-card-children strong {
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: rgba(19, 48, 78, 0.06);
+  color: var(--navy-700);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
 .categories-card-link .card {
   padding: 16px;
 }
