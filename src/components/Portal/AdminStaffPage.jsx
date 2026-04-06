@@ -17,16 +17,37 @@ const AdminStaffPage = () => {
   const [staff, setStaff] = useState([]);
   const [form, setForm] = useState(initialState);
   const [message, setMessage] = useState('');
+  const [selectedStaffId, setSelectedStaffId] = useState('');
+  const [staffSummary, setStaffSummary] = useState(null);
+  const [summaryLoading, setSummaryLoading] = useState(false);
 
   const load = () =>
     portalApi
       .get('/admin-portal/staff', 'admin')
-      .then((response) => setStaff(response.data.staff))
+      .then((response) => {
+        setStaff(response.data.staff);
+        if (!selectedStaffId && response.data.staff[0]?._id) {
+          setSelectedStaffId(response.data.staff[0]._id);
+        }
+      })
       .catch((err) => setMessage(err.message));
 
   useEffect(() => {
     load();
   }, []);
+
+  useEffect(() => {
+    if (!selectedStaffId) {
+      setStaffSummary(null);
+      return;
+    }
+    setSummaryLoading(true);
+    portalApi
+      .get(`/admin-portal/staff/${selectedStaffId}/summary`, 'admin')
+      .then((response) => setStaffSummary(response.data))
+      .catch((err) => setMessage(err.message))
+      .finally(() => setSummaryLoading(false));
+  }, [selectedStaffId]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -49,6 +70,30 @@ const AdminStaffPage = () => {
       setMessage(err.message);
     }
   };
+
+  const exportStaffReport = async (staffId) => {
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/admin-portal/staff/${staffId}/report`,
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem('adminToken')}` },
+        }
+      );
+      if (!response.ok) throw new Error('Export failed.');
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const anchor = document.createElement('a');
+      anchor.href = url;
+      anchor.download = `staff-report-${staffId}.csv`;
+      anchor.click();
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      setMessage(err.message || 'Export failed.');
+    }
+  };
+
+  const activeCount = staff.filter((member) => member.isActive).length;
+  const inactiveCount = staff.length - activeCount;
 
   return (
     <div className="admin-categories">
@@ -76,6 +121,20 @@ const AdminStaffPage = () => {
           <div>
             <div className="portal-brand-kicker">Staff Access</div>
             <h1 className="portal-section-title" style={{ fontSize: '1.8rem' }}>Create sales staff users</h1>
+          </div>
+        </div>
+        <div className="portal-grid stats portal-module-stats" style={{ marginTop: '1rem' }}>
+          <div className="portal-stat light">
+            <div className="portal-stat-value">{staff.length}</div>
+            <div className="portal-stat-label">Total staff</div>
+          </div>
+          <div className="portal-stat light">
+            <div className="portal-stat-value">{activeCount}</div>
+            <div className="portal-stat-label">Active staff</div>
+          </div>
+          <div className="portal-stat light">
+            <div className="portal-stat-value">{inactiveCount}</div>
+            <div className="portal-stat-label">Inactive staff</div>
           </div>
         </div>
         <form className="portal-form" onSubmit={handleSubmit} style={{ marginTop: '1rem' }}>
@@ -110,16 +169,28 @@ const AdminStaffPage = () => {
             <h2 className="portal-section-title" style={{ fontSize: '1.5rem' }}>Sales staff roster</h2>
           </div>
         </div>
-        <div className="portal-record-list" style={{ marginTop: '1rem' }}>
+        <div className="portal-staff-roster" style={{ marginTop: '1rem' }}>
           {staff.length ? (
             staff.map((member) => (
-              <div className="portal-record-card" key={member._id}>
-                <h3 className="portal-record-title">{member.name || member.username}</h3>
-                <div className="portal-record-meta">
-                  <span>{member.email}</span>
-                  <span>{member.phone}</span>
-                  <span>{member.department || 'No department'}</span>
-                  <span className="portal-badge status">{member.isActive ? 'active' : 'inactive'}</span>
+              <div className="portal-staff-member-card" key={member._id}>
+                <div className="portal-staff-member-head">
+                  <div>
+                    <h3 className="portal-record-title">{member.name || member.username}</h3>
+                    <div className="portal-record-meta">
+                      <span>{member.email}</span>
+                      <span>{member.phone || 'No phone'}</span>
+                      <span>{member.department || 'No department'}</span>
+                      <span className="portal-badge status">{member.isActive ? 'active' : 'inactive'}</span>
+                    </div>
+                  </div>
+                  <div className="portal-staff-member-actions">
+                    <button className="portal-inline-button ghost" type="button" onClick={() => setSelectedStaffId(member._id)}>
+                      View Summary
+                    </button>
+                    <button className="portal-inline-button secondary" type="button" onClick={() => exportStaffReport(member._id)}>
+                      Export Report
+                    </button>
+                  </div>
                 </div>
                 <button className="portal-inline-button secondary" type="button" onClick={() => toggleStatus(member)}>
                   {member.isActive ? 'Deactivate User' : 'Activate User'}
@@ -135,6 +206,121 @@ const AdminStaffPage = () => {
             </div>
           )}
         </div>
+      </div>
+
+      <div className="portal-card">
+        <div className="portal-section-head">
+          <div>
+            <div className="portal-brand-kicker">Staff Summary</div>
+            <h2 className="portal-section-title" style={{ fontSize: '1.5rem' }}>Everything for one staff member</h2>
+            <p className="portal-section-copy">
+              Choose a staff member to review performance, recent activity, pending work, and export a single report for office use.
+            </p>
+          </div>
+          <div className="portal-inline-actions tight">
+            <select value={selectedStaffId} onChange={(e) => setSelectedStaffId(e.target.value)}>
+              <option value="">Select staff</option>
+              {staff.map((member) => (
+                <option key={member._id} value={member._id}>
+                  {member.name || member.username}
+                </option>
+              ))}
+            </select>
+            {selectedStaffId && (
+              <button className="portal-inline-button ghost" type="button" onClick={() => exportStaffReport(selectedStaffId)}>
+                Export Staff Report
+              </button>
+            )}
+          </div>
+        </div>
+
+        {summaryLoading ? (
+          <div className="portal-empty-state" style={{ marginTop: '1rem' }}>
+            <h3 className="portal-empty-title">Loading summary...</h3>
+            <p className="portal-empty-copy">Pulling attendance, reports, orders, expenses, and activity for this staff member.</p>
+          </div>
+        ) : staffSummary?.staff ? (
+          <div className="portal-staff-report" style={{ marginTop: '1rem' }}>
+            <div className="portal-staff-report-head">
+              <div>
+                <h3 className="portal-record-title" style={{ fontSize: '1.35rem' }}>{staffSummary.staff.name || staffSummary.staff.username}</h3>
+                <div className="portal-record-meta">
+                  <span>{staffSummary.staff.email}</span>
+                  <span>{staffSummary.staff.phone || 'No phone'}</span>
+                  <span>{staffSummary.staff.department || 'No department'}</span>
+                  <span className="portal-badge status">{staffSummary.staff.isActive ? 'active' : 'inactive'}</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="portal-staff-summary-grid">
+              {[
+                ['Attendance', staffSummary.metrics.attendanceCount],
+                ['Schedules', staffSummary.metrics.schedulesCount],
+                ['Reports', staffSummary.metrics.reportsCount],
+                ['Orders', staffSummary.metrics.ordersCount],
+                ['Expenses', staffSummary.metrics.expensesCount],
+                ['Visits', staffSummary.metrics.visitsCount],
+                ['Pending Follow-ups', staffSummary.metrics.pendingFollowUps],
+                ['Unread Notifications', staffSummary.metrics.unreadNotifications],
+              ].map(([label, value]) => (
+                <div className="portal-stat light" key={label}>
+                  <div className="portal-stat-value">{value}</div>
+                  <div className="portal-stat-label">{label}</div>
+                </div>
+              ))}
+            </div>
+
+            <div className="portal-staff-highlight">
+              <div className="portal-staff-highlight-card">
+                <strong>Latest attendance</strong>
+                <div className="portal-record-meta">
+                  {staffSummary.latest.attendance?.date ? <span>{staffSummary.latest.attendance.date}</span> : <span>No attendance yet</span>}
+                  {staffSummary.latest.attendance?.checkInTime && <span>In {new Date(staffSummary.latest.attendance.checkInTime).toLocaleString()}</span>}
+                  {staffSummary.latest.attendance?.checkOutTime && <span>Out {new Date(staffSummary.latest.attendance.checkOutTime).toLocaleString()}</span>}
+                </div>
+              </div>
+              <div className="portal-staff-highlight-card">
+                <strong>Next schedule</strong>
+                <div className="portal-record-meta">
+                  {staffSummary.latest.nextSchedule ? (
+                    <>
+                      <span>{staffSummary.latest.nextSchedule.title}</span>
+                      <span>{staffSummary.latest.nextSchedule.assignedDate}</span>
+                      {staffSummary.latest.nextSchedule.startTime && <span>{staffSummary.latest.nextSchedule.startTime}</span>}
+                    </>
+                  ) : (
+                    <span>No upcoming schedule</span>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="portal-record-list">
+              {staffSummary.recentActivity.length ? (
+                staffSummary.recentActivity.map((entry) => (
+                  <div className="portal-record-card" key={entry._id}>
+                    <h3 className="portal-record-title">{entry.action.replaceAll('_', ' ')}</h3>
+                    <div className="portal-record-meta">
+                      <span>{entry.module}</span>
+                      <span>{new Date(entry.createdAt).toLocaleString()}</span>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="portal-empty-state">
+                  <h3 className="portal-empty-title">No staff activity yet</h3>
+                  <p className="portal-empty-copy">Once this staff member starts using the portal, their recent actions will appear here for quick review.</p>
+                </div>
+              )}
+            </div>
+          </div>
+        ) : (
+          <div className="portal-empty-state" style={{ marginTop: '1rem' }}>
+            <h3 className="portal-empty-title">Select a staff member</h3>
+            <p className="portal-empty-copy">Choose one staff user above to view a full wrapped summary and export their report.</p>
+          </div>
+        )}
       </div>
       </section>
     </div>

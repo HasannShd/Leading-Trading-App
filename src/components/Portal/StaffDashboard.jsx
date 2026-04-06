@@ -27,8 +27,8 @@ const StaffDashboard = () => {
   if (!data) return <div className="portal-loading">Loading dashboard...</div>;
 
   return (
-    <section className="portal-page">
-      <div className="portal-card dark">
+    <section className="portal-page staff-dashboard-page">
+      <div className="portal-card dark portal-staff-hero">
         <div className="portal-section-head">
           <div>
             <div className="portal-brand-kicker">Field Summary</div>
@@ -68,7 +68,7 @@ const StaffDashboard = () => {
         </div>
       </div>
 
-      <div className="portal-card portal-help-card">
+      <div className="portal-card portal-help-card portal-soft-card">
         <div className="portal-section-head">
           <div>
             <div className="portal-brand-kicker">Daily Routine</div>
@@ -80,15 +80,15 @@ const StaffDashboard = () => {
         </div>
       </div>
 
-      <div className="portal-actions">
+      <div className="portal-actions portal-soft-actions">
         {quickLinks.map((link) => (
-          <Link key={link.to} className="portal-button ghost" to={link.to}>
+          <Link key={link.to} className="portal-button ghost portal-soft-action-button" to={link.to}>
             {link.label}
           </Link>
         ))}
       </div>
 
-      <div className="portal-card">
+      <div className="portal-card portal-soft-card">
         <div className="portal-section-head">
           <div>
             <div className="portal-brand-kicker">Today</div>
@@ -120,7 +120,7 @@ const StaffDashboard = () => {
         </div>
       </div>
 
-      <div className="portal-card">
+      <div className="portal-card portal-soft-card">
         <div className="portal-section-head">
           <div>
             <div className="portal-brand-kicker">Activity</div>
