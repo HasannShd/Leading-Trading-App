@@ -56,13 +56,18 @@ const HomePage = () => {
   ];
 
   const clients = [
+    { name: 'Ministry of Health', logo: `${baseUrl}clients/ministry.jpg` },
+    { name: 'King Hamad University Hospital', logo: `${baseUrl}clients/khuh.png` },
+    { name: 'Bapco', logo: `${baseUrl}clients/bapco.jpg` },
+    { name: 'Bahrain Defence Force', logo: `${baseUrl}clients/bdf.png` },
+    { name: 'Royal Specialized Center', logo: `${baseUrl}clients/rsci.png` },
     { name: 'KIMS Muharraq', logo: `${baseUrl}clients/Kims-Muharraq.png` },
+    { name: 'American Mission', logo: `${baseUrl}clients/american mission.png` },
+    { name: 'Aster', logo: `${baseUrl}clients/aster.jpg` },
+    { name: 'Ibn Al Nafees', logo: `${baseUrl}clients/ibn al nafees.png` },
     { name: 'Al Rayan', logo: `${baseUrl}clients/al rayan.jpg` },
     { name: 'Al Salam', logo: `${baseUrl}clients/al salam.jpg` },
     { name: 'Hilal Hospital', logo: `${baseUrl}clients/hilal.jpg` },
-    { name: 'Ibn Al Nafees', logo: `${baseUrl}clients/ibn al nafees.png` },
-    { name: 'American Mission', logo: `${baseUrl}clients/american mission.png` },
-    { name: 'Aster', logo: `${baseUrl}clients/aster.jpg` },
     { name: 'Dar Al Hayat', logo: `${baseUrl}clients/dar al hayat.jpg` },
     { name: 'Resalah', logo: `${baseUrl}clients/resalah.jpg` },
     { name: 'Shifa Al Jazeera', logo: `${baseUrl}clients/shifa al jazeera.jpg` },
@@ -71,8 +76,8 @@ const HomePage = () => {
   const heroStats = [
     { value: '10+', label: 'Years supporting mission-critical buyers' },
     { value: '3,000+', label: 'Medical, dental & industrial SKUs' },
-    { value: 'Licensed', label: '& Certified' },
-    { value: '24h', label: 'Fast quotation resdponse for priority requests' },
+    { value: 'NHRA Licensed & Certified'},
+    { value: '24h', label: 'Fast quotation response for priority requests' },
   ];
 
   const sectorCards = [

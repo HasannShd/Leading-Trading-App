@@ -58,8 +58,7 @@ const Footer = () => {
           <div className="footer-col">
             <div className="footer-title"><FaRegClock /> Hours</div>
             <div className="footer-hours-list">
-              <div>Mon – Thu: 8:00am – 4:00pm</div>
-              <div>Sat – Sun: 8:00am – 4:00pm</div>
+              <div>Sat – Thu: 8:00am – 4:00pm</div>
             </div>
           </div>
         </div>
