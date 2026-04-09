@@ -7,31 +7,37 @@ import './Homepage.css';
 const homepageCategories = [
   {
     name: 'Medical Equipment',
+    slug: 'medical-equipment',
     label: 'Clinical systems',
     description: 'Diagnostic and treatment support equipment for hospitals, clinics, and operational care environments.',
   },
   {
     name: 'Anesthesia & Respiratory',
+    slug: 'anesthesia-respiratory',
     label: 'Airway and respiratory care',
     description: 'Products selected for respiratory support, airway control, and procedure-critical environments.',
   },
   {
     name: 'Dental',
+    slug: 'dental',
     label: 'Practice continuity',
     description: 'Dental consumables and specialist tools that keep practices supplied without disrupting workflow.',
   },
   {
     name: 'Consumables & Disposables',
+    slug: 'consumables-disposables',
     label: 'Recurring essentials',
     description: 'High-rotation products that support daily care, infection control, and procedure readiness.',
   },
   {
     name: 'Industrial & Safety',
+    slug: 'industrial-safety',
     label: 'Operational protection',
     description: 'Industrial and safety sourcing for disciplined operations where reliability and availability matter.',
   },
   {
     name: 'Hospital Furniture & Utilities',
+    slug: 'hospital-furniture-utilities',
     label: 'Facility support',
     description: 'Furniture, transport, and utility items that support day-to-day movement, care, and storage.',
   },
@@ -109,8 +115,8 @@ const sectors = [
 const whyStats = [
   { value: '10+', label: 'Years serving Bahrain-based buyers' },
   { value: 'Medical + Industrial', label: 'Two sectors supported through one structured operating model' },
-  { value: 'Quality-led sourcing', label: 'Supplier assessment shaped around specification, documentation, and reliability' },
-  { value: 'Long-term account support', label: 'Built for recurring business relationships, not only one-off transactions' },
+  { value: 'Integrated team model', label: 'Leadership, sales, accounts, and delivery aligned around one workflow' },
+  { value: 'Quality-led sourcing', label: 'Supplier assessment guided by specification, documentation, and reliability' },
 ];
 
 const mainBrands = [
@@ -174,14 +180,14 @@ const HomePage = () => {
         <div className="home-shell home-hero__grid">
           <div className="home-hero__copy animate-stagger" data-stagger-step="120ms">
             <span className="home-eyebrow animate-on-scroll">Leading Trading Est. | Bahrain</span>
-            <h1 className="animate-on-scroll">Trusted medical and industrial supply for organizations that expect quality, continuity, and dependable support.</h1>
+            <h1 className="animate-on-scroll">Reliable medical and industrial supply, delivered with quality control, supplier discipline, and dependable local support.</h1>
             <p className="animate-on-scroll">
-              Leading Trading Est. supports hospitals, clinics, practices, and industrial buyers with disciplined sourcing, established supplier relationships, and reliable local execution.
+              Leading Trading Est. supports hospitals, clinics, practices, and operational teams across Bahrain with structured sourcing, established supplier relationships, and coordinated delivery execution.
             </p>
 
             <div className="home-hero__actions animate-on-scroll">
               <Link className="home-btn home-btn--primary" to="/contact">Request a Quote</Link>
-              <Link className="home-btn home-btn--ghost" to="/products">Explore Categories</Link>
+              <Link className="home-btn home-btn--ghost" to="/products">Explore Products</Link>
             </div>
 
             <div className="home-hero__notes animate-stagger" data-stagger-step="90ms">
@@ -217,9 +223,9 @@ const HomePage = () => {
         <div className="home-shell">
           <div className="section-heading animate-stagger" data-stagger-step="110ms">
             <span className="home-eyebrow home-eyebrow--ink animate-on-scroll">How LTE creates value</span>
-            <h2 className="animate-on-scroll">LTE is built around supplier discipline, quality control, and dependable execution.</h2>
+            <h2 className="animate-on-scroll">Our business model combines supplier access, quality review, logistics planning, and customer follow-through.</h2>
             <p className="animate-on-scroll">
-              The business model combines supplier relationships, specification control, logistics coordination, and customer support so procurement decisions are backed by a stronger operating structure.
+              LTE is structured to support procurement decisions with better supplier visibility, clearer specification control, coordinated logistics, and responsive account management.
             </p>
           </div>
 
@@ -240,9 +246,9 @@ const HomePage = () => {
         <div className="home-shell workflow-stage__grid">
           <div className="workflow-stage__intro animate-stagger" data-stagger-step="110ms">
             <span className="home-eyebrow home-eyebrow--ink animate-on-scroll">Workflow</span>
-            <h2 className="animate-on-scroll">A clear workflow from inquiry through delivery is central to how LTE operates.</h2>
+            <h2 className="animate-on-scroll">A clear operating workflow supports every enquiry, quotation, procurement decision, and delivery commitment.</h2>
             <p className="animate-on-scroll">
-              Every request moves through a structured sequence: need identification, supplier review, procurement alignment, logistics planning, and dependable delivery support.
+              Each requirement moves through review, sourcing, procurement alignment, logistics coordination, and delivery support so the customer receives a more dependable service path.
             </p>
             <div className="workflow-stage__line">
               <span className="workflow-stage__line-fill" />
@@ -267,9 +273,9 @@ const HomePage = () => {
         <div className="home-shell">
           <div className="section-heading animate-stagger" data-stagger-step="110ms">
             <span className="home-eyebrow home-eyebrow--ink animate-on-scroll">Sector focus</span>
-            <h2 className="animate-on-scroll">One company serving two distinct sectors with the same operating discipline.</h2>
+            <h2 className="animate-on-scroll">One operating model supporting two sectors with different technical needs but the same requirement for dependable execution.</h2>
             <p className="animate-on-scroll">
-              LTE supports medical and industrial buyers through the same standards of supplier assessment, quality review, logistics coordination, and customer follow-through.
+              LTE serves medical and industrial buyers through the same standards of supplier assessment, quality review, logistics coordination, and local customer support.
             </p>
           </div>
 
@@ -313,9 +319,9 @@ const HomePage = () => {
         <div className="home-shell">
           <div className="section-heading animate-stagger" data-stagger-step="110ms">
             <span className="home-eyebrow home-eyebrow--ink animate-on-scroll">Trusted brands and institutions</span>
-            <h2 className="animate-on-scroll">Our supplier network and customer base reflect the standards we operate against.</h2>
+            <h2 className="animate-on-scroll">Our supplier network and institutional customer base reflect the standards we are expected to maintain.</h2>
             <p className="animate-on-scroll">
-              LTE works with selected manufacturers and serves institutions that require reliability, product quality, and professional service standards.
+              LTE works with selected manufacturers and supports institutions that require reliability, product quality, and professional service standards.
             </p>
           </div>
 
@@ -351,15 +357,15 @@ const HomePage = () => {
         <div className="home-shell">
           <div className="section-heading section-heading--inline animate-stagger" data-stagger-step="110ms">
             <div className="animate-stagger" data-stagger-step="110ms">
-              <span className="home-eyebrow home-eyebrow--ink animate-on-scroll">Featured categories</span>
-              <h2 className="animate-on-scroll">A focused view of the categories that define our supply capability.</h2>
+              <span className="home-eyebrow home-eyebrow--ink animate-on-scroll">Core categories</span>
+              <h2 className="animate-on-scroll">Core supply categories across medical, dental, and industrial operations.</h2>
             </div>
-            <Link className="home-inline-link animate-on-scroll" to="/products">Browse all categories</Link>
+            <Link className="home-inline-link animate-on-scroll" to="/categories">Browse all categories</Link>
           </div>
 
           <div className="category-grid animate-stagger" data-stagger-step="100ms">
             {homepageCategories.map((category) => (
-              <Link className="category-card animate-on-scroll" key={category.name} to="/products">
+              <Link className="category-card animate-on-scroll" key={category.name} to={`/categories/${category.slug}`}>
                 <small>{category.label}</small>
                 <h3>{category.name}</h3>
                 <p>{category.description}</p>
@@ -369,49 +375,31 @@ const HomePage = () => {
           </div>
 
           {featuredProducts.length > 0 ? (
-            <div className="featured-band animate-stagger" data-stagger-step="120ms">
-              <>
-                <Link className="featured-band__lead animate-on-scroll" to={`/product/${leadProduct._id}`}>
-                  <div className="featured-band__lead-copy">
-                    <small>Product spotlight</small>
-                    <h3>{leadProduct.name}</h3>
-                    <p>
-                      {leadProduct.description?.trim() ||
-                        'A selected featured product representing the current strength of the catalog.'}
-                    </p>
-                    <span>{leadProduct.brand || leadProduct.categorySlug?.name || 'Featured selection'}</span>
-                  </div>
-                  <div className="featured-band__lead-media">
-                    {leadProduct.image ? (
-                      <img src={normalizeImageSrc(leadProduct.image)} alt={leadProduct.name} loading="lazy" />
+            <div className="featured-grid animate-stagger" data-stagger-step="100ms">
+              {[leadProduct, ...secondaryProducts].filter(Boolean).map((product, index) => (
+                <Link className="featured-card animate-on-scroll" key={product._id} to={`/product/${product._id}`}>
+                  <div className="featured-card__media">
+                    {product.image ? (
+                      <img src={normalizeImageSrc(product.image)} alt={product.name} loading="lazy" />
                     ) : (
-                      <div className="featured-fallback">{leadProduct.name?.[0] || 'P'}</div>
+                      <div className="featured-fallback">{product.name?.[0] || 'P'}</div>
                     )}
                   </div>
+                  <div className="featured-card__copy">
+                    <small>{index === 0 ? 'Product spotlight' : (product.brand || 'Featured selection')}</small>
+                    <h3>{product.name}</h3>
+                    <p>
+                      {product.description?.trim() ||
+                        'Review the product listing to see specifications, variants, and quotation options.'}
+                    </p>
+                    <span>{product.categorySlug?.name || product.brand || 'Open product'}</span>
+                  </div>
                 </Link>
-
-                <div className="featured-band__rail animate-stagger" data-stagger-step="100ms">
-                  {secondaryProducts.map((product) => (
-                    <Link className="featured-mini animate-on-scroll" key={product._id} to={`/product/${product._id}`}>
-                      <div className="featured-mini__media">
-                        {product.image ? (
-                          <img src={normalizeImageSrc(product.image)} alt={product.name} loading="lazy" />
-                        ) : (
-                          <div className="featured-fallback">{product.name?.[0] || 'P'}</div>
-                        )}
-                      </div>
-                      <div className="featured-mini__copy">
-                        <small>{product.brand || 'Featured'}</small>
-                        <strong>{product.name}</strong>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              </>
+              ))}
             </div>
           ) : (
             <div className="catalog-stage__note animate-on-scroll">
-              Featured products will appear here once products are marked as featured in the catalog.
+              Selected product highlights will appear here once featured items are marked in the catalog.
             </div>
           )}
         </div>
@@ -421,9 +409,9 @@ const HomePage = () => {
         <div className="home-shell credibility-stage__grid">
           <div className="credibility-stage__statement animate-stagger" data-stagger-step="110ms">
             <span className="home-eyebrow animate-on-scroll">Why LTE</span>
-            <h2 className="animate-on-scroll">Procurement support should combine product access, quality assurance, and dependable follow-through.</h2>
+            <h2 className="animate-on-scroll">Organizations stay with LTE because the service model extends beyond quotation and supply.</h2>
             <p className="animate-on-scroll">
-              Long-term customer relationships are built through responsiveness, operational clarity, and a team structure that remains engaged from inquiry through delivery.
+              Our leadership, sales, accounts, and delivery teams operate as one coordinated workflow, giving customers clearer communication, better accountability, and stronger operational continuity.
             </p>
           </div>
 
@@ -442,9 +430,9 @@ const HomePage = () => {
         <div className="home-shell final-cta__panel">
           <div className="animate-stagger" data-stagger-step="110ms">
             <span className="home-eyebrow animate-on-scroll">Next step</span>
-            <h2 className="animate-on-scroll">Speak with the team behind LTE’s sourcing, coordination, and delivery support.</h2>
+            <h2 className="animate-on-scroll">Discuss your requirement with the LTE team responsible for sourcing, coordination, and delivery support.</h2>
             <p className="animate-on-scroll">
-              For quotations, category guidance, or account enquiries, our team is available to support your requirement with a clear and practical next step.
+              For quotations, category guidance, account support, or project enquiries, our team is available to provide a clear and practical next step.
             </p>
           </div>
 

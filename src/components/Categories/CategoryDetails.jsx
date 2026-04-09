@@ -1,13 +1,25 @@
 import { useDeferredValue, useEffect, useMemo, useRef, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import Input from '../Common/Input';
 import StatePanel from '../Common/StatePanel';
 import { normalizeImageSrc } from '../../utils/normalizeImageSrc';
 import { useScrollReveal } from '../../hooks/useScrollReveal';
 import './CategoryDetails.css';
 
+const legacyCategorySlugMap = {
+  'lab-devices-consumables': 'laboratory',
+  'medical-furniture': 'hospital-furniture-utilities',
+  'industrial-supplies': 'industrial-safety',
+  orthopedic: 'orthopedic-rehabilitation',
+  'medical-dressing-first-aid': 'wound-care-dressing-first-aid',
+  'hypodermic-disposable': 'injection-iv-disposable',
+  'non-woven-surgical-disposables': 'ppe-non-woven-disposable',
+  'examination-disposable': 'examination-general-disposable',
+};
+
 const CategoryDetails = () => {
   const { slug } = useParams();
+  const navigate = useNavigate();
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
   const [category, setCategory] = useState(null);
   const [products, setProducts] = useState([]);
@@ -28,16 +40,35 @@ const CategoryDetails = () => {
       setLoading(true);
       setError(null);
       try {
-        const categoryRes = await fetch(`${API_URL}/categories/${slug}`);
-        if (!categoryRes.ok) {
+        const requestedSlug = legacyCategorySlugMap[slug] || slug;
+        let categoryData = null;
+
+        const categoryRes = await fetch(`${API_URL}/categories/${requestedSlug}`);
+        if (categoryRes.ok) {
+          categoryData = await categoryRes.json();
+        } else {
+          const categoriesRes = await fetch(`${API_URL}/categories`);
+          const allCategories = await categoriesRes.json();
+          const categoryList = Array.isArray(allCategories) ? allCategories : [];
+          categoryData = categoryList.find(
+            (item) =>
+              item.slug === requestedSlug ||
+              item.slug === slug ||
+              item.name?.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '') === requestedSlug
+          );
+        }
+
+        if (!categoryData?._id) {
           setCategory(null);
           setProducts([]);
           setError('Category not found');
           return;
         }
-
-        const categoryData = await categoryRes.json();
         setCategory(categoryData);
+
+        if (categoryData.slug && categoryData.slug !== slug) {
+          navigate(`/categories/${categoryData.slug}`, { replace: true });
+        }
 
         const productsRes = await fetch(`${API_URL}/products?category=${categoryData._id}&limit=200`);
         const productsData = await productsRes.json();

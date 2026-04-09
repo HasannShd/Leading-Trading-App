@@ -30,9 +30,32 @@ const teamUnits = [
 
 const companyPillars = [
   'Medical, dental, and industrial sourcing managed under one operating structure',
-  'Supplier assessment based on quality, price, reliability, and documentation standards',
-  'Inventory-aware coordination from procurement through delivery',
-  'A team model built around leadership, sales, administration, and delivery execution',
+  'Supplier assessment guided by quality, suitability, reliability, and documentation standards',
+  'Procurement and delivery coordination shaped around continuity, timing, and service accountability',
+  'A team model that aligns leadership, sales, accounts, and delivery execution',
+];
+
+const workflowSteps = [
+  {
+    title: 'Requirement review',
+    description:
+      'Customer requirements are clarified early so product selection, quotations, and expected delivery conditions are aligned from the outset.',
+  },
+  {
+    title: 'Supplier and product evaluation',
+    description:
+      'Suitable suppliers and products are reviewed against quality, availability, documentation, and the operational needs of the customer.',
+  },
+  {
+    title: 'Procurement alignment',
+    description:
+      'Commercial terms, quantities, lead times, and specification details are consolidated into a clearer procurement decision.',
+  },
+  {
+    title: 'Logistics and delivery coordination',
+    description:
+      'Inventory handling, dispatch planning, and final delivery timing are organized before fulfilment moves into execution.',
+  },
 ];
 
 const About = () => (
@@ -40,10 +63,10 @@ const About = () => (
     <section className="about-hero">
       <div className="about-hero-copy">
         <span className="about-eyebrow">About Leading Trading Est</span>
-        <h1>Built to support procurement with stronger supplier discipline, quality control, and dependable delivery.</h1>
+        <h1>Built to support procurement with stronger supplier discipline, quality assurance, and dependable delivery coordination.</h1>
         <p>
           Since 2012, Leading Trading Est has supported organizations in Bahrain across medical, dental,
-          industrial, and safety requirements with a focus on quality, reliability, and professional execution.
+          industrial, and safety requirements with a focus on product quality, service reliability, and professional execution.
         </p>
         <div className="about-hero-actions">
           <Link className="btn primary" to="/contact">Talk to Our Team</Link>
@@ -55,8 +78,7 @@ const About = () => (
         <span className="about-hero-panel-label">Operating profile</span>
         <strong>Supplier-led sourcing, structured procurement, and dependable operational follow-through.</strong>
         <p>
-          Our workflow covers requirement assessment, supplier review, product evaluation, procurement alignment,
-          logistics coordination, stock handling, and final delivery support.
+          Our business model combines supplier access, quality review, procurement discipline, logistics planning, and local account support under one operating workflow.
         </p>
         <div className="about-hero-metrics">
           <div>
@@ -90,9 +112,9 @@ const About = () => (
             and handling process are strong enough to support day-to-day operations without disruption.
           </p>
           <p>
-            The company operates across medical, dental, and industrial categories, combining supplier access
-            with practical coordination on pricing, quality, lead times, stock readiness, and delivery planning.
-            This allows us to support both recurring demand and urgent procurement requirements with greater control.
+            The company operates across medical, dental, and industrial categories, combining supplier access with
+            practical coordination on pricing, quality, lead times, stock readiness, and delivery planning. This
+            enables us to support both recurring demand and urgent procurement requirements with better control.
           </p>
         </article>
 
@@ -107,10 +129,27 @@ const About = () => (
       </div>
     </section>
 
+    <section className="about-workflow">
+      <div className="about-section-heading">
+        <span className="about-eyebrow">Workflow</span>
+        <h2>A structured workflow that supports quality, clarity, and dependable execution from enquiry to delivery.</h2>
+      </div>
+
+      <div className="about-workflow-grid">
+        {workflowSteps.map((step, index) => (
+          <article className="about-workflow-card" key={step.title}>
+            <span className="about-workflow-index">{`0${index + 1}`}</span>
+            <h3>{step.title}</h3>
+            <p>{step.description}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
     <section className="about-leadership">
       <div className="about-section-heading">
         <span className="about-eyebrow">Leadership</span>
-        <h2>Leadership that sets the company’s standard for quality, coordination, and service.</h2>
+        <h2>Leadership that sets the company’s standards for quality, coordination, and long-term customer confidence.</h2>
       </div>
 
       <div className="about-leadership-card">
@@ -122,14 +161,14 @@ const About = () => (
 
         <div className="about-leadership-copy">
           <p>
-            At Leading Trading Est, the objective has always been clear: build a supply business that customers
-            can rely on when product quality, timing, and service standards matter. That requires disciplined
-            sourcing, careful supplier evaluation, and operational follow-through that matches what has been committed.
+            At Leading Trading Est, the objective has always been clear: build a supply business that customers can
+            rely on when product quality, timing, and service standards matter. That requires disciplined sourcing,
+            careful supplier evaluation, and operational follow-through that matches what has been committed.
           </p>
           <p>
-            Our growth has been built on trust, consistency, and a team structure that supports execution from
-            enquiry to delivery. We continue to strengthen supplier relationships, maintain service standards,
-            and support customers with solutions that are dependable in practice as well as on paper.
+            Our growth has been built on trust, consistency, and a team structure that supports execution from enquiry
+            to delivery. We continue to strengthen supplier relationships, maintain service standards, and support
+            customers with solutions that are dependable in practice as well as on paper.
           </p>
         </div>
       </div>
@@ -138,7 +177,7 @@ const About = () => (
     <section className="about-team">
       <div className="about-section-heading">
         <span className="about-eyebrow">Team structure</span>
-        <h2>A team structure built around leadership, administration, sales coordination, and delivery execution.</h2>
+        <h2>A team structure built around leadership, commercial coordination, administrative control, and delivery execution.</h2>
       </div>
 
       <div className="about-team-grid">
@@ -149,6 +188,28 @@ const About = () => (
             <p>{unit.description}</p>
           </article>
         ))}
+      </div>
+    </section>
+
+    <section className="about-story">
+      <div className="about-story-grid">
+        <article className="about-story-card about-story-card--lead">
+          <span className="about-card-kicker">Quality commitment</span>
+          <p>
+            Quality at LTE is reflected in the way suppliers are reviewed, products are assessed, documentation is
+            considered, and delivery commitments are handled. The objective is not simply to fulfil an order, but to
+            do so with the level of control and reliability that professional buyers expect.
+          </p>
+        </article>
+
+        <article className="about-story-card about-story-card--pillars">
+          <span className="about-card-kicker">Working relationship</span>
+          <ul className="about-pillar-list">
+            <li>Responsive commercial follow-up from enquiry to quotation</li>
+            <li>Operational coordination between sales, accounts, and delivery</li>
+            <li>Support for repeat accounts and long-term procurement relationships</li>
+          </ul>
+        </article>
       </div>
     </section>
   </main>

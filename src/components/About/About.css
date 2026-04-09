@@ -119,6 +119,7 @@
 }
 
 .about-story,
+.about-workflow,
 .about-leadership,
 .about-team {
   display: grid;
@@ -152,6 +153,7 @@
 }
 
 .about-story-card,
+.about-workflow-card,
 .about-leadership-card,
 .about-team-card {
   padding: 32px;
@@ -199,6 +201,45 @@
   border-radius: 999px;
   background: linear-gradient(135deg, #d39d63 0%, #b57b43 58%, #875625 100%);
   box-shadow: 0 0 0 6px rgba(168, 119, 68, 0.12);
+}
+
+.about-workflow-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.about-workflow-card {
+  display: grid;
+  gap: 14px;
+}
+
+.about-workflow-index {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 54px;
+  height: 54px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #0b1626 0%, #14314c 100%);
+  color: #f8f3eb;
+  font-size: 0.84rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+}
+
+.about-workflow-card h3 {
+  margin: 0;
+  color: var(--navy-900);
+  font-size: 1.16rem;
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+}
+
+.about-workflow-card p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.8;
 }
 
 .about-leadership-card {
@@ -270,6 +311,10 @@
   .about-team-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
+  .about-workflow-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 760px) {
@@ -286,6 +331,7 @@
   }
 
   .about-hero-metrics,
+  .about-workflow-grid,
   .about-team-grid {
     grid-template-columns: 1fr;
   }

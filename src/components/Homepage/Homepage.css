@@ -658,12 +658,69 @@
   font-weight: 700;
 }
 
-.featured-band {
+.featured-band,
+.featured-grid {
   margin-top: 22px;
-  padding: 20px;
   display: grid;
-  grid-template-columns: minmax(0, 1.16fr) minmax(320px, 0.84fr);
   gap: 18px;
+}
+
+.featured-band {
+  padding: 20px;
+  grid-template-columns: minmax(0, 1.16fr) minmax(320px, 0.84fr);
+}
+
+.featured-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.featured-card {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: 18px;
+  padding: 18px;
+  text-decoration: none;
+  color: inherit;
+  border-radius: 24px;
+  border: 1px solid rgba(19, 48, 78, 0.08);
+  background:
+    radial-gradient(circle at top right, rgba(198, 145, 89, 0.08), transparent 24%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(244, 240, 232, 0.9));
+  box-shadow: 0 20px 40px rgba(7, 17, 31, 0.07);
+}
+
+.featured-card__media {
+  overflow: hidden;
+  min-height: 190px;
+  border-radius: 22px;
+  background: rgba(248, 243, 235, 0.8);
+  border: 1px solid rgba(19, 48, 78, 0.06);
+}
+
+.featured-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.featured-card__copy {
+  display: flex;
+  flex-direction: column;
+}
+
+.featured-card__copy h3 {
+  margin: 14px 0 0;
+  font-size: clamp(1.35rem, 2.4vw, 2rem);
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+  color: var(--navy-900);
+}
+
+.featured-card__copy span {
+  display: inline-flex;
+  margin-top: 16px;
+  color: #875625;
+  font-weight: 700;
 }
 
 .catalog-stage__note {
@@ -857,7 +914,9 @@
   }
 
   .featured-band,
-  .featured-band__lead {
+  .featured-band__lead,
+  .featured-grid,
+  .featured-card {
     grid-template-columns: 1fr;
   }
 
@@ -888,12 +947,14 @@
   .home-hero__metrics,
   .pillar-grid,
   .category-grid,
-  .credibility-stage__stats {
+  .credibility-stage__stats,
+  .featured-grid {
     grid-template-columns: 1fr;
   }
 
   .workflow-step,
-  .featured-mini {
+  .featured-mini,
+  .featured-card {
     grid-template-columns: 1fr;
   }
 
@@ -912,10 +973,15 @@
     min-height: 110px;
   }
 
+  .featured-card__media {
+    min-height: 220px;
+  }
+
   .sector-shot__frame,
   .final-cta__panel,
   .pillar-card,
-  .featured-band {
+  .featured-band,
+  .featured-card {
     padding: 24px;
   }
 
