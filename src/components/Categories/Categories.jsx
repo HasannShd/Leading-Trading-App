@@ -1,9 +1,10 @@
-import { useState, useMemo, useEffect, useCallback, useDeferredValue } from 'react';
+import { useState, useMemo, useEffect, useCallback, useDeferredValue, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import Card from '../Common/Card';
 import Input from '../Common/Input';
 import StatePanel from '../Common/StatePanel';
 import { buildCategoryTree } from '../../utils/categoryTree';
+import { useScrollReveal } from '../../hooks/useScrollReveal';
 import './Categories.css';
 
 const Categories = () => {
@@ -12,6 +13,7 @@ const Categories = () => {
   const [q, setQ] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const rootRef = useRef(null);
 
   const deferredQuery = useDeferredValue(q);
 
@@ -34,6 +36,8 @@ const Categories = () => {
     fetchCategories();
   }, [fetchCategories]);
 
+  useScrollReveal(rootRef);
+
   const list = useMemo(() => {
     const s = deferredQuery.toLowerCase().trim();
     const tree = buildCategoryTree(categories);
@@ -53,29 +57,29 @@ const Categories = () => {
 
   return (
     <main>
-      <section className="categories-shell">
+      <section className="categories-shell" ref={rootRef}>
         <section className="categories-hero">
-          <div className="categories-hero-copy">
-            <span className="categories-eyebrow">Our Categories</span>
-            <h1 className="categories-title">Explore our medical, dental, and industrial categories.</h1>
-            <p className="categories-subtitle">
+          <div className="categories-hero-copy animate-stagger" data-stagger-step="110ms">
+            <span className="categories-eyebrow animate-on-scroll">Our Categories</span>
+            <h1 className="categories-title animate-on-scroll">Explore our medical, dental, and industrial categories.</h1>
+            <p className="categories-subtitle animate-on-scroll">
               Browse the main categories in our catalog and open each one to view the products available inside it.
             </p>
           </div>
 
-          <div className="categories-hero-tools">
+          <div className="categories-hero-tools animate-stagger" data-stagger-step="120ms">
             <Input
-              className="categories-search"
+              className="categories-search animate-on-scroll"
               placeholder="Search categories, departments, or supply types"
               value={q}
               onChange={(e) => setQ(e.target.value)}
             />
-            <div className="categories-hero-stats">
-              <div className="categories-stat">
+            <div className="categories-hero-stats animate-stagger" data-stagger-step="120ms">
+              <div className="categories-stat animate-on-scroll">
                 <strong>{categories.length}</strong>
                 <span>active categories</span>
               </div>
-              <div className="categories-stat">
+              <div className="categories-stat animate-on-scroll">
                 <strong>{withDescriptions}</strong>
                 <span>with descriptions</span>
               </div>
@@ -109,12 +113,12 @@ const Categories = () => {
           />
         ) : (
           <>
-            <div className="categories-results-bar">
+            <div className="categories-results-bar animate-on-scroll">
               <span>{list.length} category{list.length === 1 ? '' : 'ies'} available</span>
               <p>Open a main category to browse its subcategories and products.</p>
             </div>
 
-            <div className="categories-grid">
+            <div className="categories-grid animate-stagger" data-stagger-step="100ms">
               {list.map((c) => {
                 const categoryKey = (c.slug || c.name || '')
                   .toLowerCase()
@@ -125,7 +129,7 @@ const Categories = () => {
                   <Link
                     key={c._id}
                     to={`/categories/${c.slug || c._id}`}
-                    className="categories-card-link"
+                    className="categories-card-link animate-on-scroll"
                     aria-label={`Open ${c.name}`}
                   >
                     <Card className="categories-card">

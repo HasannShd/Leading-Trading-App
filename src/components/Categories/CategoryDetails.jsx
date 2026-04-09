@@ -1,8 +1,9 @@
-import { useDeferredValue, useEffect, useMemo, useState } from 'react';
+import { useDeferredValue, useEffect, useMemo, useRef, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Input from '../Common/Input';
 import StatePanel from '../Common/StatePanel';
 import { normalizeImageSrc } from '../../utils/normalizeImageSrc';
+import { useScrollReveal } from '../../hooks/useScrollReveal';
 import './CategoryDetails.css';
 
 const CategoryDetails = () => {
@@ -14,8 +15,11 @@ const CategoryDetails = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [brokenImages, setBrokenImages] = useState({});
+  const rootRef = useRef(null);
 
   const deferredQuery = useDeferredValue(q);
+
+  useScrollReveal(rootRef);
 
   useEffect(() => {
     setQ('');
@@ -76,7 +80,7 @@ const CategoryDetails = () => {
 
   return (
     <main>
-      <section className="category-details-shell">
+      <section className="category-details-shell" ref={rootRef}>
         {loading ? (
           <StatePanel
             eyebrow="Loading"
@@ -87,43 +91,43 @@ const CategoryDetails = () => {
         ) : (
           <>
             <section className="category-details-hero">
-              <div className="category-details-hero-copy">
-                <span className="category-details-eyebrow">Category Focus</span>
+              <div className="category-details-hero-copy animate-stagger" data-stagger-step="110ms">
+                <span className="category-details-eyebrow animate-on-scroll">Category Focus</span>
                 {category.parent ? (
-                  <div className="category-details-breadcrumb">
+                  <div className="category-details-breadcrumb animate-on-scroll">
                     <Link to={`/categories/${category.parent.slug || category.parent._id}`}>{category.parent.name}</Link>
                     <span>/</span>
                     <strong>{category.name}</strong>
                   </div>
                 ) : null}
-                <h1 className="category-details-title">{category.name}</h1>
-                <p className="category-details-desc">
+                <h1 className="category-details-title animate-on-scroll">{category.name}</h1>
+                <p className="category-details-desc animate-on-scroll">
                   {category.description?.trim() || 'Browse the products available in this category and request support for matching specifications.'}
                 </p>
               </div>
 
-              <div className="category-details-hero-meta">
-                <div className="category-details-meta-card">
+              <div className="category-details-hero-meta animate-stagger" data-stagger-step="120ms">
+                <div className="category-details-meta-card animate-on-scroll">
                   <strong>{products.length}</strong>
                   <span>products currently listed</span>
                 </div>
-                <div className="category-details-meta-card">
+                <div className="category-details-meta-card animate-on-scroll">
                   <strong>{new Set(products.map((product) => product.brand).filter(Boolean)).size || 1}</strong>
                   <span>brands represented</span>
                 </div>
-                <Link className="btn primary" to="/contact">Request sourcing support</Link>
+                <Link className="btn primary animate-on-scroll" to="/contact">Request sourcing support</Link>
               </div>
             </section>
 
             {category.children?.length ? (
               <section className="category-details-subcategories">
-                <div className="category-details-subcategories-head">
-                  <h2>Subcategories inside {category.name}</h2>
-                  <p>Open a subcategory to narrow the catalog further, or keep scrolling to review products across the full group.</p>
+                <div className="category-details-subcategories-head animate-stagger" data-stagger-step="110ms">
+                  <h2 className="animate-on-scroll">Subcategories inside {category.name}</h2>
+                  <p className="animate-on-scroll">Open a subcategory to narrow the catalog further, or keep scrolling to review products across the full group.</p>
                 </div>
-                <div className="category-details-subcategories-grid">
+                <div className="category-details-subcategories-grid animate-stagger" data-stagger-step="90ms">
                   {category.children.map((child) => (
-                    <Link key={child._id} to={`/categories/${child.slug || child._id}`} className="category-details-subcategory-card">
+                    <Link key={child._id} to={`/categories/${child.slug || child._id}`} className="category-details-subcategory-card animate-on-scroll">
                       <span>Subcategory</span>
                       <strong>{child.name}</strong>
                       <p>{child.description?.trim() || 'Open this subcategory to review the dedicated product set.'}</p>
@@ -133,8 +137,8 @@ const CategoryDetails = () => {
               </section>
             ) : null}
 
-            <div className="category-details-products-header">
-              <div>
+            <div className="category-details-products-header animate-stagger" data-stagger-step="110ms">
+              <div className="animate-on-scroll">
                 <h2 className="category-details-products-title">
                   {category.children?.length ? 'Products across this main category' : 'Products in this category'}
                 </h2>
@@ -144,7 +148,7 @@ const CategoryDetails = () => {
               </div>
               <div className="category-details-products-spacer" />
               <Input
-                className="category-details-search"
+                className="category-details-search animate-on-scroll"
                 placeholder="Search products in this category"
                 value={q}
                 onChange={(e) => setQ(e.target.value)}
@@ -166,14 +170,14 @@ const CategoryDetails = () => {
                 action={<button className="btn" onClick={() => setQ('')}>Clear Search</button>}
               />
             ) : (
-              <ul className="category-details-products-list">
+              <ul className="category-details-products-list animate-stagger" data-stagger-step="100ms">
                 {filteredProducts.map((p) => {
                   const productImage = p.image || p.images?.[0] || '';
                   const price = Number(p.basePrice || p.variants?.[0]?.price || 0);
                   const imageFailed = brokenImages[p._id] === true;
 
                   return (
-                    <li key={p._id} className="category-details-product-item">
+                    <li key={p._id} className="category-details-product-item animate-on-scroll">
                       <Link to={`/product/${p._id}`} className="category-details-product-link">
                         {productImage && !imageFailed ? (
                           <div className="category-details-product-media">

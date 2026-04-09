@@ -1,10 +1,11 @@
-import { useDeferredValue, useEffect, useMemo, useState, useCallback } from 'react';
+import { useDeferredValue, useEffect, useMemo, useState, useCallback, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import Input from '../Common/Input';
 import Card from '../Common/Card';
 import StatePanel from '../Common/StatePanel';
 import { normalizeImageSrc } from '../../utils/normalizeImageSrc';
 import { buildCategoryTree } from '../../utils/categoryTree';
+import { useScrollReveal } from '../../hooks/useScrollReveal';
 import './Shop.css';
 
 const getProductPrice = (product) => {
@@ -28,8 +29,11 @@ const Shop = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [brokenImages, setBrokenImages] = useState({});
+  const rootRef = useRef(null);
 
   const deferredQuery = useDeferredValue(q);
+
+  useScrollReveal(rootRef);
 
   const fetchCategories = useCallback(async () => {
     try {
@@ -106,41 +110,42 @@ const Shop = () => {
 
   return (
     <main>
-      <section className="shop-shell">
+      <section className="shop-shell" ref={rootRef}>
         <section className="shop-hero">
-          <div className="shop-hero-copy">
-            <span className="shop-eyebrow">Product Catalog</span>
-            <h1>Browse products with clearer structure, faster filtering, and stronger purchase intent.</h1>
-            <p>
+          <div className="shop-hero-copy animate-stagger" data-stagger-step="110ms">
+            <span className="shop-eyebrow animate-on-scroll">Product Catalog</span>
+            <h1 className="animate-on-scroll">Browse products with clearer structure, faster filtering, and stronger purchase intent.</h1>
+            <p className="animate-on-scroll">
               Review the active catalog, narrow by category, and move straight into product detail pages built
               for quotes, repeat orders, and operational sourcing.
             </p>
           </div>
 
-          <div className="shop-hero-stats">
-            <div className="shop-hero-stat">
+          <div className="shop-hero-stats animate-stagger" data-stagger-step="120ms">
+            <div className="shop-hero-stat animate-on-scroll">
               <strong>{total || products.length}</strong>
               <span>products available</span>
             </div>
-            <div className="shop-hero-stat">
+            <div className="shop-hero-stat animate-on-scroll">
               <strong>{categoryTree.length}</strong>
               <span>main categories</span>
             </div>
-            <div className="shop-hero-stat">
+            <div className="shop-hero-stat animate-on-scroll">
               <strong>{featuredCount}</strong>
               <span>featured right now</span>
             </div>
           </div>
         </section>
 
-        <section className="shop-toolbar">
+        <section className="shop-toolbar animate-stagger" data-stagger-step="100ms">
           <form onSubmit={handleSearch} className="shop-search">
             <Input
+              className="animate-on-scroll"
               placeholder="Search products by name, brand, or SKU"
               value={q}
               onChange={(e) => setQ(e.target.value)}
             />
-            <select value={category} onChange={(e) => { setCategory(e.target.value); setPage(1); }}>
+            <select className="animate-on-scroll" value={category} onChange={(e) => { setCategory(e.target.value); setPage(1); }}>
               <option value="">All Categories</option>
               {categoryTree.map((parent) => (
                 parent.children?.length ? (
@@ -155,15 +160,15 @@ const Shop = () => {
                 )
               ))}
             </select>
-            <select value={sort} onChange={(e) => setSort(e.target.value)}>
+            <select className="animate-on-scroll" value={sort} onChange={(e) => setSort(e.target.value)}>
               <option value="featured">Sort: Featured</option>
               <option value="name">Sort: Name</option>
               <option value="price">Sort: Price</option>
             </select>
-            <button className="btn primary" type="submit">Apply</button>
+            <button className="btn primary animate-on-scroll" type="submit">Apply</button>
           </form>
 
-          <div className="shop-toolbar-meta">
+          <div className="shop-toolbar-meta animate-on-scroll">
             <span>{products.length} shown on this page</span>
             {(searchQuery || category) && (
               <button
@@ -204,14 +209,14 @@ const Shop = () => {
             description="The current filters returned no products. Broaden the search or reset filters."
           />
         ) : (
-          <div className="shop-grid">
+          <div className="shop-grid animate-stagger" data-stagger-step="90ms">
             {products.map((product) => {
               const productImage = product.image || product.images?.[0] || '';
               const price = getProductPrice(product);
               const imageFailed = brokenImages[product._id] === true;
 
               return (
-                <Link key={product._id} to={`/product/${product._id}`} className="shop-card-link">
+                <Link key={product._id} to={`/product/${product._id}`} className="shop-card-link animate-on-scroll">
                   <Card className="shop-card">
                     <div className="shop-card-media">
                       {productImage && !imageFailed ? (

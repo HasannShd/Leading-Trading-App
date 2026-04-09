@@ -1,127 +1,106 @@
-import { useEffect } from 'react';
-import { gsap } from 'gsap';
+import { useLayoutEffect } from 'react';
+import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useScrollReveal } from '../../hooks/useScrollReveal';
 
 gsap.registerPlugin(ScrollTrigger);
 
-export const useHomepageScroll = (rootRef, enabled) => {
-  useEffect(() => {
-    if (!enabled || !rootRef.current) return undefined;
+export const useHomepageScroll = (rootRef, enabled = true) => {
+  useScrollReveal(rootRef, enabled);
+
+  useLayoutEffect(() => {
+    const root = rootRef?.current;
+    if (!enabled || !root) return undefined;
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) return undefined;
 
     const ctx = gsap.context(() => {
-      gsap.fromTo(
-        '.js-hero-copy',
-        { autoAlpha: 0, y: 36 },
-        { autoAlpha: 1, y: 0, duration: 0.9, ease: 'power3.out' }
-      );
+      const hero = root.querySelector('.home-hero');
+      const heroOrb = root.querySelector('.hero-orb');
 
-      gsap.fromTo(
-        '.js-hero-stage',
-        { autoAlpha: 0, y: 44, scale: 0.98 },
-        { autoAlpha: 1, y: 0, scale: 1, duration: 1.05, delay: 0.08, ease: 'power3.out' }
-      );
-
-      gsap.utils.toArray('.js-fade-up').forEach((element) => {
+      if (heroOrb) {
         gsap.fromTo(
-          element,
-          { autoAlpha: 0, y: 54 },
-          {
-            autoAlpha: 1,
-            y: 0,
-            duration: 0.9,
-            ease: 'power3.out',
+          heroOrb,
+          { opacity: 0.35, scale: 1.18 },
+          { opacity: 1, scale: 1, duration: 1.5, ease: 'power2.out' }
+        );
+      }
+
+      if (hero) {
+        gsap.utils.toArray(hero.querySelectorAll('[data-hero-parallax="slow"]')).forEach((element) => {
+          gsap.to(element, {
+            yPercent: -8,
+            ease: 'none',
             scrollTrigger: {
-              trigger: element,
-              start: 'top 84%',
+              trigger: hero,
+              start: 'top top',
+              end: 'bottom top',
+              scrub: 0.8,
+            },
+          });
+        });
+
+        gsap.utils.toArray(hero.querySelectorAll('[data-hero-parallax="fast"]')).forEach((element) => {
+          gsap.to(element, {
+            yPercent: 10,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: hero,
+              start: 'top top',
+              end: 'bottom top',
+              scrub: 0.8,
+            },
+          });
+        });
+      }
+
+      const workflowFill = root.querySelector('.workflow-stage__line-fill');
+      const workflowSection = root.querySelector('.workflow-stage');
+
+      if (workflowFill && workflowSection) {
+        gsap.fromTo(
+          workflowFill,
+          { scaleY: 0 },
+          {
+            scaleY: 1,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: workflowSection,
+              start: 'top 60%',
+              end: 'bottom 70%',
+              scrub: 0.9,
             },
           }
         );
+      }
+
+      gsap.utils.toArray(root.querySelectorAll('[data-parallax="soft"]')).forEach((element) => {
+        gsap.to(element, {
+          yPercent: -6,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: element,
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: 0.8,
+          },
+        });
       });
 
-      gsap.utils.toArray('.js-story-chapter').forEach((element) => {
-        const visual = element.querySelector('.js-story-visual');
-
-        gsap.fromTo(
-          element,
-          { autoAlpha: 0, y: 54 },
-          {
-            autoAlpha: 1,
-            y: 0,
-            duration: 0.95,
-            ease: 'power3.out',
-            scrollTrigger: {
-              trigger: element,
-              start: 'top 76%',
-            },
-          }
-        );
-
-        if (visual) {
-          gsap.fromTo(
-            visual,
-            { y: 42 },
-            {
-              y: -18,
-              ease: 'none',
-              scrollTrigger: {
-                trigger: element,
-                start: 'top bottom',
-                end: 'bottom top',
-                scrub: 0.8,
-              },
-            }
-          );
-        }
+      gsap.utils.toArray(root.querySelectorAll('[data-parallax="lift"]')).forEach((element) => {
+        gsap.to(element, {
+          yPercent: -10,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: element,
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: 0.85,
+          },
+        });
       });
-
-      gsap.fromTo(
-        '.js-logo-block',
-        { autoAlpha: 0, y: 42 },
-        {
-          autoAlpha: 1,
-          y: 0,
-          duration: 0.9,
-          stagger: 0.14,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: '.js-trust',
-            start: 'top 72%',
-          },
-        }
-      );
-
-      gsap.fromTo(
-        '.js-category-card',
-        { autoAlpha: 0, y: 38 },
-        {
-          autoAlpha: 1,
-          y: 0,
-          duration: 0.75,
-          stagger: 0.08,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: '.js-categories',
-            start: 'top 76%',
-          },
-        }
-      );
-
-      gsap.fromTo(
-        '.js-credibility-card',
-        { autoAlpha: 0, y: 46 },
-        {
-          autoAlpha: 1,
-          y: 0,
-          duration: 0.84,
-          stagger: 0.12,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: '.js-credibility',
-            start: 'top 76%',
-          },
-        }
-      );
-    }, rootRef);
+    }, root);
 
     return () => ctx.revert();
   }, [enabled, rootRef]);

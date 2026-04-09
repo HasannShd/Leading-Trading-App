@@ -37,6 +37,52 @@ const homepageCategories = [
   },
 ];
 
+const valuePillars = [
+  {
+    title: 'Vendor Relations',
+    body: 'Supplier relationships are managed for continuity, access, and dependable repeat ordering rather than opportunistic sourcing.',
+    detail: 'Selected manufacturer relationships',
+  },
+  {
+    title: 'Quality Assurance',
+    body: 'Product fit, documentation, and suitability matter before quotation speed. The workflow is built around reducing avoidable friction.',
+    detail: 'Product and documentation discipline',
+  },
+  {
+    title: 'Logistics',
+    body: 'Requests move through a clearer delivery path with timing visibility, inventory awareness, and practical coordination.',
+    detail: 'Operational movement without noise',
+  },
+  {
+    title: 'Customer Commitment',
+    body: 'Sales, accounts, and delivery remain connected so support does not disappear once an order is placed.',
+    detail: 'Local follow-through after sourcing',
+  },
+];
+
+const workflowSteps = [
+  {
+    title: 'Inquiry',
+    body: 'Requirements are clarified first so the request is commercially and operationally useful from the beginning.',
+  },
+  {
+    title: 'Sourcing',
+    body: 'Suppliers are screened against fit, quality, availability, and the level of confidence required for the end use.',
+  },
+  {
+    title: 'Procurement',
+    body: 'Commercial terms, product details, and documentation move into a cleaner buying decision with fewer unknowns.',
+  },
+  {
+    title: 'Logistics',
+    body: 'Expected timing, inventory handling, and delivery coordination are aligned before the order lands on the customer side.',
+  },
+  {
+    title: 'Delivery & Support',
+    body: 'The process closes with visible handover, repeat-order readiness, and support that remains responsive after the first purchase.',
+  },
+];
+
 const sectors = [
   {
     key: 'medical',
@@ -44,6 +90,9 @@ const sectors = [
     title: 'For hospitals, clinics, and practices where procurement decisions affect care continuity.',
     body: 'LTE supports regulated medical environments with clearer sourcing, dependable availability, and better control over product suitability, timing, and documentation.',
     points: ['Hospitals and specialist centers', 'Clinics and outpatient facilities', 'Routine and urgent replenishment'],
+    image: 'Stethescope.webp',
+    visualTitle: 'Hospitals, clinics, and repeat-use environments',
+    visualBody: 'Better sourcing decisions come from product fit, supplier confidence, and procurement clarity, not just from having stock on a list.',
   },
   {
     key: 'industrial',
@@ -51,22 +100,17 @@ const sectors = [
     title: 'For operational teams that need disciplined supply support, not fragmented vendor follow-up.',
     body: 'The same structured workflow extends into industrial and safety sourcing, giving buyers a steadier path from request to delivery without noise or wasted coordination.',
     points: ['Safety and utility products', 'Operational supply continuity', 'Consistent delivery planning'],
+    image: 'about page.webp',
+    visualTitle: 'Industrial continuity without procurement drag',
+    visualBody: 'Operational teams need the same level of supply discipline: selected products, cleaner coordination, and dependable local follow-through.',
   },
 ];
 
-const capabilityCards = [
-  {
-    title: 'Trusted product selection',
-    body: 'Known brands, suitable alternatives, and procurement choices that stay aligned to real use cases instead of broad catalog clutter.',
-  },
-  {
-    title: 'Clearer commercial follow-through',
-    body: 'Quotation handling, supplier coordination, and order timing stay visible so teams spend less time chasing updates.',
-  },
-  {
-    title: 'Built for repeat accounts',
-    body: 'LTE is structured for continuing buyer relationships where continuity, clarity, and responsiveness matter more than one-off transactions.',
-  },
+const whyStats = [
+  { value: '10+', label: 'Years serving Bahrain-based buyers' },
+  { value: 'Medical + Industrial', label: 'Two sectors supported with one measured workflow' },
+  { value: 'Supplier-led clarity', label: 'Known manufacturer relationships and dependable coordination' },
+  { value: 'Repeat-account focus', label: 'Built for recurring trust, not only one-off transactions' },
 ];
 
 const mainBrands = [
@@ -99,19 +143,7 @@ const HomePage = () => {
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
   const baseUrl = import.meta.env.BASE_URL;
   const rootRef = useRef(null);
-
   const [featuredProducts, setFeaturedProducts] = useState([]);
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
-
-  useEffect(() => {
-    const media = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const syncPreference = () => setPrefersReducedMotion(media.matches);
-
-    syncPreference();
-    media.addEventListener('change', syncPreference);
-
-    return () => media.removeEventListener('change', syncPreference);
-  }, []);
 
   useEffect(() => {
     const fetchFeatured = async () => {
@@ -128,77 +160,52 @@ const HomePage = () => {
     fetchFeatured();
   }, [API_URL]);
 
-  useHomepageScroll(rootRef, !prefersReducedMotion);
+  useHomepageScroll(rootRef, true);
 
   const leadProduct = featuredProducts[0] || null;
   const secondaryProducts = featuredProducts.slice(1, 5);
-
-  const spotlightStats = useMemo(
-    () => [
-      { value: '10+', label: 'Years serving Bahrain-based buyers' },
-      { value: 'Medical + Industrial', label: 'Two operationally different sectors, one disciplined workflow' },
-      { value: 'Supplier-led clarity', label: 'Known manufacturer relationships and dependable coordination' },
-    ],
-    []
-  );
+  const marqueeBrands = useMemo(() => [...mainBrands, ...mainBrands], []);
+  const marqueeClients = useMemo(() => [...clients, ...clients], []);
 
   return (
     <main className="cinematic-home" ref={rootRef}>
       <section className="home-hero">
-        <div className="home-hero__backdrop" />
-
+        <div className="home-hero__ambient" />
         <div className="home-shell home-hero__grid">
-          <div className="home-hero__copy js-hero-copy">
-            <span className="home-eyebrow">Leading Trading Est. | Bahrain</span>
-            <h1>Trusted medical and industrial supply, presented with the confidence your customers expect.</h1>
-            <p>
+          <div className="home-hero__copy animate-stagger" data-stagger-step="120ms">
+            <span className="home-eyebrow animate-on-scroll">Leading Trading Est. | Bahrain</span>
+            <h1 className="animate-on-scroll">Trusted medical and industrial supply, presented with the confidence your customers expect.</h1>
+            <p className="animate-on-scroll">
               Leading Trading Est. delivers dependable sourcing, stronger supplier relationships, and measured service for organizations that cannot afford uncertainty.
             </p>
 
-            <div className="home-hero__actions">
+            <div className="home-hero__actions animate-on-scroll">
               <Link className="home-btn home-btn--primary" to="/contact">Request a Quote</Link>
               <Link className="home-btn home-btn--ghost" to="/products">Explore Categories</Link>
             </div>
 
-            <div className="home-hero__notes">
-              <span>NHRA-aware procurement</span>
-              <span>Medical and industrial sourcing</span>
-              <span>Dependable local support</span>
+            <div className="home-hero__notes animate-stagger" data-stagger-step="90ms">
+              <span className="animate-on-scroll">NHRA-aware procurement</span>
+              <span className="animate-on-scroll">Medical and industrial sourcing</span>
+              <span className="animate-on-scroll">Dependable Bahrain-based support</span>
             </div>
           </div>
 
-          <div className="home-hero__stage js-hero-stage">
-            <article className="hero-stage hero-stage--primary">
-              <img src={`${baseUrl}lp.jpg`} alt="Operational procurement and care environment" loading="eager" />
-              <div className="hero-stage__overlay">
-                <span>Operational view</span>
-                <strong>Structured support for hospitals, clinics, and demanding teams.</strong>
-              </div>
-            </article>
-
-            <article className="hero-stage hero-stage--secondary">
-              <img src={`${baseUrl}Stethescope.webp`} alt="Medical detail" loading="lazy" />
-              <div className="hero-stage__caption">
-                <span>Precision matters</span>
-                <strong>Products, timing, and service aligned to real use.</strong>
-              </div>
-            </article>
-
-            <article className="hero-stage hero-stage--panel">
-              <span className="hero-stage__tag">Service posture</span>
-              <h2>Measured, reliable, and built for repeat trust.</h2>
-              <ul>
-                <li>Fast quotation handling</li>
-                <li>Supplier and stock coordination</li>
-                <li>Support that stays responsive after the first order</li>
-              </ul>
+          <div className="home-hero__visual animate-on-scroll" data-hero-parallax="slow">
+            <div className="hero-orb" />
+            <div className="hero-visual__frame">
+              <img src={`${baseUrl}lp.jpg`} alt="Leading Trading Est operational environment" loading="eager" />
+            </div>
+            <article className="hero-visual__panel" data-hero-parallax="fast">
+              <small>Operational confidence</small>
+              <strong>Better supplier control, clearer delivery rhythm, stronger repeat trust.</strong>
             </article>
           </div>
         </div>
 
-        <div className="home-shell home-hero__stats js-fade-up">
-          {spotlightStats.map((item) => (
-            <article className="hero-stat" key={item.label}>
+        <div className="home-shell home-hero__metrics animate-stagger" data-stagger-step="120ms">
+          {whyStats.slice(0, 3).map((item) => (
+            <article className="hero-metric animate-on-scroll" key={item.label}>
               <strong>{item.value}</strong>
               <span>{item.label}</span>
             </article>
@@ -206,150 +213,132 @@ const HomePage = () => {
         </div>
       </section>
 
-      <section className="home-section home-intro js-fade-up">
-        <div className="home-shell home-intro__panel">
-          <div className="home-intro__copy">
-            <span className="home-eyebrow home-eyebrow--ink">Brand position</span>
-            <h2>LTE is a supply partner for organizations that need reliability before reassurance.</h2>
-            <p>
-              The business already serves medical and industrial buyers in Bahrain. The homepage should reflect that same level of discipline: clear priorities, calm pacing, and stronger confidence in every section.
+      <section className="home-section business-model">
+        <div className="home-shell">
+          <div className="section-heading animate-stagger" data-stagger-step="110ms">
+            <span className="home-eyebrow home-eyebrow--ink animate-on-scroll">How LTE creates value</span>
+            <h2 className="animate-on-scroll">A stronger supplier is defined by how the workflow holds together, not just by what appears in the catalog.</h2>
+            <p className="animate-on-scroll">
+              The business model is simple to understand and difficult to replace: selected vendor relationships, controlled quality, disciplined logistics, and customer support that does not disappear after the first order.
             </p>
           </div>
 
-          <div className="home-intro__aside">
-            <article>
-              <small>Leadership</small>
-              <strong>Shahid Majeed</strong>
-              <p>Managing Director & CEO guiding supplier relationships, direction, and long-term commercial trust.</p>
-            </article>
-            <article>
-              <small>Operating teams</small>
-              <strong>Sales, accounts, HR, and delivery</strong>
-              <p>Commercial response and customer service stay connected so the workflow remains visible end to end.</p>
-            </article>
+          <div className="pillar-grid animate-stagger" data-stagger-step="120ms">
+            {valuePillars.map((pillar, index) => (
+              <article className="pillar-card animate-on-scroll" key={pillar.title}>
+                <span className="pillar-card__index">{`0${index + 1}`}</span>
+                <h3>{pillar.title}</h3>
+                <p>{pillar.body}</p>
+                <strong>{pillar.detail}</strong>
+              </article>
+            ))}
           </div>
         </div>
       </section>
 
-      <section className="home-story">
-        <div className="home-shell">
-          <div className="section-heading js-fade-up">
-            <span className="home-eyebrow home-eyebrow--ink">Scroll narrative</span>
-            <h2>Let the page unfold in stages instead of compressing the whole story into one framed block.</h2>
-            <p>
-              Trust should arrive first, then sector relevance, then operational proof. Each chapter should feel visible in the page itself, not trapped inside a single pinned panel.
+      <section className="home-section workflow-stage">
+        <div className="home-shell workflow-stage__grid">
+          <div className="workflow-stage__intro animate-stagger" data-stagger-step="110ms">
+            <span className="home-eyebrow home-eyebrow--ink animate-on-scroll">Workflow</span>
+            <h2 className="animate-on-scroll">The process should feel visible from inquiry to delivery, not improvised in the middle.</h2>
+            <p className="animate-on-scroll">
+              LTE’s operating rhythm starts with a clear need, moves through sourcing and procurement with supplier control, and closes with logistics and support that stay responsive.
             </p>
+            <div className="workflow-stage__line">
+              <span className="workflow-stage__line-fill" />
+            </div>
           </div>
 
-          <div className="story-sequence">
-            <article className="story-chapter js-story-chapter">
-              <div className="story-chapter__copy">
-                <span className="story-copy__step">01</span>
-                <span className="home-eyebrow home-eyebrow--ink">{sectors[0].eyebrow}</span>
-                <h2>{sectors[0].title}</h2>
-                <p>{sectors[0].body}</p>
-                <ul>
-                  {sectors[0].points.map((point) => (
-                    <li key={point}>{point}</li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className="story-chapter__visual story-chapter__visual--medical js-story-visual">
-                <div className="story-chapter__visual-frame">
-                  <div className="story-chapter__visual-copy">
-                    <span>Medical solutions</span>
-                    <strong>Hospitals, clinics, and repeat-use environments</strong>
-                    <p>
-                      Better sourcing decisions come from product fit, supplier confidence, and procurement clarity, not just from having stock on a list.
-                    </p>
-                  </div>
-                  <div className="story-chapter__media">
-                    <img src={`${baseUrl}Stethescope.webp`} alt="Medical supply detail" loading="lazy" />
-                  </div>
+          <div className="workflow-stage__steps animate-stagger" data-stagger-step="140ms">
+            {workflowSteps.map((step, index) => (
+              <article className="workflow-step animate-on-scroll" key={step.title}>
+                <span className="workflow-step__index">{`0${index + 1}`}</span>
+                <div>
+                  <h3>{step.title}</h3>
+                  <p>{step.body}</p>
                 </div>
-              </div>
-            </article>
-
-            <article className="story-chapter story-chapter--reverse js-story-chapter">
-              <div className="story-chapter__copy">
-                <span className="story-copy__step">02</span>
-                <span className="home-eyebrow home-eyebrow--ink">{sectors[1].eyebrow}</span>
-                <h2>{sectors[1].title}</h2>
-                <p>{sectors[1].body}</p>
-                <ul>
-                  {sectors[1].points.map((point) => (
-                    <li key={point}>{point}</li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className="story-chapter__visual story-chapter__visual--industrial js-story-visual">
-                <div className="story-chapter__visual-frame story-chapter__visual-frame--stacked">
-                  <div className="story-chapter__visual-copy">
-                    <span>Industrial solutions</span>
-                    <strong>Operational products where continuity matters as much as price.</strong>
-                    <p>
-                      Industrial teams need disciplined supply support too. The same workflow extends into safety, utilities, and operational continuity with less friction.
-                    </p>
-                  </div>
-                  <div className="story-chapter__stack">
-                    <div>
-                      <small>Operational support</small>
-                      <strong>Safety, utilities, and industrial essentials</strong>
-                    </div>
-                    <div>
-                      <small>Service rhythm</small>
-                      <strong>Reliable sourcing, inventory alignment, and delivery follow-through</strong>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </article>
+              </article>
+            ))}
           </div>
         </div>
       </section>
 
-      <section className="home-section home-trust js-trust">
+      <section className="home-section sector-sequence">
         <div className="home-shell">
-          <div className="section-heading js-fade-up">
-            <span className="home-eyebrow home-eyebrow--ink">Brands and institutions</span>
-            <h2>Credibility should arrive before the catalog does.</h2>
-            <p>
-              LTE works with selected manufacturers and supplies institutions whose standards require more than a broad product list.
+          <div className="section-heading animate-stagger" data-stagger-step="110ms">
+            <span className="home-eyebrow home-eyebrow--ink animate-on-scroll">Sector focus</span>
+            <h2 className="animate-on-scroll">One business, two operational realities, presented with the same discipline.</h2>
+            <p className="animate-on-scroll">
+              The website should reveal medical and industrial capabilities as distinct chapters, each with its own mood, but both connected by the same service posture.
             </p>
           </div>
 
-          <div className="trust-grid">
-            <article className="trust-card trust-card--copy js-logo-block">
-              <small>Trusted manufacturers</small>
-              <h3>Established brands, selected for fit and continuity.</h3>
-              <p>
-                The strongest supplier relationship is not just access, it is confidence that the product, documentation, and timing will stay aligned when orders repeat.
-              </p>
-            </article>
+          <div className="sector-sequence__list">
+            {sectors.map((sector, index) => (
+              <article
+                className={`sector-shot sector-shot--${sector.key}${index % 2 ? ' sector-shot--reverse' : ''} animate-stagger`}
+                data-stagger-step="120ms"
+                key={sector.key}
+              >
+                <div className="sector-shot__copy animate-on-scroll">
+                  <span className="home-eyebrow home-eyebrow--ink">{sector.eyebrow}</span>
+                  <h2>{sector.title}</h2>
+                  <p>{sector.body}</p>
+                  <ul>
+                    {sector.points.map((point) => (
+                      <li key={point}>{point}</li>
+                    ))}
+                  </ul>
+                </div>
 
-            <div className="trust-card trust-card--logos js-logo-block">
-              {mainBrands.map((brand) => (
-                <div className={`logo-chip logo-chip--brand logo-chip--${brand.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`} key={brand.name}>
+                <div className="sector-shot__visual animate-on-scroll" data-parallax={sector.key === 'medical' ? 'soft' : 'lift'}>
+                  <div className="sector-shot__frame">
+                    <div className="sector-shot__frame-copy">
+                      <span>{sector.eyebrow}</span>
+                      <strong>{sector.visualTitle}</strong>
+                      <p>{sector.visualBody}</p>
+                    </div>
+                    <div className="sector-shot__media">
+                      <img src={`${baseUrl}${sector.image}`} alt={sector.eyebrow} loading="lazy" />
+                    </div>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="home-section trust-stage">
+        <div className="home-shell">
+          <div className="section-heading animate-stagger" data-stagger-step="110ms">
+            <span className="home-eyebrow home-eyebrow--ink animate-on-scroll">Trusted brands and institutions</span>
+            <h2 className="animate-on-scroll">Credibility should arrive before the catalog does.</h2>
+            <p className="animate-on-scroll">
+              LTE works with selected manufacturers and serves institutions whose standards require more than a broad product list and a quick quotation.
+            </p>
+          </div>
+
+          <div className="trust-stage__copy animate-on-scroll">
+            <p>
+              Premium positioning comes from proof. The supplier mix and institutional customer base should communicate that proof slowly, clearly, and without clutter.
+            </p>
+          </div>
+
+          <div className="logo-marquee animate-on-scroll">
+            <div className="logo-marquee__track">
+              {marqueeBrands.map((brand, index) => (
+                <div className={`logo-chip logo-chip--brand logo-chip--${brand.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`} key={`${brand.name}-${index}`}>
                   <img src={`${baseUrl}${brand.logo}`} alt={brand.name} loading="lazy" />
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="trust-grid trust-grid--clients">
-            <article className="trust-card trust-card--copy js-logo-block">
-              <small>Institutions supplied</small>
-              <h3>Built to support organizations that expect steadier service.</h3>
-              <p>
-                From major hospitals to recognized specialist institutions, the customer mix signals the level of confidence the business is already trusted with.
-              </p>
-            </article>
-
-            <div className="trust-card trust-card--logos trust-card--clients js-logo-block">
-              {clients.map((client) => (
-                <div className={`logo-chip logo-chip--client logo-chip--${client.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`} key={client.name}>
+          <div className="logo-marquee logo-marquee--reverse animate-on-scroll">
+            <div className="logo-marquee__track">
+              {marqueeClients.map((client, index) => (
+                <div className={`logo-chip logo-chip--client logo-chip--${client.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`} key={`${client.name}-${index}`}>
                   <img src={`${baseUrl}${client.logo}`} alt={client.name} loading="lazy" />
                 </div>
               ))}
@@ -358,19 +347,19 @@ const HomePage = () => {
         </div>
       </section>
 
-      <section className="home-section home-categories js-categories">
+      <section className="home-section catalog-stage">
         <div className="home-shell">
-          <div className="section-heading section-heading--inline js-fade-up">
-            <div>
-              <span className="home-eyebrow home-eyebrow--ink">Featured categories</span>
-              <h2>The catalog should feel curated, not dropped onto the page all at once.</h2>
+          <div className="section-heading section-heading--inline animate-stagger" data-stagger-step="110ms">
+            <div className="animate-stagger" data-stagger-step="110ms">
+              <span className="home-eyebrow home-eyebrow--ink animate-on-scroll">Featured categories</span>
+              <h2 className="animate-on-scroll">The catalog should feel curated, not dropped onto the page all at once.</h2>
             </div>
-            <Link className="home-inline-link" to="/products">Browse all categories</Link>
+            <Link className="home-inline-link animate-on-scroll" to="/products">Browse all categories</Link>
           </div>
 
-          <div className="category-grid">
+          <div className="category-grid animate-stagger" data-stagger-step="100ms">
             {homepageCategories.map((category) => (
-              <Link className="category-card js-category-card" key={category.name} to="/products">
+              <Link className="category-card animate-on-scroll" key={category.name} to="/products">
                 <small>{category.label}</small>
                 <h3>{category.name}</h3>
                 <p>{category.description}</p>
@@ -379,10 +368,10 @@ const HomePage = () => {
             ))}
           </div>
 
-          <div className="featured-band js-fade-up">
+          <div className="featured-band animate-stagger" data-stagger-step="120ms">
             {leadProduct ? (
               <>
-                <Link className="featured-band__lead" to={`/product/${leadProduct._id}`}>
+                <Link className="featured-band__lead animate-on-scroll" to={`/product/${leadProduct._id}`}>
                   <div className="featured-band__lead-copy">
                     <small>Product spotlight</small>
                     <h3>{leadProduct.name}</h3>
@@ -401,9 +390,9 @@ const HomePage = () => {
                   </div>
                 </Link>
 
-                <div className="featured-band__rail">
+                <div className="featured-band__rail animate-stagger" data-stagger-step="100ms">
                   {secondaryProducts.map((product) => (
-                    <Link className="featured-mini" key={product._id} to={`/product/${product._id}`}>
+                    <Link className="featured-mini animate-on-scroll" key={product._id} to={`/product/${product._id}`}>
                       <div className="featured-mini__media">
                         {product.image ? (
                           <img src={normalizeImageSrc(product.image)} alt={product.name} loading="lazy" />
@@ -420,46 +409,46 @@ const HomePage = () => {
                 </div>
               </>
             ) : (
-              <div className="featured-band__empty">Featured products will appear here as they are marked in the catalog.</div>
+              <div className="featured-band__empty animate-on-scroll">Featured products will appear here as they are marked in the catalog.</div>
             )}
           </div>
         </div>
       </section>
 
-      <section className="home-section home-credibility js-credibility">
-        <div className="home-shell">
-          <div className="section-heading js-fade-up">
-            <span className="home-eyebrow home-eyebrow--ink">Why LTE</span>
-            <h2>A supplier should think beyond the invoice when the buying environment is critical.</h2>
-            <p>
+      <section className="home-section credibility-stage">
+        <div className="home-shell credibility-stage__grid">
+          <div className="credibility-stage__statement animate-stagger" data-stagger-step="110ms">
+            <span className="home-eyebrow animate-on-scroll">Why LTE</span>
+            <h2 className="animate-on-scroll">A supplier should think beyond the invoice when the buying environment is critical.</h2>
+            <p className="animate-on-scroll">
               What keeps buyers loyal is not just product access. It is confidence in how the supplier thinks, responds, and follows through when details matter.
             </p>
           </div>
 
-          <div className="credibility-grid">
-            {capabilityCards.map((card) => (
-              <article className="credibility-card js-credibility-card" key={card.title}>
-                <h3>{card.title}</h3>
-                <p>{card.body}</p>
+          <div className="credibility-stage__stats animate-stagger" data-stagger-step="120ms">
+            {whyStats.map((item) => (
+              <article className="credibility-stat animate-on-scroll" key={item.label}>
+                <strong>{item.value}</strong>
+                <span>{item.label}</span>
               </article>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="home-section home-cta js-fade-up">
-        <div className="home-shell cta-panel">
-          <div>
-            <span className="home-eyebrow">Closing step</span>
-            <h2>When the business already operates with confidence, the website should close with the same clarity.</h2>
-            <p>
-              For quotations, category support, or account enquiries, the next move should be simple and immediate.
+      <section className="home-section final-cta">
+        <div className="home-shell final-cta__panel">
+          <div className="animate-stagger" data-stagger-step="110ms">
+            <span className="home-eyebrow animate-on-scroll">Closing step</span>
+            <h2 className="animate-on-scroll">When the business already operates with confidence, the website should close with the same clarity.</h2>
+            <p className="animate-on-scroll">
+              For quotations, category support, or account enquiries, the next move should feel direct and immediate, not buried after the story ends.
             </p>
           </div>
 
-          <div className="cta-panel__actions">
-            <Link className="home-btn home-btn--primary" to="/contact">Request a Quote</Link>
-            <Link className="home-btn home-btn--ghost-light" to="/about">Learn More About LTE</Link>
+          <div className="final-cta__actions animate-stagger" data-stagger-step="120ms">
+            <Link className="home-btn home-btn--primary animate-on-scroll" to="/contact">Request a Quote</Link>
+            <Link className="home-btn home-btn--ghost-light animate-on-scroll" to="/about">Learn More About LTE</Link>
           </div>
         </div>
       </section>
