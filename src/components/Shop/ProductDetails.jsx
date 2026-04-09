@@ -283,7 +283,7 @@ const ProductDetails = () => {
             <h1>{product.name}</h1>
             <p className="product-brand">{product.brand || 'Leading Trading Est'}</p>
             <p className="product-desc">
-              {product.description?.trim() || 'Contact our team for sourcing details, specifications, and availability.'}
+              {product.description?.trim() || 'Contact our team for product specifications, availability, and commercial support.'}
             </p>
 
             {notice && (
@@ -374,7 +374,7 @@ const ProductDetails = () => {
                 <button className="btn primary" onClick={handleAddToCart}>
                   Add to Cart
                 </button>
-                <Link className="btn" to="/contact">Request a Quote</Link>
+                <Link className="btn" to="/contact">Request Quotation</Link>
               </div>
             </div>
 
@@ -399,7 +399,7 @@ const ProductDetails = () => {
             <div className="product-related-header">
               <div>
                 <span className="product-kicker">Also in this category</span>
-                <h2>Related products worth reviewing next</h2>
+                <h2>Related products in the same category</h2>
               </div>
               <Link className="btn" to={`/categories/${product.categorySlug?.slug || product.categorySlug?._id || ''}`}>
                 Browse Category

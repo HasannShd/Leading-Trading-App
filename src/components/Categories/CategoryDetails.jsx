@@ -133,7 +133,7 @@ const CategoryDetails = () => {
                 ) : null}
                 <h1 className="category-details-title animate-on-scroll">{category.name}</h1>
                 <p className="category-details-desc animate-on-scroll">
-                  {category.description?.trim() || 'Browse the products available in this category and request support for matching specifications.'}
+                  {category.description?.trim() || 'Review the products listed in this category and contact our team for specification guidance, availability, and quotation support.'}
                 </p>
               </div>
 
@@ -174,7 +174,7 @@ const CategoryDetails = () => {
                   {category.children?.length ? 'Products across this main category' : 'Products in this category'}
                 </h2>
                 <p className="category-details-products-copy">
-                  Filter by name, brand, description, or SKU to narrow the category quickly.
+                  Filter by name, brand, description, or SKU to narrow the relevant products quickly.
                 </p>
               </div>
               <div className="category-details-products-spacer" />
@@ -235,7 +235,7 @@ const CategoryDetails = () => {
                               : (p.brand || 'Catalog item')}
                           </span>
                           <strong>{p.name}</strong>
-                          <p>{p.description?.trim() || 'Open the product to review specifications, variants, and request options.'}</p>
+                          <p>{p.description?.trim() || 'Open the product to review specifications, available variants, and quotation options.'}</p>
                         </div>
 
                         <div className="category-details-product-footer">

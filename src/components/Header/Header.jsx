@@ -174,10 +174,6 @@ const Header = () => {
               <NavLink
                 to="/categories"
                 className="nav-dropdown-toggle"
-                onClick={e => {
-                  e.preventDefault();
-                  setDropdown(d => !d);
-                }}
               >
                 Categories ▾
               </NavLink>
@@ -188,6 +184,16 @@ const Header = () => {
                 id={isMobileViewport ? 'mobile-categories-menu' : undefined}
                 className="nav-dropdown-menu"
               >
+                <Link
+                  to="/categories"
+                  className="nav-dropdown-item nav-dropdown-item-all"
+                  onClick={() => {
+                    setDropdown(false);
+                    setMobileNav(false);
+                  }}
+                >
+                  Browse All Categories
+                </Link>
                 {isMobileViewport && (
                   <Link
                     to="/categories"

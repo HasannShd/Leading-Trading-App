@@ -61,9 +61,9 @@ const Categories = () => {
         <section className="categories-hero">
           <div className="categories-hero-copy animate-stagger" data-stagger-step="110ms">
             <span className="categories-eyebrow animate-on-scroll">Our Categories</span>
-            <h1 className="categories-title animate-on-scroll">Explore our medical, dental, and industrial categories.</h1>
+            <h1 className="categories-title animate-on-scroll">Explore the core medical, dental, and industrial categories that define the LTE catalog.</h1>
             <p className="categories-subtitle animate-on-scroll">
-              Browse the main categories in our catalog and open each one to view the products available inside it.
+              Browse the main category structure, open each group, and review the products available inside the relevant subcategories.
             </p>
           </div>
 
@@ -115,7 +115,7 @@ const Categories = () => {
           <>
             <div className="categories-results-bar animate-on-scroll">
               <span>{list.length} category{list.length === 1 ? '' : 'ies'} available</span>
-              <p>Open a main category to browse its subcategories and products.</p>
+              <p>Select a main category to review its subcategories and the products listed within that group.</p>
             </div>
 
             <div className="categories-grid animate-stagger" data-stagger-step="100ms">
