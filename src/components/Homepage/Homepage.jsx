@@ -119,6 +119,17 @@ const whyStats = [
   { value: 'Quality review', label: 'Supplier and product decisions guided by suitability, documentation, and continuity of supply' },
 ];
 
+const credibilityPillars = [
+  {
+    title: 'Commercial ownership',
+    body: 'Every enquiry is handled through a coordinated path between leadership, sales, accounts, and delivery instead of fragmented follow-up.',
+  },
+  {
+    title: 'Quality discipline',
+    body: 'Supplier review, documentation checks, specification fit, and delivery planning remain part of the decision process before orders move forward.',
+  },
+];
+
 const mainBrands = [
   { name: 'Medstar', logo: 'Brands/medstar.jpg' },
   { name: 'Rogin', logo: 'Brands/rogin.png' },
@@ -181,7 +192,7 @@ const HomePage = () => {
         <div className="home-shell home-hero__grid">
           <div className="home-hero__copy animate-stagger" data-stagger-step="120ms">
             <span className="home-eyebrow animate-on-scroll">Leading Trading Est. | Bahrain</span>
-            <h1 className="animate-on-scroll">Reliable medical and industrial supply, delivered with quality control, supplier discipline, and dependable local support.</h1>
+            <h1 className="animate-on-scroll">Reliable medical and industrial supply with disciplined sourcing, quality assurance, and dependable local support.</h1>
             <p className="animate-on-scroll">
               Leading Trading Est. supports hospitals, clinics, practices, and operational teams across Bahrain with structured sourcing, established supplier relationships, and coordinated delivery execution.
             </p>
@@ -442,15 +453,26 @@ const HomePage = () => {
       </section>
 
       <section className="home-section credibility-stage">
-        <div className="home-shell credibility-stage__grid">
+        <div className="home-shell credibility-stage__panel">
           <div className="credibility-stage__statement animate-stagger" data-stagger-step="110ms">
             <span className="home-eyebrow animate-on-scroll">Why LTE</span>
-            <h2 className="animate-on-scroll">LTE is built around disciplined sourcing, accountable teams, and support that continues beyond the initial quotation.</h2>
+            <h2 className="animate-on-scroll">LTE is structured around accountable teams, disciplined sourcing, and support that stays clear from enquiry through delivery.</h2>
             <p className="animate-on-scroll">
-              The company is structured so leadership, sales, accounts, and delivery remain aligned through the same operating workflow, giving customers better communication, stronger accountability, and more dependable continuity.
+              Our operating model is designed for customers who need dependable communication, better commercial control, and a supply partner that can support repeat requirements without losing structure.
             </p>
           </div>
 
+          <div className="credibility-stage__support animate-stagger" data-stagger-step="120ms">
+            {credibilityPillars.map((pillar) => (
+              <article className="credibility-support-card animate-on-scroll" key={pillar.title}>
+                <span>{pillar.title}</span>
+                <p>{pillar.body}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+
+        <div className="home-shell credibility-stage__grid">
           <div className="credibility-stage__stats animate-stagger" data-stagger-step="120ms">
             {whyStats.map((item) => (
               <article className="credibility-stat animate-on-scroll" key={item.label}>

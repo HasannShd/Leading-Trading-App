@@ -1,6 +1,7 @@
 // src/App.jsx
 
 import './App.css';
+import { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import Header from './components/Header/Header.jsx';
 import Footer from './components/Footer/Footer.jsx';
@@ -143,9 +144,20 @@ const AppShell = () => {
   );
 };
 
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+  }, [pathname]);
+
+  return null;
+};
+
 export default function App() {
   return (
     <Router>
+      <ScrollToTop />
       <AuthProvider>
         <AdminProvider>
           <StaffProvider>
