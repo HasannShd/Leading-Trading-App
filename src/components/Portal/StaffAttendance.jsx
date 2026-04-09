@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { portalApi } from '../../services/portalApi';
+import { formatPortalDate, formatPortalDateTime, getPortalDateKey } from '../../utils/portalDate';
 import './PortalShell.css';
 
 const StaffAttendance = () => {
@@ -21,9 +22,9 @@ const StaffAttendance = () => {
     load();
   }, []);
 
-  const today = new Date().toISOString().slice(0, 10);
+  const today = getPortalDateKey();
   const todayRecord = records.find((record) => record.date === today);
-  const formatStamp = (value) => (value ? new Date(value).toLocaleString() : 'Not recorded');
+  const formatStamp = (value) => (value ? formatPortalDateTime(value) : 'Not recorded');
 
   useEffect(() => {
     if (!todayRecord) return;
@@ -155,10 +156,10 @@ const StaffAttendance = () => {
         <div className="portal-record-list" style={{ marginTop: '1rem' }}>
           {records.map((record) => (
             <div className="portal-record-card" key={record._id}>
-              <h3 className="portal-record-title">{record.date}</h3>
+              <h3 className="portal-record-title">{formatPortalDate(record.date)}</h3>
               <div className="portal-record-meta">
-                <span>In: {record.checkInTime ? new Date(record.checkInTime).toLocaleString() : '-'}</span>
-                <span>Out: {record.checkOutTime ? new Date(record.checkOutTime).toLocaleString() : '-'}</span>
+                <span>In: {record.checkInTime ? formatPortalDateTime(record.checkInTime) : '-'}</span>
+                <span>Out: {record.checkOutTime ? formatPortalDateTime(record.checkOutTime) : '-'}</span>
                 <span>{record.totalWorkedMinutes || 0} mins</span>
                 {record.mileageWeekStart !== undefined && record.mileageWeekStart !== null && <span>Start km: {record.mileageWeekStart}</span>}
                 {record.mileageWeekEnd !== undefined && record.mileageWeekEnd !== null && <span>End km: {record.mileageWeekEnd}</span>}

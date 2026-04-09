@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { portalApi } from '../../services/portalApi';
 import AdminTopNav from '../Admin/AdminTopNav';
 import '../Admin/AdminCategories.css';
+import { formatPortalDate, formatPortalDateTime } from '../../utils/portalDate';
 import './PortalShell.css';
 
 const initialState = {
@@ -94,6 +95,17 @@ const AdminStaffPage = () => {
 
   const activeCount = staff.filter((member) => member.isActive).length;
   const inactiveCount = staff.length - activeCount;
+  const selectedStaff = staff.find((member) => member._id === selectedStaffId);
+  const drillLinks = selectedStaffId
+    ? [
+        { href: `/admin/attendance?user=${selectedStaffId}`, label: 'Attendance' },
+        { href: `/admin/reports?user=${selectedStaffId}`, label: 'Reports' },
+        { href: `/admin/orders?user=${selectedStaffId}`, label: 'Orders' },
+        { href: `/admin/expenses?user=${selectedStaffId}`, label: 'Expenses' },
+        { href: `/admin/visits?user=${selectedStaffId}`, label: 'Visits' },
+        { href: `/admin/followups?user=${selectedStaffId}`, label: 'Follow-ups' },
+      ]
+    : [];
 
   return (
     <div className="admin-categories">
@@ -251,6 +263,12 @@ const AdminStaffPage = () => {
                   <span className="portal-badge status">{staffSummary.staff.isActive ? 'active' : 'inactive'}</span>
                 </div>
               </div>
+              <div className="portal-staff-summary-actions">
+                <div className="portal-badge status">{selectedStaff?.isActive ? 'Ready for field work' : 'Inactive user'}</div>
+                <button className="portal-inline-button secondary" type="button" onClick={() => exportStaffReport(selectedStaffId)}>
+                  Download Full Staff Report
+                </button>
+              </div>
             </div>
 
             <div className="portal-staff-summary-grid">
@@ -268,30 +286,84 @@ const AdminStaffPage = () => {
                   <div className="portal-stat-value">{value}</div>
                   <div className="portal-stat-label">{label}</div>
                 </div>
-              ))}
+                ))}
             </div>
 
-            <div className="portal-staff-highlight">
-              <div className="portal-staff-highlight-card">
-                <strong>Latest attendance</strong>
-                <div className="portal-record-meta">
-                  {staffSummary.latest.attendance?.date ? <span>{staffSummary.latest.attendance.date}</span> : <span>No attendance yet</span>}
-                  {staffSummary.latest.attendance?.checkInTime && <span>In {new Date(staffSummary.latest.attendance.checkInTime).toLocaleString()}</span>}
-                  {staffSummary.latest.attendance?.checkOutTime && <span>Out {new Date(staffSummary.latest.attendance.checkOutTime).toLocaleString()}</span>}
+            <div className="portal-staff-report-sheet">
+              <div className="portal-staff-report-grid">
+                <div className="portal-staff-report-block">
+                  <div className="portal-brand-kicker">Latest Attendance</div>
+                  <div className="portal-staff-report-list">
+                    <div className="portal-staff-report-row">
+                      <strong>Last date</strong>
+                      <span>{staffSummary.latest.attendance?.date ? formatPortalDate(staffSummary.latest.attendance.date) : 'No attendance yet'}</span>
+                    </div>
+                    <div className="portal-staff-report-row">
+                      <strong>Check in</strong>
+                      <span>{staffSummary.latest.attendance?.checkInTime ? formatPortalDateTime(staffSummary.latest.attendance.checkInTime) : 'Not recorded'}</span>
+                    </div>
+                    <div className="portal-staff-report-row">
+                      <strong>Check out</strong>
+                      <span>{staffSummary.latest.attendance?.checkOutTime ? formatPortalDateTime(staffSummary.latest.attendance.checkOutTime) : 'Not recorded'}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="portal-staff-report-block">
+                  <div className="portal-brand-kicker">Work Queue</div>
+                  <div className="portal-staff-report-list">
+                    <div className="portal-staff-report-row">
+                      <strong>Next schedule</strong>
+                      <span>
+                        {staffSummary.latest.nextSchedule
+                          ? `${staffSummary.latest.nextSchedule.title} • ${formatPortalDate(staffSummary.latest.nextSchedule.assignedDate)}`
+                          : 'No upcoming schedule'}
+                      </span>
+                    </div>
+                    <div className="portal-staff-report-row">
+                      <strong>Pending orders</strong>
+                      <span>{staffSummary.metrics.pendingOrders}</span>
+                    </div>
+                    <div className="portal-staff-report-row">
+                      <strong>Pending expenses</strong>
+                      <span>{staffSummary.metrics.pendingExpenses}</span>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div className="portal-staff-highlight-card">
-                <strong>Next schedule</strong>
-                <div className="portal-record-meta">
-                  {staffSummary.latest.nextSchedule ? (
-                    <>
-                      <span>{staffSummary.latest.nextSchedule.title}</span>
-                      <span>{staffSummary.latest.nextSchedule.assignedDate}</span>
-                      {staffSummary.latest.nextSchedule.startTime && <span>{staffSummary.latest.nextSchedule.startTime}</span>}
-                    </>
-                  ) : (
-                    <span>No upcoming schedule</span>
-                  )}
+
+              <div className="portal-staff-report-grid">
+                <div className="portal-staff-report-block">
+                  <div className="portal-brand-kicker">Latest Activity</div>
+                  <div className="portal-staff-report-list">
+                    <div className="portal-staff-report-row">
+                      <strong>Report</strong>
+                      <span>{staffSummary.latest.report ? formatPortalDate(staffSummary.latest.report.date) : 'No report yet'}</span>
+                    </div>
+                    <div className="portal-staff-report-row">
+                      <strong>Order</strong>
+                      <span>{staffSummary.latest.order ? formatPortalDateTime(staffSummary.latest.order.createdAt) : 'No order yet'}</span>
+                    </div>
+                    <div className="portal-staff-report-row">
+                      <strong>Expense</strong>
+                      <span>{staffSummary.latest.expense ? formatPortalDateTime(staffSummary.latest.expense.createdAt) : 'No expense yet'}</span>
+                    </div>
+                    <div className="portal-staff-report-row">
+                      <strong>Visit</strong>
+                      <span>{staffSummary.latest.visit ? formatPortalDate(staffSummary.latest.visit.visitDate) : 'No visit yet'}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="portal-staff-report-block">
+                  <div className="portal-brand-kicker">Open Directly</div>
+                  <div className="portal-drill-links">
+                    {drillLinks.map((link) => (
+                      <a key={link.href} className="portal-inline-button ghost" href={link.href}>
+                        {link.label}
+                      </a>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
@@ -303,7 +375,7 @@ const AdminStaffPage = () => {
                     <h3 className="portal-record-title">{entry.action.replaceAll('_', ' ')}</h3>
                     <div className="portal-record-meta">
                       <span>{entry.module}</span>
-                      <span>{new Date(entry.createdAt).toLocaleString()}</span>
+                      <span>{formatPortalDateTime(entry.createdAt)}</span>
                     </div>
                   </div>
                 ))

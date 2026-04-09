@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { portalApi } from '../../services/portalApi';
+import { formatPortalDate, formatPortalDateTime, formatPortalPrettyDate } from '../../utils/portalDate';
 import './PortalShell.css';
 
 const quickLinks = [
@@ -34,7 +35,7 @@ const StaffDashboard = () => {
             <div className="portal-brand-kicker">Field Summary</div>
             <h1 className="portal-section-title">Welcome back{data.user?.name ? `, ${data.user.name}` : ''}</h1>
             <p className="portal-section-copy" style={{ color: 'rgba(255,255,255,0.76)' }}>
-              Today is {data.today}. Keep check-ins, schedules, visits, orders, and follow-ups moving from one mobile workspace.
+              Today is {formatPortalPrettyDate()}. Keep check-ins, schedules, visits, orders, and follow-ups moving from one mobile workspace.
             </p>
           </div>
         </div>
@@ -42,7 +43,7 @@ const StaffDashboard = () => {
           <div className="portal-stat">
             <div className="portal-stat-value">{data.attendanceStatus?.checkedIn ? 'Checked In' : 'Not In'}</div>
             <div className="portal-stat-label">
-              {data.attendanceStatus?.checkInTime ? new Date(data.attendanceStatus.checkInTime).toLocaleString() : 'Attendance today'}
+              {data.attendanceStatus?.checkInTime ? formatPortalDateTime(data.attendanceStatus.checkInTime) : 'Attendance today'}
             </div>
           </div>
           <div className="portal-stat">
@@ -101,7 +102,7 @@ const StaffDashboard = () => {
               <div className="portal-record-card" key={item._id}>
                 <h3 className="portal-record-title">{item.title}</h3>
                 <div className="portal-record-meta">
-                  <span>{item.assignedDate}</span>
+                  <span>{formatPortalDate(item.assignedDate)}</span>
                   {item.startTime && <span>{item.startTime}</span>}
                   {item.endTime && <span>to {item.endTime}</span>}
                   {item.location && <span>{item.location}</span>}
@@ -133,7 +134,7 @@ const StaffDashboard = () => {
               <div className="portal-record-card" key={`${item.label}-${item.id}`}>
                 <h3 className="portal-record-title">{item.label}</h3>
                 <div className="portal-record-meta">
-                  <span>{new Date(item.createdAt).toLocaleString()}</span>
+                  <span>{formatPortalDateTime(item.createdAt)}</span>
                 </div>
               </div>
             ))

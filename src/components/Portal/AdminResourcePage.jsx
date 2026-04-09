@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { portalApi } from '../../services/portalApi';
 import AdminTopNav from '../Admin/AdminTopNav';
 import '../Admin/AdminCategories.css';
+import { formatPortalDateTime } from '../../utils/portalDate';
 import './PortalShell.css';
 
 const AdminResourcePage = ({ config }) => {
@@ -10,6 +11,7 @@ const AdminResourcePage = ({ config }) => {
   const [statusDrafts, setStatusDrafts] = useState({});
   const [staff, setStaff] = useState([]);
   const [filters, setFilters] = useState({ user: '', status: '', date: '' });
+  const [staffSummary, setStaffSummary] = useState(null);
 
   const buildQuery = () => {
     const params = new URLSearchParams();
@@ -38,6 +40,17 @@ const AdminResourcePage = ({ config }) => {
   useEffect(() => {
     load();
   }, [config.endpoint, filters.user, filters.status, filters.date]);
+
+  useEffect(() => {
+    if (!filters.user) {
+      setStaffSummary(null);
+      return;
+    }
+    portalApi
+      .get(`/admin-portal/staff/${filters.user}/summary`, 'admin')
+      .then((response) => setStaffSummary(response.data))
+      .catch(() => setStaffSummary(null));
+  }, [filters.user]);
 
   const handleStatusUpdate = async (record) => {
     try {
@@ -89,11 +102,11 @@ const AdminResourcePage = ({ config }) => {
       record.visitTime,
       record.startTime,
       record.endTime,
-      record.checkInTime ? `In ${new Date(record.checkInTime).toLocaleString()}` : '',
-      record.checkOutTime ? `Out ${new Date(record.checkOutTime).toLocaleString()}` : '',
+      record.checkInTime ? `In ${formatPortalDateTime(record.checkInTime)}` : '',
+      record.checkOutTime ? `Out ${formatPortalDateTime(record.checkOutTime)}` : '',
       record.expenseDate,
       record.dueDate,
-      record.createdAt ? new Date(record.createdAt).toLocaleString() : '',
+      record.createdAt ? formatPortalDateTime(record.createdAt) : '',
       record.amount !== undefined ? `${record.amount} BHD` : '',
       record.mileageWeekStart !== undefined && record.mileageWeekStart !== null ? `Start km ${record.mileageWeekStart}` : '',
       record.mileageWeekEnd !== undefined && record.mileageWeekEnd !== null ? `End km ${record.mileageWeekEnd}` : '',
@@ -177,6 +190,73 @@ const AdminResourcePage = ({ config }) => {
             {config.supportsDate && (
               <input type="date" value={filters.date} onChange={(e) => setFilters((current) => ({ ...current, date: e.target.value }))} />
             )}
+          </div>
+        )}
+        {staffSummary?.staff && (
+          <div className="portal-admin-staff-focus">
+            <div className="portal-admin-staff-focus-head">
+              <div>
+                <div className="portal-brand-kicker">Selected Staff</div>
+                <h3 className="portal-record-title" style={{ fontSize: '1.2rem' }}>
+                  {staffSummary.staff.name || staffSummary.staff.username}
+                </h3>
+                <div className="portal-record-meta">
+                  <span>{staffSummary.staff.department || 'No department'}</span>
+                  <span>{staffSummary.staff.phone || 'No phone'}</span>
+                  <span>{staffSummary.staff.email}</span>
+                </div>
+              </div>
+              <div className="portal-inline-actions tight">
+                <span className="portal-badge status">
+                  {staffSummary.staff.isActive ? 'Active staff account' : 'Inactive staff account'}
+                </span>
+                <button
+                  className="portal-inline-button ghost"
+                  type="button"
+                  onClick={() => window.open(`/admin/staff`, '_self')}
+                >
+                  Open Full Staff Summary
+                </button>
+              </div>
+            </div>
+            <div className="portal-staff-summary-grid compact">
+              <div className="portal-stat light">
+                <div className="portal-stat-value">{staffSummary.metrics.attendanceCount}</div>
+                <div className="portal-stat-label">Attendance</div>
+              </div>
+              <div className="portal-stat light">
+                <div className="portal-stat-value">{staffSummary.metrics.reportsCount}</div>
+                <div className="portal-stat-label">Reports</div>
+              </div>
+              <div className="portal-stat light">
+                <div className="portal-stat-value">{staffSummary.metrics.ordersCount}</div>
+                <div className="portal-stat-label">Orders</div>
+              </div>
+              <div className="portal-stat light">
+                <div className="portal-stat-value">{staffSummary.metrics.pendingFollowUps}</div>
+                <div className="portal-stat-label">Pending follow-ups</div>
+              </div>
+            </div>
+            <div className="portal-record-meta">
+              <span>
+                Latest attendance:{' '}
+                {staffSummary.latest.attendance?.checkInTime
+                  ? formatPortalDateTime(staffSummary.latest.attendance.checkInTime)
+                  : 'No attendance yet'}
+              </span>
+              <span>
+                Latest report:{' '}
+                {staffSummary.latest.report?.createdAt
+                  ? formatPortalDateTime(staffSummary.latest.report.createdAt)
+                  : 'No report yet'}
+              </span>
+              <span>
+                Latest order:{' '}
+                {staffSummary.latest.order?.createdAt
+                  ? formatPortalDateTime(staffSummary.latest.order.createdAt)
+                  : 'No order yet'}
+              </span>
+            </div>
           </div>
         )}
         {message && <div className="portal-badge status" style={{ marginTop: '1rem' }}>{message}</div>}

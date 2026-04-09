@@ -1,523 +1,468 @@
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useEffect, useMemo, useState } from 'react';
 import { normalizeImageSrc } from '../../utils/normalizeImageSrc';
+import { useHomepageScroll } from './useHomepageScroll';
 import './Homepage.css';
+
+const homepageCategories = [
+  {
+    name: 'Medical Equipment',
+    label: 'Clinical systems',
+    description: 'Diagnostic and treatment support equipment for hospitals, clinics, and operational care environments.',
+  },
+  {
+    name: 'Anesthesia & Respiratory',
+    label: 'Airway and respiratory care',
+    description: 'Products selected for respiratory support, airway control, and procedure-critical environments.',
+  },
+  {
+    name: 'Dental',
+    label: 'Practice continuity',
+    description: 'Dental consumables and specialist tools that keep practices supplied without disrupting workflow.',
+  },
+  {
+    name: 'Consumables & Disposables',
+    label: 'Recurring essentials',
+    description: 'High-rotation products that support daily care, infection control, and procedure readiness.',
+  },
+  {
+    name: 'Industrial & Safety',
+    label: 'Operational protection',
+    description: 'Industrial and safety sourcing for disciplined operations where reliability and availability matter.',
+  },
+  {
+    name: 'Hospital Furniture & Utilities',
+    label: 'Facility support',
+    description: 'Furniture, transport, and utility items that support day-to-day movement, care, and storage.',
+  },
+];
+
+const sectors = [
+  {
+    key: 'medical',
+    eyebrow: 'Medical solutions',
+    title: 'For hospitals, clinics, and practices where procurement decisions affect care continuity.',
+    body: 'LTE supports regulated medical environments with clearer sourcing, dependable availability, and better control over product suitability, timing, and documentation.',
+    points: ['Hospitals and specialist centers', 'Clinics and outpatient facilities', 'Routine and urgent replenishment'],
+  },
+  {
+    key: 'industrial',
+    eyebrow: 'Industrial solutions',
+    title: 'For operational teams that need disciplined supply support, not fragmented vendor follow-up.',
+    body: 'The same structured workflow extends into industrial and safety sourcing, giving buyers a steadier path from request to delivery without noise or wasted coordination.',
+    points: ['Safety and utility products', 'Operational supply continuity', 'Consistent delivery planning'],
+  },
+];
+
+const capabilityCards = [
+  {
+    title: 'Trusted product selection',
+    body: 'Known brands, suitable alternatives, and procurement choices that stay aligned to real use cases instead of broad catalog clutter.',
+  },
+  {
+    title: 'Clearer commercial follow-through',
+    body: 'Quotation handling, supplier coordination, and order timing stay visible so teams spend less time chasing updates.',
+  },
+  {
+    title: 'Built for repeat accounts',
+    body: 'LTE is structured for continuing buyer relationships where continuity, clarity, and responsiveness matter more than one-off transactions.',
+  },
+];
+
+const mainBrands = [
+  { name: 'Medstar', logo: 'Brands/medstar.jpg' },
+  { name: 'Rogin', logo: 'Brands/rogin.png' },
+  { name: 'SMI', logo: 'Brands/Smi.png' },
+  { name: 'ROMSONS', logo: 'Brands/romsons.png' },
+  { name: 'Hermann Meditech', logo: 'Brands/Hermann.png' },
+  { name: 'Zogear', logo: 'Brands/Zogear.png' },
+  { name: 'ADC', logo: 'Brands/adc.png' },
+  { name: 'Osseous', logo: 'Brands/osseous.png' },
+  { name: 'Berger', logo: 'Brands/berger.jpg' },
+  { name: 'Bastos-Viegas', logo: 'Brands/bastosviegas.webp' },
+];
+
+const clients = [
+  { name: 'Ministry of Health', logo: 'clients/ministry.jpg' },
+  { name: 'King Hamad University Hospital', logo: 'clients/khuh.png' },
+  { name: 'Bapco', logo: 'clients/bapco.jpg' },
+  { name: 'Bahrain Defence Force', logo: 'clients/bdf.png' },
+  { name: 'Royal Specialized Center', logo: 'clients/rsci.png' },
+  { name: 'American Mission', logo: 'clients/american mission.png' },
+  { name: 'Aster', logo: 'clients/aster.jpg' },
+  { name: 'Al Salam', logo: 'clients/al salam.jpg' },
+  { name: 'Al Rayan', logo: 'clients/al rayan.jpg' },
+  { name: 'Shifa Al Jazeera', logo: 'clients/shifa al jazeera.jpg' },
+];
 
 const HomePage = () => {
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
   const baseUrl = import.meta.env.BASE_URL;
+  const rootRef = useRef(null);
 
   const [featuredProducts, setFeaturedProducts] = useState([]);
-  const [shuffleTick, setShuffleTick] = useState(0);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+
+  useEffect(() => {
+    const media = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const syncPreference = () => setPrefersReducedMotion(media.matches);
+
+    syncPreference();
+    media.addEventListener('change', syncPreference);
+
+    return () => media.removeEventListener('change', syncPreference);
+  }, []);
 
   useEffect(() => {
     const fetchFeatured = async () => {
       try {
-        const response = await fetch(`${API_URL}/products?featured=true&limit=6`);
+        const response = await fetch(`${API_URL}/products?featured=true&limit=5`);
         const data = await response.json();
-        const items = Array.isArray(data) ? data : (data.items || []);
+        const items = Array.isArray(data) ? data : data.items || [];
         setFeaturedProducts(items);
-      } catch (err) {
-        console.error('Failed to load featured products', err);
+      } catch (error) {
+        console.error('Failed to load featured products', error);
       }
     };
 
     fetchFeatured();
   }, [API_URL]);
 
-  useEffect(() => {
-    const id = setInterval(() => {
-      setShuffleTick((tick) => tick + 1);
-    }, 8000);
+  useHomepageScroll(rootRef, !prefersReducedMotion);
 
-    return () => clearInterval(id);
-  }, []);
+  const leadProduct = featuredProducts[0] || null;
+  const secondaryProducts = featuredProducts.slice(1, 5);
 
-  const shuffledFeatured = useMemo(() => {
-    const next = [...featuredProducts];
-    if (next.length < 2) return next;
-
-    const offset = shuffleTick % next.length;
-    return [...next.slice(offset), ...next.slice(0, offset)];
-  }, [featuredProducts, shuffleTick]);
-
-  const mainBrands = [
-    { name: 'Medstar', logo: `${baseUrl}Brands/medstar.jpg` },
-    { name: 'Rogin', logo: `${baseUrl}Brands/rogin.png` },
-    { name: 'SMI', logo: `${baseUrl}Brands/Smi.png` },
-    { name: 'ROMSONS', logo: `${baseUrl}Brands/romsons.png` },
-    { name: 'Hermann Meditech', logo: `${baseUrl}Brands/Hermann.png` },
-    { name: 'Zogear', logo: `${baseUrl}Brands/Zogear.png` },
-    { name: 'ADC', logo: `${baseUrl}Brands/adc.png` },
-    { name: 'Osseous', logo: `${baseUrl}Brands/osseous.png` },
-    { name: 'Berger', logo: `${baseUrl}Brands/berger.jpg` },
-    { name: 'Bastos-Viegas', logo: `${baseUrl}Brands/bastosviegas.webp` },
-    { name: 'Optimacast', logo: `${baseUrl}Brands/optimacast.png` },
-  ];
-
-  const clients = [
-    { name: 'Ministry of Health', logo: `${baseUrl}clients/ministry.jpg` },
-    { name: 'King Hamad University Hospital', logo: `${baseUrl}clients/khuh.png` },
-    { name: 'Bapco', logo: `${baseUrl}clients/bapco.jpg` },
-    { name: 'Bahrain Defence Force', logo: `${baseUrl}clients/bdf.png` },
-    { name: 'Royal Specialized Center', logo: `${baseUrl}clients/rsci.png` },
-    { name: 'KIMS Muharraq', logo: `${baseUrl}clients/Kims-Muharraq.png` },
-    { name: 'American Mission', logo: `${baseUrl}clients/american mission.png` },
-    { name: 'Aster', logo: `${baseUrl}clients/aster.jpg` },
-    { name: 'Ibn Al Nafees', logo: `${baseUrl}clients/ibn al nafees.png` },
-    { name: 'Al Rayan', logo: `${baseUrl}clients/al rayan.jpg` },
-    { name: 'Al Salam', logo: `${baseUrl}clients/al salam.jpg` },
-    { name: 'Hilal Hospital', logo: `${baseUrl}clients/hilal.jpg` },
-    { name: 'Dar Al Hayat', logo: `${baseUrl}clients/dar al hayat.jpg` },
-    { name: 'Resalah', logo: `${baseUrl}clients/resalah.jpg` },
-    { name: 'Shifa Al Jazeera', logo: `${baseUrl}clients/shifa al jazeera.jpg` },
-  ];
-
-  const heroStats = [
-    { value: '10+', label: 'Years supporting mission-critical buyers' },
-    { value: '3,000+', label: 'Medical, dental & industrial SKUs' },
-    { value: 'NHRA Licensed & Certified'},
-    { value: '24h', label: 'Fast quotation response for priority requests' },
-  ];
-
-  const sectorCards = [
-    {
-      tag: 'Healthcare',
-      title: 'Hospital and clinic procurement with traceability built in.',
-      description: 'Equipment, disposables, and recurring supply programs aligned to regulated care environments.',
-    },
-    {
-      tag: 'Dental',
-      title: 'Dental sourcing that balances premium brands with day-to-day reliability.',
-      description: 'Tools, consumables, and specialist products selected for professional practice continuity.',
-    },
-    {
-      tag: 'Industrial',
-      title: 'Industrial supply support with the discipline of a critical operation.',
-      description: 'Consistent sourcing, verified availability, and delivery coordination for operational teams.',
-    },
-  ];
-
-  const capabilityCards = [
-    {
-      index: '01',
-      title: 'Procurement with clinical precision',
-      description: 'We do more than supply products. We help teams source the right specification, paperwork, and timing so procurement decisions stand up operationally.',
-    },
-    {
-      index: '02',
-      title: 'Brand access without catalog chaos',
-      description: 'Your teams get access to known manufacturers and dependable alternatives without spending cycles on fragmented vendor coordination.',
-    },
-    {
-      index: '03',
-      title: 'A partner for repeat orders, not one-off transactions',
-      description: 'From urgent requests to scheduled replenishment, our process is designed to reduce friction across the full supply relationship.',
-    },
-  ];
-
-  const workflowSteps = [
-    {
-      phase: '01',
-      label: 'Market demand',
-      title: 'Demand is identified before sourcing starts',
-      description: 'We track what the market, our sectors, and our customers actively need so procurement starts from real demand instead of guesswork.',
-      note: 'Signals from hospitals, clinics, practices, and operational buyers',
-    },
-    {
-      phase: '02',
-      label: 'Supplier search',
-      title: 'Suitable suppliers are shortlisted',
-      description: 'Once a product need is clear, we search for manufacturers and suppliers that can meet the expected quality, reliability, and documentation level.',
-      note: 'Supplier network review, origin review, product fit',
-    },
-    {
-      phase: '03',
-      label: 'Assessment',
-      title: 'Quality, pricing, and suitability are validated',
-      description: 'Product quality, commercial value, and supply practicality are assessed together before a sourcing decision is confirmed.',
-      note: 'Quality, price, documentation, continuity',
-    },
-    {
-      phase: '04',
-      label: 'Order confirmation',
-      title: 'Orders are placed with a defined arrival window',
-      description: 'Once approved, orders are confirmed with supplier timing and expected delivery duration so downstream planning is clear.',
-      note: 'Lead time and arrival commitment established',
-    },
-    {
-      phase: '05',
-      label: 'Logistics and stock',
-      title: 'Logistics, inventory, and storage are prepared',
-      description: 'Incoming goods are coordinated against stock count, handling readiness, storage conditions, and internal inventory control.',
-      note: 'Stock checks, storage readiness, inventory discipline',
-    },
-    {
-      phase: '06',
-      label: 'Fulfillment',
-      title: 'Orders move into delivery execution',
-      description: 'Once stock is ready, products are allocated and handed to delivery operations for final fulfillment to the customer.',
-      note: 'Prepared inventory flows into delivery teams',
-    },
-  ];
-
-  const proofTiles = [
-    { title: 'Trusted sourcing', body: 'Selected manufacturers across medical, dental, and industrial categories.' },
-    { title: 'Local market familiarity', body: 'Built around the expectations of buyers operating in Bahrain.' },
-    { title: 'Critical response mindset', body: 'Designed for environments where delays affect care or operations.' },
-  ];
-
-  const spotlightProducts = shuffledFeatured.slice(0, 6);
-  const leadProduct = spotlightProducts[0] || null;
-  const secondaryProducts = spotlightProducts.slice(1, 5);
-  const overflowCount = Math.max(0, featuredProducts.length - 5);
+  const spotlightStats = useMemo(
+    () => [
+      { value: '10+', label: 'Years serving Bahrain-based buyers' },
+      { value: 'Medical + Industrial', label: 'Two operationally different sectors, one disciplined workflow' },
+      { value: 'Supplier-led clarity', label: 'Known manufacturer relationships and dependable coordination' },
+    ],
+    []
+  );
 
   return (
-    <main className="premium-home">
-      <section className="premium-hero">
-        <div className="premium-hero-noise" />
-        <div className="premium-hero-grid">
-          <div className="premium-hero-copy">
-            <span className="premium-eyebrow">Leading Trading Est | Bahrain</span>
-            <h1>Critical supply, delivered with the confidence your teams expect.</h1>
-            <p className="premium-hero-lead">
-              Premium medical, dental, and industrial sourcing for organizations that cannot afford procurement friction, unclear documentation, or missed timelines.
+    <main className="cinematic-home" ref={rootRef}>
+      <section className="home-hero">
+        <div className="home-hero__backdrop" />
+
+        <div className="home-shell home-hero__grid">
+          <div className="home-hero__copy js-hero-copy">
+            <span className="home-eyebrow">Leading Trading Est. | Bahrain</span>
+            <h1>Trusted medical and industrial supply, presented with the confidence your customers expect.</h1>
+            <p>
+              Leading Trading Est. delivers dependable sourcing, stronger supplier relationships, and measured service for organizations that cannot afford uncertainty.
             </p>
-            <div className="premium-hero-actions">
-              <Link className="premium-btn premium-btn-primary" to="/contact">Request a Quote</Link>
-              <Link className="premium-btn premium-btn-secondary" to="/products">Explore Categories</Link>
+
+            <div className="home-hero__actions">
+              <Link className="home-btn home-btn--primary" to="/contact">Request a Quote</Link>
+              <Link className="home-btn home-btn--ghost" to="/products">Explore Categories</Link>
             </div>
-            <div className="premium-hero-notes">
-              <span>NHRA-Approved</span>
-              <span>Trusted manufacturer network</span>
-              <span>Responsive account support</span>
+
+            <div className="home-hero__notes">
+              <span>NHRA-aware procurement</span>
+              <span>Medical and industrial sourcing</span>
+              <span>Dependable local support</span>
             </div>
           </div>
 
-          <div className="premium-hero-stage">
-            <div className="premium-stage-panel premium-stage-main">
-              <div className="premium-stage-chip">Mission-ready supply partner</div>
-              <img src={`${baseUrl}lp.jpg`} alt="Clinical and professional supply environment" loading="eager" />
-              <div className="premium-stage-overlay">
-                <div>
-                  <span>Operational focus</span>
-                  <strong>Medical, dental & industrial</strong>
-                </div>
-                <p>Structured sourcing for facilities, clinics, hospitals, and demanding operational teams.</p>
+          <div className="home-hero__stage js-hero-stage">
+            <article className="hero-stage hero-stage--primary">
+              <img src={`${baseUrl}lp.jpg`} alt="Operational procurement and care environment" loading="eager" />
+              <div className="hero-stage__overlay">
+                <span>Operational view</span>
+                <strong>Structured support for hospitals, clinics, and demanding teams.</strong>
               </div>
+            </article>
+
+            <article className="hero-stage hero-stage--secondary">
+              <img src={`${baseUrl}Stethescope.webp`} alt="Medical detail" loading="lazy" />
+              <div className="hero-stage__caption">
+                <span>Precision matters</span>
+                <strong>Products, timing, and service aligned to real use.</strong>
+              </div>
+            </article>
+
+            <article className="hero-stage hero-stage--panel">
+              <span className="hero-stage__tag">Service posture</span>
+              <h2>Measured, reliable, and built for repeat trust.</h2>
+              <ul>
+                <li>Fast quotation handling</li>
+                <li>Supplier and stock coordination</li>
+                <li>Support that stays responsive after the first order</li>
+              </ul>
+            </article>
+          </div>
+        </div>
+
+        <div className="home-shell home-hero__stats js-fade-up">
+          {spotlightStats.map((item) => (
+            <article className="hero-stat" key={item.label}>
+              <strong>{item.value}</strong>
+              <span>{item.label}</span>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="home-section home-intro js-fade-up">
+        <div className="home-shell home-intro__panel">
+          <div className="home-intro__copy">
+            <span className="home-eyebrow home-eyebrow--ink">Brand position</span>
+            <h2>LTE is a supply partner for organizations that need reliability before reassurance.</h2>
+            <p>
+              The business already serves medical and industrial buyers in Bahrain. The homepage should reflect that same level of discipline: clear priorities, calm pacing, and stronger confidence in every section.
+            </p>
+          </div>
+
+          <div className="home-intro__aside">
+            <article>
+              <small>Leadership</small>
+              <strong>Shahid Majeed</strong>
+              <p>Managing Director & CEO guiding supplier relationships, direction, and long-term commercial trust.</p>
+            </article>
+            <article>
+              <small>Operating teams</small>
+              <strong>Sales, accounts, HR, and delivery</strong>
+              <p>Commercial response and customer service stay connected so the workflow remains visible end to end.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section className="home-story js-story-pin">
+        <div className="home-shell story-shell js-story-shell">
+          <div className="story-rail">
+            <span className="home-eyebrow home-eyebrow--ink">Scroll narrative</span>
+            <div className="story-progress">
+              <div className="story-progress__fill js-story-progress-fill" />
             </div>
+          </div>
 
-            <div className="premium-stage-stack">
-              <div className="premium-stage-panel premium-stage-detail">
-                <img src={`${baseUrl}Stethescope.webp`} alt="Medical supply detail" loading="lazy" />
-                <div className="premium-stage-caption">
-                  <span>Precision where it matters</span>
-                  <strong>High-trust product selection</strong>
-                </div>
+          <div className="story-content">
+            <div className="story-copy">
+              <div className="story-copy__block story-copy__block--base js-story-copy-intro">
+                <span className="story-copy__step">01</span>
+                <h2>One message at a time. First trust. Then sector relevance. Then proof.</h2>
+                <p>
+                  The homepage should not behave like a crowded catalog. It should establish confidence first, then reveal where LTE is strongest and why buyers stay.
+                </p>
               </div>
 
-              <div className="premium-stage-panel premium-stage-metric">
-                <span className="premium-stage-label">Supply posture</span>
-                <strong>Reliable under pressure</strong>
-                <p>Clear sourcing, clear communication, and support that matches the seriousness of your field.</p>
+              <div className="story-copy__block js-story-copy-medical">
+                <span className="story-copy__step">02</span>
+                <span className="home-eyebrow home-eyebrow--ink">{sectors[0].eyebrow}</span>
+                <h2>{sectors[0].title}</h2>
+                <p>{sectors[0].body}</p>
                 <ul>
-                  <li>Fast quotation cycles</li>
-                  <li>Documentation-conscious workflow</li>
-                  <li>Repeat-order friendly accounts</li>
+                  {sectors[0].points.map((point) => (
+                    <li key={point}>{point}</li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="story-copy__block js-story-copy-industrial">
+                <span className="story-copy__step">03</span>
+                <span className="home-eyebrow home-eyebrow--ink">{sectors[1].eyebrow}</span>
+                <h2>{sectors[1].title}</h2>
+                <p>{sectors[1].body}</p>
+                <ul>
+                  {sectors[1].points.map((point) => (
+                    <li key={point}>{point}</li>
+                  ))}
                 </ul>
               </div>
             </div>
-          </div>
-        </div>
 
-        <div className="premium-hero-stats">
-          {heroStats.map((stat) => (
-            <div className="premium-stat-card" key={stat.label}>
-              <strong>{stat.value}</strong>
-              <span>{stat.label}</span>
+            <div className="story-visual">
+              <article className="story-panel story-panel--medical js-story-panel-medical">
+                <div className="story-panel__top">
+                  <span>Medical solutions</span>
+                  <strong>Hospitals, clinics, and repeat-use environments</strong>
+                </div>
+                <p>
+                  Better sourcing decisions come from product fit, supplier confidence, and procurement clarity, not just from having stock on a list.
+                </p>
+                <div className="story-panel__media">
+                  <img src={`${baseUrl}Stethescope.webp`} alt="Medical supply detail" loading="lazy" />
+                </div>
+              </article>
+
+              <article className="story-panel story-panel--industrial js-story-panel-industrial">
+                <div className="story-panel__top">
+                  <span>Industrial solutions</span>
+                  <strong>Operational products where continuity matters as much as price.</strong>
+                </div>
+                <p>
+                  Industrial teams need disciplined supply support too. The same workflow extends into safety, utilities, and operational continuity with less friction.
+                </p>
+                <div className="story-panel__stack">
+                  <div>
+                    <small>Operational support</small>
+                    <strong>Safety, utilities, and industrial essentials</strong>
+                  </div>
+                  <div>
+                    <small>Service rhythm</small>
+                    <strong>Reliable sourcing, inventory alignment, and delivery follow-through</strong>
+                  </div>
+                </div>
+              </article>
             </div>
-          ))}
-        </div>
-      </section>
-
-      <section className="premium-sector-strip">
-        {sectorCards.map((sector) => (
-          <article className="premium-sector-card" key={sector.tag}>
-            <span>{sector.tag}</span>
-            <h2>{sector.title}</h2>
-            <p>{sector.description}</p>
-          </article>
-        ))}
-      </section>
-
-      <section className="premium-section premium-company-intro">
-        <div className="premium-company-panel">
-          <div className="premium-company-copy">
-            <span className="premium-eyebrow">About LTE</span>
-            <h2>Get to know the company behind the supply operation before you scroll any further.</h2>
-            <p>
-              Leading Trading Est supports Bahrain&apos;s medical, dental, and industrial buyers through a structured workflow that connects sourcing, inventory control, and delivery execution.
-            </p>
-            <p>
-              The company is led by Shahid Majeed and supported by sales, accounts, HR, and delivery teams that keep quotations, stock handling, and customer service aligned.
-            </p>
-            <Link className="premium-btn premium-btn-primary" to="/about">Learn More About Us</Link>
-          </div>
-
-          <div className="premium-company-grid">
-            <article className="premium-company-card">
-              <small>Leadership</small>
-              <h3>Managing Director & CEO</h3>
-              <p>Shahid Majeed leads the company direction, supplier relationships, and growth strategy.</p>
-            </article>
-
-            <article className="premium-company-card">
-              <small>Commercial and support</small>
-              <h3>Sales, Accounts & HR</h3>
-              <p>Customer response, account coordination, and internal administration stay connected under one operating flow.</p>
-            </article>
-
-            <article className="premium-company-card">
-              <small>Execution</small>
-              <h3>Delivery and fulfillment</h3>
-              <p>Once stock is ready, the delivery team takes products through the final step to the customer site.</p>
-            </article>
           </div>
         </div>
       </section>
 
-      <section className="premium-section premium-story">
-        <div className="premium-section-heading">
-          <span className="premium-eyebrow">Why buyers stay with us</span>
-          <h2>Built for organizations that need a supplier to think beyond the invoice.</h2>
-          <p>
-            Your business is not buying generic stock. You are protecting continuity, compliance, and service quality. The website should reflect that standard.
-          </p>
-        </div>
-
-        <div className="premium-proof-grid">
-          {proofTiles.map((tile) => (
-            <article className="premium-proof-tile" key={tile.title}>
-              <h3>{tile.title}</h3>
-              <p>{tile.body}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="premium-section premium-capabilities">
-        <div className="premium-section-heading">
-          <span className="premium-eyebrow">Service posture</span>
-          <h2>A more premium presentation, anchored in real procurement value.</h2>
-        </div>
-
-        <div className="premium-capability-grid">
-          {capabilityCards.map((card) => (
-            <article className="premium-capability-card" key={card.title}>
-              <span>{card.index}</span>
-              <h3>{card.title}</h3>
-              <p>{card.description}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="premium-section premium-workflow">
-        <div className="premium-workflow-copy">
-          <span className="premium-eyebrow">How we operate</span>
-          <h2>From market demand to final delivery, the workflow stays visible all the way through.</h2>
-          <p>
-            The process is designed to reduce blind spots. Demand is identified first, suppliers are evaluated properly, logistics are coordinated early, and stock is controlled before delivery moves.
-          </p>
-        </div>
-
-        <div className="premium-workflow-diagram">
-          <div className="premium-workflow-spine">
-            <span className="premium-workflow-spine-label">Operations flow</span>
-            <strong>Demand → Source → Assess → Confirm → Stock → Deliver</strong>
+      <section className="home-section home-trust js-trust">
+        <div className="home-shell">
+          <div className="section-heading js-fade-up">
+            <span className="home-eyebrow home-eyebrow--ink">Brands and institutions</span>
+            <h2>Credibility should arrive before the catalog does.</h2>
             <p>
-              Every stage is connected so sourcing decisions, arrival timing, inventory handling, and delivery execution stay aligned.
+              LTE works with selected manufacturers and supplies institutions whose standards require more than a broad product list.
             </p>
-            <div className="premium-workflow-track">
-              {workflowSteps.map((step) => (
-                <div className="premium-workflow-track-node" key={`track-${step.phase}`}>
-                  <span>{step.phase}</span>
-                  <small>{step.label}</small>
+          </div>
+
+          <div className="trust-grid">
+            <article className="trust-card trust-card--copy js-logo-block">
+              <small>Trusted manufacturers</small>
+              <h3>Established brands, selected for fit and continuity.</h3>
+              <p>
+                The strongest supplier relationship is not just access, it is confidence that the product, documentation, and timing will stay aligned when orders repeat.
+              </p>
+            </article>
+
+            <div className="trust-card trust-card--logos js-logo-block">
+              {mainBrands.map((brand) => (
+                <div className={`logo-chip logo-chip--brand logo-chip--${brand.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`} key={brand.name}>
+                  <img src={`${baseUrl}${brand.logo}`} alt={brand.name} loading="lazy" />
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="premium-workflow-rail">
-            {workflowSteps.map((step) => (
-              <article className="premium-workflow-step" key={step.label}>
-                <div className="premium-workflow-step-top">
-                  <span>{step.label}</span>
-                  <strong>{step.phase}</strong>
+          <div className="trust-grid trust-grid--clients">
+            <article className="trust-card trust-card--copy js-logo-block">
+              <small>Institutions supplied</small>
+              <h3>Built to support organizations that expect steadier service.</h3>
+              <p>
+                From major hospitals to recognized specialist institutions, the customer mix signals the level of confidence the business is already trusted with.
+              </p>
+            </article>
+
+            <div className="trust-card trust-card--logos trust-card--clients js-logo-block">
+              {clients.map((client) => (
+                <div className={`logo-chip logo-chip--client logo-chip--${client.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`} key={client.name}>
+                  <img src={`${baseUrl}${client.logo}`} alt={client.name} loading="lazy" />
                 </div>
-                <h3>{step.title}</h3>
-                <p>{step.description}</p>
-                <small>{step.note}</small>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="home-section home-categories js-categories">
+        <div className="home-shell">
+          <div className="section-heading section-heading--inline js-fade-up">
+            <div>
+              <span className="home-eyebrow home-eyebrow--ink">Featured categories</span>
+              <h2>The catalog should feel curated, not dropped onto the page all at once.</h2>
+            </div>
+            <Link className="home-inline-link" to="/products">Browse all categories</Link>
+          </div>
+
+          <div className="category-grid">
+            {homepageCategories.map((category) => (
+              <Link className="category-card js-category-card" key={category.name} to="/products">
+                <small>{category.label}</small>
+                <h3>{category.name}</h3>
+                <p>{category.description}</p>
+                <span>Explore category</span>
+              </Link>
+            ))}
+          </div>
+
+          <div className="featured-band js-fade-up">
+            {leadProduct ? (
+              <>
+                <Link className="featured-band__lead" to={`/product/${leadProduct._id}`}>
+                  <div className="featured-band__lead-copy">
+                    <small>Product spotlight</small>
+                    <h3>{leadProduct.name}</h3>
+                    <p>
+                      {leadProduct.description?.trim() ||
+                        'A selected featured product representing the current strength of the catalog.'}
+                    </p>
+                    <span>{leadProduct.brand || leadProduct.categorySlug?.name || 'Featured selection'}</span>
+                  </div>
+                  <div className="featured-band__lead-media">
+                    {leadProduct.image ? (
+                      <img src={normalizeImageSrc(leadProduct.image)} alt={leadProduct.name} loading="lazy" />
+                    ) : (
+                      <div className="featured-fallback">{leadProduct.name?.[0] || 'P'}</div>
+                    )}
+                  </div>
+                </Link>
+
+                <div className="featured-band__rail">
+                  {secondaryProducts.map((product) => (
+                    <Link className="featured-mini" key={product._id} to={`/product/${product._id}`}>
+                      <div className="featured-mini__media">
+                        {product.image ? (
+                          <img src={normalizeImageSrc(product.image)} alt={product.name} loading="lazy" />
+                        ) : (
+                          <div className="featured-fallback">{product.name?.[0] || 'P'}</div>
+                        )}
+                      </div>
+                      <div className="featured-mini__copy">
+                        <small>{product.brand || 'Featured'}</small>
+                        <strong>{product.name}</strong>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </>
+            ) : (
+              <div className="featured-band__empty">Featured products will appear here as they are marked in the catalog.</div>
+            )}
+          </div>
+        </div>
+      </section>
+
+      <section className="home-section home-credibility js-credibility">
+        <div className="home-shell">
+          <div className="section-heading js-fade-up">
+            <span className="home-eyebrow home-eyebrow--ink">Why LTE</span>
+            <h2>A supplier should think beyond the invoice when the buying environment is critical.</h2>
+            <p>
+              What keeps buyers loyal is not just product access. It is confidence in how the supplier thinks, responds, and follows through when details matter.
+            </p>
+          </div>
+
+          <div className="credibility-grid">
+            {capabilityCards.map((card) => (
+              <article className="credibility-card js-credibility-card" key={card.title}>
+                <h3>{card.title}</h3>
+                <p>{card.body}</p>
               </article>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="premium-section premium-featured">
-        <div className="premium-section-heading premium-section-heading-inline">
+      <section className="home-section home-cta js-fade-up">
+        <div className="home-shell cta-panel">
           <div>
-            <span className="premium-eyebrow">Product spotlight</span>
-            <h2>A curated look at selected products, not the whole catalog at once.</h2>
-          </div>
-          <Link className="premium-inline-link" to="/shop">View full catalog</Link>
-        </div>
-
-        <div className="premium-featured-showcase">
-          {leadProduct ? (
-            <>
-              <Link className="premium-featured-lead" key={leadProduct._id} to={`/product/${leadProduct._id}`}>
-                <div className="premium-featured-lead-media">
-                  {leadProduct.image ? (
-                    <img
-                      src={normalizeImageSrc(leadProduct.image)}
-                      alt={leadProduct.name}
-                      loading="lazy"
-                    />
-                  ) : (
-                    <span>{leadProduct.name?.[0] || 'P'}</span>
-                  )}
-                </div>
-
-                <div className="premium-featured-lead-copy">
-                  <div className="premium-featured-lead-top">
-                    <span>{leadProduct.brand || leadProduct.categorySlug?.name || 'Featured selection'}</span>
-                    <strong>Lead feature</strong>
-                  </div>
-                  <h3>{leadProduct.name}</h3>
-                  <p>
-                    {leadProduct.description?.trim() ||
-                      'A highlighted catalog product selected to represent the range, quality, and direction of the current featured lineup.'}
-                  </p>
-                  <div className="premium-featured-lead-meta">
-                    <small>{leadProduct.categorySlug?.name || 'Catalog product'}</small>
-                    <em>Open product</em>
-                  </div>
-                </div>
-              </Link>
-
-              <div className="premium-featured-rail">
-                <div className="premium-featured-rail-intro">
-                  <span>Current shortlist</span>
-                  <p>Rotate the featured lineup while keeping the homepage focused and premium.</p>
-                </div>
-
-                <div className="premium-featured-stack">
-                  {secondaryProducts.map((product) => (
-                    <Link className="premium-featured-mini" key={product._id} to={`/product/${product._id}`}>
-                      <div className="premium-featured-mini-media">
-                        {product.image ? (
-                          <img
-                            src={normalizeImageSrc(product.image)}
-                            alt={product.name}
-                            loading="lazy"
-                          />
-                        ) : (
-                          <span>{product.name?.[0] || 'P'}</span>
-                        )}
-                      </div>
-
-                      <div className="premium-featured-mini-copy">
-                        <span>{product.brand || 'Featured product'}</span>
-                        <strong>{product.name}</strong>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-
-                <div className="premium-featured-rail-footer">
-                  <div>
-                    <span>Catalog flow</span>
-                    <strong>
-                      {overflowCount > 0
-                        ? `+${overflowCount} more featured products available in the full catalog`
-                        : 'Explore the full catalog for the wider product range'}
-                    </strong>
-                  </div>
-                  <Link className="premium-btn premium-btn-dark" to="/shop">Browse Products</Link>
-                </div>
-              </div>
-            </>
-          ) : (
-            <div className="premium-product-empty">
-              Featured products will appear here once catalog items are marked as featured.
-            </div>
-          )}
-        </div>
-      </section>
-
-      <section className="premium-section premium-trust">
-        <div className="premium-section-heading">
-          <span className="premium-eyebrow">Selected relationships</span>
-          <h2>Supported by established manufacturers and trusted by local institutions.</h2>
-        </div>
-
-        <div className="premium-logo-block">
-          <div className="premium-logo-title">Manufacturers</div>
-          <div className="premium-logo-grid premium-logo-grid--brands">
-            {mainBrands.map((brand) => (
-              brand.logo ? (
-                <div
-                  className={`premium-logo-card premium-logo-card--brand premium-logo-card--${brand.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`}
-                  key={brand.name}
-                >
-                  <div className="premium-logo-media">
-                    <img src={brand.logo} alt={brand.name} loading="lazy" />
-                  </div>
-                </div>
-              ) : (
-                <div className="premium-logo-card premium-logo-card--brand premium-logo-fallback" key={brand.name}>
-                  {brand.name.slice(0, 2).toUpperCase()}
-                </div>
-              )
-            ))}
-          </div>
-        </div>
-
-        <div className="premium-logo-block">
-          <div className="premium-logo-title">Institutions supplied</div>
-          <div className="premium-logo-grid premium-logo-grid--clients">
-            {clients.map((client) => (
-              client.logo ? (
-                <div
-                  className={`premium-logo-card premium-logo-card--client premium-logo-card--${client.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`}
-                  key={client.name}
-                >
-                  <div className="premium-logo-media">
-                    <img src={client.logo} alt={client.name} loading="lazy" />
-                  </div>
-                </div>
-              ) : (
-                <div className="premium-logo-card premium-logo-card--client premium-logo-fallback" key={client.name}>
-                  {client.name.slice(0, 2).toUpperCase()}
-                </div>
-              )
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="premium-section premium-cta">
-        <div className="premium-cta-card">
-          <div>
-            <span className="premium-eyebrow">Start a conversation</span>
-            <h2>Give the brand the same level of confidence your customers expect from your service.</h2>
-            <p>For quotations, category inquiries, or account support, the next step is direct and simple.</p>
+            <span className="home-eyebrow">Closing step</span>
+            <h2>When the business already operates with confidence, the website should close with the same clarity.</h2>
+            <p>
+              For quotations, category support, or account enquiries, the next move should be simple and immediate.
+            </p>
           </div>
 
-          <div className="premium-cta-actions">
-            <Link className="premium-btn premium-btn-primary" to="/contact">Request a Quote</Link>
-            <Link className="premium-btn premium-btn-secondary" to="/shop">Browse Products</Link>
+          <div className="cta-panel__actions">
+            <Link className="home-btn home-btn--primary" to="/contact">Request a Quote</Link>
+            <Link className="home-btn home-btn--ghost-light" to="/about">Learn More About LTE</Link>
           </div>
         </div>
       </section>

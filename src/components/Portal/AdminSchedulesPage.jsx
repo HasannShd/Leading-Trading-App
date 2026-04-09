@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { portalApi } from '../../services/portalApi';
 import AdminTopNav from '../Admin/AdminTopNav';
 import '../Admin/AdminCategories.css';
+import { formatPortalDate } from '../../utils/portalDate';
 import './PortalShell.css';
 
 const emptyForm = {
@@ -155,7 +156,7 @@ const AdminSchedulesPage = () => {
                 <h3 className="portal-record-title">{schedule.title}</h3>
                 <div className="portal-record-meta">
                   <span>{schedule.user?.name || schedule.user?.username}</span>
-                  <span>{schedule.assignedDate}</span>
+                  <span>{formatPortalDate(schedule.assignedDate)}</span>
                   {schedule.startTime && <span>{schedule.startTime}</span>}
                   {schedule.location && <span>{schedule.location}</span>}
                   <span className="portal-badge status">{schedule.status}</span>

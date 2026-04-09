@@ -1,6 +1,7 @@
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
 import { useContext } from 'react';
 import { StaffContext } from '../../context/StaffContext';
+import { formatPortalPrettyDate } from '../../utils/portalDate';
 import './PortalShell.css';
 
 const navItems = [
@@ -36,7 +37,7 @@ const StaffLayout = () => {
           <button className="portal-inline-button ghost" type="button" onClick={logout}>
             Sign Out
           </button>
-          <span className="portal-chip">{new Date().toLocaleDateString()}</span>
+          <span className="portal-chip">{formatPortalPrettyDate()}</span>
         </div>
       </header>
       <div className="portal-staff-nav-wrap">
