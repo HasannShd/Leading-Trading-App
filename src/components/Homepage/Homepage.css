@@ -666,6 +666,16 @@
   gap: 18px;
 }
 
+.catalog-stage__note {
+  margin-top: 22px;
+  padding: 22px 24px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.58);
+  border: 1px solid rgba(19, 48, 78, 0.08);
+  color: var(--muted);
+  line-height: 1.7;
+}
+
 .featured-band__lead,
 .featured-mini {
   text-decoration: none;
@@ -748,13 +758,6 @@
   color: var(--navy-700);
   font-size: 2rem;
   font-weight: 800;
-}
-
-.featured-band__empty {
-  min-height: 180px;
-  display: grid;
-  place-items: center;
-  color: var(--muted);
 }
 
 .credibility-stage__grid {

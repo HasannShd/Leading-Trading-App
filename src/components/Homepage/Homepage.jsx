@@ -40,46 +40,46 @@ const homepageCategories = [
 const valuePillars = [
   {
     title: 'Vendor Relations',
-    body: 'Supplier relationships are managed for continuity, access, and dependable repeat ordering rather than opportunistic sourcing.',
-    detail: 'Selected manufacturer relationships',
+    body: 'Supplier relationships are developed around continuity, access, and dependable repeat supply rather than short-term opportunistic buying.',
+    detail: 'Established manufacturer and vendor network',
   },
   {
     title: 'Quality Assurance',
-    body: 'Product fit, documentation, and suitability matter before quotation speed. The workflow is built around reducing avoidable friction.',
-    detail: 'Product and documentation discipline',
+    body: 'Product suitability, documentation, and specification control are reviewed before quotation and fulfillment decisions are made.',
+    detail: 'Specification and documentation discipline',
   },
   {
     title: 'Logistics',
-    body: 'Requests move through a clearer delivery path with timing visibility, inventory awareness, and practical coordination.',
-    detail: 'Operational movement without noise',
+    body: 'Orders move through a structured path with inventory awareness, delivery coordination, and clearer visibility on timing.',
+    detail: 'Inventory and delivery coordination',
   },
   {
     title: 'Customer Commitment',
-    body: 'Sales, accounts, and delivery remain connected so support does not disappear once an order is placed.',
-    detail: 'Local follow-through after sourcing',
+    body: 'Sales, accounts, and delivery remain aligned so customer support continues beyond quotation and procurement.',
+    detail: 'Commercial follow-through and local support',
   },
 ];
 
 const workflowSteps = [
   {
     title: 'Inquiry',
-    body: 'Requirements are clarified first so the request is commercially and operationally useful from the beginning.',
+    body: 'Requirements are clarified at the outset so product selection, pricing, and delivery expectations are aligned from the beginning.',
   },
   {
     title: 'Sourcing',
-    body: 'Suppliers are screened against fit, quality, availability, and the level of confidence required for the end use.',
+    body: 'Suitable suppliers are shortlisted against quality, availability, compliance, and the operational demands of the end user.',
   },
   {
     title: 'Procurement',
-    body: 'Commercial terms, product details, and documentation move into a cleaner buying decision with fewer unknowns.',
+    body: 'Commercial terms, documentation, and product details are consolidated into a clear procurement decision with fewer uncertainties.',
   },
   {
     title: 'Logistics',
-    body: 'Expected timing, inventory handling, and delivery coordination are aligned before the order lands on the customer side.',
+    body: 'Lead times, inventory handling, and delivery coordination are planned before the order moves into execution.',
   },
   {
     title: 'Delivery & Support',
-    body: 'The process closes with visible handover, repeat-order readiness, and support that remains responsive after the first purchase.',
+    body: 'Orders are completed with reliable handover, responsive support, and readiness for repeat demand when required.',
   },
 ];
 
@@ -87,30 +87,30 @@ const sectors = [
   {
     key: 'medical',
     eyebrow: 'Medical solutions',
-    title: 'For hospitals, clinics, and practices where procurement decisions affect care continuity.',
-    body: 'LTE supports regulated medical environments with clearer sourcing, dependable availability, and better control over product suitability, timing, and documentation.',
+    title: 'Supporting hospitals, clinics, and practices where continuity of care depends on supply reliability.',
+    body: 'LTE supports regulated medical environments with disciplined sourcing, dependable availability, and close attention to product suitability, timing, and documentation.',
     points: ['Hospitals and specialist centers', 'Clinics and outpatient facilities', 'Routine and urgent replenishment'],
     image: 'Stethescope.webp',
-    visualTitle: 'Hospitals, clinics, and repeat-use environments',
-    visualBody: 'Better sourcing decisions come from product fit, supplier confidence, and procurement clarity, not just from having stock on a list.',
+    visualTitle: 'Medical procurement with operational discipline',
+    visualBody: 'Clinical supply decisions require more than stock visibility. They depend on specification fit, supplier confidence, and dependable execution.',
   },
   {
     key: 'industrial',
     eyebrow: 'Industrial solutions',
-    title: 'For operational teams that need disciplined supply support, not fragmented vendor follow-up.',
-    body: 'The same structured workflow extends into industrial and safety sourcing, giving buyers a steadier path from request to delivery without noise or wasted coordination.',
+    title: 'Supporting industrial and safety teams that need structured supply, not fragmented vendor follow-up.',
+    body: 'The same disciplined workflow extends into industrial and safety sourcing, giving buyers a more dependable path from request to delivery.',
     points: ['Safety and utility products', 'Operational supply continuity', 'Consistent delivery planning'],
     image: 'about page.webp',
-    visualTitle: 'Industrial continuity without procurement drag',
-    visualBody: 'Operational teams need the same level of supply discipline: selected products, cleaner coordination, and dependable local follow-through.',
+    visualTitle: 'Industrial continuity backed by reliable coordination',
+    visualBody: 'Operational teams need dependable product flow, practical coordination, and local follow-through that supports day-to-day performance.',
   },
 ];
 
 const whyStats = [
   { value: '10+', label: 'Years serving Bahrain-based buyers' },
-  { value: 'Medical + Industrial', label: 'Two sectors supported with one measured workflow' },
-  { value: 'Supplier-led clarity', label: 'Known manufacturer relationships and dependable coordination' },
-  { value: 'Repeat-account focus', label: 'Built for recurring trust, not only one-off transactions' },
+  { value: 'Medical + Industrial', label: 'Two sectors supported through one structured operating model' },
+  { value: 'Quality-led sourcing', label: 'Supplier assessment shaped around specification, documentation, and reliability' },
+  { value: 'Long-term account support', label: 'Built for recurring business relationships, not only one-off transactions' },
 ];
 
 const mainBrands = [
@@ -174,9 +174,9 @@ const HomePage = () => {
         <div className="home-shell home-hero__grid">
           <div className="home-hero__copy animate-stagger" data-stagger-step="120ms">
             <span className="home-eyebrow animate-on-scroll">Leading Trading Est. | Bahrain</span>
-            <h1 className="animate-on-scroll">Trusted medical and industrial supply, presented with the confidence your customers expect.</h1>
+            <h1 className="animate-on-scroll">Trusted medical and industrial supply for organizations that expect quality, continuity, and dependable support.</h1>
             <p className="animate-on-scroll">
-              Leading Trading Est. delivers dependable sourcing, stronger supplier relationships, and measured service for organizations that cannot afford uncertainty.
+              Leading Trading Est. supports hospitals, clinics, practices, and industrial buyers with disciplined sourcing, established supplier relationships, and reliable local execution.
             </p>
 
             <div className="home-hero__actions animate-on-scroll">
@@ -198,7 +198,7 @@ const HomePage = () => {
             </div>
             <article className="hero-visual__panel" data-hero-parallax="fast">
               <small>Operational confidence</small>
-              <strong>Better supplier control, clearer delivery rhythm, stronger repeat trust.</strong>
+              <strong>Supplier coordination, delivery planning, and account support aligned under one operating team.</strong>
             </article>
           </div>
         </div>
@@ -217,9 +217,9 @@ const HomePage = () => {
         <div className="home-shell">
           <div className="section-heading animate-stagger" data-stagger-step="110ms">
             <span className="home-eyebrow home-eyebrow--ink animate-on-scroll">How LTE creates value</span>
-            <h2 className="animate-on-scroll">A stronger supplier is defined by how the workflow holds together, not just by what appears in the catalog.</h2>
+            <h2 className="animate-on-scroll">LTE is built around supplier discipline, quality control, and dependable execution.</h2>
             <p className="animate-on-scroll">
-              The business model is simple to understand and difficult to replace: selected vendor relationships, controlled quality, disciplined logistics, and customer support that does not disappear after the first order.
+              The business model combines supplier relationships, specification control, logistics coordination, and customer support so procurement decisions are backed by a stronger operating structure.
             </p>
           </div>
 
@@ -240,9 +240,9 @@ const HomePage = () => {
         <div className="home-shell workflow-stage__grid">
           <div className="workflow-stage__intro animate-stagger" data-stagger-step="110ms">
             <span className="home-eyebrow home-eyebrow--ink animate-on-scroll">Workflow</span>
-            <h2 className="animate-on-scroll">The process should feel visible from inquiry to delivery, not improvised in the middle.</h2>
+            <h2 className="animate-on-scroll">A clear workflow from inquiry through delivery is central to how LTE operates.</h2>
             <p className="animate-on-scroll">
-              LTE’s operating rhythm starts with a clear need, moves through sourcing and procurement with supplier control, and closes with logistics and support that stay responsive.
+              Every request moves through a structured sequence: need identification, supplier review, procurement alignment, logistics planning, and dependable delivery support.
             </p>
             <div className="workflow-stage__line">
               <span className="workflow-stage__line-fill" />
@@ -267,9 +267,9 @@ const HomePage = () => {
         <div className="home-shell">
           <div className="section-heading animate-stagger" data-stagger-step="110ms">
             <span className="home-eyebrow home-eyebrow--ink animate-on-scroll">Sector focus</span>
-            <h2 className="animate-on-scroll">One business, two operational realities, presented with the same discipline.</h2>
+            <h2 className="animate-on-scroll">One company serving two distinct sectors with the same operating discipline.</h2>
             <p className="animate-on-scroll">
-              The website should reveal medical and industrial capabilities as distinct chapters, each with its own mood, but both connected by the same service posture.
+              LTE supports medical and industrial buyers through the same standards of supplier assessment, quality review, logistics coordination, and customer follow-through.
             </p>
           </div>
 
@@ -313,15 +313,15 @@ const HomePage = () => {
         <div className="home-shell">
           <div className="section-heading animate-stagger" data-stagger-step="110ms">
             <span className="home-eyebrow home-eyebrow--ink animate-on-scroll">Trusted brands and institutions</span>
-            <h2 className="animate-on-scroll">Credibility should arrive before the catalog does.</h2>
+            <h2 className="animate-on-scroll">Our supplier network and customer base reflect the standards we operate against.</h2>
             <p className="animate-on-scroll">
-              LTE works with selected manufacturers and serves institutions whose standards require more than a broad product list and a quick quotation.
+              LTE works with selected manufacturers and serves institutions that require reliability, product quality, and professional service standards.
             </p>
           </div>
 
           <div className="trust-stage__copy animate-on-scroll">
             <p>
-              Premium positioning comes from proof. The supplier mix and institutional customer base should communicate that proof slowly, clearly, and without clutter.
+              Our relationships with established brands and respected institutions demonstrate the level of trust placed in our sourcing, coordination, and delivery performance.
             </p>
           </div>
 
@@ -352,7 +352,7 @@ const HomePage = () => {
           <div className="section-heading section-heading--inline animate-stagger" data-stagger-step="110ms">
             <div className="animate-stagger" data-stagger-step="110ms">
               <span className="home-eyebrow home-eyebrow--ink animate-on-scroll">Featured categories</span>
-              <h2 className="animate-on-scroll">The catalog should feel curated, not dropped onto the page all at once.</h2>
+              <h2 className="animate-on-scroll">A focused view of the categories that define our supply capability.</h2>
             </div>
             <Link className="home-inline-link animate-on-scroll" to="/products">Browse all categories</Link>
           </div>
@@ -368,8 +368,8 @@ const HomePage = () => {
             ))}
           </div>
 
-          <div className="featured-band animate-stagger" data-stagger-step="120ms">
-            {leadProduct ? (
+          {featuredProducts.length > 0 ? (
+            <div className="featured-band animate-stagger" data-stagger-step="120ms">
               <>
                 <Link className="featured-band__lead animate-on-scroll" to={`/product/${leadProduct._id}`}>
                   <div className="featured-band__lead-copy">
@@ -408,10 +408,12 @@ const HomePage = () => {
                   ))}
                 </div>
               </>
-            ) : (
-              <div className="featured-band__empty animate-on-scroll">Featured products will appear here as they are marked in the catalog.</div>
-            )}
-          </div>
+            </div>
+          ) : (
+            <div className="catalog-stage__note animate-on-scroll">
+              Featured products will appear here once products are marked as featured in the catalog.
+            </div>
+          )}
         </div>
       </section>
 
@@ -419,9 +421,9 @@ const HomePage = () => {
         <div className="home-shell credibility-stage__grid">
           <div className="credibility-stage__statement animate-stagger" data-stagger-step="110ms">
             <span className="home-eyebrow animate-on-scroll">Why LTE</span>
-            <h2 className="animate-on-scroll">A supplier should think beyond the invoice when the buying environment is critical.</h2>
+            <h2 className="animate-on-scroll">Procurement support should combine product access, quality assurance, and dependable follow-through.</h2>
             <p className="animate-on-scroll">
-              What keeps buyers loyal is not just product access. It is confidence in how the supplier thinks, responds, and follows through when details matter.
+              Long-term customer relationships are built through responsiveness, operational clarity, and a team structure that remains engaged from inquiry through delivery.
             </p>
           </div>
 
@@ -439,10 +441,10 @@ const HomePage = () => {
       <section className="home-section final-cta">
         <div className="home-shell final-cta__panel">
           <div className="animate-stagger" data-stagger-step="110ms">
-            <span className="home-eyebrow animate-on-scroll">Closing step</span>
-            <h2 className="animate-on-scroll">When the business already operates with confidence, the website should close with the same clarity.</h2>
+            <span className="home-eyebrow animate-on-scroll">Next step</span>
+            <h2 className="animate-on-scroll">Speak with the team behind LTE’s sourcing, coordination, and delivery support.</h2>
             <p className="animate-on-scroll">
-              For quotations, category support, or account enquiries, the next move should feel direct and immediate, not buried after the story ends.
+              For quotations, category guidance, or account enquiries, our team is available to support your requirement with a clear and practical next step.
             </p>
           </div>
 

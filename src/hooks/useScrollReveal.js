@@ -11,34 +11,13 @@ export const useScrollReveal = (rootRef, enabled = true) => {
     const root = rootRef?.current;
     if (!enabled || !root) return undefined;
 
-    const items = Array.from(root.querySelectorAll('.animate-on-scroll'));
-    if (items.length === 0) return undefined;
-
-    const revealAll = () => {
-      items.forEach((item) => item.classList.add('is-visible'));
-    };
-
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReducedMotion || typeof IntersectionObserver === 'undefined') {
-      revealAll();
+      root.querySelectorAll('.animate-on-scroll').forEach((item) => item.classList.add('is-visible'));
       return undefined;
     }
 
-    root.querySelectorAll('.animate-stagger').forEach((container) => {
-      const step = container.getAttribute('data-stagger-step') || '140ms';
-      container.style.setProperty('--reveal-step', step);
-
-      const staggerItems = Array.from(container.querySelectorAll('.animate-on-scroll'));
-      staggerItems.forEach((item, index) => {
-        item.style.setProperty('--reveal-index', String(index));
-      });
-    });
-
-    items.forEach((item) => {
-      if (!item.style.getPropertyValue('--reveal-index')) {
-        item.style.setProperty('--reveal-index', '0');
-      }
-    });
+    const observed = new WeakSet();
 
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
@@ -48,12 +27,43 @@ export const useScrollReveal = (rootRef, enabled = true) => {
       });
     }, OBSERVER_OPTIONS);
 
-    items.forEach((item) => {
-      if (!item.classList.contains('is-visible')) {
-        observer.observe(item);
-      }
+    const hydrateItems = () => {
+      root.querySelectorAll('.animate-stagger').forEach((container) => {
+        const step = container.getAttribute('data-stagger-step') || '140ms';
+        container.style.setProperty('--reveal-step', step);
+
+        const staggerItems = Array.from(container.querySelectorAll('.animate-on-scroll'));
+        staggerItems.forEach((item, index) => {
+          item.style.setProperty('--reveal-index', String(index));
+        });
+      });
+
+      root.querySelectorAll('.animate-on-scroll').forEach((item) => {
+        if (!item.style.getPropertyValue('--reveal-index')) {
+          item.style.setProperty('--reveal-index', '0');
+        }
+
+        if (!item.classList.contains('is-visible') && !observed.has(item)) {
+          observer.observe(item);
+          observed.add(item);
+        }
+      });
+    };
+
+    hydrateItems();
+
+    const mutationObserver = new MutationObserver(() => {
+      hydrateItems();
     });
 
-    return () => observer.disconnect();
+    mutationObserver.observe(root, {
+      childList: true,
+      subtree: true,
+    });
+
+    return () => {
+      mutationObserver.disconnect();
+      observer.disconnect();
+    };
   }, [enabled, rootRef]);
 };
