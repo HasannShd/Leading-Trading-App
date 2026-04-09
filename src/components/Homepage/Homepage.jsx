@@ -231,27 +231,20 @@ const HomePage = () => {
         </div>
       </section>
 
-      <section className="home-story js-story-pin">
-        <div className="home-shell story-shell js-story-shell">
-          <div className="story-rail">
+      <section className="home-story">
+        <div className="home-shell">
+          <div className="section-heading js-fade-up">
             <span className="home-eyebrow home-eyebrow--ink">Scroll narrative</span>
-            <div className="story-progress">
-              <div className="story-progress__fill js-story-progress-fill" />
-            </div>
+            <h2>Let the page unfold in stages instead of compressing the whole story into one framed block.</h2>
+            <p>
+              Trust should arrive first, then sector relevance, then operational proof. Each chapter should feel visible in the page itself, not trapped inside a single pinned panel.
+            </p>
           </div>
 
-          <div className="story-content">
-            <div className="story-copy">
-              <div className="story-copy__block story-copy__block--base js-story-copy-intro">
+          <div className="story-sequence">
+            <article className="story-chapter js-story-chapter">
+              <div className="story-chapter__copy">
                 <span className="story-copy__step">01</span>
-                <h2>One message at a time. First trust. Then sector relevance. Then proof.</h2>
-                <p>
-                  The homepage should not behave like a crowded catalog. It should establish confidence first, then reveal where LTE is strongest and why buyers stay.
-                </p>
-              </div>
-
-              <div className="story-copy__block js-story-copy-medical">
-                <span className="story-copy__step">02</span>
                 <span className="home-eyebrow home-eyebrow--ink">{sectors[0].eyebrow}</span>
                 <h2>{sectors[0].title}</h2>
                 <p>{sectors[0].body}</p>
@@ -262,8 +255,25 @@ const HomePage = () => {
                 </ul>
               </div>
 
-              <div className="story-copy__block js-story-copy-industrial">
-                <span className="story-copy__step">03</span>
+              <div className="story-chapter__visual story-chapter__visual--medical js-story-visual">
+                <div className="story-chapter__visual-frame">
+                  <div className="story-chapter__visual-copy">
+                    <span>Medical solutions</span>
+                    <strong>Hospitals, clinics, and repeat-use environments</strong>
+                    <p>
+                      Better sourcing decisions come from product fit, supplier confidence, and procurement clarity, not just from having stock on a list.
+                    </p>
+                  </div>
+                  <div className="story-chapter__media">
+                    <img src={`${baseUrl}Stethescope.webp`} alt="Medical supply detail" loading="lazy" />
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article className="story-chapter story-chapter--reverse js-story-chapter">
+              <div className="story-chapter__copy">
+                <span className="story-copy__step">02</span>
                 <span className="home-eyebrow home-eyebrow--ink">{sectors[1].eyebrow}</span>
                 <h2>{sectors[1].title}</h2>
                 <p>{sectors[1].body}</p>
@@ -273,42 +283,29 @@ const HomePage = () => {
                   ))}
                 </ul>
               </div>
-            </div>
 
-            <div className="story-visual">
-              <article className="story-panel story-panel--medical js-story-panel-medical">
-                <div className="story-panel__top">
-                  <span>Medical solutions</span>
-                  <strong>Hospitals, clinics, and repeat-use environments</strong>
-                </div>
-                <p>
-                  Better sourcing decisions come from product fit, supplier confidence, and procurement clarity, not just from having stock on a list.
-                </p>
-                <div className="story-panel__media">
-                  <img src={`${baseUrl}Stethescope.webp`} alt="Medical supply detail" loading="lazy" />
-                </div>
-              </article>
-
-              <article className="story-panel story-panel--industrial js-story-panel-industrial">
-                <div className="story-panel__top">
-                  <span>Industrial solutions</span>
-                  <strong>Operational products where continuity matters as much as price.</strong>
-                </div>
-                <p>
-                  Industrial teams need disciplined supply support too. The same workflow extends into safety, utilities, and operational continuity with less friction.
-                </p>
-                <div className="story-panel__stack">
-                  <div>
-                    <small>Operational support</small>
-                    <strong>Safety, utilities, and industrial essentials</strong>
+              <div className="story-chapter__visual story-chapter__visual--industrial js-story-visual">
+                <div className="story-chapter__visual-frame story-chapter__visual-frame--stacked">
+                  <div className="story-chapter__visual-copy">
+                    <span>Industrial solutions</span>
+                    <strong>Operational products where continuity matters as much as price.</strong>
+                    <p>
+                      Industrial teams need disciplined supply support too. The same workflow extends into safety, utilities, and operational continuity with less friction.
+                    </p>
                   </div>
-                  <div>
-                    <small>Service rhythm</small>
-                    <strong>Reliable sourcing, inventory alignment, and delivery follow-through</strong>
+                  <div className="story-chapter__stack">
+                    <div>
+                      <small>Operational support</small>
+                      <strong>Safety, utilities, and industrial essentials</strong>
+                    </div>
+                    <div>
+                      <small>Service rhythm</small>
+                      <strong>Reliable sourcing, inventory alignment, and delivery follow-through</strong>
+                    </div>
                   </div>
                 </div>
-              </article>
-            </div>
+              </div>
+            </article>
           </div>
         </div>
       </section>

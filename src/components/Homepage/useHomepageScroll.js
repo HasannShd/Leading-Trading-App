@@ -38,43 +38,40 @@ export const useHomepageScroll = (rootRef, enabled) => {
         );
       });
 
-      ScrollTrigger.matchMedia({
-        '(min-width: 901px)': () => {
-          const storyTimeline = gsap.timeline({
-            scrollTrigger: {
-              trigger: '.js-story-pin',
-              start: 'top top',
-              end: '+=1800',
-              scrub: 1,
-              pin: true,
-              anticipatePin: 1,
-            },
-          });
+      gsap.utils.toArray('.js-story-chapter').forEach((element) => {
+        const visual = element.querySelector('.js-story-visual');
 
-          storyTimeline
-            .fromTo(
-              '.js-story-shell',
-              { autoAlpha: 0.84, y: 24 },
-              { autoAlpha: 1, y: 0, duration: 0.7, ease: 'power2.out' },
-              0
-            )
-            .to('.js-story-progress-fill', { scaleY: 0.34, duration: 1.1, ease: 'none' }, 0)
-            .to('.js-story-copy-intro', { autoAlpha: 0, y: -32, duration: 0.9, ease: 'power2.inOut' }, 0.8)
-            .to('.js-story-panel-medical', { autoAlpha: 1, y: 0, scale: 1, duration: 1.1, ease: 'power2.out' }, 0.8)
-            .fromTo('.js-story-copy-medical', { autoAlpha: 0, y: 36 }, { autoAlpha: 1, y: 0, duration: 0.9, ease: 'power2.out' }, 1)
-            .to('.js-story-progress-fill', { scaleY: 0.68, duration: 1.1, ease: 'none' }, 1.8)
-            .to('.js-story-copy-medical', { autoAlpha: 0, y: -32, duration: 0.9, ease: 'power2.inOut' }, 2.05)
-            .to('.js-story-panel-medical', { autoAlpha: 0.16, y: -14, scale: 0.985, duration: 0.9, ease: 'power2.inOut' }, 2.05)
-            .to('.js-story-panel-industrial', { autoAlpha: 1, y: 0, scale: 1, duration: 1.1, ease: 'power2.out' }, 2.1)
-            .fromTo('.js-story-copy-industrial', { autoAlpha: 0, y: 36 }, { autoAlpha: 1, y: 0, duration: 0.9, ease: 'power2.out' }, 2.22)
-            .to('.js-story-progress-fill', { scaleY: 1, duration: 1, ease: 'none' }, 3);
-        },
-        '(max-width: 900px)': () => {
-          gsap.set('.js-story-progress-fill', { clearProps: 'all' });
-          gsap.set(['.js-story-panel-medical', '.js-story-panel-industrial', '.js-story-copy-medical', '.js-story-copy-industrial'], {
-            clearProps: 'all',
-          });
-        },
+        gsap.fromTo(
+          element,
+          { autoAlpha: 0, y: 54 },
+          {
+            autoAlpha: 1,
+            y: 0,
+            duration: 0.95,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: element,
+              start: 'top 76%',
+            },
+          }
+        );
+
+        if (visual) {
+          gsap.fromTo(
+            visual,
+            { y: 42 },
+            {
+              y: -18,
+              ease: 'none',
+              scrollTrigger: {
+                trigger: element,
+                start: 'top bottom',
+                end: 'bottom top',
+                scrub: 0.8,
+              },
+            }
+          );
+        }
       });
 
       gsap.fromTo(
