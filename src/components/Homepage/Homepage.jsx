@@ -113,10 +113,10 @@ const sectors = [
 ];
 
 const whyStats = [
-  { value: '10+', label: 'Years serving Bahrain-based buyers' },
-  { value: 'Medical + Industrial', label: 'Two sectors supported through one structured operating model' },
-  { value: 'Integrated team model', label: 'Leadership, sales, accounts, and delivery aligned around one workflow' },
-  { value: 'Quality-led sourcing', label: 'Supplier assessment guided by specification, documentation, and reliability' },
+  { value: '10+', label: 'Years supporting Bahrain-based healthcare and industrial buyers' },
+  { value: 'Medical + Industrial', label: 'One operating structure supporting clinical, dental, safety, and utility requirements' },
+  { value: 'Integrated execution', label: 'Leadership, sales, accounts, and delivery working through one accountable workflow' },
+  { value: 'Quality review', label: 'Supplier and product decisions guided by suitability, documentation, and continuity of supply' },
 ];
 
 const mainBrands = [
@@ -170,6 +170,7 @@ const HomePage = () => {
 
   const leadProduct = featuredProducts[0] || null;
   const secondaryProducts = featuredProducts.slice(1, 5);
+  const spotlightProducts = [leadProduct, ...secondaryProducts].filter(Boolean);
   const marqueeBrands = useMemo(() => [...mainBrands, ...mainBrands], []);
   const marqueeClients = useMemo(() => [...clients, ...clients], []);
 
@@ -358,7 +359,7 @@ const HomePage = () => {
           <div className="section-heading section-heading--inline animate-stagger" data-stagger-step="110ms">
             <div className="animate-stagger" data-stagger-step="110ms">
               <span className="home-eyebrow home-eyebrow--ink animate-on-scroll">Core categories</span>
-              <h2 className="animate-on-scroll">Core supply categories across medical, dental, and industrial operations.</h2>
+              <h2 className="animate-on-scroll">Supply categories supporting clinical, dental, and industrial operations.</h2>
             </div>
             <Link className="home-inline-link animate-on-scroll" to="/categories">Browse all categories</Link>
           </div>
@@ -374,34 +375,69 @@ const HomePage = () => {
             ))}
           </div>
 
-          {featuredProducts.length > 0 ? (
-            <div className="featured-grid animate-stagger" data-stagger-step="100ms">
-              {[leadProduct, ...secondaryProducts].filter(Boolean).map((product, index) => (
-                <Link className="featured-card animate-on-scroll" key={product._id} to={`/product/${product._id}`}>
-                  <div className="featured-card__media">
-                    {product.image ? (
-                      <img src={normalizeImageSrc(product.image)} alt={product.name} loading="lazy" />
-                    ) : (
-                      <div className="featured-fallback">{product.name?.[0] || 'P'}</div>
-                    )}
-                  </div>
-                  <div className="featured-card__copy">
-                    <small>{index === 0 ? 'Product spotlight' : (product.brand || 'Featured selection')}</small>
-                    <h3>{product.name}</h3>
-                    <p>
-                      {product.description?.trim() ||
-                        'Review the product listing to see specifications, variants, and quotation options.'}
-                    </p>
-                    <span>{product.categorySlug?.name || product.brand || 'Open product'}</span>
-                  </div>
-                </Link>
-              ))}
+          {spotlightProducts.length > 0 ? (
+            <div className="featured-showcase">
+              <div className="featured-showcase__intro animate-stagger" data-stagger-step="110ms">
+                <span className="home-eyebrow home-eyebrow--ink animate-on-scroll">Selected product highlights</span>
+                <h3 className="animate-on-scroll">A focused look at representative products across the LTE catalog.</h3>
+                <p className="animate-on-scroll">
+                  These highlights give a clearer sense of the products, categories, and practical use cases LTE supports across medical, dental, and industrial operations.
+                </p>
+              </div>
+
+              <div className="featured-showcase__grid animate-stagger" data-stagger-step="110ms">
+                {leadProduct ? (
+                  <Link className="featured-spotlight animate-on-scroll" to={`/product/${leadProduct._id}`}>
+                    <div className="featured-spotlight__copy">
+                      <small>Product spotlight</small>
+                      <h3>{leadProduct.name}</h3>
+                      <p>
+                        {leadProduct.description?.trim() ||
+                          'Open the product page to review specifications, quotation support, and category context.'}
+                      </p>
+
+                      <div className="featured-spotlight__meta">
+                        <span>{leadProduct.brand || 'LTE catalog'}</span>
+                        <strong>{leadProduct.categorySlug?.name || 'Request quotation'}</strong>
+                      </div>
+                    </div>
+
+                    <div className="featured-spotlight__media" data-parallax="soft">
+                      {leadProduct.image ? (
+                        <img src={normalizeImageSrc(leadProduct.image)} alt={leadProduct.name} loading="lazy" />
+                      ) : (
+                        <div className="featured-fallback">{leadProduct.name?.[0] || 'P'}</div>
+                      )}
+                    </div>
+                  </Link>
+                ) : null}
+
+                <div className="featured-rail">
+                  {secondaryProducts.map((product, index) => (
+                    <Link className="featured-compact animate-on-scroll" key={product._id} to={`/product/${product._id}`}>
+                      <div className="featured-compact__media" data-parallax={index % 2 === 0 ? 'soft' : 'lift'}>
+                        {product.image ? (
+                          <img src={normalizeImageSrc(product.image)} alt={product.name} loading="lazy" />
+                        ) : (
+                          <div className="featured-fallback">{product.name?.[0] || 'P'}</div>
+                        )}
+                      </div>
+
+                      <div className="featured-compact__copy">
+                        <small>{product.brand || 'LTE selection'}</small>
+                        <h4>{product.name}</h4>
+                        <p>
+                          {product.description?.trim() ||
+                            'Open the listing for product details, quotation handling, and category reference.'}
+                        </p>
+                        <span>{product.categorySlug?.name || 'Open product'}</span>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
             </div>
-          ) : (
-            <div className="catalog-stage__note animate-on-scroll">
-              Selected product highlights will appear here once featured items are marked in the catalog.
-            </div>
-          )}
+          ) : null}
         </div>
       </section>
 
@@ -409,9 +445,9 @@ const HomePage = () => {
         <div className="home-shell credibility-stage__grid">
           <div className="credibility-stage__statement animate-stagger" data-stagger-step="110ms">
             <span className="home-eyebrow animate-on-scroll">Why LTE</span>
-            <h2 className="animate-on-scroll">Organizations stay with LTE because the service model extends beyond quotation and supply.</h2>
+            <h2 className="animate-on-scroll">LTE is built around disciplined sourcing, accountable teams, and support that continues beyond the initial quotation.</h2>
             <p className="animate-on-scroll">
-              Our leadership, sales, accounts, and delivery teams operate as one coordinated workflow, giving customers clearer communication, better accountability, and stronger operational continuity.
+              The company is structured so leadership, sales, accounts, and delivery remain aligned through the same operating workflow, giving customers better communication, stronger accountability, and more dependable continuity.
             </p>
           </div>
 

@@ -19,6 +19,19 @@ export const useScrollReveal = (rootRef, enabled = true) => {
 
     const observed = new WeakSet();
 
+    const revealIfInView = (item) => {
+      const rect = item.getBoundingClientRect();
+      const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+      const revealBoundary = viewportHeight * 0.92;
+
+      if (rect.top < revealBoundary && rect.bottom > 0) {
+        item.classList.add('is-visible');
+        return true;
+      }
+
+      return false;
+    };
+
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (!entry.isIntersecting) return;
@@ -41,6 +54,14 @@ export const useScrollReveal = (rootRef, enabled = true) => {
       root.querySelectorAll('.animate-on-scroll').forEach((item) => {
         if (!item.style.getPropertyValue('--reveal-index')) {
           item.style.setProperty('--reveal-index', '0');
+        }
+
+        if (item.classList.contains('is-visible')) {
+          return;
+        }
+
+        if (revealIfInView(item)) {
+          return;
         }
 
         if (!item.classList.contains('is-visible') && !observed.has(item)) {

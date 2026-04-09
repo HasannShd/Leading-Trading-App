@@ -6,55 +6,55 @@ const teamUnits = [
     label: 'Managing Director & CEO',
     title: 'Shahid Majeed',
     description:
-      'Provides strategic direction, strengthens supplier relationships, and sets the operational and quality standards the company is expected to maintain.',
+      'Sets the company’s strategic direction, strengthens supplier relationships, and maintains the service, quality, and operating standards clients expect from LTE.',
   },
   {
     label: 'Accounts & HR',
     title: 'Operational control and internal continuity',
     description:
-      'Supports financial discipline, internal administration, people coordination, and the controls required to keep daily operations consistent and dependable.',
+      'Supports financial discipline, internal administration, staff coordination, and the controls required to keep day-to-day operations stable, accurate, and dependable.',
   },
   {
     label: 'Sales Department',
     title: 'Customer-facing commercial execution',
     description:
-      'Handles enquiries, quotations, account follow-up, and customer coordination to ensure requirements are translated into the right commercial and product decisions.',
+      'Manages enquiries, quotations, account follow-up, and commercial coordination so customer requirements are converted into suitable sourcing and procurement decisions.',
   },
   {
     label: 'Delivery Team',
     title: 'Final-mile fulfillment and handoff',
     description:
-      'Coordinates dispatch and handover so confirmed orders are delivered on time, in the correct condition, and with proper follow-through.',
+      'Coordinates dispatch and handover so confirmed orders are delivered on time, in the correct condition, and with the follow-through required for repeat business.',
   },
 ];
 
 const companyPillars = [
-  'Medical, dental, and industrial sourcing managed under one operating structure',
-  'Supplier assessment guided by quality, suitability, reliability, and documentation standards',
-  'Procurement and delivery coordination shaped around continuity, timing, and service accountability',
-  'A team model that aligns leadership, sales, accounts, and delivery execution',
+  'Medical, dental, and industrial sourcing managed through one accountable operating structure',
+  'Supplier review guided by quality, suitability, reliability, and documentation discipline',
+  'Procurement and delivery coordination organized around continuity, timing, and service accountability',
+  'A team model that aligns leadership, sales, accounts, and delivery under one workflow',
 ];
 
 const workflowSteps = [
   {
     title: 'Requirement review',
     description:
-      'Customer requirements are clarified early so product selection, quotations, and expected delivery conditions are aligned from the outset.',
+      'Requirements are clarified early so product selection, quotations, and delivery expectations are aligned from the outset.',
   },
   {
     title: 'Supplier and product evaluation',
     description:
-      'Suitable suppliers and products are reviewed against quality, availability, documentation, and the operational needs of the customer.',
+      'Suppliers and products are assessed against quality, availability, documentation, and the operating conditions of the end user.',
   },
   {
     title: 'Procurement alignment',
     description:
-      'Commercial terms, quantities, lead times, and specification details are consolidated into a clearer procurement decision.',
+      'Commercial terms, quantities, lead times, and specification details are consolidated into a procurement decision with better visibility and control.',
   },
   {
     title: 'Logistics and delivery coordination',
     description:
-      'Inventory handling, dispatch planning, and final delivery timing are organized before fulfilment moves into execution.',
+      'Inventory handling, dispatch planning, and final delivery timing are coordinated before fulfilment moves into execution.',
   },
 ];
 
@@ -63,7 +63,7 @@ const About = () => (
     <section className="about-hero">
       <div className="about-hero-copy">
         <span className="about-eyebrow">About Leading Trading Est</span>
-        <h1>Built to support procurement with stronger supplier discipline, quality assurance, and dependable delivery coordination.</h1>
+        <h1>Supporting procurement in Bahrain with disciplined sourcing, quality assurance, and dependable delivery coordination.</h1>
         <p>
           Since 2012, Leading Trading Est has supported organizations in Bahrain across medical, dental,
           industrial, and safety requirements with a focus on product quality, service reliability, and professional execution.
@@ -78,7 +78,7 @@ const About = () => (
         <span className="about-hero-panel-label">Operating profile</span>
         <strong>Supplier-led sourcing, structured procurement, and dependable operational follow-through.</strong>
         <p>
-          Our business model combines supplier access, quality review, procurement discipline, logistics planning, and local account support under one operating workflow.
+          Our business model combines supplier access, quality review, procurement discipline, logistics planning, and local account support under one coordinated operating workflow.
         </p>
         <div className="about-hero-metrics">
           <div>
@@ -108,13 +108,13 @@ const About = () => (
           <p>
             Leading Trading Est serves hospitals, clinics, practices, and operational teams that require dependable
             access to the right products supported by a workflow that remains organized from sourcing through delivery.
-            Our focus is not only on what is supplied, but also on whether the sourcing path, documentation, timing,
-            and handling process are strong enough to support day-to-day operations without disruption.
+            The company’s focus is not only on what is supplied, but also on whether the sourcing path, documentation,
+            timing, and handling process are strong enough to support daily operations without unnecessary disruption.
           </p>
           <p>
             The company operates across medical, dental, and industrial categories, combining supplier access with
             practical coordination on pricing, quality, lead times, stock readiness, and delivery planning. This
-            enables us to support both recurring demand and urgent procurement requirements with better control.
+            allows LTE to support both recurring demand and urgent procurement requirements with better control and clearer accountability.
           </p>
         </article>
 
@@ -132,7 +132,7 @@ const About = () => (
     <section className="about-workflow">
       <div className="about-section-heading">
         <span className="about-eyebrow">Workflow</span>
-        <h2>A structured workflow that supports quality, clarity, and dependable execution from enquiry to delivery.</h2>
+        <h2>A structured workflow supporting quality, clarity, and dependable execution from enquiry to delivery.</h2>
       </div>
 
       <div className="about-workflow-grid">
@@ -149,7 +149,7 @@ const About = () => (
     <section className="about-leadership">
       <div className="about-section-heading">
         <span className="about-eyebrow">Leadership</span>
-        <h2>Leadership that sets the company’s standards for quality, coordination, and long-term customer confidence.</h2>
+        <h2>Leadership that sets the standard for quality, coordination, and long-term customer confidence.</h2>
       </div>
 
       <div className="about-leadership-card">
@@ -168,7 +168,7 @@ const About = () => (
           <p>
             Our growth has been built on trust, consistency, and a team structure that supports execution from enquiry
             to delivery. We continue to strengthen supplier relationships, maintain service standards, and support
-            customers with solutions that are dependable in practice as well as on paper.
+            customers with solutions that remain dependable in practice as well as on paper.
           </p>
         </div>
       </div>
@@ -198,16 +198,16 @@ const About = () => (
           <p>
             Quality at LTE is reflected in the way suppliers are reviewed, products are assessed, documentation is
             considered, and delivery commitments are handled. The objective is not simply to fulfil an order, but to
-            do so with the level of control and reliability that professional buyers expect.
+            do so with the level of control and reliability professional buyers expect.
           </p>
         </article>
 
         <article className="about-story-card about-story-card--pillars">
           <span className="about-card-kicker">Working relationship</span>
           <ul className="about-pillar-list">
-            <li>Responsive commercial follow-up from enquiry to quotation</li>
-            <li>Operational coordination between sales, accounts, and delivery</li>
-            <li>Support for repeat accounts and long-term procurement relationships</li>
+            <li>Responsive commercial follow-up from enquiry through quotation and order handling</li>
+            <li>Operational coordination between sales, accounts, and delivery teams</li>
+            <li>Support for repeat accounts and longer-term procurement relationships</li>
           </ul>
         </article>
       </div>
