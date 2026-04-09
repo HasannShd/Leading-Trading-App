@@ -85,6 +85,44 @@
   box-shadow: 0 18px 36px rgba(7, 17, 31, 0.06);
 }
 
+.shop-guidance {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.shop-guidance-card {
+  padding: 24px;
+  border-radius: 24px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(244, 240, 232, 0.92));
+  border: 1px solid rgba(19, 48, 78, 0.08);
+  box-shadow: 0 18px 36px rgba(7, 17, 31, 0.06);
+}
+
+.shop-guidance-card span {
+  display: inline-flex;
+  color: #876342;
+  font-size: 0.76rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+}
+
+.shop-guidance-card strong {
+  display: block;
+  margin-top: 14px;
+  color: var(--navy-900);
+  font-size: 1.16rem;
+  line-height: 1.24;
+  letter-spacing: -0.03em;
+}
+
+.shop-guidance-card p {
+  margin: 12px 0 0;
+  color: var(--muted);
+  line-height: 1.76;
+}
+
 .shop-search {
   display: flex;
   gap: 12px;
@@ -125,6 +163,16 @@
   border-radius: 24px;
   text-decoration: none;
   color: inherit;
+  transition: transform 0.24s ease, box-shadow 0.24s ease;
+}
+
+.shop-card-link:hover {
+  transform: translateY(-4px);
+}
+
+.shop-card-link:hover .card {
+  box-shadow: 0 26px 48px rgba(7, 17, 31, 0.1);
+  border-color: rgba(168, 119, 68, 0.18);
 }
 
 .shop-card {
@@ -228,6 +276,7 @@
 }
 
 @media (max-width: 1080px) {
+  .shop-guidance,
   .shop-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -247,6 +296,10 @@
   .shop-toolbar {
     padding: 20px;
     border-radius: 22px;
+  }
+
+  .shop-guidance {
+    grid-template-columns: 1fr;
   }
 
   .shop-toolbar-meta {

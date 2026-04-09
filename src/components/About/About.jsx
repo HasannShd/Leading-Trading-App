@@ -1,4 +1,6 @@
+import { useRef } from 'react';
 import { Link } from 'react-router-dom';
+import { useScrollReveal } from '../../hooks/useScrollReveal';
 import './About.css';
 
 const teamUnits = [
@@ -58,38 +60,43 @@ const workflowSteps = [
   },
 ];
 
-const About = () => (
-  <main className="about-shell">
+const About = () => {
+  const rootRef = useRef(null);
+
+  useScrollReveal(rootRef);
+
+  return (
+  <main className="about-shell" ref={rootRef}>
     <section className="about-hero">
-      <div className="about-hero-copy">
-        <span className="about-eyebrow">About Leading Trading Est</span>
-        <h1>Supporting procurement in Bahrain with disciplined sourcing, quality assurance, and dependable delivery coordination.</h1>
-        <p>
+      <div className="about-hero-copy animate-stagger" data-stagger-step="100ms">
+        <span className="about-eyebrow animate-on-scroll">About Leading Trading Est</span>
+        <h1 className="animate-on-scroll">Supporting procurement in Bahrain with disciplined sourcing, quality assurance, and dependable delivery coordination.</h1>
+        <p className="animate-on-scroll">
           Since 2012, Leading Trading Est has supported organizations in Bahrain across medical, dental,
           industrial, and safety requirements with a focus on product quality, service reliability, and professional execution.
         </p>
-        <div className="about-hero-actions">
+        <div className="about-hero-actions animate-on-scroll">
           <Link className="btn primary" to="/contact">Talk to Our Team</Link>
           <Link className="btn" to="/products">Explore Categories</Link>
         </div>
       </div>
 
-      <div className="about-hero-panel">
-        <span className="about-hero-panel-label">Operating profile</span>
-        <strong>Supplier-led sourcing, structured procurement, and dependable operational follow-through.</strong>
-        <p>
+      <div className="about-hero-panel animate-stagger" data-stagger-step="100ms">
+        <span className="about-hero-panel-label animate-on-scroll">Operating profile</span>
+        <strong className="animate-on-scroll">Supplier-led sourcing, structured procurement, and dependable operational follow-through.</strong>
+        <p className="animate-on-scroll">
           Our business model combines supplier access, quality review, procurement discipline, logistics planning, and local account support under one coordinated operating workflow.
         </p>
-        <div className="about-hero-metrics">
-          <div>
+        <div className="about-hero-metrics animate-stagger" data-stagger-step="90ms">
+          <div className="animate-on-scroll">
             <strong>2012</strong>
             <span>company foundation</span>
           </div>
-          <div>
+          <div className="animate-on-scroll">
             <strong>Medical</strong>
             <span>clinical and equipment supply</span>
           </div>
-          <div>
+          <div className="animate-on-scroll">
             <strong>Industrial</strong>
             <span>safety and operational support</span>
           </div>
@@ -98,13 +105,13 @@ const About = () => (
     </section>
 
     <section className="about-story">
-      <div className="about-section-heading">
-        <span className="about-eyebrow">Company profile</span>
-        <h2>A Bahrain-based supply business built around continuity, accountability, and service reliability.</h2>
+      <div className="about-section-heading animate-stagger" data-stagger-step="100ms">
+        <span className="about-eyebrow animate-on-scroll">Company profile</span>
+        <h2 className="animate-on-scroll">A Bahrain-based supply business built around continuity, accountability, and service reliability.</h2>
       </div>
 
-      <div className="about-story-grid">
-        <article className="about-story-card about-story-card--lead">
+      <div className="about-story-grid animate-stagger" data-stagger-step="110ms">
+        <article className="about-story-card about-story-card--lead animate-on-scroll">
           <p>
             Leading Trading Est serves hospitals, clinics, practices, and operational teams that require dependable
             access to the right products supported by a workflow that remains organized from sourcing through delivery.
@@ -118,7 +125,7 @@ const About = () => (
           </p>
         </article>
 
-        <article className="about-story-card about-story-card--pillars">
+        <article className="about-story-card about-story-card--pillars animate-on-scroll">
           <span className="about-card-kicker">What defines the company</span>
           <ul className="about-pillar-list">
             {companyPillars.map((pillar) => (
@@ -130,14 +137,14 @@ const About = () => (
     </section>
 
     <section className="about-workflow">
-      <div className="about-section-heading">
-        <span className="about-eyebrow">Workflow</span>
-        <h2>A structured workflow supporting quality, clarity, and dependable execution from enquiry to delivery.</h2>
+      <div className="about-section-heading animate-stagger" data-stagger-step="100ms">
+        <span className="about-eyebrow animate-on-scroll">Workflow</span>
+        <h2 className="animate-on-scroll">A structured workflow supporting quality, clarity, and dependable execution from enquiry to delivery.</h2>
       </div>
 
-      <div className="about-workflow-grid">
+      <div className="about-workflow-grid animate-stagger" data-stagger-step="110ms">
         {workflowSteps.map((step, index) => (
-          <article className="about-workflow-card" key={step.title}>
+          <article className="about-workflow-card animate-on-scroll" key={step.title}>
             <span className="about-workflow-index">{`0${index + 1}`}</span>
             <h3>{step.title}</h3>
             <p>{step.description}</p>
@@ -147,19 +154,19 @@ const About = () => (
     </section>
 
     <section className="about-leadership">
-      <div className="about-section-heading">
-        <span className="about-eyebrow">Leadership</span>
-        <h2>Leadership that sets the standard for quality, coordination, and long-term customer confidence.</h2>
+      <div className="about-section-heading animate-stagger" data-stagger-step="100ms">
+        <span className="about-eyebrow animate-on-scroll">Leadership</span>
+        <h2 className="animate-on-scroll">Leadership that sets the standard for quality, coordination, and long-term customer confidence.</h2>
       </div>
 
-      <div className="about-leadership-card">
-        <div className="about-leadership-signature">
+      <div className="about-leadership-card animate-stagger" data-stagger-step="100ms">
+        <div className="about-leadership-signature animate-on-scroll">
           <span className="about-card-kicker">Message from leadership</span>
           <strong>Shahid Majeed</strong>
           <small>Managing Director & CEO</small>
         </div>
 
-        <div className="about-leadership-copy">
+        <div className="about-leadership-copy animate-on-scroll">
           <p>
             At Leading Trading Est, the objective has always been clear: build a supply business that customers can
             rely on when product quality, timing, and service standards matter. That requires disciplined sourcing,
@@ -175,14 +182,14 @@ const About = () => (
     </section>
 
     <section className="about-team">
-      <div className="about-section-heading">
-        <span className="about-eyebrow">Team structure</span>
-        <h2>A team structure built around leadership, commercial coordination, administrative control, and delivery execution.</h2>
+      <div className="about-section-heading animate-stagger" data-stagger-step="100ms">
+        <span className="about-eyebrow animate-on-scroll">Team structure</span>
+        <h2 className="animate-on-scroll">A team structure built around leadership, commercial coordination, administrative control, and delivery execution.</h2>
       </div>
 
-      <div className="about-team-grid">
+      <div className="about-team-grid animate-stagger" data-stagger-step="110ms">
         {teamUnits.map((unit) => (
-          <article className="about-team-card" key={unit.label}>
+          <article className="about-team-card animate-on-scroll" key={unit.label}>
             <span>{unit.label}</span>
             <h3>{unit.title}</h3>
             <p>{unit.description}</p>
@@ -192,8 +199,8 @@ const About = () => (
     </section>
 
     <section className="about-story">
-      <div className="about-story-grid">
-        <article className="about-story-card about-story-card--lead">
+      <div className="about-story-grid animate-stagger" data-stagger-step="110ms">
+        <article className="about-story-card about-story-card--lead animate-on-scroll">
           <span className="about-card-kicker">Quality commitment</span>
           <p>
             Quality at LTE is reflected in the way suppliers are reviewed, products are assessed, documentation is
@@ -202,7 +209,7 @@ const About = () => (
           </p>
         </article>
 
-        <article className="about-story-card about-story-card--pillars">
+        <article className="about-story-card about-story-card--pillars animate-on-scroll">
           <span className="about-card-kicker">Working relationship</span>
           <ul className="about-pillar-list">
             <li>Responsive commercial follow-up from enquiry through quotation and order handling</li>
@@ -213,6 +220,7 @@ const About = () => (
       </div>
     </section>
   </main>
-);
+  );
+};
 
 export default About;

@@ -61,9 +61,9 @@ const Categories = () => {
         <section className="categories-hero">
           <div className="categories-hero-copy animate-stagger" data-stagger-step="110ms">
             <span className="categories-eyebrow animate-on-scroll">Our Categories</span>
-            <h1 className="categories-title animate-on-scroll">Explore the core medical, dental, and industrial categories that define the LTE catalog.</h1>
+            <h1 className="categories-title animate-on-scroll">Browse the category structure behind LTE’s medical, dental, and industrial supply portfolio.</h1>
             <p className="categories-subtitle animate-on-scroll">
-              Browse the main category structure, open each group, and review the products available inside the relevant subcategories.
+              Review the main operating groups first, then move into the relevant subcategories to narrow specifications, brands, and product use cases.
             </p>
           </div>
 
@@ -113,9 +113,27 @@ const Categories = () => {
           />
         ) : (
           <>
+            <section className="categories-guidance animate-stagger" data-stagger-step="100ms">
+              <article className="categories-guidance-card animate-on-scroll">
+                <span>Structured browsing</span>
+                <strong>Start with the main operating group, then move into the right subcategory.</strong>
+                <p>The category structure is designed to help buyers move from broad operational needs into the most relevant product group quickly.</p>
+              </article>
+              <article className="categories-guidance-card animate-on-scroll">
+                <span>Practical filtering</span>
+                <strong>Use the search bar to narrow by department, supply type, or procurement purpose.</strong>
+                <p>Searches look across both main categories and subcategories, making it easier to locate the correct supply path.</p>
+              </article>
+              <article className="categories-guidance-card animate-on-scroll">
+                <span>Quotation support</span>
+                <strong>Open a category to review products, then contact LTE for specification and sourcing guidance.</strong>
+                <p>Where product choice depends on size, variant, approval, or availability, the team can support the next step directly.</p>
+              </article>
+            </section>
+
             <div className="categories-results-bar animate-on-scroll">
               <span>{list.length} category{list.length === 1 ? '' : 'ies'} available</span>
-              <p>Select a main category to review its subcategories and the products listed within that group.</p>
+              <p>Select a main category to review its subcategories and the products supplied within that operating group.</p>
             </div>
 
             <div className="categories-grid animate-stagger" data-stagger-step="100ms">

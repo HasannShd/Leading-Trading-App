@@ -114,10 +114,9 @@ const Shop = () => {
         <section className="shop-hero">
           <div className="shop-hero-copy animate-stagger" data-stagger-step="110ms">
             <span className="shop-eyebrow animate-on-scroll">Product Catalog</span>
-            <h1 className="animate-on-scroll">Browse products with clearer structure, faster filtering, and stronger purchase intent.</h1>
+            <h1 className="animate-on-scroll">A structured catalog for medical, dental, and industrial sourcing.</h1>
             <p className="animate-on-scroll">
-              Review the active catalog, narrow by category, and move straight into product detail pages built
-              for quotes, repeat orders, and operational sourcing.
+              Review the active catalog, narrow by category, and move directly into product pages designed for quotations, repeat procurement, and operational decision-making.
             </p>
           </div>
 
@@ -132,9 +131,27 @@ const Shop = () => {
             </div>
             <div className="shop-hero-stat animate-on-scroll">
               <strong>{featuredCount}</strong>
-              <span>featured right now</span>
+              <span>featured selections</span>
             </div>
           </div>
+        </section>
+
+        <section className="shop-guidance animate-stagger" data-stagger-step="100ms">
+          <article className="shop-guidance-card animate-on-scroll">
+            <span>Catalog approach</span>
+            <strong>Review products by category first when the requirement is operational rather than brand-specific.</strong>
+            <p>For most procurement teams, category-led browsing is the fastest way to move from requirement to shortlist.</p>
+          </article>
+          <article className="shop-guidance-card animate-on-scroll">
+            <span>Quotation workflow</span>
+            <strong>Use the product pages to confirm specifications, variant structure, and quotation support.</strong>
+            <p>Where sizing, type selection, or documentation matters, the product detail page provides the clearer next step.</p>
+          </article>
+          <article className="shop-guidance-card animate-on-scroll">
+            <span>Repeat procurement</span>
+            <strong>Built for recurring demand across healthcare, dental, safety, and facility support categories.</strong>
+            <p>The LTE catalog is organized to support both one-time sourcing needs and repeat account purchasing.</p>
+          </article>
         </section>
 
         <section className="shop-toolbar animate-stagger" data-stagger-step="100ms">

@@ -1,7 +1,8 @@
-import { useEffect, useMemo, useState, useCallback, startTransition } from 'react';
+import { useEffect, useMemo, useState, useCallback, startTransition, useRef } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import StatePanel from '../Common/StatePanel';
 import { normalizeImageSrc } from '../../utils/normalizeImageSrc';
+import { useScrollReveal } from '../../hooks/useScrollReveal';
 import './ProductDetails.css';
 
 const buildSizeLabel = (entry) => [entry.size, entry.inches, entry.color].filter(Boolean).join(' / ');
@@ -27,6 +28,9 @@ const ProductDetails = () => {
   const [qty, setQty] = useState(1);
   const [loading, setLoading] = useState(false);
   const [notice, setNotice] = useState(null);
+  const rootRef = useRef(null);
+
+  useScrollReveal(rootRef);
 
   const fetchProduct = useCallback(async () => {
     setLoading(true);
@@ -239,9 +243,9 @@ const ProductDetails = () => {
 
   return (
     <main>
-      <section className="product-details-shell">
+      <section className="product-details-shell" ref={rootRef}>
         <section className="product-details">
-          <div className="product-media">
+          <div className="product-media animate-on-scroll">
             {resolvedActiveImage ? (
               <img
                 src={resolvedActiveImage}
@@ -278,13 +282,30 @@ const ProductDetails = () => {
             )}
           </div>
 
-          <div className="product-info">
-            <span className="product-kicker">{product.categorySlug?.name || product.brand || 'Catalog product'}</span>
-            <h1>{product.name}</h1>
-            <p className="product-brand">{product.brand || 'Leading Trading Est'}</p>
-            <p className="product-desc">
+          <div className="product-info animate-stagger" data-stagger-step="100ms">
+            <span className="product-kicker animate-on-scroll">
+              {product.categorySlug?.parent?.name
+                ? `${product.categorySlug.parent.name} / ${product.categorySlug?.name || ''}`
+                : (product.categorySlug?.name || product.brand || 'Catalog product')}
+            </span>
+            <h1 className="animate-on-scroll">{product.name}</h1>
+            <p className="product-brand animate-on-scroll">{product.brand || 'Leading Trading Est'}</p>
+            <p className="product-desc animate-on-scroll">
               {product.description?.trim() || 'Contact our team for product specifications, availability, and commercial support.'}
             </p>
+
+            <div className="product-service-grid animate-stagger" data-stagger-step="100ms">
+              <article className="product-service-card animate-on-scroll">
+                <span>Procurement use</span>
+                <strong>Review the product structure before moving into quotation or cart handling.</strong>
+                <p>Where products depend on type, size, brand, or commercial fit, the detail page gives the clearest next step.</p>
+              </article>
+              <article className="product-service-card animate-on-scroll">
+                <span>Support path</span>
+                <strong>LTE can assist with specification fit, availability, and repeat-order planning.</strong>
+                <p>Use WhatsApp, direct enquiry, or quotation handling when the requirement needs confirmation before purchase.</p>
+              </article>
+            </div>
 
             {notice && (
               <StatePanel
@@ -297,7 +318,7 @@ const ProductDetails = () => {
               />
             )}
 
-            <div className="product-purchase-card">
+            <div className="product-purchase-card animate-on-scroll">
               <div className="product-price-row">
                 <div>
                   <span className="product-price-label">Current price</span>
@@ -379,7 +400,7 @@ const ProductDetails = () => {
             </div>
 
             {productSpecs.length > 0 && (
-              <div className="product-specs">
+              <div className="product-specs animate-on-scroll">
                 <h3>Specifications</h3>
                 <div className="product-spec-grid">
                   {productSpecs.map((spec, idx) => (
@@ -395,11 +416,11 @@ const ProductDetails = () => {
         </section>
 
         {relatedProducts.length > 0 && (
-          <section className="product-related">
-            <div className="product-related-header">
-              <div>
-                <span className="product-kicker">Also in this category</span>
-                <h2>Related products in the same category</h2>
+          <section className="product-related animate-stagger" data-stagger-step="100ms">
+            <div className="product-related-header animate-on-scroll">
+              <div className="animate-stagger" data-stagger-step="100ms">
+                <span className="product-kicker animate-on-scroll">Also in this category</span>
+                <h2 className="animate-on-scroll">Related products in the same operational category</h2>
               </div>
               <Link className="btn" to={`/categories/${product.categorySlug?.slug || product.categorySlug?._id || ''}`}>
                 Browse Category
