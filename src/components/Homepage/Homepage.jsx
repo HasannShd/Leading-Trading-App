@@ -100,7 +100,7 @@ const sectors = [
     title: 'Supporting industrial and safety teams that need structured supply, not fragmented vendor follow-up.',
     body: 'The same disciplined workflow extends into industrial and safety sourcing, giving buyers a more dependable path from request to delivery.',
     points: ['Safety and utility products', 'Operational supply continuity', 'Consistent delivery planning'],
-    image: 'about page.webp',
+    image: 'industrial.png',
     visualTitle: 'Industrial continuity backed by reliable coordination',
     visualBody: 'Operational teams need dependable product flow, practical coordination, and local follow-through that supports day-to-day performance.',
   },
