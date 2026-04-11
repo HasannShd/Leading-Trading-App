@@ -102,7 +102,7 @@ const CategoryDetails = () => {
             title="Category not available"
             description={error || 'The category you requested could not be found.'}
             variant="error"
-            action={<Link className="btn primary" to="/products">Browse All Categories</Link>}
+            action={<Link className="btn primary" to="/categories">Browse All Categories</Link>}
           />
         </section>
       </main>

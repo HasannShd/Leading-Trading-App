@@ -199,7 +199,7 @@ const HomePage = () => {
 
             <div className="home-hero__actions animate-on-scroll">
               <Link className="home-btn home-btn--primary" to="/contact">Request a Quote</Link>
-              <Link className="home-btn home-btn--ghost" to="/products">Explore Products</Link>
+              <Link className="home-btn home-btn--ghost" to="/categories">Explore Categories</Link>
             </div>
 
             <div className="home-hero__notes animate-stagger" data-stagger-step="90ms">

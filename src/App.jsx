@@ -59,8 +59,9 @@ const AppShell = () => {
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<HomePage />} />
+          <Route path="/categories" element={<Categories />} />
           <Route path="/categories/:slug" element={<CategoryDetails />} />
-          <Route path="/products" element={<Categories />} />
+          <Route path="/products" element={<Navigate to="/categories" replace />} />
           <Route path="/shop" element={<Shop />} />
           <Route path="/product/:id" element={<ProductDetails />} />
           <Route path="/cart" element={<Cart />} />

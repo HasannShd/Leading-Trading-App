@@ -77,7 +77,7 @@ const About = () => {
         </p>
         <div className="about-hero-actions animate-on-scroll">
           <Link className="btn primary" to="/contact">Talk to Our Team</Link>
-          <Link className="btn" to="/products">Explore Categories</Link>
+          <Link className="btn" to="/categories">Explore Categories</Link>
         </div>
       </div>
 

@@ -61,9 +61,9 @@ const Categories = () => {
         <section className="categories-hero">
           <div className="categories-hero-copy animate-stagger" data-stagger-step="110ms">
             <span className="categories-eyebrow animate-on-scroll">Our Categories</span>
-            <h1 className="categories-title animate-on-scroll">Browse the category structure behind LTE’s medical, dental, and industrial supply portfolio.</h1>
+            <h1 className="categories-title animate-on-scroll">Browse LTE&apos;s medical, dental, and industrial categories.</h1>
             <p className="categories-subtitle animate-on-scroll">
-              Review the main operating groups first, then move into the relevant subcategories to narrow specifications, brands, and product use cases.
+              Review the main groups first, then open the relevant subcategories to find the right department or supply area faster.
             </p>
           </div>
 
@@ -117,7 +117,7 @@ const Categories = () => {
               <article className="categories-guidance-card animate-on-scroll">
                 <span>Structured browsing</span>
                 <strong>Start with the main operating group, then move into the right subcategory.</strong>
-                <p>The category structure is designed to help buyers move from broad operational needs into the most relevant product group quickly.</p>
+                <p>The category structure helps visitors move from broad operational needs into the right department quickly.</p>
               </article>
               <article className="categories-guidance-card animate-on-scroll">
                 <span>Practical filtering</span>
@@ -126,14 +126,14 @@ const Categories = () => {
               </article>
               <article className="categories-guidance-card animate-on-scroll">
                 <span>Quotation support</span>
-                <strong>Open a category to review products, then contact LTE for specification and sourcing guidance.</strong>
-                <p>Where product choice depends on size, variant, approval, or availability, the team can support the next step directly.</p>
+                <strong>Open a category to review its structure, then contact LTE for sourcing guidance.</strong>
+                <p>When you need help choosing the right section or subcategory, the team can guide the next step directly.</p>
               </article>
             </section>
 
             <div className="categories-results-bar animate-on-scroll">
               <span>{list.length} category{list.length === 1 ? '' : 'ies'} available</span>
-              <p>Select a main category to review its subcategories and the products supplied within that operating group.</p>
+              <p>Select a main category to review its subcategories and browse the category structure within that operating group.</p>
             </div>
 
             <div className="categories-grid animate-stagger" data-stagger-step="100ms">
@@ -174,7 +174,7 @@ const Categories = () => {
                         </div>
                         <h3 className="categories-card-title">{c.name}</h3>
                         <p className="categories-card-desc">
-                          {c.description?.trim() || 'Browse the subcategories and products available inside this main category.'}
+                          {c.description?.trim() || 'Browse the subcategories available inside this main category.'}
                         </p>
                         {c.children?.length ? (
                           <div className="categories-card-children">
