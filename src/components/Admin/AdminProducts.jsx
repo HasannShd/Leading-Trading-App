@@ -87,6 +87,12 @@ const AdminProducts = () => {
     return Number.isNaN(date.getTime()) ? '-' : date.toLocaleDateString();
   };
 
+  const hasProductImage = (product) => Boolean(
+    product?.image?.trim() ||
+    product?.images?.some((image) => image?.trim()) ||
+    product?.variants?.some((variant) => variant?.image?.trim())
+  );
+
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData(prev => ({
@@ -904,6 +910,7 @@ const AdminProducts = () => {
                   <th>Category</th>
                   <th>Brand</th>
                   <th>SKU</th>
+                  <th>Image</th>
                   <th>Desc?</th>
                   <th>Featured</th>
                   <th>Status</th>
@@ -930,6 +937,9 @@ const AdminProducts = () => {
                     <td className="col-category">{product.categorySlug?.name || '-'}</td>
                     <td className="col-brand">{product.brand || '-'}</td>
                     <td className="col-sku">{product.sku || '-'}</td>
+                    <td className="col-image-flag">
+                      {hasProductImage(product) ? 'Yes' : 'No'}
+                    </td>
                     <td className="col-desc-flag">{product.description?.trim() ? 'Yes' : 'No'}</td>
                     <td>{product.featured ? 'Yes' : 'No'}</td>
                     <td className="col-status">
