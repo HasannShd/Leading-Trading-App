@@ -93,11 +93,17 @@ const StaffAttendance = () => {
           </div>
           <div className="portal-stat">
             <div className="portal-stat-value">{todayRecord?.mileageWeekStart ?? '-'}</div>
-            <div className="portal-stat-label">Week start km</div>
+            <div className="portal-stat-label">
+              Week start km
+              {todayRecord?.mileageWeekStartAt ? ` • ${formatStamp(todayRecord.mileageWeekStartAt)}` : ''}
+            </div>
           </div>
           <div className="portal-stat">
             <div className="portal-stat-value">{todayRecord?.mileageWeekEnd ?? '-'}</div>
-            <div className="portal-stat-label">Week end km</div>
+            <div className="portal-stat-label">
+              Week end km
+              {todayRecord?.mileageWeekEndAt ? ` • ${formatStamp(todayRecord.mileageWeekEndAt)}` : ''}
+            </div>
           </div>
         </div>
         <div className="portal-field" style={{ marginTop: '1rem' }}>
@@ -162,7 +168,9 @@ const StaffAttendance = () => {
                 <span>Out: {record.checkOutTime ? formatPortalDateTime(record.checkOutTime) : '-'}</span>
                 <span>{record.totalWorkedMinutes || 0} mins</span>
                 {record.mileageWeekStart !== undefined && record.mileageWeekStart !== null && <span>Start km: {record.mileageWeekStart}</span>}
+                {record.mileageWeekStartAt && <span>Start entered: {formatPortalDateTime(record.mileageWeekStartAt)}</span>}
                 {record.mileageWeekEnd !== undefined && record.mileageWeekEnd !== null && <span>End km: {record.mileageWeekEnd}</span>}
+                {record.mileageWeekEndAt && <span>End entered: {formatPortalDateTime(record.mileageWeekEndAt)}</span>}
               </div>
               {(record.checkInNote || record.checkOutNote) && (
                 <div className="portal-record-copy">

@@ -40,6 +40,7 @@ import StaffAttendance from './components/Portal/StaffAttendance';
 import StaffSchedulePage from './components/Portal/StaffSchedulePage';
 import StaffNotificationsPage from './components/Portal/StaffNotificationsPage';
 import StaffResourcePage from './components/Portal/StaffResourcePage';
+import StaffOrdersPage from './components/Portal/StaffOrdersPage';
 import AdminStaffPage from './components/Portal/AdminStaffPage';
 import AdminSchedulesPage from './components/Portal/AdminSchedulesPage';
 import AdminResourcePage from './components/Portal/AdminResourcePage';
@@ -97,16 +98,11 @@ const AppShell = () => {
             <Route path="attendance" element={<StaffAttendance />} />
             <Route path="schedule" element={<StaffSchedulePage />} />
             <Route path="reports" element={<StaffResourcePage config={staffModuleConfigs.reports} />} />
-            <Route path="orders" element={<StaffResourcePage config={staffModuleConfigs.orders} />} />
+            <Route path="orders" element={<StaffOrdersPage />} />
             <Route path="expenses" element={<StaffResourcePage config={staffModuleConfigs.expenses} />} />
             <Route path="clients" element={<StaffResourcePage config={staffModuleConfigs.clients} />} />
             <Route path="visits" element={<StaffResourcePage config={staffModuleConfigs.visits} />} />
-            <Route path="followups" element={<StaffResourcePage config={staffModuleConfigs.followups} />} />
-            <Route path="quotations" element={<StaffResourcePage config={staffModuleConfigs.quotations} />} />
             <Route path="collections" element={<StaffResourcePage config={staffModuleConfigs.collections} />} />
-            <Route path="requests" element={<StaffResourcePage config={staffModuleConfigs.requests} />} />
-            <Route path="demand" element={<StaffResourcePage config={staffModuleConfigs.demand} />} />
-            <Route path="issues" element={<StaffResourcePage config={staffModuleConfigs.issues} />} />
             <Route path="notifications" element={<StaffNotificationsPage />} />
           </Route>
 
@@ -130,12 +126,7 @@ const AppShell = () => {
           <Route path="/admin/expenses" element={<ProtectedAdminRoute element={<AdminResourcePage config={{ ...adminModuleConfigs.expenses, exportKey: 'expenses' }} />} />} />
           <Route path="/admin/clients" element={<ProtectedAdminRoute element={<AdminResourcePage config={adminModuleConfigs.clients} />} />} />
           <Route path="/admin/visits" element={<ProtectedAdminRoute element={<AdminResourcePage config={{ ...adminModuleConfigs.visits, exportKey: 'visits' }} />} />} />
-          <Route path="/admin/followups" element={<ProtectedAdminRoute element={<AdminResourcePage config={{ ...adminModuleConfigs.followups, exportKey: 'followups' }} />} />} />
-          <Route path="/admin/quotations" element={<ProtectedAdminRoute element={<AdminResourcePage config={adminModuleConfigs.quotations} />} />} />
           <Route path="/admin/collections" element={<ProtectedAdminRoute element={<AdminResourcePage config={adminModuleConfigs.collections} />} />} />
-          <Route path="/admin/requests" element={<ProtectedAdminRoute element={<AdminResourcePage config={adminModuleConfigs.requests} />} />} />
-          <Route path="/admin/demand" element={<ProtectedAdminRoute element={<AdminResourcePage config={adminModuleConfigs.demand} />} />} />
-          <Route path="/admin/issues" element={<ProtectedAdminRoute element={<AdminResourcePage config={adminModuleConfigs.issues} />} />} />
           <Route path="/admin/notifications" element={<ProtectedAdminRoute element={<AdminResourcePage config={adminModuleConfigs.notifications} />} />} />
           <Route path="/admin/logs" element={<ProtectedAdminRoute element={<AdminResourcePage config={adminModuleConfigs.logs} />} />} />
         </Routes>

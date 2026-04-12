@@ -88,8 +88,6 @@ const AdminResourcePage = ({ config }) => {
     record.clientName ||
     record.action ||
     record.item ||
-    record.productName ||
-    record.issueType ||
     'Record';
 
   const recordMeta = (record) =>
@@ -105,14 +103,12 @@ const AdminResourcePage = ({ config }) => {
       record.checkInTime ? `In ${formatPortalDateTime(record.checkInTime)}` : '',
       record.checkOutTime ? `Out ${formatPortalDateTime(record.checkOutTime)}` : '',
       record.expenseDate,
-      record.dueDate,
       record.createdAt ? formatPortalDateTime(record.createdAt) : '',
       record.amount !== undefined ? `${record.amount} BHD` : '',
       record.mileageWeekStart !== undefined && record.mileageWeekStart !== null ? `Start km ${record.mileageWeekStart}` : '',
       record.mileageWeekEnd !== undefined && record.mileageWeekEnd !== null ? `End km ${record.mileageWeekEnd}` : '',
-      record.proposedPrice !== undefined && record.proposedPrice !== null ? `${record.proposedPrice} BHD` : '',
     ].filter(Boolean);
-  const pendingStatuses = new Set(['submitted', 'pending', 'under_review', 'reviewed', 'draft', 'partial', 'missed', 'overdue']);
+  const pendingStatuses = new Set(['submitted', 'pending', 'under_review', 'reviewed', 'partial', 'overdue']);
   const pendingCount = records.filter((record) => pendingStatuses.has(record.status)).length;
   const assignedPeople = new Set(records.map((record) => record.user?._id).filter(Boolean)).size;
 
@@ -147,7 +143,7 @@ const AdminResourcePage = ({ config }) => {
               Review entries below, use the filters to narrow the list, and update statuses from the cards when needed.
             </p>
           </div>
-          {['attendance', 'reports', 'expenses', 'orders', 'visits', 'followups'].includes(config.exportKey || configKey) && (
+          {['attendance', 'reports', 'expenses', 'orders', 'visits'].includes(config.exportKey || configKey) && (
             <button className="portal-inline-button ghost" type="button" onClick={handleExport}>Export CSV</button>
           )}
         </div>
@@ -233,8 +229,8 @@ const AdminResourcePage = ({ config }) => {
                 <div className="portal-stat-label">Orders</div>
               </div>
               <div className="portal-stat light">
-                <div className="portal-stat-value">{staffSummary.metrics.pendingFollowUps}</div>
-                <div className="portal-stat-label">Pending follow-ups</div>
+                <div className="portal-stat-value">{staffSummary.metrics.collectionsCount}</div>
+                <div className="portal-stat-label">Collections</div>
               </div>
             </div>
             <div className="portal-record-meta">

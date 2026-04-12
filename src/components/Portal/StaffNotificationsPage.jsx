@@ -33,7 +33,7 @@ const StaffNotificationsPage = () => {
             <div className="portal-brand-kicker">Alerts</div>
             <h2 className="portal-section-title" style={{ fontSize: '1.4rem' }}>Read your office updates here</h2>
             <p className="portal-section-copy">
-              This page shows reminders, follow-up alerts, and office updates. Open this page regularly and press <strong>Mark as Read</strong> after you have seen the message.
+              This page shows reminders, schedule updates, status changes, and office updates. Open this page regularly and press <strong>Mark as Read</strong> after you have seen the message.
             </p>
           </div>
         </div>

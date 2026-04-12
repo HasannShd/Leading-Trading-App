@@ -10,7 +10,7 @@ const quickLinks = [
   { to: '/staff/orders', label: 'Submit Order' },
   { to: '/staff/expenses', label: 'Submit Expense' },
   { to: '/staff/visits', label: 'Log Visit' },
-  { to: '/staff/followups', label: 'View Follow-ups' },
+  { to: '/staff/collections', label: 'Open Collections' },
 ];
 
 const StaffDashboard = () => {
@@ -35,7 +35,7 @@ const StaffDashboard = () => {
             <div className="portal-brand-kicker">Field Summary</div>
             <h1 className="portal-section-title">Welcome back{data.user?.name ? `, ${data.user.name}` : ''}</h1>
             <p className="portal-section-copy" style={{ color: 'rgba(255,255,255,0.76)' }}>
-              Today is {formatPortalPrettyDate()}. Keep check-ins, schedules, visits, orders, and follow-ups moving from one mobile workspace.
+              Today is {formatPortalPrettyDate()}. Keep check-ins, schedules, visits, orders, and collections moving from one mobile workspace.
             </p>
           </div>
         </div>
@@ -47,8 +47,8 @@ const StaffDashboard = () => {
             </div>
           </div>
           <div className="portal-stat">
-            <div className="portal-stat-value">{data.quickStats.pendingFollowUps}</div>
-            <div className="portal-stat-label">Pending follow-ups</div>
+            <div className="portal-stat-value">{data.quickStats.recentOrders}</div>
+            <div className="portal-stat-label">Recent orders</div>
           </div>
           <div className="portal-stat">
             <div className="portal-stat-value">{data.quickStats.unreadNotifications}</div>

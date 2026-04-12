@@ -30,7 +30,6 @@ const AdminDashboard = () => {
     pendingReports: 0,
     pendingExpenses: 0,
     pendingOrders: 0,
-    dueFollowUps: 0,
   });
   const [recentOpsActivity, setRecentOpsActivity] = useState([]);
   const [loadingMetrics, setLoadingMetrics] = useState(true);
@@ -88,7 +87,6 @@ const AdminDashboard = () => {
         pendingReports: opsData?.data?.metrics?.pendingReports || 0,
         pendingExpenses: opsData?.data?.metrics?.pendingExpenses || 0,
         pendingOrders: opsData?.data?.metrics?.pendingOrders || 0,
-        dueFollowUps: opsData?.data?.metrics?.dueFollowUps || 0,
       });
       setRecentOpsActivity(opsData?.data?.recentActivity || []);
     } catch (err) {
@@ -131,7 +129,7 @@ const AdminDashboard = () => {
       icon: '🧾',
       title: 'Orders',
       value: metrics.orders,
-      description: 'Monitor the current order volume and move quickly on new requests.',
+      description: 'Monitor the current order volume and move quickly on new customer orders.',
       action: () => goTo(adminPaths.siteOrders),
       label: 'Manage Orders',
     },
@@ -174,7 +172,7 @@ const AdminDashboard = () => {
       icon: '📝',
       title: 'Reports',
       value: opsMetrics.pendingReports,
-      description: 'Review daily field reports, visit outcomes, and follow-up notes.',
+      description: 'Review daily field reports, visit outcomes, and staff notes.',
       action: () => goTo('/admin/reports'),
       label: 'Open Reports',
     },
@@ -195,12 +193,12 @@ const AdminDashboard = () => {
       label: 'Open Staff Orders',
     },
     {
-      icon: '📍',
-      title: 'Follow-Ups',
-      value: opsMetrics.dueFollowUps,
-      description: 'Keep due client follow-ups, visits, and payment conversations visible.',
-      action: () => goTo('/admin/followups'),
-      label: 'Open Follow-Ups',
+      icon: '💰',
+      title: 'Collections',
+      value: loadingMetrics ? '...' : 'Open',
+      description: 'Review collection records and payment conversations logged by staff.',
+      action: () => goTo('/admin/collections'),
+      label: 'Open Collections',
     },
   ];
 
@@ -241,7 +239,7 @@ const AdminDashboard = () => {
           <button className="admin-nav-item" onClick={() => goTo('/admin/schedules')}>📅 Schedules</button>
           <button className="admin-nav-item" onClick={() => goTo('/admin/reports')}>📝 Reports</button>
           <button className="admin-nav-item" onClick={() => goTo('/admin/expenses')}>💸 Expenses</button>
-          <button className="admin-nav-item" onClick={() => goTo('/admin/followups')}>📍 Follow-ups</button>
+          <button className="admin-nav-item" onClick={() => goTo('/admin/collections')}>💰 Collections</button>
           <button className="admin-nav-item" onClick={() => goTo(adminPaths.categories)}>📁 Categories</button>
           <button className="admin-nav-item" onClick={() => goTo(adminPaths.products)}>📦 Products</button>
           <button className="admin-nav-item" onClick={() => goTo(adminPaths.import)}>📥 Import</button>
@@ -348,8 +346,8 @@ const AdminDashboard = () => {
                 <li>Create and activate staff users</li>
                 <li>Track check-in and check-out history</li>
                 <li>Assign schedules and review field reports</li>
-                <li>Review expenses, visits, quotations, collections, and requests</li>
-                <li>Monitor client follow-ups and field demand logs</li>
+                <li>Review expenses, visits, collections, and submitted staff orders</li>
+                <li>Monitor notifications and activity logs from one admin workspace</li>
               </ul>
             </div>
 

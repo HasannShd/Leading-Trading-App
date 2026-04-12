@@ -103,7 +103,7 @@ const AdminStaffPage = () => {
         { href: `/admin/orders?user=${selectedStaffId}`, label: 'Orders' },
         { href: `/admin/expenses?user=${selectedStaffId}`, label: 'Expenses' },
         { href: `/admin/visits?user=${selectedStaffId}`, label: 'Visits' },
-        { href: `/admin/followups?user=${selectedStaffId}`, label: 'Follow-ups' },
+        { href: `/admin/collections?user=${selectedStaffId}`, label: 'Collections' },
       ]
     : [];
 
@@ -279,7 +279,7 @@ const AdminStaffPage = () => {
                 ['Orders', staffSummary.metrics.ordersCount],
                 ['Expenses', staffSummary.metrics.expensesCount],
                 ['Visits', staffSummary.metrics.visitsCount],
-                ['Pending Follow-ups', staffSummary.metrics.pendingFollowUps],
+                ['Collections', staffSummary.metrics.collectionsCount],
                 ['Unread Notifications', staffSummary.metrics.unreadNotifications],
               ].map(([label, value]) => (
                 <div className="portal-stat light" key={label}>

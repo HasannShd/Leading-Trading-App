@@ -26,7 +26,7 @@ const AdminDashboardPage = () => {
     { label: 'Open Staff Orders', to: '/admin/orders' },
     { label: 'Open Expenses', to: '/admin/expenses' },
     { label: 'Open Visits', to: '/admin/visits' },
-    { label: 'Open Follow-ups', to: '/admin/followups' },
+    { label: 'Open Collections', to: '/admin/collections' },
   ];
 
   return (
@@ -37,7 +37,7 @@ const AdminDashboardPage = () => {
             <div className="portal-brand-kicker">Operations Summary</div>
             <h1 className="portal-section-title">Admin Dashboard</h1>
             <p className="portal-section-copy" style={{ color: 'rgba(255,255,255,0.76)' }}>
-              Cross-team visibility across attendance, field activity, requests, orders, and approvals.
+              Cross-team visibility across attendance, field activity, orders, expenses, and collections.
             </p>
           </div>
         </div>
@@ -47,7 +47,6 @@ const AdminDashboardPage = () => {
             ['Not Checked In', metrics.notCheckedIn],
             ['Pending Expenses', metrics.pendingExpenses],
             ['Pending Orders', metrics.pendingOrders],
-            ['Due Follow-Ups', metrics.dueFollowUps],
             ['Field Staff', metrics.staffCount],
           ].map(([label, value]) => (
             <div className="portal-stat" key={label}>
@@ -64,7 +63,7 @@ const AdminDashboardPage = () => {
             <div className="portal-brand-kicker">Simple Admin Workflow</div>
             <h2 className="portal-section-title" style={{ fontSize: '1.5rem' }}>What to do first</h2>
             <p className="portal-section-copy">
-              If the team is new to the portal, begin by creating staff users, assigning schedules, and checking attendance. Once staff start using the system, reports, visits, orders, expenses, and follow-ups will appear automatically.
+              If the team is new to the portal, begin by creating staff users, assigning schedules, and checking attendance. Once staff start using the system, reports, visits, orders, expenses, and collections will appear automatically.
             </p>
           </div>
         </div>

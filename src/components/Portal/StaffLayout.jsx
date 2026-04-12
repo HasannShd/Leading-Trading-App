@@ -13,12 +13,7 @@ const navItems = [
   { to: '/staff/expenses', label: 'Expenses' },
   { to: '/staff/clients', label: 'Clients' },
   { to: '/staff/visits', label: 'Visits' },
-  { to: '/staff/followups', label: 'Follow-ups' },
-  { to: '/staff/quotations', label: 'Quotations' },
   { to: '/staff/collections', label: 'Collections' },
-  { to: '/staff/requests', label: 'Requests' },
-  { to: '/staff/demand', label: 'Demand' },
-  { to: '/staff/issues', label: 'Issues' },
   { to: '/staff/notifications', label: 'Notifications' },
 ];
 
