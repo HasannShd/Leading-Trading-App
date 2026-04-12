@@ -39,12 +39,6 @@ export const AdminProvider = ({ children }) => {
   }, [admin, adminLoginPath, loading, location.pathname, navigate]);
 
   useEffect(() => {
-    if (!admin || admin.role !== 'admin' || admin.mfaEnabled || !isAdminRoute) return;
-    if (location.pathname === adminLoginPath || location.pathname === adminAccountPath) return;
-    navigate(adminAccountPath, { replace: true });
-  }, [admin, adminAccountPath, adminLoginPath, isAdminRoute, location.pathname, navigate]);
-
-  useEffect(() => {
     const token = localStorage.getItem('adminToken');
     if (token) {
       verifyAdmin();
@@ -131,7 +125,7 @@ export const AdminProvider = ({ children }) => {
       setAdmin(meData.user);
       setMfaChallenge(null);
       if (!meData.user.mfaEnabled) {
-        setError('Set up MFA from the Account page to fully secure admin access.');
+        setError('MFA is recommended for this admin account. You can set it up from the Account page.');
       }
       return true;
     } catch (err) {
@@ -183,7 +177,7 @@ export const AdminProvider = ({ children }) => {
   };
 
   return (
-    <AdminContext.Provider value={{ admin, loading, error, login, logout, mfaChallenge, verifyMfa, mfaSetupRequired: Boolean(admin && admin.role === 'admin' && !admin.mfaEnabled) }}>
+    <AdminContext.Provider value={{ admin, loading, error, login, logout, mfaChallenge, verifyMfa, mfaSetupRequired: Boolean(admin && admin.role === 'admin' && !admin.mfaEnabled), adminAccountPath }}>
       {children}
     </AdminContext.Provider>
   );
