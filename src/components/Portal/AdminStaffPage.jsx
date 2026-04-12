@@ -324,74 +324,14 @@ const AdminStaffPage = () => {
                 ))}
             </div>
 
-            <div className="portal-staff-report-sheet">
-              <div className="portal-staff-report-grid">
-                <div className="portal-staff-report-block">
-                  <div className="portal-brand-kicker">Attendance Snapshot</div>
-                  <div className="portal-staff-report-list">
-                    <div className="portal-staff-report-row">
-                      <strong>Last date</strong>
-                      <span>{staffSummary.latest.attendance?.date ? formatPortalDate(staffSummary.latest.attendance.date) : 'No attendance yet'}</span>
-                    </div>
-                    <div className="portal-staff-report-row">
-                      <strong>Check in</strong>
-                      <span>{staffSummary.latest.attendance?.checkInTime ? formatPortalDateTime(staffSummary.latest.attendance.checkInTime) : 'Not recorded'}</span>
-                    </div>
-                    <div className="portal-staff-report-row">
-                      <strong>Check out</strong>
-                      <span>{staffSummary.latest.attendance?.checkOutTime ? formatPortalDateTime(staffSummary.latest.attendance.checkOutTime) : 'Not recorded'}</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="portal-staff-report-block">
-                  <div className="portal-brand-kicker">Summary Filters</div>
-                  <div className="portal-staff-report-list">
-                    <div className="portal-staff-report-row">
-                      <strong>Viewing</strong>
-                      <span>{summaryDate ? formatPortalDate(summaryDate) : 'All dates'}</span>
-                    </div>
-                    <div className="portal-staff-report-row">
-                      <strong>Pending orders</strong>
-                      <span>{staffSummary.metrics.pendingOrders}</span>
-                    </div>
-                    <div className="portal-staff-report-row">
-                      <strong>Latest client</strong>
-                      <span>{staffSummary.latest.client?.name || 'No client yet'}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="portal-staff-report-grid">
-                <div className="portal-staff-report-block">
-                  <div className="portal-brand-kicker">Latest Activity</div>
-                  <div className="portal-staff-report-list">
-                    <div className="portal-staff-report-row">
-                      <strong>Report</strong>
-                      <span>{staffSummary.latest.report ? formatPortalDate(staffSummary.latest.report.date) : 'No report yet'}</span>
-                    </div>
-                    <div className="portal-staff-report-row">
-                      <strong>Order</strong>
-                      <span>{staffSummary.latest.order ? formatPortalDateTime(staffSummary.latest.order.createdAt) : 'No order yet'}</span>
-                    </div>
-                    <div className="portal-staff-report-row">
-                      <strong>Visit</strong>
-                      <span>{staffSummary.latest.visit ? formatPortalDate(staffSummary.latest.visit.visitDate) : 'No visit yet'}</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="portal-staff-report-block">
-                  <div className="portal-brand-kicker">Open Directly</div>
-                  <div className="portal-drill-links">
-                    {drillLinks.map((link) => (
-                      <a key={link.href} className="portal-inline-button ghost" href={link.href}>
-                        {link.label}
-                      </a>
-                    ))}
-                  </div>
-                </div>
+            <div className="portal-staff-report-block">
+              <div className="portal-brand-kicker">Open Directly</div>
+              <div className="portal-drill-links">
+                {drillLinks.map((link) => (
+                  <a key={link.href} className="portal-inline-button ghost" href={link.href}>
+                    {link.label}
+                  </a>
+                ))}
               </div>
             </div>
 
