@@ -52,6 +52,7 @@ const AdminStaffPage = () => {
   const [summaryDate, setSummaryDate] = useState('');
   const [staffSummary, setStaffSummary] = useState(null);
   const [summaryLoading, setSummaryLoading] = useState(false);
+  const [selectedClientId, setSelectedClientId] = useState('');
   const [expandedSections, setExpandedSections] = useState({
     attendance: false,
     reports: false,
@@ -89,6 +90,7 @@ const AdminStaffPage = () => {
       clients: false,
       activity: false,
     });
+    setSelectedClientId('');
     setSummaryLoading(true);
     const params = new URLSearchParams();
     if (summaryDate) params.set('date', summaryDate);
@@ -155,6 +157,11 @@ const AdminStaffPage = () => {
     setExpandedSections((current) => ({ ...current, [key]: !current[key] }));
   };
   const getVisibleRecords = (key, records = []) => (expandedSections[key] ? records : records.slice(0, DETAIL_PREVIEW_COUNT));
+  const visibleClients = getVisibleRecords('clients', staffSummary?.records?.clients || []);
+  const selectedClient =
+    (staffSummary?.records?.clients || []).find((entry) => entry._id === selectedClientId) ||
+    visibleClients[0] ||
+    null;
   const drillLinks = selectedStaffId
     ? [
         { href: `/admin/attendance?user=${selectedStaffId}`, label: 'Attendance' },
@@ -555,33 +562,51 @@ const AdminStaffPage = () => {
                 </div>
                 <div className="portal-record-list">
                   {staffSummary.records.clients.length ? (
-                    getVisibleRecords('clients', staffSummary.records.clients).map((entry) => (
-                      <div className="portal-record-card" key={entry._id}>
-                        <h3 className="portal-record-title">{entry.name}</h3>
-                        {renderDetailGrid([
-                          ['Created', formatPortalDateTime(entry.createdAt)],
-                          ['Updated', formatPortalDateTime(entry.updatedAt)],
-                          ['Type', entry.companyType || '-'],
-                          ['Department', entry.department || '-'],
-                          ['Contact', entry.contactPerson || '-'],
-                          ['Phone', entry.phone || '-'],
-                          ['Email', entry.email || '-'],
-                          ['Location', entry.location || '-'],
-                        ])}
-                        {entry.address && (
-                          <div className="portal-note-block">
-                            <div className="portal-detail-label">Address</div>
-                            <div className="portal-record-copy">{entry.address}</div>
-                          </div>
-                        )}
-                        {entry.notes && (
-                          <div className="portal-note-block">
-                            <div className="portal-detail-label">Notes</div>
-                            <div className="portal-record-copy">{entry.notes}</div>
-                          </div>
-                        )}
+                    <>
+                      <div className="portal-inline-list compact">
+                        {visibleClients.map((entry) => (
+                          <button
+                            key={entry._id}
+                            type="button"
+                            className={`portal-record-card portal-record-card-button${selectedClient?._id === entry._id ? ' is-selected' : ''}`}
+                            onClick={() => setSelectedClientId(entry._id)}
+                          >
+                            <h3 className="portal-record-title">{entry.name}</h3>
+                            <div className="portal-record-meta">
+                              <span>{entry.companyType || 'Client'}</span>
+                              <span>{entry.location || 'No location'}</span>
+                            </div>
+                          </button>
+                        ))}
                       </div>
-                    ))
+                      {selectedClient && (
+                        <div className="portal-record-card">
+                          <h3 className="portal-record-title">{selectedClient.name}</h3>
+                          {renderDetailGrid([
+                            ['Created', formatPortalDateTime(selectedClient.createdAt)],
+                            ['Updated', formatPortalDateTime(selectedClient.updatedAt)],
+                            ['Type', selectedClient.companyType || '-'],
+                            ['Department', selectedClient.department || '-'],
+                            ['Contact', selectedClient.contactPerson || '-'],
+                            ['Phone', selectedClient.phone || '-'],
+                            ['Email', selectedClient.email || '-'],
+                            ['Location', selectedClient.location || '-'],
+                          ])}
+                          {selectedClient.address && (
+                            <div className="portal-note-block">
+                              <div className="portal-detail-label">Address</div>
+                              <div className="portal-record-copy">{selectedClient.address}</div>
+                            </div>
+                          )}
+                          {selectedClient.notes && (
+                            <div className="portal-note-block">
+                              <div className="portal-detail-label">Notes</div>
+                              <div className="portal-record-copy">{selectedClient.notes}</div>
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </>
                   ) : (
                     <div className="portal-empty-state">
                       <h3 className="portal-empty-title">No clients found</h3>
