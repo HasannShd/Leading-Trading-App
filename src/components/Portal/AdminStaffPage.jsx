@@ -42,6 +42,7 @@ const renderDetailGrid = (items) => (
 );
 
 const DETAIL_PREVIEW_COUNT = 3;
+const ATTENDANCE_PREVIEW_COUNT = 6;
 
 const AdminStaffPage = () => {
   const [staff, setStaff] = useState([]);
@@ -156,7 +157,10 @@ const AdminStaffPage = () => {
   const toggleSection = (key) => {
     setExpandedSections((current) => ({ ...current, [key]: !current[key] }));
   };
-  const getVisibleRecords = (key, records = []) => (expandedSections[key] ? records : records.slice(0, DETAIL_PREVIEW_COUNT));
+  const getVisibleRecords = (key, records = []) => {
+    const previewCount = key === 'attendance' ? ATTENDANCE_PREVIEW_COUNT : DETAIL_PREVIEW_COUNT;
+    return expandedSections[key] ? records : records.slice(0, previewCount);
+  };
   const visibleClients = getVisibleRecords('clients', staffSummary?.records?.clients || []);
   const selectedClient =
     (staffSummary?.records?.clients || []).find((entry) => entry._id === selectedClientId) || null;
@@ -397,15 +401,22 @@ const AdminStaffPage = () => {
                     getVisibleRecords('attendance', staffSummary.records.attendance).map((entry) => (
                       <div className="portal-record-card" key={entry._id}>
                         <h3 className="portal-record-title">{formatPortalDate(entry.date)}</h3>
-                        {renderDetailGrid([
-                          ['Check in', entry.checkInTime ? formatPortalDateTime(entry.checkInTime) : 'Not recorded'],
-                          ['Check out', entry.checkOutTime ? formatPortalDateTime(entry.checkOutTime) : 'Not recorded'],
-                          ['Worked time', `${entry.totalWorkedMinutes || 0} min`],
-                          ['Week start km', entry.mileageWeekStart ?? '-'],
-                          ['Start entered', entry.mileageWeekStartAt ? formatPortalDateTime(entry.mileageWeekStartAt) : '-'],
-                          ['Week end km', entry.mileageWeekEnd ?? '-'],
-                          ['End entered', entry.mileageWeekEndAt ? formatPortalDateTime(entry.mileageWeekEndAt) : '-'],
-                        ])}
+                        <div className="portal-inline-list compact">
+                          <div className="portal-compact-row">
+                            <div className="portal-compact-row-main">
+                              <strong>Check in</strong>
+                              <span>{entry.checkInTime ? formatPortalDateTime(entry.checkInTime) : 'Not checked in'}</span>
+                            </div>
+                            <span className="portal-badge status">{entry.checkInTime ? 'Done' : 'Missing'}</span>
+                          </div>
+                          <div className="portal-compact-row">
+                            <div className="portal-compact-row-main">
+                              <strong>Check out</strong>
+                              <span>{entry.checkOutTime ? formatPortalDateTime(entry.checkOutTime) : 'Not checked out'}</span>
+                            </div>
+                            <span className="portal-badge status">{entry.checkOutTime ? 'Done' : 'Open'}</span>
+                          </div>
+                        </div>
                       </div>
                     ))
                   ) : (
