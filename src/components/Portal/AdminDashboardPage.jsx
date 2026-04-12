@@ -21,12 +21,11 @@ const AdminDashboardPage = () => {
   const operationsLinks = [
     { label: 'Open Staff Team', to: '/admin/staff' },
     { label: 'Open Attendance', to: '/admin/attendance' },
-    { label: 'Open Schedules', to: '/admin/schedules' },
     { label: 'Open Reports', to: '/admin/reports' },
     { label: 'Open Staff Orders', to: '/admin/orders' },
-    { label: 'Open Expenses', to: '/admin/expenses' },
+    { label: 'Open Clients', to: '/admin/clients' },
     { label: 'Open Visits', to: '/admin/visits' },
-    { label: 'Open Collections', to: '/admin/collections' },
+    { label: 'Open Activity Logs', to: '/admin/logs' },
   ];
 
   return (
@@ -37,7 +36,7 @@ const AdminDashboardPage = () => {
             <div className="portal-brand-kicker">Operations Summary</div>
             <h1 className="portal-section-title">Admin Dashboard</h1>
             <p className="portal-section-copy" style={{ color: 'rgba(255,255,255,0.76)' }}>
-              Cross-team visibility across attendance, field activity, orders, expenses, and collections.
+              Cross-team visibility across attendance, field activity, orders, clients, and visits.
             </p>
           </div>
         </div>
@@ -45,7 +44,6 @@ const AdminDashboardPage = () => {
           {[
             ['Checked In Today', metrics.checkedInToday],
             ['Not Checked In', metrics.notCheckedIn],
-            ['Pending Expenses', metrics.pendingExpenses],
             ['Pending Orders', metrics.pendingOrders],
             ['Field Staff', metrics.staffCount],
           ].map(([label, value]) => (
@@ -63,7 +61,7 @@ const AdminDashboardPage = () => {
             <div className="portal-brand-kicker">Simple Admin Workflow</div>
             <h2 className="portal-section-title" style={{ fontSize: '1.5rem' }}>What to do first</h2>
             <p className="portal-section-copy">
-              If the team is new to the portal, begin by creating staff users, assigning schedules, and checking attendance. Once staff start using the system, reports, visits, orders, expenses, and collections will appear automatically.
+              If the team is new to the portal, begin by creating staff users and checking attendance. Once staff start using the system, reports, visits, clients, and orders will appear automatically.
             </p>
           </div>
         </div>
@@ -99,7 +97,7 @@ const AdminDashboardPage = () => {
           </div>
         ) : (
           <p className="portal-section-copy" style={{ marginTop: '1rem' }}>
-            No staff activity has been logged yet. Create staff users, assign schedules, or open the website control tools below.
+            No staff activity has been logged yet. Create staff users, review attendance, or open the website control tools below.
           </p>
         )}
       </div>

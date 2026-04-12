@@ -28,7 +28,6 @@ const AdminDashboard = () => {
     checkedInToday: 0,
     notCheckedIn: 0,
     pendingReports: 0,
-    pendingExpenses: 0,
     pendingOrders: 0,
   });
   const [recentOpsActivity, setRecentOpsActivity] = useState([]);
@@ -85,7 +84,6 @@ const AdminDashboard = () => {
         checkedInToday: opsData?.data?.metrics?.checkedInToday || 0,
         notCheckedIn: opsData?.data?.metrics?.notCheckedIn || 0,
         pendingReports: opsData?.data?.metrics?.pendingReports || 0,
-        pendingExpenses: opsData?.data?.metrics?.pendingExpenses || 0,
         pendingOrders: opsData?.data?.metrics?.pendingOrders || 0,
       });
       setRecentOpsActivity(opsData?.data?.recentActivity || []);
@@ -177,14 +175,6 @@ const AdminDashboard = () => {
       label: 'Open Reports',
     },
     {
-      icon: '💸',
-      title: 'Expenses',
-      value: opsMetrics.pendingExpenses,
-      description: 'Track submitted expenses, receipts, approvals, and payment follow-through.',
-      action: () => goTo('/admin/expenses'),
-      label: 'Open Expenses',
-    },
-    {
       icon: '📦',
       title: 'Staff Orders',
       value: opsMetrics.pendingOrders,
@@ -193,12 +183,12 @@ const AdminDashboard = () => {
       label: 'Open Staff Orders',
     },
     {
-      icon: '💰',
-      title: 'Collections',
+      icon: '🏥',
+      title: 'Clients',
       value: loadingMetrics ? '...' : 'Open',
-      description: 'Review collection records and payment conversations logged by staff.',
-      action: () => goTo('/admin/collections'),
-      label: 'Open Collections',
+      description: 'Review the shared client list and keep staff-linked accounts organized.',
+      action: () => goTo('/admin/clients'),
+      label: 'Open Clients',
     },
   ];
 
@@ -236,10 +226,10 @@ const AdminDashboard = () => {
           </button>
           <button className="admin-nav-item" onClick={() => goTo('/admin/staff')}>👥 Staff</button>
           <button className="admin-nav-item" onClick={() => goTo('/admin/attendance')}>🕘 Attendance</button>
-          <button className="admin-nav-item" onClick={() => goTo('/admin/schedules')}>📅 Schedules</button>
           <button className="admin-nav-item" onClick={() => goTo('/admin/reports')}>📝 Reports</button>
-          <button className="admin-nav-item" onClick={() => goTo('/admin/expenses')}>💸 Expenses</button>
-          <button className="admin-nav-item" onClick={() => goTo('/admin/collections')}>💰 Collections</button>
+          <button className="admin-nav-item" onClick={() => goTo('/admin/orders')}>📦 Staff Orders</button>
+          <button className="admin-nav-item" onClick={() => goTo('/admin/clients')}>🏥 Clients</button>
+          <button className="admin-nav-item" onClick={() => goTo('/admin/visits')}>📍 Visits</button>
           <button className="admin-nav-item" onClick={() => goTo(adminPaths.categories)}>📁 Categories</button>
           <button className="admin-nav-item" onClick={() => goTo(adminPaths.products)}>📦 Products</button>
           <button className="admin-nav-item" onClick={() => goTo(adminPaths.import)}>📥 Import</button>

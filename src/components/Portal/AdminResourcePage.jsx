@@ -143,7 +143,7 @@ const AdminResourcePage = ({ config }) => {
               Review entries below, use the filters to narrow the list, and update statuses from the cards when needed.
             </p>
           </div>
-          {['attendance', 'reports', 'expenses', 'orders', 'visits'].includes(config.exportKey || configKey) && (
+          {['attendance', 'reports', 'orders', 'visits'].includes(config.exportKey || configKey) && (
             <button className="portal-inline-button ghost" type="button" onClick={handleExport}>Export CSV</button>
           )}
         </div>
@@ -229,8 +229,8 @@ const AdminResourcePage = ({ config }) => {
                 <div className="portal-stat-label">Orders</div>
               </div>
               <div className="portal-stat light">
-                <div className="portal-stat-value">{staffSummary.metrics.collectionsCount}</div>
-                <div className="portal-stat-label">Collections</div>
+                <div className="portal-stat-value">{staffSummary.metrics.clientsCount}</div>
+                <div className="portal-stat-label">Clients</div>
               </div>
             </div>
             <div className="portal-record-meta">

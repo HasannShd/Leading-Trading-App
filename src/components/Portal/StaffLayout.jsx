@@ -7,13 +7,10 @@ import './PortalShell.css';
 const navItems = [
   { to: '/staff/dashboard', label: 'Dashboard' },
   { to: '/staff/attendance', label: 'Attendance' },
-  { to: '/staff/schedule', label: 'Schedule' },
   { to: '/staff/reports', label: 'Reports' },
   { to: '/staff/orders', label: 'Orders' },
-  { to: '/staff/expenses', label: 'Expenses' },
   { to: '/staff/clients', label: 'Clients' },
   { to: '/staff/visits', label: 'Visits' },
-  { to: '/staff/collections', label: 'Collections' },
   { to: '/staff/notifications', label: 'Notifications' },
 ];
 

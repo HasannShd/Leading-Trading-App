@@ -101,9 +101,9 @@ const AdminStaffPage = () => {
         { href: `/admin/attendance?user=${selectedStaffId}`, label: 'Attendance' },
         { href: `/admin/reports?user=${selectedStaffId}`, label: 'Reports' },
         { href: `/admin/orders?user=${selectedStaffId}`, label: 'Orders' },
-        { href: `/admin/expenses?user=${selectedStaffId}`, label: 'Expenses' },
         { href: `/admin/visits?user=${selectedStaffId}`, label: 'Visits' },
-        { href: `/admin/collections?user=${selectedStaffId}`, label: 'Collections' },
+        { href: `/admin/clients`, label: 'Clients' },
+        { href: `/admin/logs?user=${selectedStaffId}`, label: 'Activity Logs' },
       ]
     : [];
 
@@ -249,7 +249,7 @@ const AdminStaffPage = () => {
         {summaryLoading ? (
           <div className="portal-empty-state" style={{ marginTop: '1rem' }}>
             <h3 className="portal-empty-title">Loading summary...</h3>
-            <p className="portal-empty-copy">Pulling attendance, reports, orders, expenses, and activity for this staff member.</p>
+            <p className="portal-empty-copy">Pulling attendance, reports, orders, visits, and activity for this staff member.</p>
           </div>
         ) : staffSummary?.staff ? (
           <div className="portal-staff-report" style={{ marginTop: '1rem' }}>
@@ -274,12 +274,10 @@ const AdminStaffPage = () => {
             <div className="portal-staff-summary-grid">
               {[
                 ['Attendance', staffSummary.metrics.attendanceCount],
-                ['Schedules', staffSummary.metrics.schedulesCount],
                 ['Reports', staffSummary.metrics.reportsCount],
                 ['Orders', staffSummary.metrics.ordersCount],
-                ['Expenses', staffSummary.metrics.expensesCount],
                 ['Visits', staffSummary.metrics.visitsCount],
-                ['Collections', staffSummary.metrics.collectionsCount],
+                ['Clients', staffSummary.metrics.clientsCount],
                 ['Unread Notifications', staffSummary.metrics.unreadNotifications],
               ].map(([label, value]) => (
                 <div className="portal-stat light" key={label}>
@@ -313,20 +311,12 @@ const AdminStaffPage = () => {
                   <div className="portal-brand-kicker">Work Queue</div>
                   <div className="portal-staff-report-list">
                     <div className="portal-staff-report-row">
-                      <strong>Next schedule</strong>
-                      <span>
-                        {staffSummary.latest.nextSchedule
-                          ? `${staffSummary.latest.nextSchedule.title} • ${formatPortalDate(staffSummary.latest.nextSchedule.assignedDate)}`
-                          : 'No upcoming schedule'}
-                      </span>
-                    </div>
-                    <div className="portal-staff-report-row">
                       <strong>Pending orders</strong>
                       <span>{staffSummary.metrics.pendingOrders}</span>
                     </div>
                     <div className="portal-staff-report-row">
-                      <strong>Pending expenses</strong>
-                      <span>{staffSummary.metrics.pendingExpenses}</span>
+                      <strong>Open notifications</strong>
+                      <span>{staffSummary.metrics.unreadNotifications}</span>
                     </div>
                   </div>
                 </div>
@@ -343,10 +333,6 @@ const AdminStaffPage = () => {
                     <div className="portal-staff-report-row">
                       <strong>Order</strong>
                       <span>{staffSummary.latest.order ? formatPortalDateTime(staffSummary.latest.order.createdAt) : 'No order yet'}</span>
-                    </div>
-                    <div className="portal-staff-report-row">
-                      <strong>Expense</strong>
-                      <span>{staffSummary.latest.expense ? formatPortalDateTime(staffSummary.latest.expense.createdAt) : 'No expense yet'}</span>
                     </div>
                     <div className="portal-staff-report-row">
                       <strong>Visit</strong>

@@ -62,24 +62,9 @@ export const staffModuleConfigs = {
       items: parseLineItems(values.itemsText),
     }),
   },
-  expenses: {
-    title: 'Expense Requests',
-    description: 'Submit expenses with receipts from the field and track approvals without extra admin friction.',
-    endpoint: '/staff-portal/expenses',
-    fields: [
-      { name: 'title', label: 'Title', required: true },
-      { name: 'category', label: 'Category', required: true },
-      { name: 'amount', label: 'Amount (BHD)', type: 'number', required: true },
-      { name: 'expenseDate', label: 'Expense Date', type: 'date', required: true },
-      { name: 'paymentMethod', label: 'Payment Method' },
-      { name: 'receiptUrl', label: 'Receipt Upload', type: 'file' },
-      { name: 'relatedReference', label: 'Related Reference' },
-      { name: 'description', label: 'Description', type: 'textarea' },
-    ],
-  },
   clients: {
     title: 'Clients',
-    description: 'Keep the field CRM tidy so visits, orders, expenses, and collections stay linked to the right accounts.',
+    description: 'Keep the field client list tidy so visits and orders stay linked to the right accounts.',
     endpoint: '/staff-portal/clients',
     fields: [
       { name: 'name', label: 'Client / Facility Name', required: true },
@@ -108,37 +93,14 @@ export const staffModuleConfigs = {
       { name: 'outcome', label: 'Outcome', type: 'textarea' },
     ],
   },
-  collections: {
-    title: 'Collections',
-    description: 'Track amounts due, amounts collected, and payment status on each conversation.',
-    endpoint: '/staff-portal/collections',
-    statusPatch: '/staff-portal/collections',
-    statusOptions: ['pending', 'partial', 'collected', 'overdue'],
-    fields: [
-      { name: 'clientName', label: 'Client Name' },
-      { name: 'reference', label: 'Reference / Invoice' },
-      { name: 'amountDue', label: 'Amount Due', type: 'number' },
-      { name: 'amountCollected', label: 'Amount Collected', type: 'number' },
-      { name: 'collectionDate', label: 'Collection Date', type: 'date' },
-      {
-        name: 'status',
-        label: 'Status',
-        type: 'select',
-        options: ['pending', 'partial', 'collected', 'overdue'].map((value) => ({ value, label: value })),
-      },
-      { name: 'notes', label: 'Notes', type: 'textarea' },
-    ],
-  },
 };
 
 export const adminModuleConfigs = {
   attendance: { title: 'Attendance Logs', endpoint: '/admin-portal/attendance', supportsDate: true, supportsUser: true },
   reports: { title: 'Daily Reports', endpoint: '/admin-portal/reports', supportsDate: true, supportsUser: true },
   orders: { title: 'Sales Orders', endpoint: '/admin-portal/orders', statusPatch: '/admin-portal/orders', supportsStatus: true, supportsUser: true, statusOptions: ['submitted', 'reviewed', 'emailed', 'confirmed', 'delivered', 'cancelled'] },
-  expenses: { title: 'Expense Requests', endpoint: '/admin-portal/expenses', statusPatch: '/admin-portal/expenses', supportsStatus: true, supportsUser: true, statusOptions: ['submitted', 'under_review', 'approved', 'rejected', 'paid'] },
   clients: { title: 'Clients', endpoint: '/admin-portal/clients' },
   visits: { title: 'Visit Logs', endpoint: '/admin-portal/visits', supportsUser: true },
-  collections: { title: 'Collections', endpoint: '/admin-portal/collections', supportsUser: true },
   notifications: { title: 'Notifications', endpoint: '/admin-portal/notifications' },
   logs: { title: 'Activity Logs', endpoint: '/admin-portal/activity-logs', supportsUser: true },
 };
