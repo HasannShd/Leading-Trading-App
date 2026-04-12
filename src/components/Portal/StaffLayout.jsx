@@ -14,6 +14,10 @@ const navItems = [
   { to: '/staff/notifications', label: 'Notifications' },
 ];
 
+const mobileQuickNav = navItems.filter((item) =>
+  ['/staff/dashboard', '/staff/attendance', '/staff/orders', '/staff/clients'].includes(item.to)
+);
+
 const StaffLayout = () => {
   const location = useLocation();
   const { logout } = useContext(StaffContext);
@@ -66,6 +70,17 @@ const StaffLayout = () => {
       </div>
       <div className="portal-content">
         <Outlet />
+      </div>
+      <div className="portal-mobile-bottom-nav">
+        {mobileQuickNav.map((item) => (
+          <NavLink
+            key={item.to}
+            to={item.to}
+            className={({ isActive }) => `portal-mobile-bottom-link${isActive || location.pathname.startsWith(item.to) ? ' active' : ''}`}
+          >
+            {item.label}
+          </NavLink>
+        ))}
       </div>
     </div>
   );

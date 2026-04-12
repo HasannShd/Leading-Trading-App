@@ -31,8 +31,28 @@ const StaffResourcePage = ({ config }) => {
 
   const fieldMap = useMemo(() => config.fields, [config.fields]);
   const singularTitle = config.title.replace(/s$/, '') || 'Record';
+  const draftKey = `staff-draft:${config.endpoint}`;
 
   const handleChange = (name, value) => setValues((current) => ({ ...current, [name]: value }));
+
+  useEffect(() => {
+    const raw = localStorage.getItem(draftKey);
+    if (!raw) {
+      setValues(initialValues(fieldMap));
+      return;
+    }
+    try {
+      const parsed = JSON.parse(raw);
+      setValues({ ...initialValues(fieldMap), ...parsed });
+      setMessage('Saved draft restored on this device.');
+    } catch (error) {
+      setValues(initialValues(fieldMap));
+    }
+  }, [draftKey, fieldMap]);
+
+  useEffect(() => {
+    localStorage.setItem(draftKey, JSON.stringify(values));
+  }, [draftKey, values]);
 
   const handleFile = async (fieldName, file) => {
     if (!file) return;
@@ -57,6 +77,7 @@ const StaffResourcePage = ({ config }) => {
       const payload = config.transformPayload ? config.transformPayload(values) : values;
       await portalApi.post(config.endpoint, payload, 'sales_staff');
       setValues(initialValues(fieldMap));
+      localStorage.removeItem(draftKey);
       setMessage(`${singularTitle} saved successfully.`);
       load();
     } catch (err) {
@@ -64,6 +85,12 @@ const StaffResourcePage = ({ config }) => {
     } finally {
       setBusy(false);
     }
+  };
+
+  const clearDraft = () => {
+    localStorage.removeItem(draftKey);
+    setValues(initialValues(fieldMap));
+    setMessage('Draft cleared.');
   };
 
   const handleStatusUpdate = async (record) => {
@@ -174,10 +201,15 @@ const StaffResourcePage = ({ config }) => {
           </div>
           {message && <div className="portal-message-banner success">{message}</div>}
           <div className="portal-submit-bar">
-            <div className="portal-submit-note">When you finish typing, press this button once.</div>
-            <button className="portal-button primary portal-save-button" type="submit" disabled={busy}>
-              {busy ? 'Saving...' : `Save ${singularTitle}`}
-            </button>
+            <div className="portal-submit-note">When you finish typing, press this button once. Drafts are saved on this phone until you submit or clear them.</div>
+            <div className="portal-actions-two">
+              <button className="portal-button ghost portal-save-button portal-save-button-ghost" type="button" onClick={clearDraft} disabled={busy}>
+                Clear Draft
+              </button>
+              <button className="portal-button primary portal-save-button" type="submit" disabled={busy}>
+                {busy ? 'Saving...' : `Save ${singularTitle}`}
+              </button>
+            </div>
           </div>
         </form>
       </div>

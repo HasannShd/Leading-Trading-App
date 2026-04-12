@@ -6,10 +6,18 @@ const getScope = (role) => {
   return 'user';
 };
 
+const getStoredToken = (role) => {
+  if (role === 'admin') return localStorage.getItem('adminToken');
+  if (role === 'sales_staff') return localStorage.getItem('staffToken');
+  return localStorage.getItem('token');
+};
+
 const request = async ({ path, method = 'GET', role = 'sales_staff', body, isForm = false }) => {
   const headers = { 'X-Auth-Scope': getScope(role) };
+  const token = getStoredToken(role);
 
   if (!isForm) headers['Content-Type'] = 'application/json';
+  if (token) headers.Authorization = `Bearer ${token}`;
 
   const response = await fetch(`${API_URL}${path}`, {
     method,

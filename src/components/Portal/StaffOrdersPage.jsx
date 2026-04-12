@@ -53,6 +53,7 @@ const StaffOrdersPage = () => {
   const [busy, setBusy] = useState(false);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState('');
+  const draftKey = 'staff-draft:orders-workspace';
 
   const load = async () => {
     setLoading(true);
@@ -73,6 +74,35 @@ const StaffOrdersPage = () => {
   useEffect(() => {
     load();
   }, []);
+
+  useEffect(() => {
+    const raw = localStorage.getItem(draftKey);
+    if (!raw) return;
+    try {
+      const parsed = JSON.parse(raw);
+      if (parsed.clientForm) setClientForm((current) => ({ ...current, ...parsed.clientForm }));
+      if (parsed.orderForm) setOrderForm((current) => ({ ...current, ...parsed.orderForm }));
+      if (parsed.clientQuery) setClientQuery(parsed.clientQuery);
+      if (parsed.selectedClientId) setSelectedClientId(parsed.selectedClientId);
+      if (parsed.showClientForm) setShowClientForm(Boolean(parsed.showClientForm));
+      setMessage('Saved client/order draft restored on this device.');
+    } catch (error) {
+      // ignore malformed draft
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem(
+      draftKey,
+      JSON.stringify({
+        clientForm,
+        orderForm,
+        clientQuery,
+        selectedClientId,
+        showClientForm,
+      })
+    );
+  }, [clientForm, clientQuery, draftKey, orderForm, selectedClientId, showClientForm]);
 
   const filteredClients = useMemo(() => {
     const query = clientQuery.trim().toLowerCase();
@@ -143,7 +173,9 @@ const StaffOrdersPage = () => {
       };
       await portalApi.post('/staff-portal/orders', payload, 'sales_staff');
       setOrderForm(blankOrder);
+      setClientForm(blankClient);
       setSelectedClientId('');
+      localStorage.removeItem(draftKey);
       setMessage('Order submitted.');
       await load();
     } catch (err) {
@@ -151,6 +183,16 @@ const StaffOrdersPage = () => {
     } finally {
       setBusy(false);
     }
+  };
+
+  const clearDraft = () => {
+    localStorage.removeItem(draftKey);
+    setClientForm(blankClient);
+    setOrderForm(blankOrder);
+    setClientQuery('');
+    setSelectedClientId('');
+    setShowClientForm(false);
+    setMessage('Client and order draft cleared.');
   };
 
   const downloadExport = async (path, filename) => {
@@ -301,10 +343,15 @@ const StaffOrdersPage = () => {
                 </div>
               </div>
               <div className="portal-submit-bar">
-                <div className="portal-submit-note">If the client does not already exist, fill these boxes and press save.</div>
-                <button className="portal-button primary portal-save-button" type="submit" disabled={busy}>
-                  {busy ? 'Saving...' : 'Save New Client'}
-                </button>
+                <div className="portal-submit-note">If the client does not already exist, fill these boxes and press save. Your draft stays on this phone until you clear it.</div>
+                <div className="portal-actions-two">
+                  <button className="portal-button ghost portal-save-button portal-save-button-ghost" type="button" onClick={clearDraft} disabled={busy}>
+                    Clear Draft
+                  </button>
+                  <button className="portal-button primary portal-save-button" type="submit" disabled={busy}>
+                    {busy ? 'Saving...' : 'Save New Client'}
+                  </button>
+                </div>
               </div>
             </form>
           )}
@@ -363,10 +410,15 @@ const StaffOrdersPage = () => {
             </div>
             {message && <div className="portal-message-banner success">{message}</div>}
             <div className="portal-submit-bar">
-              <div className="portal-submit-note">Check the selected client and order items, then press this button once.</div>
-              <button className="portal-button primary portal-save-button" type="submit" disabled={busy}>
-                {busy ? 'Submitting...' : 'Save Order'}
-              </button>
+              <div className="portal-submit-note">Check the selected client and order items, then press this button once. Drafts are saved on this phone until you submit or clear them.</div>
+              <div className="portal-actions-two">
+                <button className="portal-button ghost portal-save-button portal-save-button-ghost" type="button" onClick={clearDraft} disabled={busy}>
+                  Clear Draft
+                </button>
+                <button className="portal-button primary portal-save-button" type="submit" disabled={busy}>
+                  {busy ? 'Submitting...' : 'Save Order'}
+                </button>
+              </div>
             </div>
           </form>
         </div>

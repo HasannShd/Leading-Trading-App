@@ -3,7 +3,7 @@ import { Navigate, useLocation } from 'react-router-dom';
 import { AdminContext } from '../context/AdminContext';
 
 const ProtectedAdminRoute = ({ element }) => {
-  const { admin, loading } = useContext(AdminContext);
+  const { admin, loading, mfaSetupRequired } = useContext(AdminContext);
   const location = useLocation();
 
   if (loading) {
@@ -24,6 +24,14 @@ const ProtectedAdminRoute = ({ element }) => {
 
   if (!admin) {
     return <Navigate to={location.pathname.startsWith('/admin') ? '/admin/login' : '/.well-known/admin-access-sh123456'} replace />;
+  }
+
+  if (
+    mfaSetupRequired &&
+    location.pathname !== '/admin/account' &&
+    location.pathname !== '/.well-known/admin-account-sh123456'
+  ) {
+    return <Navigate to={location.pathname.startsWith('/admin') ? '/admin/account' : '/.well-known/admin-account-sh123456'} replace />;
   }
 
   return element;

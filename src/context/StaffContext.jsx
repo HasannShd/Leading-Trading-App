@@ -1,6 +1,7 @@
 import { createContext, useEffect, useState } from 'react';
 import { portalApi } from '../services/portalApi';
-import { authFetch } from '../services/authFetch';
+import { authFetch, getStoredToken } from '../services/authFetch';
+import { getTokenExpiryMs, isTokenExpired } from '../utils/sessionToken';
 
 export const StaffContext = createContext();
 
@@ -36,6 +37,26 @@ export const StaffProvider = ({ children }) => {
   useEffect(() => {
     fetchMe();
   }, []);
+
+  useEffect(() => {
+    const token = getStoredToken('sales_staff');
+    if (!token) return undefined;
+    if (isTokenExpired(token)) {
+      localStorage.removeItem('staffToken');
+      setStaff(null);
+      setLoading(false);
+      setError('Your session expired. Please sign in again.');
+      return undefined;
+    }
+    const expiry = getTokenExpiryMs(token);
+    if (!expiry) return undefined;
+    const timeout = window.setTimeout(() => {
+      localStorage.removeItem('staffToken');
+      setStaff(null);
+      setError('Your session expired. Please sign in again.');
+    }, Math.max(expiry - Date.now(), 0));
+    return () => window.clearTimeout(timeout);
+  }, [staff]);
 
   const login = async (identifier, password) => {
     setLoading(true);

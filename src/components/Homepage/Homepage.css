@@ -33,6 +33,16 @@
   z-index: 1;
 }
 
+.home-section {
+  content-visibility: auto;
+  contain-intrinsic-size: 960px;
+}
+
+.home-hero {
+  content-visibility: visible;
+  contain-intrinsic-size: auto;
+}
+
 .home-shell {
   width: min(var(--page-max), calc(100% - (var(--page-gutter) * 2)));
   margin: 0 auto;
@@ -557,6 +567,7 @@
   gap: 16px;
   width: max-content;
   animation: logo-marquee 42s linear infinite;
+  will-change: transform;
 }
 
 .logo-marquee--reverse .logo-marquee__track {
@@ -809,6 +820,7 @@
   width: 100%;
   height: 100%;
   object-fit: contain;
+  transform: translateZ(0);
 }
 
 .featured-rail {

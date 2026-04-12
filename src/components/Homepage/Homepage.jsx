@@ -163,18 +163,32 @@ const HomePage = () => {
   const [featuredProducts, setFeaturedProducts] = useState([]);
 
   useEffect(() => {
+    const controller = new AbortController();
     const fetchFeatured = async () => {
       try {
-        const response = await fetch(`${API_URL}/products?featured=true&limit=5`);
+        const response = await fetch(`${API_URL}/products?featured=true&limit=5`, { signal: controller.signal });
         const data = await response.json();
         const items = Array.isArray(data) ? data : data.items || [];
         setFeaturedProducts(items);
       } catch (error) {
+        if (error.name === 'AbortError') return;
         console.error('Failed to load featured products', error);
       }
     };
 
-    fetchFeatured();
+    let idleId;
+    if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
+      idleId = window.requestIdleCallback(fetchFeatured, { timeout: 1200 });
+    } else {
+      fetchFeatured();
+    }
+
+    return () => {
+      controller.abort();
+      if (idleId && 'cancelIdleCallback' in window) {
+        window.cancelIdleCallback(idleId);
+      }
+    };
   }, [API_URL]);
 
   useHomepageScroll(rootRef, true);
@@ -203,7 +217,7 @@ const HomePage = () => {
             </div>
 
             <div className="home-hero__notes animate-stagger" data-stagger-step="90ms">
-              <span className="animate-on-scroll">NHRA-aware procurement</span>
+              <span className="animate-on-scroll">NHRA-Approvedt</span>
               <span className="animate-on-scroll">Medical and industrial sourcing</span>
               <span className="animate-on-scroll">Dependable Bahrain-based support</span>
             </div>
@@ -212,7 +226,7 @@ const HomePage = () => {
           <div className="home-hero__visual animate-on-scroll" data-hero-parallax="slow">
             <div className="hero-orb" />
             <div className="hero-visual__frame">
-              <img src={`${baseUrl}lp.jpg`} alt="Leading Trading Est operational environment" loading="eager" />
+              <img src={`${baseUrl}lp.jpg`} alt="Leading Trading Est operational environment" loading="eager" fetchPriority="high" decoding="async" />
             </div>
             <article className="hero-visual__panel" data-hero-parallax="fast">
               <small>Operational confidence</small>
@@ -317,7 +331,7 @@ const HomePage = () => {
                       <p>{sector.visualBody}</p>
                     </div>
                     <div className="sector-shot__media">
-                      <img src={`${baseUrl}${sector.image}`} alt={sector.eyebrow} loading="lazy" />
+                      <img src={`${baseUrl}${sector.image}`} alt={sector.eyebrow} loading="lazy" decoding="async" />
                     </div>
                   </div>
                 </div>
@@ -347,7 +361,7 @@ const HomePage = () => {
             <div className="logo-marquee__track">
               {marqueeBrands.map((brand, index) => (
                 <div className={`logo-chip logo-chip--brand logo-chip--${brand.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`} key={`${brand.name}-${index}`}>
-                  <img src={`${baseUrl}${brand.logo}`} alt={brand.name} loading="lazy" />
+                  <img src={`${baseUrl}${brand.logo}`} alt={brand.name} loading="lazy" decoding="async" />
                 </div>
               ))}
             </div>
@@ -357,7 +371,7 @@ const HomePage = () => {
             <div className="logo-marquee__track">
               {marqueeClients.map((client, index) => (
                 <div className={`logo-chip logo-chip--client logo-chip--${client.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`} key={`${client.name}-${index}`}>
-                  <img src={`${baseUrl}${client.logo}`} alt={client.name} loading="lazy" />
+                  <img src={`${baseUrl}${client.logo}`} alt={client.name} loading="lazy" decoding="async" />
                 </div>
               ))}
             </div>
@@ -415,7 +429,7 @@ const HomePage = () => {
 
                     <div className="featured-spotlight__media" data-parallax="soft">
                       {leadProduct.image ? (
-                        <img src={normalizeImageSrc(leadProduct.image)} alt={leadProduct.name} loading="lazy" />
+                        <img src={normalizeImageSrc(leadProduct.image)} alt={leadProduct.name} loading="lazy" decoding="async" />
                       ) : (
                         <div className="featured-fallback">{leadProduct.name?.[0] || 'P'}</div>
                       )}
@@ -428,7 +442,7 @@ const HomePage = () => {
                     <Link className="featured-compact animate-on-scroll" key={product._id} to={`/product/${product._id}`}>
                       <div className="featured-compact__media" data-parallax={index % 2 === 0 ? 'soft' : 'lift'}>
                         {product.image ? (
-                          <img src={normalizeImageSrc(product.image)} alt={product.name} loading="lazy" />
+                          <img src={normalizeImageSrc(product.image)} alt={product.name} loading="lazy" decoding="async" />
                         ) : (
                           <div className="featured-fallback">{product.name?.[0] || 'P'}</div>
                         )}

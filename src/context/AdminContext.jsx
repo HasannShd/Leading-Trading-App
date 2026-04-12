@@ -1,6 +1,7 @@
 import { createContext, useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { authFetch } from '../services/authFetch';
+import { authFetch, getStoredToken } from '../services/authFetch';
+import { getTokenExpiryMs, isTokenExpired } from '../utils/sessionToken';
 
 export const AdminContext = createContext();
 
@@ -13,11 +14,13 @@ export const AdminProvider = ({ children }) => {
   const navigate = useNavigate();
   const isVisibleAdminRoute = location.pathname.startsWith('/admin');
   const adminLoginPath = isVisibleAdminRoute ? '/admin/login' : '/.well-known/admin-access-sh123456';
+  const adminAccountPath = isVisibleAdminRoute ? '/admin/account' : '/.well-known/admin-account-sh123456';
   const isAdminRoute = location.pathname.startsWith('/.well-known/') || isVisibleAdminRoute;
 
   const resetAdminSession = (shouldRedirect = true) => {
     localStorage.removeItem('adminToken');
     setAdmin(null);
+    setError(null);
     if (shouldRedirect && isAdminRoute && location.pathname !== adminLoginPath) {
       navigate(adminLoginPath, { replace: true });
     }
@@ -36,6 +39,12 @@ export const AdminProvider = ({ children }) => {
   }, [admin, adminLoginPath, loading, location.pathname, navigate]);
 
   useEffect(() => {
+    if (!admin || admin.role !== 'admin' || admin.mfaEnabled || !isAdminRoute) return;
+    if (location.pathname === adminLoginPath || location.pathname === adminAccountPath) return;
+    navigate(adminAccountPath, { replace: true });
+  }, [admin, adminAccountPath, adminLoginPath, isAdminRoute, location.pathname, navigate]);
+
+  useEffect(() => {
     const token = localStorage.getItem('adminToken');
     if (token) {
       verifyAdmin();
@@ -43,6 +52,24 @@ export const AdminProvider = ({ children }) => {
       setLoading(false);
     }
   }, []);
+
+  useEffect(() => {
+    const token = getStoredToken('admin');
+    if (!token) return undefined;
+    if (isTokenExpired(token)) {
+      resetAdminSession(false);
+      setLoading(false);
+      return undefined;
+    }
+
+    const expiry = getTokenExpiryMs(token);
+    if (!expiry) return undefined;
+    const timeout = window.setTimeout(() => {
+      resetAdminSession();
+      setError('Your admin session expired. Please sign in again.');
+    }, Math.max(expiry - Date.now(), 0));
+    return () => window.clearTimeout(timeout);
+  }, [admin, location.pathname]);
 
   const verifyAdmin = async () => {
     try {
@@ -103,6 +130,9 @@ export const AdminProvider = ({ children }) => {
 
       setAdmin(meData.user);
       setMfaChallenge(null);
+      if (!meData.user.mfaEnabled) {
+        setError('Set up MFA from the Account page to fully secure admin access.');
+      }
       return true;
     } catch (err) {
       setError(err.message);
@@ -153,7 +183,7 @@ export const AdminProvider = ({ children }) => {
   };
 
   return (
-    <AdminContext.Provider value={{ admin, loading, error, login, logout, mfaChallenge, verifyMfa }}>
+    <AdminContext.Provider value={{ admin, loading, error, login, logout, mfaChallenge, verifyMfa, mfaSetupRequired: Boolean(admin && admin.role === 'admin' && !admin.mfaEnabled) }}>
       {children}
     </AdminContext.Provider>
   );
