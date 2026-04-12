@@ -89,6 +89,7 @@ const AdminResourcePage = ({ config }) => {
   const configKey = config.endpoint.split('/').pop();
   const isAttendancePage = (config.exportKey || configKey) === 'attendance';
   const isReportsPage = (config.exportKey || configKey) === 'reports';
+  const isOrdersPage = (config.exportKey || configKey) === 'orders';
 
   const recordTitle = (record) =>
     record.title ||
@@ -232,6 +233,8 @@ const AdminResourcePage = ({ config }) => {
                 ? 'Review check-in, check-out, mileage, and worked time clearly for each staff member. Use the filters to inspect one staff member or one working day.'
                 : isReportsPage
                   ? 'Review daily reports only. Click one report to open its full details and notes.'
+                  : isOrdersPage
+                    ? 'Review sales orders only. Select a staff member if needed, then click an order to open its full details.'
                 : 'Review entries below, use the filters to narrow the list, and update statuses from the cards when needed.'}
             </p>
           </div>
@@ -308,10 +311,12 @@ const AdminResourcePage = ({ config }) => {
               </div>
             </div>
             <div className="portal-staff-summary-grid compact">
-              <div className="portal-stat light">
-                <div className="portal-stat-value">{filters.date ? staffSummary.metrics.filteredReportsCount : staffSummary.metrics.reportsCount}</div>
-                <div className="portal-stat-label">{filters.date ? 'Reports on selected date' : 'Reports'}</div>
-              </div>
+              {!isOrdersPage && (
+                <div className="portal-stat light">
+                  <div className="portal-stat-value">{filters.date ? staffSummary.metrics.filteredReportsCount : staffSummary.metrics.reportsCount}</div>
+                  <div className="portal-stat-label">{filters.date ? 'Reports on selected date' : 'Reports'}</div>
+                </div>
+              )}
               <div className="portal-stat light">
                 <div className="portal-stat-value">{filters.date ? staffSummary.metrics.filteredOrdersCount : staffSummary.metrics.ordersCount}</div>
                 <div className="portal-stat-label">{filters.date ? 'Orders on selected date' : 'Orders'}</div>
@@ -336,6 +341,25 @@ const AdminResourcePage = ({ config }) => {
                   <div className="portal-staff-report-row">
                     <strong>Summary</strong>
                     <span>{staffSummary.latest.report?.summary || 'No report yet'}</span>
+                  </div>
+                </div>
+              </div>
+            )}
+            {isOrdersPage && (
+              <div className="portal-staff-report-block" style={{ marginTop: '0.5rem' }}>
+                <div className="portal-brand-kicker">Latest Order</div>
+                <div className="portal-staff-report-list">
+                  <div className="portal-staff-report-row">
+                    <strong>Client</strong>
+                    <span>{staffSummary.latest.order?.customerName || staffSummary.latest.order?.companyName || 'No order yet'}</span>
+                  </div>
+                  <div className="portal-staff-report-row">
+                    <strong>Submitted</strong>
+                    <span>{staffSummary.latest.order?.createdAt ? formatPortalDateTime(staffSummary.latest.order.createdAt) : 'No order yet'}</span>
+                  </div>
+                  <div className="portal-staff-report-row">
+                    <strong>Status</strong>
+                    <span>{staffSummary.latest.order?.status || 'No order yet'}</span>
                   </div>
                 </div>
               </div>
@@ -387,6 +411,78 @@ const AdminResourcePage = ({ config }) => {
                         <div className="portal-record-copy">
                           {selectedReport.visits.map((visit) => `${visit.clientName || 'Client'}: ${visit.outcome || '-'}`).join(' | ')}
                         </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </>
+            ) : isOrdersPage ? (
+              <>
+                <div className="portal-inline-list compact">
+                  {records.map((record) => (
+                    <button
+                      key={record._id}
+                      type="button"
+                      className={`portal-record-card portal-record-card-button${selectedReport?._id === record._id ? ' is-selected' : ''}`}
+                      onClick={() => setSelectedRecordId((current) => (current === record._id ? '' : record._id))}
+                    >
+                      <h3 className="portal-record-title">{record.customerName || record.companyName || 'Order'}</h3>
+                      <div className="portal-record-meta">
+                        <span>{record.createdAt ? formatPortalDateTime(record.createdAt) : '-'}</span>
+                        {record.status && <span className="portal-badge status">{record.status}</span>}
+                      </div>
+                    </button>
+                  ))}
+                </div>
+                {selectedReport && (
+                  <div className="portal-record-card">
+                    <h3 className="portal-record-title">{selectedReport.customerName || selectedReport.companyName || 'Order'}</h3>
+                    <div className="portal-record-meta">
+                      <span>{selectedReport.createdAt ? formatPortalDateTime(selectedReport.createdAt) : '-'}</span>
+                      <span>{selectedReport.status || '-'}</span>
+                      <span>{selectedReport.urgency || '-'}</span>
+                    </div>
+                    <div className="portal-detail-grid">
+                      <div className="portal-detail-item">
+                        <span className="portal-detail-label">Client</span>
+                        <span className="portal-detail-value">{selectedReport.client?.name || '-'}</span>
+                      </div>
+                      <div className="portal-detail-item">
+                        <span className="portal-detail-label">Contact</span>
+                        <span className="portal-detail-value">{selectedReport.contactPerson || '-'}</span>
+                      </div>
+                    </div>
+                    <div className="portal-note-block">
+                      <div className="portal-detail-label">Items</div>
+                      <div className="portal-record-copy">
+                        {(selectedReport.items || []).map((item) => `${item.productName} x${item.quantity}${item.price ? ` @ ${item.price}` : ''}`).join(' | ') || '-'}
+                      </div>
+                    </div>
+                    {selectedReport.deliveryNote && (
+                      <div className="portal-note-block">
+                        <div className="portal-detail-label">Delivery Note</div>
+                        <div className="portal-record-copy">{selectedReport.deliveryNote}</div>
+                      </div>
+                    )}
+                    {selectedReport.notes && (
+                      <div className="portal-note-block">
+                        <div className="portal-detail-label">Notes</div>
+                        <div className="portal-record-copy">{selectedReport.notes}</div>
+                      </div>
+                    )}
+                    {config.statusPatch && selectedReport.status && (
+                      <div className="portal-inline-actions" style={{ marginTop: '0.5rem' }}>
+                        <select
+                          value={statusDrafts[selectedReport._id] || selectedReport.status}
+                          onChange={(e) => setStatusDrafts((current) => ({ ...current, [selectedReport._id]: e.target.value }))}
+                        >
+                          {(config.statusOptions || []).map((value) => (
+                            <option key={value} value={value}>{value}</option>
+                          ))}
+                        </select>
+                        <button className="portal-inline-button secondary" type="button" onClick={() => handleStatusUpdate(selectedReport)}>
+                          Update
+                        </button>
                       </div>
                     )}
                   </div>
