@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { portalApi } from '../../services/portalApi';
 import AdminTopNav from '../Admin/AdminTopNav';
 import '../Admin/AdminCategories.css';
-import { formatPortalDateTime } from '../../utils/portalDate';
+import { formatPortalDate, formatPortalDateTime } from '../../utils/portalDate';
 import './PortalShell.css';
 
 const AdminResourcePage = ({ config }) => {
@@ -46,11 +46,13 @@ const AdminResourcePage = ({ config }) => {
       setStaffSummary(null);
       return;
     }
+    const params = new URLSearchParams();
+    if (filters.date) params.set('date', filters.date);
     portalApi
-      .get(`/admin-portal/staff/${filters.user}/summary`, 'admin')
+      .get(`/admin-portal/staff/${filters.user}/summary${params.toString() ? `?${params.toString()}` : ''}`, 'admin')
       .then((response) => setStaffSummary(response.data))
       .catch(() => setStaffSummary(null));
-  }, [filters.user]);
+  }, [filters.user, filters.date]);
 
   const handleStatusUpdate = async (record) => {
     try {
@@ -80,6 +82,7 @@ const AdminResourcePage = ({ config }) => {
   };
 
   const configKey = config.endpoint.split('/').pop();
+  const isAttendancePage = (config.exportKey || configKey) === 'attendance';
 
   const recordTitle = (record) =>
     record.title ||
@@ -108,6 +111,84 @@ const AdminResourcePage = ({ config }) => {
       record.mileageWeekStart !== undefined && record.mileageWeekStart !== null ? `Start km ${record.mileageWeekStart}` : '',
       record.mileageWeekEnd !== undefined && record.mileageWeekEnd !== null ? `End km ${record.mileageWeekEnd}` : '',
     ].filter(Boolean);
+
+  const renderAttendanceRecord = (record) => {
+    const attendanceStatus = record.checkInTime && record.checkOutTime ? 'Complete day' : record.checkInTime ? 'Checked in only' : 'No check-in';
+    return (
+      <div className="portal-record-card" key={record._id}>
+        <div className="portal-staff-report-row">
+          <strong>{record.user?.name || record.user?.username || 'Staff'}</strong>
+          <span>{record.date ? formatPortalDate(record.date) : 'No date'}</span>
+        </div>
+        <div className="portal-record-meta">
+          <span className="portal-badge status">{attendanceStatus}</span>
+          <span>Logged: {record.createdAt ? formatPortalDateTime(record.createdAt) : '-'}</span>
+          <span>Total worked: {record.totalWorkedMinutes || 0} min</span>
+        </div>
+        <div className="portal-staff-report-list">
+          <div className="portal-staff-report-row">
+            <strong>Check in</strong>
+            <span>{record.checkInTime ? formatPortalDateTime(record.checkInTime) : 'Not recorded'}</span>
+          </div>
+          <div className="portal-staff-report-row">
+            <strong>Check out</strong>
+            <span>{record.checkOutTime ? formatPortalDateTime(record.checkOutTime) : 'Not recorded'}</span>
+          </div>
+          <div className="portal-staff-report-row">
+            <strong>Week start mileage</strong>
+            <span>
+              {record.mileageWeekStart ?? '-'}
+              {record.mileageWeekStartAt ? ` • entered ${formatPortalDateTime(record.mileageWeekStartAt)}` : ''}
+            </span>
+          </div>
+          <div className="portal-staff-report-row">
+            <strong>Week end mileage</strong>
+            <span>
+              {record.mileageWeekEnd ?? '-'}
+              {record.mileageWeekEndAt ? ` • entered ${formatPortalDateTime(record.mileageWeekEndAt)}` : ''}
+            </span>
+          </div>
+        </div>
+        {(record.checkInNote || record.checkOutNote) && (
+          <div className="portal-record-copy">
+            {[record.checkInNote ? `Check-in note: ${record.checkInNote}` : '', record.checkOutNote ? `Check-out note: ${record.checkOutNote}` : '']
+              .filter(Boolean)
+              .join(' | ')}
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  const renderDefaultRecord = (record) => (
+    <div className="portal-record-card" key={record._id}>
+      <h3 className="portal-record-title">{recordTitle(record)}</h3>
+      <div className="portal-record-meta">
+        {recordMeta(record).map((item) => (
+          <span key={`${record._id}-${item}`}>{item}</span>
+        ))}
+        {record.status && <span className="portal-badge status">{record.status}</span>}
+      </div>
+      {(record.notes || record.note || record.description || record.summary || record.message) && (
+        <div className="portal-record-copy">
+          {record.notes || record.note || record.description || record.summary || record.message}
+        </div>
+      )}
+      {config.statusPatch && record.status && (
+        <div className="portal-inline-actions">
+          <select
+            value={statusDrafts[record._id] || record.status}
+            onChange={(e) => setStatusDrafts((current) => ({ ...current, [record._id]: e.target.value }))}
+          >
+            {(config.statusOptions || ['submitted', 'under_review', 'approved', 'rejected', 'paid', 'reviewed', 'emailed', 'confirmed', 'delivered', 'cancelled', 'pending', 'partial', 'collected', 'overdue', 'resolved', 'closed', 'fulfilled']).map((value) => (
+              <option key={value} value={value}>{value}</option>
+            ))}
+          </select>
+          <button className="portal-inline-button secondary" type="button" onClick={() => handleStatusUpdate(record)}>Update</button>
+        </div>
+      )}
+    </div>
+  );
   const pendingStatuses = new Set(['submitted', 'pending', 'under_review', 'reviewed', 'partial', 'overdue']);
   const pendingCount = records.filter((record) => pendingStatuses.has(record.status)).length;
   const assignedPeople = new Set(records.map((record) => record.user?._id).filter(Boolean)).size;
@@ -140,7 +221,9 @@ const AdminResourcePage = ({ config }) => {
             <div className="portal-brand-kicker">Admin View</div>
             <h1 className="portal-section-title" style={{ fontSize: '1.8rem' }}>{config.title}</h1>
             <p className="portal-section-copy">
-              Review entries below, use the filters to narrow the list, and update statuses from the cards when needed.
+              {isAttendancePage
+                ? 'Review check-in, check-out, mileage, and worked time clearly for each staff member. Use the filters to inspect one staff member or one working day.'
+                : 'Review entries below, use the filters to narrow the list, and update statuses from the cards when needed.'}
             </p>
           </div>
           {['attendance', 'reports', 'orders', 'visits'].includes(config.exportKey || configKey) && (
@@ -217,76 +300,74 @@ const AdminResourcePage = ({ config }) => {
             </div>
             <div className="portal-staff-summary-grid compact">
               <div className="portal-stat light">
-                <div className="portal-stat-value">{staffSummary.metrics.attendanceCount}</div>
-                <div className="portal-stat-label">Attendance</div>
+                <div className="portal-stat-value">{filters.date ? staffSummary.metrics.filteredAttendanceCount : staffSummary.metrics.attendanceCount}</div>
+                <div className="portal-stat-label">{filters.date ? 'Attendance on selected date' : 'Attendance'}</div>
               </div>
               <div className="portal-stat light">
-                <div className="portal-stat-value">{staffSummary.metrics.reportsCount}</div>
-                <div className="portal-stat-label">Reports</div>
+                <div className="portal-stat-value">{filters.date ? staffSummary.metrics.filteredReportsCount : staffSummary.metrics.reportsCount}</div>
+                <div className="portal-stat-label">{filters.date ? 'Reports on selected date' : 'Reports'}</div>
               </div>
               <div className="portal-stat light">
-                <div className="portal-stat-value">{staffSummary.metrics.ordersCount}</div>
-                <div className="portal-stat-label">Orders</div>
+                <div className="portal-stat-value">{filters.date ? staffSummary.metrics.filteredOrdersCount : staffSummary.metrics.ordersCount}</div>
+                <div className="portal-stat-label">{filters.date ? 'Orders on selected date' : 'Orders'}</div>
               </div>
               <div className="portal-stat light">
-                <div className="portal-stat-value">{staffSummary.metrics.clientsCount}</div>
-                <div className="portal-stat-label">Clients</div>
+                <div className="portal-stat-value">{filters.date ? staffSummary.metrics.filteredClientsCount : staffSummary.metrics.clientsCount}</div>
+                <div className="portal-stat-label">{filters.date ? 'Clients added on selected date' : 'Clients'}</div>
               </div>
             </div>
-            <div className="portal-record-meta">
-              <span>
-                Latest attendance:{' '}
-                {staffSummary.latest.attendance?.checkInTime
-                  ? formatPortalDateTime(staffSummary.latest.attendance.checkInTime)
-                  : 'No attendance yet'}
-              </span>
-              <span>
-                Latest report:{' '}
-                {staffSummary.latest.report?.createdAt
-                  ? formatPortalDateTime(staffSummary.latest.report.createdAt)
-                  : 'No report yet'}
-              </span>
-              <span>
-                Latest order:{' '}
-                {staffSummary.latest.order?.createdAt
-                  ? formatPortalDateTime(staffSummary.latest.order.createdAt)
-                  : 'No order yet'}
-              </span>
+            <div className="portal-staff-report-grid" style={{ marginTop: '0.5rem' }}>
+              <div className="portal-staff-report-block">
+                <div className="portal-brand-kicker">Latest Attendance</div>
+                <div className="portal-staff-report-list">
+                  <div className="portal-staff-report-row">
+                    <strong>Date</strong>
+                    <span>{staffSummary.latest.attendance?.date ? formatPortalDate(staffSummary.latest.attendance.date) : 'No attendance yet'}</span>
+                  </div>
+                  <div className="portal-staff-report-row">
+                    <strong>Check in</strong>
+                    <span>{staffSummary.latest.attendance?.checkInTime ? formatPortalDateTime(staffSummary.latest.attendance.checkInTime) : 'Not recorded'}</span>
+                  </div>
+                  <div className="portal-staff-report-row">
+                    <strong>Check out</strong>
+                    <span>{staffSummary.latest.attendance?.checkOutTime ? formatPortalDateTime(staffSummary.latest.attendance.checkOutTime) : 'Not recorded'}</span>
+                  </div>
+                  <div className="portal-staff-report-row">
+                    <strong>Mileage</strong>
+                    <span>
+                      Start {staffSummary.latest.attendance?.mileageWeekStart ?? '-'} | End {staffSummary.latest.attendance?.mileageWeekEnd ?? '-'}
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div className="portal-staff-report-block">
+                <div className="portal-brand-kicker">Latest Related Work</div>
+                <div className="portal-staff-report-list">
+                  <div className="portal-staff-report-row">
+                    <strong>Report</strong>
+                    <span>{staffSummary.latest.report?.createdAt ? formatPortalDateTime(staffSummary.latest.report.createdAt) : 'No report yet'}</span>
+                  </div>
+                  <div className="portal-staff-report-row">
+                    <strong>Report summary</strong>
+                    <span>{staffSummary.latest.report?.summary || 'No report yet'}</span>
+                  </div>
+                  <div className="portal-staff-report-row">
+                    <strong>Latest order</strong>
+                    <span>{staffSummary.latest.order?.createdAt ? formatPortalDateTime(staffSummary.latest.order.createdAt) : 'No order yet'}</span>
+                  </div>
+                  <div className="portal-staff-report-row">
+                    <strong>Latest visit</strong>
+                    <span>{staffSummary.latest.visit?.visitDate ? formatPortalDate(staffSummary.latest.visit.visitDate) : 'No visit yet'}</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         )}
         {message && <div className="portal-badge status" style={{ marginTop: '1rem' }}>{message}</div>}
         <div className="portal-record-list" style={{ marginTop: '1rem' }}>
           {records.length ? (
-            records.map((record) => (
-              <div className="portal-record-card" key={record._id}>
-                <h3 className="portal-record-title">{recordTitle(record)}</h3>
-                <div className="portal-record-meta">
-                  {recordMeta(record).map((item) => (
-                    <span key={`${record._id}-${item}`}>{item}</span>
-                  ))}
-                  {record.status && <span className="portal-badge status">{record.status}</span>}
-                </div>
-                {(record.notes || record.note || record.description || record.summary || record.message) && (
-                  <div className="portal-record-copy">
-                    {record.notes || record.note || record.description || record.summary || record.message}
-                  </div>
-                )}
-                {config.statusPatch && record.status && (
-                  <div className="portal-inline-actions">
-                    <select
-                      value={statusDrafts[record._id] || record.status}
-                      onChange={(e) => setStatusDrafts((current) => ({ ...current, [record._id]: e.target.value }))}
-                    >
-                      {(config.statusOptions || ['submitted', 'under_review', 'approved', 'rejected', 'paid', 'reviewed', 'emailed', 'confirmed', 'delivered', 'cancelled', 'pending', 'partial', 'collected', 'overdue', 'resolved', 'closed', 'fulfilled']).map((value) => (
-                        <option key={value} value={value}>{value}</option>
-                      ))}
-                    </select>
-                    <button className="portal-inline-button secondary" type="button" onClick={() => handleStatusUpdate(record)}>Update</button>
-                  </div>
-                )}
-              </div>
-            ))
+            records.map((record) => (isAttendancePage ? renderAttendanceRecord(record) : renderDefaultRecord(record)))
           ) : (
             <div className="portal-empty-state">
               <h3 className="portal-empty-title">Nothing to review yet</h3>
