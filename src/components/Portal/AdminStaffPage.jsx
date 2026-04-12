@@ -461,49 +461,6 @@ const AdminStaffPage = () => {
             <div className="portal-staff-report-grid">
               <div className="portal-staff-report-block">
                 <div className="portal-section-head portal-mini-head">
-                  <div className="portal-brand-kicker">Orders</div>
-                  {staffSummary.records.orders.length > DETAIL_PREVIEW_COUNT && (
-                    <button className="portal-inline-button ghost" type="button" onClick={() => toggleSection('orders')}>
-                      {expandedSections.orders ? 'Show Less' : `Show All (${staffSummary.records.orders.length})`}
-                    </button>
-                  )}
-                </div>
-                <div className="portal-record-list">
-                  {staffSummary.records.orders.length ? (
-                    getVisibleRecords('orders', staffSummary.records.orders).map((entry) => (
-                      <div className="portal-record-card" key={entry._id}>
-                        <h3 className="portal-record-title">{entry.customerName || entry.companyName || 'Order'}</h3>
-                        {renderDetailGrid([
-                          ['Submitted', formatPortalDateTime(entry.submittedAt || entry.createdAt)],
-                          ['Status', entry.status],
-                          ['Urgency', entry.urgency],
-                          ['Client', entry.client?.name || '-'],
-                          ['Contact', entry.contactPerson || '-'],
-                          ['Items', String(entry.items?.length || 0)],
-                        ])}
-                        <div className="portal-note-block">
-                          <div className="portal-detail-label">Items</div>
-                          <div className="portal-record-copy">{formatItems(entry.items)}</div>
-                        </div>
-                        {entry.notes && (
-                          <div className="portal-note-block">
-                            <div className="portal-detail-label">Notes</div>
-                            <div className="portal-record-copy">{entry.notes}</div>
-                          </div>
-                        )}
-                      </div>
-                    ))
-                  ) : (
-                    <div className="portal-empty-state">
-                      <h3 className="portal-empty-title">No orders found</h3>
-                      <p className="portal-empty-copy">No orders match the current filter.</p>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              <div className="portal-staff-report-block">
-                <div className="portal-section-head portal-mini-head">
                   <div className="portal-brand-kicker">Visits</div>
                   {staffSummary.records.visits.length > DETAIL_PREVIEW_COUNT && (
                     <button className="portal-inline-button ghost" type="button" onClick={() => toggleSection('visits')}>
