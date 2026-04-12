@@ -399,24 +399,17 @@ const AdminStaffPage = () => {
                 <div className="portal-record-list">
                   {staffSummary.records.attendance.length ? (
                     getVisibleRecords('attendance', staffSummary.records.attendance).map((entry) => (
-                      <div className="portal-record-card" key={entry._id}>
-                        <h3 className="portal-record-title">{formatPortalDate(entry.date)}</h3>
-                        <div className="portal-inline-list compact">
-                          <div className="portal-compact-row">
-                            <div className="portal-compact-row-main">
-                              <strong>Check in</strong>
-                              <span>{entry.checkInTime ? formatPortalDateTime(entry.checkInTime) : 'Not checked in'}</span>
-                            </div>
-                            <span className="portal-badge status">{entry.checkInTime ? 'Done' : 'Missing'}</span>
-                          </div>
-                          <div className="portal-compact-row">
-                            <div className="portal-compact-row-main">
-                              <strong>Check out</strong>
-                              <span>{entry.checkOutTime ? formatPortalDateTime(entry.checkOutTime) : 'Not checked out'}</span>
-                            </div>
-                            <span className="portal-badge status">{entry.checkOutTime ? 'Done' : 'Open'}</span>
-                          </div>
+                      <div className="portal-compact-row" key={entry._id}>
+                        <div className="portal-compact-row-main">
+                          <strong>{formatPortalDate(entry.date)}</strong>
+                          <span>
+                            Check in {entry.checkInTime ? formatPortalDateTime(entry.checkInTime) : 'not recorded'} , Checkout{' '}
+                            {entry.checkOutTime ? formatPortalDateTime(entry.checkOutTime) : 'not recorded'}
+                          </span>
                         </div>
+                        <span className="portal-badge status">
+                          {entry.checkInTime && entry.checkOutTime ? 'Done' : 'Open'}
+                        </span>
                       </div>
                     ))
                   ) : (
@@ -440,23 +433,12 @@ const AdminStaffPage = () => {
                 <div className="portal-record-list">
                   {staffSummary.records.reports.length ? (
                     getVisibleRecords('reports', staffSummary.records.reports).map((entry) => (
-                      <div className="portal-record-card" key={entry._id}>
-                        <h3 className="portal-record-title">{formatPortalDate(entry.date)}</h3>
-                        {renderDetailGrid([
-                          ['Created', formatPortalDateTime(entry.createdAt)],
-                          ['Follow up', entry.followUpNeeded ? 'Yes' : 'No'],
-                          ['Visits in report', String(entry.visits?.length || 0)],
-                        ])}
-                        <div className="portal-note-block">
-                          <div className="portal-detail-label">Summary</div>
-                          <div className="portal-record-copy">{entry.summary}</div>
+                      <div className="portal-compact-row" key={entry._id}>
+                        <div className="portal-compact-row-main">
+                          <strong>{formatPortalDate(entry.date)}</strong>
+                          <span>{entry.summary || entry.notes || 'Daily report submitted'}</span>
                         </div>
-                        {entry.notes && (
-                          <div className="portal-note-block">
-                            <div className="portal-detail-label">Notes</div>
-                            <div className="portal-record-copy">{entry.notes}</div>
-                          </div>
-                        )}
+                        <span>{formatPortalDateTime(entry.createdAt)}</span>
                       </div>
                     ))
                   ) : (
@@ -482,13 +464,15 @@ const AdminStaffPage = () => {
                 <div className="portal-record-list">
                   {staffSummary.records.visits.length ? (
                     getVisibleRecords('visits', staffSummary.records.visits).map((entry) => (
-                      <div className="portal-record-card" key={entry._id}>
-                        <h3 className="portal-record-title">{entry.client?.name || entry.clientName || 'Visit'}</h3>
-                        {renderDetailGrid([
-                          ['Visited at', entry.location || entry.client?.name || entry.clientName || '-'],
-                          ['Date', formatPortalDate(entry.visitDate)],
-                          ['Time', entry.visitTime || '-'],
-                        ])}
+                      <div className="portal-compact-row" key={entry._id}>
+                        <div className="portal-compact-row-main">
+                          <strong>
+                            Visited {entry.location || entry.client?.name || entry.clientName || 'client'}
+                          </strong>
+                          <span>
+                            {formatPortalDate(entry.visitDate)} {entry.visitTime ? `, ${entry.visitTime}` : ''}
+                          </span>
+                        </div>
                       </div>
                     ))
                   ) : (
