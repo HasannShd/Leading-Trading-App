@@ -217,7 +217,7 @@ const HomePage = () => {
             </div>
 
             <div className="home-hero__notes animate-stagger" data-stagger-step="90ms">
-              <span className="animate-on-scroll">NHRA-Approvedt</span>
+              <span className="animate-on-scroll">NHRA-Approved</span>
               <span className="animate-on-scroll">Medical and industrial sourcing</span>
               <span className="animate-on-scroll">Dependable Bahrain-based support</span>
             </div>
