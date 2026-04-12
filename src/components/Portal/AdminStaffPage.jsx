@@ -229,7 +229,10 @@ const AdminStaffPage = () => {
             ))}
           </div>
           {message && <div className="portal-badge status">{message}</div>}
-          <button className="portal-button primary" type="submit">Create Staff User</button>
+          <div className="portal-submit-bar">
+            <div className="portal-submit-note">When the details are ready, press this button once.</div>
+            <button className="portal-button primary portal-save-button" type="submit">Create Staff User</button>
+          </div>
         </form>
       </div>
 
