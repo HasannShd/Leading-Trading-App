@@ -91,6 +91,7 @@ const AdminResourcePage = ({ config }) => {
   const isReportsPage = (config.exportKey || configKey) === 'reports';
   const isOrdersPage = (config.exportKey || configKey) === 'orders';
   const isClientsPage = (config.exportKey || configKey) === 'clients';
+  const isVisitsPage = (config.exportKey || configKey) === 'visits';
 
   const recordTitle = (record) =>
     record.title ||
@@ -238,6 +239,8 @@ const AdminResourcePage = ({ config }) => {
                     ? 'Review sales orders only. Select a staff member if needed, then click an order to open its full details.'
                     : isClientsPage
                       ? 'Review client records only. Keep the staff filter if needed, then click a client to open the full client details.'
+                      : isVisitsPage
+                        ? 'Review visit records only. Keep the staff filter if needed, then click a visit to open its full details.'
                 : 'Review entries below, use the filters to narrow the list, and update statuses from the cards when needed.'}
             </p>
           </div>
@@ -286,7 +289,7 @@ const AdminResourcePage = ({ config }) => {
             )}
           </div>
         )}
-        {staffSummary?.staff && !isClientsPage && (
+        {staffSummary?.staff && !isClientsPage && !isVisitsPage && (
           <div className="portal-admin-staff-focus">
             <div className="portal-admin-staff-focus-head">
               <div>
@@ -565,6 +568,69 @@ const AdminResourcePage = ({ config }) => {
                       <div className="portal-note-block">
                         <div className="portal-detail-label">Notes</div>
                         <div className="portal-record-copy">{selectedReport.notes}</div>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </>
+            ) : isVisitsPage ? (
+              <>
+                <div className="portal-inline-list compact">
+                  {records.map((record) => (
+                    <button
+                      key={record._id}
+                      type="button"
+                      className={`portal-record-card portal-record-card-button${selectedReport?._id === record._id ? ' is-selected' : ''}`}
+                      onClick={() => setSelectedRecordId((current) => (current === record._id ? '' : record._id))}
+                    >
+                      <h3 className="portal-record-title">{record.client?.name || record.clientName || 'Visit'}</h3>
+                      <div className="portal-record-meta">
+                        <span>{record.visitDate ? formatPortalDate(record.visitDate) : '-'}</span>
+                        <span>{record.visitTime || '-'}</span>
+                        <span>{record.location || 'No location'}</span>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+                {selectedReport && (
+                  <div className="portal-record-card">
+                    <h3 className="portal-record-title">{selectedReport.client?.name || selectedReport.clientName || 'Visit'}</h3>
+                    <div className="portal-detail-grid">
+                      <div className="portal-detail-item">
+                        <span className="portal-detail-label">Visit date</span>
+                        <span className="portal-detail-value">{selectedReport.visitDate ? formatPortalDate(selectedReport.visitDate) : '-'}</span>
+                      </div>
+                      <div className="portal-detail-item">
+                        <span className="portal-detail-label">Visit time</span>
+                        <span className="portal-detail-value">{selectedReport.visitTime || '-'}</span>
+                      </div>
+                      <div className="portal-detail-item">
+                        <span className="portal-detail-label">Logged</span>
+                        <span className="portal-detail-value">{selectedReport.createdAt ? formatPortalDateTime(selectedReport.createdAt) : '-'}</span>
+                      </div>
+                      <div className="portal-detail-item">
+                        <span className="portal-detail-label">Met person</span>
+                        <span className="portal-detail-value">{selectedReport.metPerson || '-'}</span>
+                      </div>
+                      <div className="portal-detail-item">
+                        <span className="portal-detail-label">Location</span>
+                        <span className="portal-detail-value">{selectedReport.location || '-'}</span>
+                      </div>
+                      <div className="portal-detail-item">
+                        <span className="portal-detail-label">Purpose</span>
+                        <span className="portal-detail-value">{selectedReport.purpose || '-'}</span>
+                      </div>
+                    </div>
+                    {selectedReport.discussionSummary && (
+                      <div className="portal-note-block">
+                        <div className="portal-detail-label">Discussion</div>
+                        <div className="portal-record-copy">{selectedReport.discussionSummary}</div>
+                      </div>
+                    )}
+                    {selectedReport.outcome && (
+                      <div className="portal-note-block">
+                        <div className="portal-detail-label">Outcome</div>
+                        <div className="portal-record-copy">{selectedReport.outcome}</div>
                       </div>
                     )}
                   </div>
