@@ -8,6 +8,7 @@ export const AdminProvider = ({ children }) => {
   const [admin, setAdmin] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [mfaChallenge, setMfaChallenge] = useState(null);
   const location = useLocation();
   const navigate = useNavigate();
   const isVisibleAdminRoute = location.pathname.startsWith('/admin');
@@ -44,6 +45,7 @@ export const AdminProvider = ({ children }) => {
         const data = await response.json();
         if (data.user.role === 'admin') {
           setAdmin(data.user);
+          setMfaChallenge(null);
         } else {
           resetAdminSession(false);
         }
@@ -75,6 +77,11 @@ export const AdminProvider = ({ children }) => {
         return false;
       }
 
+      if (data.mfaRequired && data.challengeToken) {
+        setMfaChallenge(data.challengeToken);
+        return 'mfa_required';
+      }
+
       const meResponse = await authFetch('/auth/me', { scope: 'admin' });
       const meData = await meResponse.json();
 
@@ -85,6 +92,33 @@ export const AdminProvider = ({ children }) => {
       }
 
       setAdmin(meData.user);
+      setMfaChallenge(null);
+      return true;
+    } catch (err) {
+      setError(err.message);
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const verifyMfa = async (code) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await authFetch('/auth/admin/mfa/verify-login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        scope: 'admin',
+        body: JSON.stringify({ challengeToken: mfaChallenge, code }),
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        setError(data.err || 'MFA verification failed');
+        return false;
+      }
+      setAdmin(data.user);
+      setMfaChallenge(null);
       return true;
     } catch (err) {
       setError(err.message);
@@ -101,11 +135,12 @@ export const AdminProvider = ({ children }) => {
       console.error('Logout failed', err);
     } finally {
       resetAdminSession();
+      setMfaChallenge(null);
     }
   };
 
   return (
-    <AdminContext.Provider value={{ admin, loading, error, login, logout }}>
+    <AdminContext.Provider value={{ admin, loading, error, login, logout, mfaChallenge, verifyMfa }}>
       {children}
     </AdminContext.Provider>
   );

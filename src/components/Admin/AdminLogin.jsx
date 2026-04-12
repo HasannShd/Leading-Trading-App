@@ -15,7 +15,8 @@ const AdminLogin = () => {
   const [resetConfirmPassword, setResetConfirmPassword] = useState('');
   const [resetMessage, setResetMessage] = useState('');
   const [resetError, setResetError] = useState('');
-  const { login, error } = useContext(AdminContext);
+  const [mfaCode, setMfaCode] = useState('');
+  const { login, error, mfaChallenge, verifyMfa } = useContext(AdminContext);
   const navigate = useNavigate();
   const location = useLocation();
   const resetToken = useMemo(() => new URLSearchParams(location.search).get('resetToken') || '', [location.search]);
@@ -25,6 +26,16 @@ const AdminLogin = () => {
     e.preventDefault();
     setIsLoading(true);
     const success = await login(identifier, password);
+    setIsLoading(false);
+    if (success === true) {
+      navigate(window.location.pathname.startsWith('/admin') ? '/admin/dashboard' : '/.well-known/admin-dashboard-sh123456');
+    }
+  };
+
+  const handleMfaSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    const success = await verifyMfa(mfaCode);
     setIsLoading(false);
     if (success) {
       navigate(window.location.pathname.startsWith('/admin') ? '/admin/dashboard' : '/.well-known/admin-dashboard-sh123456');
@@ -109,19 +120,44 @@ const AdminLogin = () => {
         <div className="admin-login-kicker">LTE Admin Access</div>
         <h1 className="admin-login-title">{mode === 'reset' ? 'Set New Password' : mode === 'forgot' ? 'Forgot Password' : 'Admin Login'}</h1>
         <p className="admin-login-subtitle">
-          {mode === 'reset'
+          {mfaChallenge
+            ? 'Enter the 6-digit code from your authenticator app to finish admin login.'
+            : mode === 'reset'
             ? 'Choose a new admin password to complete the reset.'
             : mode === 'forgot'
               ? 'Enter your admin email or username and we will send a reset link.'
               : 'Use your admin email or username to sign in.'}
         </p>
 
-        <div className="admin-login-mode-switch">
+        {!mfaChallenge && <div className="admin-login-mode-switch">
           <button type="button" className={mode === 'login' ? 'active' : ''} onClick={() => setMode('login')}>Login</button>
           <button type="button" className={mode === 'forgot' ? 'active' : ''} onClick={() => setMode('forgot')}>Forgot Password</button>
-        </div>
+        </div>}
 
-        {mode === 'login' && (
+        {mfaChallenge && (
+          <>
+            {error && <div className="admin-error-message">{error}</div>}
+            <form className="admin-login-form" onSubmit={handleMfaSubmit}>
+              <label className="admin-form-label">
+                MFA code
+                <input
+                  type="text"
+                  value={mfaCode}
+                  onChange={(e) => setMfaCode(e.target.value)}
+                  className="admin-form-input"
+                  placeholder="123456 or backup code"
+                  autoComplete="one-time-code"
+                  required
+                />
+              </label>
+              <button type="submit" className="admin-login-button" disabled={isLoading}>
+                {isLoading ? 'Verifying...' : 'Verify MFA'}
+              </button>
+            </form>
+          </>
+        )}
+
+        {!mfaChallenge && mode === 'login' && (
           <>
             {error && <div className="admin-error-message">{error}</div>}
             <form className="admin-login-form" onSubmit={handleSubmit}>
@@ -162,7 +198,7 @@ const AdminLogin = () => {
           </>
         )}
 
-        {mode === 'forgot' && (
+        {!mfaChallenge && mode === 'forgot' && (
           <>
             {forgotError && <div className="admin-error-message">{forgotError}</div>}
             {forgotMessage && <div className="admin-success-message">{forgotMessage}</div>}
@@ -186,7 +222,7 @@ const AdminLogin = () => {
           </>
         )}
 
-        {mode === 'reset' && (
+        {!mfaChallenge && mode === 'reset' && (
           <>
             {resetError && <div className="admin-error-message">{resetError}</div>}
             {resetMessage && <div className="admin-success-message">{resetMessage}</div>}
