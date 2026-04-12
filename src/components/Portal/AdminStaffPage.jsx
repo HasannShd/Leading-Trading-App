@@ -159,9 +159,7 @@ const AdminStaffPage = () => {
   const getVisibleRecords = (key, records = []) => (expandedSections[key] ? records : records.slice(0, DETAIL_PREVIEW_COUNT));
   const visibleClients = getVisibleRecords('clients', staffSummary?.records?.clients || []);
   const selectedClient =
-    (staffSummary?.records?.clients || []).find((entry) => entry._id === selectedClientId) ||
-    visibleClients[0] ||
-    null;
+    (staffSummary?.records?.clients || []).find((entry) => entry._id === selectedClientId) || null;
   const drillLinks = selectedStaffId
     ? [
         { href: `/admin/attendance?user=${selectedStaffId}`, label: 'Attendance' },
@@ -569,7 +567,7 @@ const AdminStaffPage = () => {
                             key={entry._id}
                             type="button"
                             className={`portal-record-card portal-record-card-button${selectedClient?._id === entry._id ? ' is-selected' : ''}`}
-                            onClick={() => setSelectedClientId(entry._id)}
+                            onClick={() => setSelectedClientId((current) => (current === entry._id ? '' : entry._id))}
                           >
                             <h3 className="portal-record-title">{entry.name}</h3>
                             <div className="portal-record-meta">
