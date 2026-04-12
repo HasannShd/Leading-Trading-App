@@ -246,6 +246,10 @@
   flex-wrap: wrap;
 }
 
+.portal-mini-head {
+  margin-bottom: 0.75rem;
+}
+
 .portal-section-title {
   font-size: clamp(1.35rem, 4vw, 2rem);
   line-height: 1;

@@ -41,6 +41,8 @@ const renderDetailGrid = (items) => (
   </div>
 );
 
+const DETAIL_PREVIEW_COUNT = 3;
+
 const AdminStaffPage = () => {
   const [staff, setStaff] = useState([]);
   const [form, setForm] = useState(initialState);
@@ -50,6 +52,14 @@ const AdminStaffPage = () => {
   const [summaryDate, setSummaryDate] = useState('');
   const [staffSummary, setStaffSummary] = useState(null);
   const [summaryLoading, setSummaryLoading] = useState(false);
+  const [expandedSections, setExpandedSections] = useState({
+    attendance: false,
+    reports: false,
+    orders: false,
+    visits: false,
+    clients: false,
+    activity: false,
+  });
 
   const load = () =>
     portalApi
@@ -71,6 +81,14 @@ const AdminStaffPage = () => {
       setStaffSummary(null);
       return;
     }
+    setExpandedSections({
+      attendance: false,
+      reports: false,
+      orders: false,
+      visits: false,
+      clients: false,
+      activity: false,
+    });
     setSummaryLoading(true);
     const params = new URLSearchParams();
     if (summaryDate) params.set('date', summaryDate);
@@ -133,6 +151,10 @@ const AdminStaffPage = () => {
   const filteredStaff = staff.filter((member) => matchesStaffSearch(member, staffSearch));
   const selectedStaff = staff.find((member) => member._id === selectedStaffId);
   const compactActivity = (staffSummary?.recentActivity || []).slice(0, 6);
+  const toggleSection = (key) => {
+    setExpandedSections((current) => ({ ...current, [key]: !current[key] }));
+  };
+  const getVisibleRecords = (key, records = []) => (expandedSections[key] ? records : records.slice(0, DETAIL_PREVIEW_COUNT));
   const drillLinks = selectedStaffId
     ? [
         { href: `/admin/attendance?user=${selectedStaffId}`, label: 'Attendance' },
@@ -354,10 +376,17 @@ const AdminStaffPage = () => {
 
             <div className="portal-staff-report-grid">
               <div className="portal-staff-report-block">
-                <div className="portal-brand-kicker">Attendance Log</div>
+                <div className="portal-section-head portal-mini-head">
+                  <div className="portal-brand-kicker">Attendance Log</div>
+                  {staffSummary.records.attendance.length > DETAIL_PREVIEW_COUNT && (
+                    <button className="portal-inline-button ghost" type="button" onClick={() => toggleSection('attendance')}>
+                      {expandedSections.attendance ? 'Show Less' : `Show All (${staffSummary.records.attendance.length})`}
+                    </button>
+                  )}
+                </div>
                 <div className="portal-record-list">
                   {staffSummary.records.attendance.length ? (
-                    staffSummary.records.attendance.map((entry) => (
+                    getVisibleRecords('attendance', staffSummary.records.attendance).map((entry) => (
                       <div className="portal-record-card" key={entry._id}>
                         <h3 className="portal-record-title">{formatPortalDate(entry.date)}</h3>
                         {renderDetailGrid([
@@ -381,10 +410,17 @@ const AdminStaffPage = () => {
               </div>
 
               <div className="portal-staff-report-block">
-                <div className="portal-brand-kicker">Daily Reports</div>
+                <div className="portal-section-head portal-mini-head">
+                  <div className="portal-brand-kicker">Daily Reports</div>
+                  {staffSummary.records.reports.length > DETAIL_PREVIEW_COUNT && (
+                    <button className="portal-inline-button ghost" type="button" onClick={() => toggleSection('reports')}>
+                      {expandedSections.reports ? 'Show Less' : `Show All (${staffSummary.records.reports.length})`}
+                    </button>
+                  )}
+                </div>
                 <div className="portal-record-list">
                   {staffSummary.records.reports.length ? (
-                    staffSummary.records.reports.map((entry) => (
+                    getVisibleRecords('reports', staffSummary.records.reports).map((entry) => (
                       <div className="portal-record-card" key={entry._id}>
                         <h3 className="portal-record-title">{formatPortalDate(entry.date)}</h3>
                         {renderDetailGrid([
@@ -416,10 +452,17 @@ const AdminStaffPage = () => {
 
             <div className="portal-staff-report-grid">
               <div className="portal-staff-report-block">
-                <div className="portal-brand-kicker">Orders</div>
+                <div className="portal-section-head portal-mini-head">
+                  <div className="portal-brand-kicker">Orders</div>
+                  {staffSummary.records.orders.length > DETAIL_PREVIEW_COUNT && (
+                    <button className="portal-inline-button ghost" type="button" onClick={() => toggleSection('orders')}>
+                      {expandedSections.orders ? 'Show Less' : `Show All (${staffSummary.records.orders.length})`}
+                    </button>
+                  )}
+                </div>
                 <div className="portal-record-list">
                   {staffSummary.records.orders.length ? (
-                    staffSummary.records.orders.map((entry) => (
+                    getVisibleRecords('orders', staffSummary.records.orders).map((entry) => (
                       <div className="portal-record-card" key={entry._id}>
                         <h3 className="portal-record-title">{entry.customerName || entry.companyName || 'Order'}</h3>
                         {renderDetailGrid([
@@ -452,10 +495,17 @@ const AdminStaffPage = () => {
               </div>
 
               <div className="portal-staff-report-block">
-                <div className="portal-brand-kicker">Visits</div>
+                <div className="portal-section-head portal-mini-head">
+                  <div className="portal-brand-kicker">Visits</div>
+                  {staffSummary.records.visits.length > DETAIL_PREVIEW_COUNT && (
+                    <button className="portal-inline-button ghost" type="button" onClick={() => toggleSection('visits')}>
+                      {expandedSections.visits ? 'Show Less' : `Show All (${staffSummary.records.visits.length})`}
+                    </button>
+                  )}
+                </div>
                 <div className="portal-record-list">
                   {staffSummary.records.visits.length ? (
-                    staffSummary.records.visits.map((entry) => (
+                    getVisibleRecords('visits', staffSummary.records.visits).map((entry) => (
                       <div className="portal-record-card" key={entry._id}>
                         <h3 className="portal-record-title">{entry.client?.name || entry.clientName || 'Visit'}</h3>
                         {renderDetailGrid([
@@ -492,10 +542,17 @@ const AdminStaffPage = () => {
 
             <div className="portal-staff-report-grid">
               <div className="portal-staff-report-block">
-                <div className="portal-brand-kicker">Client List</div>
+                <div className="portal-section-head portal-mini-head">
+                  <div className="portal-brand-kicker">Client List</div>
+                  {staffSummary.records.clients.length > DETAIL_PREVIEW_COUNT && (
+                    <button className="portal-inline-button ghost" type="button" onClick={() => toggleSection('clients')}>
+                      {expandedSections.clients ? 'Show Less' : `Show All (${staffSummary.records.clients.length})`}
+                    </button>
+                  )}
+                </div>
                 <div className="portal-record-list">
                   {staffSummary.records.clients.length ? (
-                    staffSummary.records.clients.map((entry) => (
+                    getVisibleRecords('clients', staffSummary.records.clients).map((entry) => (
                       <div className="portal-record-card" key={entry._id}>
                         <h3 className="portal-record-title">{entry.name}</h3>
                         {renderDetailGrid([
@@ -532,10 +589,17 @@ const AdminStaffPage = () => {
               </div>
 
               <div className="portal-staff-report-block">
-                <div className="portal-brand-kicker">Recent Activity</div>
+                <div className="portal-section-head portal-mini-head">
+                  <div className="portal-brand-kicker">Recent Activity</div>
+                  {(staffSummary.recentActivity || []).length > DETAIL_PREVIEW_COUNT && (
+                    <button className="portal-inline-button ghost" type="button" onClick={() => toggleSection('activity')}>
+                      {expandedSections.activity ? 'Show Less' : `Show All (${staffSummary.recentActivity.length})`}
+                    </button>
+                  )}
+                </div>
                 <div className="portal-inline-list compact">
-                  {compactActivity.length ? (
-                    compactActivity.map((entry) => (
+                  {(staffSummary.recentActivity || []).length ? (
+                    getVisibleRecords('activity', staffSummary.recentActivity || []).map((entry) => (
                       <div className="portal-compact-row" key={entry._id}>
                         <div className="portal-compact-row-main">
                           <strong>{formatActivityLabel(entry.action)}</strong>
