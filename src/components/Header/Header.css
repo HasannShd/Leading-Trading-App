@@ -5,21 +5,23 @@
   right: 0;
   z-index: 240;
   overflow: visible;
-  padding: 18px 0;
+  padding: 16px 0;
   transition: padding 0.3s ease, background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, backdrop-filter 0.3s ease;
 }
 
 .header.header-home {
-  background: linear-gradient(180deg, rgba(5, 11, 20, 0.55), rgba(5, 11, 20, 0));
+  background:
+    linear-gradient(180deg, rgba(6, 14, 24, 0.76), rgba(6, 14, 24, 0.18) 58%, rgba(6, 14, 24, 0)),
+    linear-gradient(90deg, rgba(198, 145, 89, 0.08), transparent 35%, rgba(162, 193, 216, 0.08));
 }
 
 .header.scrolled,
 .app:not(.hero-page) .header {
-  padding: 10px 0;
-  background: rgba(245, 241, 232, 0.84);
-  border-bottom: 1px solid rgba(168, 119, 68, 0.16);
-  box-shadow: 0 20px 40px rgba(7, 17, 31, 0.08);
-  backdrop-filter: blur(18px);
+  padding: 8px 0;
+  background: linear-gradient(180deg, rgba(250, 247, 241, 0.92), rgba(242, 238, 230, 0.86));
+  border-bottom: 1px solid rgba(168, 119, 68, 0.14);
+  box-shadow: 0 24px 46px rgba(7, 17, 31, 0.08);
+  backdrop-filter: blur(24px);
 }
 
 .header-row {
@@ -28,9 +30,10 @@
   gap: 18px;
   padding: 0 28px;
   max-width: 100%;
-  min-height: 58px;
+  min-height: 62px;
   position: relative;
   overflow: visible;
+  border-radius: 28px;
 }
 
 .brand {
@@ -51,13 +54,13 @@
 .brand-mark {
   width: 50px;
   height: 50px;
-  border-radius: 18px;
+  border-radius: 20px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0.08));
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 16px 30px rgba(0, 0, 0, 0.14);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0.1));
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  box-shadow: 0 18px 32px rgba(0, 0, 0, 0.16);
   overflow: hidden;
 }
 
@@ -111,9 +114,10 @@
   font-weight: 600;
   letter-spacing: 0.02em;
   text-decoration: none;
-  padding: 10px 14px;
+  padding: 10px 16px;
   border-radius: 999px;
-  transition: color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+  border: 1px solid transparent;
+  transition: color 0.2s ease, background 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
   white-space: nowrap;
 }
 
@@ -128,7 +132,8 @@
 .nav .nav-dropdown-toggle:hover,
 .nav a.active,
 .nav .nav-dropdown-toggle.active {
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.1);
   color: #ffffff;
   transform: translateY(-1px);
 }
@@ -140,6 +145,7 @@
 .app:not(.hero-page) .nav .nav-dropdown-toggle:hover,
 .app:not(.hero-page) .nav a.active {
   background: rgba(168, 119, 68, 0.12);
+  border-color: rgba(168, 119, 68, 0.14);
   color: var(--navy-900);
 }
 
@@ -175,11 +181,11 @@
   gap: 6px;
   padding: 10px;
   border-radius: 22px;
-  background: rgba(12, 29, 50, 0.96);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 30px 50px rgba(7, 17, 31, 0.26);
+  background: rgba(10, 24, 41, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  box-shadow: 0 30px 56px rgba(7, 17, 31, 0.26);
   z-index: 90;
-  backdrop-filter: blur(14px);
+  backdrop-filter: blur(20px);
 }
 
 .nav-dropdown-group {
@@ -249,9 +255,9 @@
   padding: 0 18px;
   border-radius: 999px;
   border: 1px solid rgba(255, 255, 255, 0.16);
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.1);
   color: #ffffff;
-  box-shadow: 0 14px 28px rgba(7, 17, 31, 0.16);
+  box-shadow: 0 16px 28px rgba(7, 17, 31, 0.16);
 }
 
 .header-actions-desktop .btn.primary {

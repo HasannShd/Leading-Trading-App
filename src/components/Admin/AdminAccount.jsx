@@ -3,6 +3,7 @@ import { AdminContext } from '../../context/AdminContext';
 import AdminTopNav from './AdminTopNav';
 import './AdminCategories.css';
 import { authFetch } from '../../services/authFetch';
+import { formatPortalDateTime } from '../../utils/portalDate';
 
 const AdminAccount = () => {
   const { admin } = useContext(AdminContext);
@@ -12,6 +13,9 @@ const AdminAccount = () => {
   const [code, setCode] = useState('');
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
+  const qrUrl = setupState?.otpAuthUrl
+    ? `https://quickchart.io/qr?text=${encodeURIComponent(setupState.otpAuthUrl)}&size=220`
+    : '';
 
   const loadMfaStatus = async () => {
     try {
@@ -118,6 +122,48 @@ const AdminAccount = () => {
         {mfaStatus?.mfaEnabled && (
           <p><strong>Backup codes remaining:</strong> {mfaStatus.backupCodesRemaining}</p>
         )}
+        {mfaStatus && (
+          <div className="admin-category-grid" style={{ marginTop: '16px' }}>
+            <div className="admin-category-tile" style={{ cursor: 'default' }}>
+              <span>🛡️</span>
+              <div>
+                <strong>MFA</strong>
+                <div>{mfaStatus.mfaEnabled ? 'Protected' : 'Needs setup'}</div>
+              </div>
+            </div>
+            <div className="admin-category-tile" style={{ cursor: 'default' }}>
+              <span>⏱️</span>
+              <div>
+                <strong>Admin session</strong>
+                <div>{mfaStatus.adminSessionTtl || '8h'}</div>
+              </div>
+            </div>
+            <div className="admin-category-tile" style={{ cursor: 'default' }}>
+              <span>🔐</span>
+              <div>
+                <strong>Password updated</strong>
+                <div>{mfaStatus.passwordChangedAt ? formatPortalDateTime(mfaStatus.passwordChangedAt) : 'Unknown'}</div>
+              </div>
+            </div>
+            <div className="admin-category-tile" style={{ cursor: 'default' }}>
+              <span>✉️</span>
+              <div>
+                <strong>Reset email</strong>
+                <div>{mfaStatus.smtpConfigured ? 'Configured' : 'Missing SMTP'}</div>
+              </div>
+            </div>
+          </div>
+        )}
+        {!!mfaStatus?.recommendedActions?.length && (
+          <div className="admin-form-container">
+            <h2>Recommended Security Actions</h2>
+            <ul>
+              {mfaStatus.recommendedActions.map((entry) => (
+                <li key={entry}>{entry}</li>
+              ))}
+            </ul>
+          </div>
+        )}
 
         {!mfaStatus?.mfaEnabled && !setupState && (
           <button className="admin-add-btn" onClick={startSetup}>Start MFA Setup</button>
@@ -127,6 +173,11 @@ const AdminAccount = () => {
           <div className="admin-form-container">
             <h2>Set up authenticator app</h2>
             <p>Add this key in Google Authenticator, Microsoft Authenticator, 1Password, or another TOTP app.</p>
+            {qrUrl && (
+              <div style={{ marginBottom: '16px' }}>
+                <img src={qrUrl} alt="MFA QR code" style={{ width: '220px', maxWidth: '100%', borderRadius: '18px', border: '1px solid rgba(23,48,77,0.12)', background: '#fff', padding: '12px' }} />
+              </div>
+            )}
             <p><strong>Manual key:</strong> <code>{setupState.manualKey}</code></p>
             <p><strong>OTP URI:</strong> <code>{setupState.otpAuthUrl}</code></p>
             <div className="admin-form-group">
