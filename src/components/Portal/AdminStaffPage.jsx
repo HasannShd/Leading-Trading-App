@@ -14,11 +14,24 @@ const initialState = {
   department: '',
 };
 
+const matchesStaffSearch = (member, search) => {
+  const term = String(search || '').trim().toLowerCase();
+  if (!term) return true;
+  return [member.name, member.username, member.email, member.phone, member.department]
+    .filter(Boolean)
+    .some((value) => String(value).toLowerCase().includes(term));
+};
+
+const formatItems = (items = []) =>
+  items.map((item) => `${item.productName} x${item.quantity}${item.price ? ` @ ${item.price}` : ''}`).join(' | ');
+
 const AdminStaffPage = () => {
   const [staff, setStaff] = useState([]);
   const [form, setForm] = useState(initialState);
   const [message, setMessage] = useState('');
   const [selectedStaffId, setSelectedStaffId] = useState('');
+  const [staffSearch, setStaffSearch] = useState('');
+  const [summaryDate, setSummaryDate] = useState('');
   const [staffSummary, setStaffSummary] = useState(null);
   const [summaryLoading, setSummaryLoading] = useState(false);
 
@@ -43,12 +56,14 @@ const AdminStaffPage = () => {
       return;
     }
     setSummaryLoading(true);
+    const params = new URLSearchParams();
+    if (summaryDate) params.set('date', summaryDate);
     portalApi
-      .get(`/admin-portal/staff/${selectedStaffId}/summary`, 'admin')
+      .get(`/admin-portal/staff/${selectedStaffId}/summary${params.toString() ? `?${params.toString()}` : ''}`, 'admin')
       .then((response) => setStaffSummary(response.data))
       .catch((err) => setMessage(err.message))
       .finally(() => setSummaryLoading(false));
-  }, [selectedStaffId]);
+  }, [selectedStaffId, summaryDate]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -74,8 +89,10 @@ const AdminStaffPage = () => {
 
   const exportStaffReport = async (staffId) => {
     try {
+      const params = new URLSearchParams();
+      if (summaryDate) params.set('date', summaryDate);
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/admin-portal/staff/${staffId}/report`,
+        `${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/admin-portal/staff/${staffId}/report${params.toString() ? `?${params.toString()}` : ''}`,
         {
           headers: { Authorization: `Bearer ${localStorage.getItem('adminToken')}` },
         }
@@ -85,7 +102,9 @@ const AdminStaffPage = () => {
       const url = window.URL.createObjectURL(blob);
       const anchor = document.createElement('a');
       anchor.href = url;
-      anchor.download = `staff-report-${staffId}.csv`;
+      const disposition = response.headers.get('content-disposition') || '';
+      const matchedName = disposition.match(/filename="([^"]+)"/i)?.[1];
+      anchor.download = matchedName || `staff-report-${staffId}.xlsx`;
       anchor.click();
       window.URL.revokeObjectURL(url);
     } catch (err) {
@@ -95,6 +114,7 @@ const AdminStaffPage = () => {
 
   const activeCount = staff.filter((member) => member.isActive).length;
   const inactiveCount = staff.length - activeCount;
+  const filteredStaff = staff.filter((member) => matchesStaffSearch(member, staffSearch));
   const selectedStaff = staff.find((member) => member._id === selectedStaffId);
   const drillLinks = selectedStaffId
     ? [
@@ -181,9 +201,18 @@ const AdminStaffPage = () => {
             <h2 className="portal-section-title" style={{ fontSize: '1.5rem' }}>Sales staff roster</h2>
           </div>
         </div>
+        <div className="portal-filter-bar" style={{ marginTop: '1rem' }}>
+          <input
+            type="search"
+            placeholder="Search staff by name, email, phone, or department"
+            value={staffSearch}
+            onChange={(e) => setStaffSearch(e.target.value)}
+          />
+          <div className="portal-badge status">{filteredStaff.length} shown</div>
+        </div>
         <div className="portal-staff-roster" style={{ marginTop: '1rem' }}>
-          {staff.length ? (
-            staff.map((member) => (
+          {filteredStaff.length ? (
+            filteredStaff.map((member) => (
               <div className="portal-staff-member-card" key={member._id}>
                 <div className="portal-staff-member-head">
                   <div>
@@ -226,21 +255,29 @@ const AdminStaffPage = () => {
             <div className="portal-brand-kicker">Staff Summary</div>
             <h2 className="portal-section-title" style={{ fontSize: '1.5rem' }}>Everything for one staff member</h2>
             <p className="portal-section-copy">
-              Choose a staff member to review performance, recent activity, pending work, and export a single report for office use.
+              Choose a staff member, then filter by date when you need to inspect one working day with full attendance, reports, orders, visits, clients, and activity.
             </p>
           </div>
-          <div className="portal-inline-actions tight">
-            <select value={selectedStaffId} onChange={(e) => setSelectedStaffId(e.target.value)}>
+          <div className="portal-inline-actions tight" style={{ width: '100%', justifyContent: 'flex-end' }}>
+            <input
+              type="search"
+              placeholder="Search before selecting staff"
+              value={staffSearch}
+              onChange={(e) => setStaffSearch(e.target.value)}
+              style={{ minWidth: '18rem', flex: '1 1 18rem' }}
+            />
+            <select value={selectedStaffId} onChange={(e) => setSelectedStaffId(e.target.value)} style={{ minWidth: '16rem', flex: '1 1 16rem' }}>
               <option value="">Select staff</option>
-              {staff.map((member) => (
+              {filteredStaff.map((member) => (
                 <option key={member._id} value={member._id}>
-                  {member.name || member.username}
+                  {member.name || member.username} {member.phone ? `• ${member.phone}` : ''}
                 </option>
               ))}
             </select>
+            <input type="date" value={summaryDate} onChange={(e) => setSummaryDate(e.target.value)} />
             {selectedStaffId && (
               <button className="portal-inline-button ghost" type="button" onClick={() => exportStaffReport(selectedStaffId)}>
-                Export Staff Report
+                Export Excel Report
               </button>
             )}
           </div>
@@ -266,23 +303,23 @@ const AdminStaffPage = () => {
               <div className="portal-staff-summary-actions">
                 <div className="portal-badge status">{selectedStaff?.isActive ? 'Ready for field work' : 'Inactive user'}</div>
                 <button className="portal-inline-button secondary" type="button" onClick={() => exportStaffReport(selectedStaffId)}>
-                  Download Full Staff Report
+                  Download Full Excel Report
                 </button>
               </div>
             </div>
 
             <div className="portal-staff-summary-grid">
               {[
-                ['Attendance', staffSummary.metrics.attendanceCount],
-                ['Reports', staffSummary.metrics.reportsCount],
-                ['Orders', staffSummary.metrics.ordersCount],
-                ['Visits', staffSummary.metrics.visitsCount],
-                ['Clients', staffSummary.metrics.clientsCount],
+                ['Attendance', summaryDate ? staffSummary.metrics.filteredAttendanceCount : staffSummary.metrics.attendanceCount],
+                ['Reports', summaryDate ? staffSummary.metrics.filteredReportsCount : staffSummary.metrics.reportsCount],
+                ['Orders', summaryDate ? staffSummary.metrics.filteredOrdersCount : staffSummary.metrics.ordersCount],
+                ['Visits', summaryDate ? staffSummary.metrics.filteredVisitsCount : staffSummary.metrics.visitsCount],
+                ['Clients', summaryDate ? staffSummary.metrics.filteredClientsCount : staffSummary.metrics.clientsCount],
                 ['Unread Notifications', staffSummary.metrics.unreadNotifications],
               ].map(([label, value]) => (
                 <div className="portal-stat light" key={label}>
                   <div className="portal-stat-value">{value}</div>
-                  <div className="portal-stat-label">{label}</div>
+                  <div className="portal-stat-label">{summaryDate ? `${label} on ${formatPortalDate(summaryDate)}` : label}</div>
                 </div>
                 ))}
             </div>
@@ -290,7 +327,7 @@ const AdminStaffPage = () => {
             <div className="portal-staff-report-sheet">
               <div className="portal-staff-report-grid">
                 <div className="portal-staff-report-block">
-                  <div className="portal-brand-kicker">Latest Attendance</div>
+                  <div className="portal-brand-kicker">Attendance Snapshot</div>
                   <div className="portal-staff-report-list">
                     <div className="portal-staff-report-row">
                       <strong>Last date</strong>
@@ -308,15 +345,19 @@ const AdminStaffPage = () => {
                 </div>
 
                 <div className="portal-staff-report-block">
-                  <div className="portal-brand-kicker">Work Queue</div>
+                  <div className="portal-brand-kicker">Summary Filters</div>
                   <div className="portal-staff-report-list">
+                    <div className="portal-staff-report-row">
+                      <strong>Viewing</strong>
+                      <span>{summaryDate ? formatPortalDate(summaryDate) : 'All dates'}</span>
+                    </div>
                     <div className="portal-staff-report-row">
                       <strong>Pending orders</strong>
                       <span>{staffSummary.metrics.pendingOrders}</span>
                     </div>
                     <div className="portal-staff-report-row">
-                      <strong>Open notifications</strong>
-                      <span>{staffSummary.metrics.unreadNotifications}</span>
+                      <strong>Latest client</strong>
+                      <span>{staffSummary.latest.client?.name || 'No client yet'}</span>
                     </div>
                   </div>
                 </div>
@@ -354,24 +395,180 @@ const AdminStaffPage = () => {
               </div>
             </div>
 
-            <div className="portal-record-list">
-              {staffSummary.recentActivity.length ? (
-                staffSummary.recentActivity.map((entry) => (
-                  <div className="portal-record-card" key={entry._id}>
-                    <h3 className="portal-record-title">{entry.action.replaceAll('_', ' ')}</h3>
-                    <div className="portal-record-meta">
-                      <span>{entry.module}</span>
-                      <span>{formatPortalDateTime(entry.createdAt)}</span>
+            <div className="portal-staff-report-grid">
+              <div className="portal-staff-report-block">
+                <div className="portal-brand-kicker">Attendance Log</div>
+                <div className="portal-record-list">
+                  {staffSummary.records.attendance.length ? (
+                    staffSummary.records.attendance.map((entry) => (
+                      <div className="portal-record-card" key={entry._id}>
+                        <h3 className="portal-record-title">{formatPortalDate(entry.date)}</h3>
+                        <div className="portal-record-meta">
+                          <span>Check in: {entry.checkInTime ? formatPortalDateTime(entry.checkInTime) : 'Not recorded'}</span>
+                          <span>Check out: {entry.checkOutTime ? formatPortalDateTime(entry.checkOutTime) : 'Not recorded'}</span>
+                          <span>Worked: {entry.totalWorkedMinutes || 0} min</span>
+                        </div>
+                        <div className="portal-record-meta">
+                          <span>Week start km: {entry.mileageWeekStart ?? '-'}</span>
+                          <span>Entered: {entry.mileageWeekStartAt ? formatPortalDateTime(entry.mileageWeekStartAt) : '-'}</span>
+                          <span>Week end km: {entry.mileageWeekEnd ?? '-'}</span>
+                          <span>Entered: {entry.mileageWeekEndAt ? formatPortalDateTime(entry.mileageWeekEndAt) : '-'}</span>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="portal-empty-state">
+                      <h3 className="portal-empty-title">No attendance found</h3>
+                      <p className="portal-empty-copy">No attendance entries match the current filter.</p>
                     </div>
-                  </div>
-                ))
-              ) : (
-                <div className="portal-empty-state">
-                  <h3 className="portal-empty-title">No staff activity yet</h3>
-                  <p className="portal-empty-copy">Once this staff member starts using the portal, their recent actions will appear here for quick review.</p>
+                  )}
                 </div>
-              )}
+              </div>
+
+              <div className="portal-staff-report-block">
+                <div className="portal-brand-kicker">Daily Reports</div>
+                <div className="portal-record-list">
+                  {staffSummary.records.reports.length ? (
+                    staffSummary.records.reports.map((entry) => (
+                      <div className="portal-record-card" key={entry._id}>
+                        <h3 className="portal-record-title">{formatPortalDate(entry.date)}</h3>
+                        <div className="portal-record-meta">
+                          <span>Created: {formatPortalDateTime(entry.createdAt)}</span>
+                          <span>Follow up: {entry.followUpNeeded ? 'Yes' : 'No'}</span>
+                          <span>Visits in report: {entry.visits?.length || 0}</span>
+                        </div>
+                        <div className="portal-record-copy">{entry.summary}</div>
+                        {entry.notes && <div className="portal-record-copy">{entry.notes}</div>}
+                      </div>
+                    ))
+                  ) : (
+                    <div className="portal-empty-state">
+                      <h3 className="portal-empty-title">No reports found</h3>
+                      <p className="portal-empty-copy">No daily reports match the current filter.</p>
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
+
+            <div className="portal-staff-report-grid">
+              <div className="portal-staff-report-block">
+                <div className="portal-brand-kicker">Orders</div>
+                <div className="portal-record-list">
+                  {staffSummary.records.orders.length ? (
+                    staffSummary.records.orders.map((entry) => (
+                      <div className="portal-record-card" key={entry._id}>
+                        <h3 className="portal-record-title">{entry.customerName || entry.companyName || 'Order'}</h3>
+                        <div className="portal-record-meta">
+                          <span>Submitted: {formatPortalDateTime(entry.submittedAt || entry.createdAt)}</span>
+                          <span>Status: {entry.status}</span>
+                          <span>Urgency: {entry.urgency}</span>
+                          <span>Client: {entry.client?.name || '-'}</span>
+                        </div>
+                        <div className="portal-record-meta">
+                          <span>Contact: {entry.contactPerson || '-'}</span>
+                          <span>Items: {entry.items?.length || 0}</span>
+                        </div>
+                        <div className="portal-record-copy">{formatItems(entry.items)}</div>
+                        {entry.notes && <div className="portal-record-copy">{entry.notes}</div>}
+                      </div>
+                    ))
+                  ) : (
+                    <div className="portal-empty-state">
+                      <h3 className="portal-empty-title">No orders found</h3>
+                      <p className="portal-empty-copy">No orders match the current filter.</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div className="portal-staff-report-block">
+                <div className="portal-brand-kicker">Visits</div>
+                <div className="portal-record-list">
+                  {staffSummary.records.visits.length ? (
+                    staffSummary.records.visits.map((entry) => (
+                      <div className="portal-record-card" key={entry._id}>
+                        <h3 className="portal-record-title">{entry.client?.name || entry.clientName || 'Visit'}</h3>
+                        <div className="portal-record-meta">
+                          <span>Date: {formatPortalDate(entry.visitDate)}</span>
+                          <span>Time: {entry.visitTime || '-'}</span>
+                          <span>Logged: {formatPortalDateTime(entry.createdAt)}</span>
+                        </div>
+                        <div className="portal-record-meta">
+                          <span>Met: {entry.metPerson || '-'}</span>
+                          <span>Location: {entry.location || '-'}</span>
+                          <span>Purpose: {entry.purpose || '-'}</span>
+                        </div>
+                        {entry.discussionSummary && <div className="portal-record-copy">{entry.discussionSummary}</div>}
+                        {entry.outcome && <div className="portal-record-copy">{entry.outcome}</div>}
+                      </div>
+                    ))
+                  ) : (
+                    <div className="portal-empty-state">
+                      <h3 className="portal-empty-title">No visits found</h3>
+                      <p className="portal-empty-copy">No visits match the current filter.</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="portal-staff-report-grid">
+              <div className="portal-staff-report-block">
+                <div className="portal-brand-kicker">Client List</div>
+                <div className="portal-record-list">
+                  {staffSummary.records.clients.length ? (
+                    staffSummary.records.clients.map((entry) => (
+                      <div className="portal-record-card" key={entry._id}>
+                        <h3 className="portal-record-title">{entry.name}</h3>
+                        <div className="portal-record-meta">
+                          <span>Created: {formatPortalDateTime(entry.createdAt)}</span>
+                          <span>Updated: {formatPortalDateTime(entry.updatedAt)}</span>
+                          <span>Type: {entry.companyType || '-'}</span>
+                          <span>Department: {entry.department || '-'}</span>
+                        </div>
+                        <div className="portal-record-meta">
+                          <span>Contact: {entry.contactPerson || '-'}</span>
+                          <span>Phone: {entry.phone || '-'}</span>
+                          <span>Email: {entry.email || '-'}</span>
+                          <span>Location: {entry.location || '-'}</span>
+                        </div>
+                        {entry.address && <div className="portal-record-copy">{entry.address}</div>}
+                        {entry.notes && <div className="portal-record-copy">{entry.notes}</div>}
+                      </div>
+                    ))
+                  ) : (
+                    <div className="portal-empty-state">
+                      <h3 className="portal-empty-title">No clients found</h3>
+                      <p className="portal-empty-copy">No clients match the current filter.</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div className="portal-staff-report-block">
+                <div className="portal-brand-kicker">Recent Activity</div>
+                <div className="portal-record-list">
+                  {staffSummary.recentActivity.length ? (
+                    staffSummary.recentActivity.map((entry) => (
+                      <div className="portal-record-card" key={entry._id}>
+                        <h3 className="portal-record-title">{entry.action.replaceAll('_', ' ')}</h3>
+                        <div className="portal-record-meta">
+                          <span>{entry.module}</span>
+                          <span>{formatPortalDateTime(entry.createdAt)}</span>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="portal-empty-state">
+                      <h3 className="portal-empty-title">No activity found</h3>
+                      <p className="portal-empty-copy">No logged activity matches the current filter.</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
           </div>
         ) : (
           <div className="portal-empty-state" style={{ marginTop: '1rem' }}>
