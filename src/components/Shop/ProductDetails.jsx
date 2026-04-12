@@ -3,6 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import StatePanel from '../Common/StatePanel';
 import { normalizeImageSrc } from '../../utils/normalizeImageSrc';
 import { useScrollReveal } from '../../hooks/useScrollReveal';
+import { authFetch } from '../../services/authFetch';
 import './ProductDetails.css';
 
 const buildSizeLabel = (entry) => [entry.size, entry.inches, entry.color].filter(Boolean).join(' / ');
@@ -16,7 +17,6 @@ const ProductDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
-  const token = localStorage.getItem('token');
 
   const [product, setProduct] = useState(null);
   const [relatedProducts, setRelatedProducts] = useState([]);
@@ -153,11 +153,6 @@ const ProductDetails = () => {
   const handleAddToCart = async () => {
     if (!product) return;
 
-    if (!token) {
-      navigate('/sign-in');
-      return;
-    }
-
     if (sizeOptions.length && (selectedSizeIndex === '' || Number.isNaN(Number(selectedSizeIndex)))) {
       setNotice({
         type: 'error',
@@ -170,12 +165,12 @@ const ProductDetails = () => {
     const selectedLabel = selectedEntry ? buildSizeLabel(selectedEntry) : '';
 
     try {
-      const response = await fetch(`${API_URL}/cart/items`, {
+      const response = await authFetch('/cart/items', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
         },
+        scope: 'user',
         body: JSON.stringify({
           productId: product._id,
           variantId,
@@ -185,6 +180,10 @@ const ProductDetails = () => {
       });
 
       if (!response.ok) {
+        if (response.status === 401) {
+          navigate('/sign-in');
+          return;
+        }
         const data = await response.json();
         setNotice({
           type: 'error',

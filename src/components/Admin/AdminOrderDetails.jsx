@@ -2,23 +2,16 @@ import { useEffect, useState, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import './AdminCategories.css';
 import AdminTopNav from './AdminTopNav';
+import { authFetch, API_URL } from '../../services/authFetch';
 
 const AdminOrderDetails = () => {
   const { id } = useParams();
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
-  const token = localStorage.getItem('adminToken');
   const [order, setOrder] = useState(null);
   const [error, setError] = useState(null);
 
   const downloadInvoice = async () => {
-    if (!token) {
-      alert('Please sign in to download the invoice.');
-      return;
-    }
     try {
-      const response = await fetch(`${API_URL}/orders/${id}/invoice`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await authFetch(`/orders/${id}/invoice`, { scope: 'admin' });
       if (!response.ok) {
         const data = await response.json().catch(() => ({}));
         alert(data.message || 'Failed to download invoice');
@@ -40,9 +33,7 @@ const AdminOrderDetails = () => {
 
   const fetchOrder = useCallback(async () => {
     try {
-      const response = await fetch(`${API_URL}/orders/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await authFetch(`/orders/${id}`, { scope: 'admin' });
       const data = await response.json();
       if (!response.ok) {
         setError(data.message || 'Failed to load order');
@@ -53,7 +44,7 @@ const AdminOrderDetails = () => {
     } catch (err) {
       setError('Failed to load order');
     }
-  }, [API_URL, id, token]);
+  }, [id]);
 
   useEffect(() => {
     fetchOrder();

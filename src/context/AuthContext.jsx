@@ -1,4 +1,5 @@
 import { createContext, useState, useEffect } from 'react';
+import { authFetch } from '../services/authFetch';
 
 export const AuthContext = createContext();
 
@@ -8,28 +9,20 @@ export const AuthProvider = ({ children }) => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      fetchMe(token);
-    } else {
-      setLoading(false);
-    }
+    fetchMe();
   }, []);
 
-  const fetchMe = async (token) => {
+  const fetchMe = async () => {
     try {
-      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
-      const response = await fetch(`${API_URL}/auth/me`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await authFetch('/auth/me', { scope: 'user' });
       if (response.ok) {
         const data = await response.json();
         setUser(data.user);
       } else {
-        localStorage.removeItem('token');
+        setUser(null);
       }
     } catch (err) {
-      localStorage.removeItem('token');
+      setUser(null);
     } finally {
       setLoading(false);
     }
@@ -39,10 +32,10 @@ export const AuthProvider = ({ children }) => {
     setLoading(true);
     setError(null);
     try {
-      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
-      const response = await fetch(`${API_URL}/auth/login`, {
+      const response = await authFetch('/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        scope: 'user',
         body: JSON.stringify({ identifier, password }),
       });
       const data = await response.json();
@@ -50,8 +43,7 @@ export const AuthProvider = ({ children }) => {
         setError(data.err || 'Login failed');
         return false;
       }
-      localStorage.setItem('token', data.token);
-      await fetchMe(data.token);
+      await fetchMe();
       return true;
     } catch (err) {
       setError(err.message);
@@ -65,10 +57,10 @@ export const AuthProvider = ({ children }) => {
     setLoading(true);
     setError(null);
     try {
-      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
-      const response = await fetch(`${API_URL}/auth/register`, {
+      const response = await authFetch('/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        scope: 'user',
         body: JSON.stringify(payload),
       });
       const data = await response.json();
@@ -76,8 +68,7 @@ export const AuthProvider = ({ children }) => {
         setError(data.err || 'Registration failed');
         return false;
       }
-      localStorage.setItem('token', data.token);
-      await fetchMe(data.token);
+      await fetchMe();
       return true;
     } catch (err) {
       setError(err.message);
@@ -87,9 +78,14 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const logout = () => {
-    localStorage.removeItem('token');
-    setUser(null);
+  const logout = async () => {
+    try {
+      await authFetch('/auth/logout', { method: 'POST', scope: 'user' });
+    } catch (err) {
+      console.error('Logout failed', err);
+    } finally {
+      setUser(null);
+    }
   };
 
   return (

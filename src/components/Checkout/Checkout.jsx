@@ -1,10 +1,9 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Checkout.css';
+import { authFetch } from '../../services/authFetch';
 
 const Checkout = () => {
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
-  const token = localStorage.getItem('token');
   const navigate = useNavigate();
   const [cart, setCart] = useState(null);
   const [paymentMethod, setPaymentMethod] = useState('cod');
@@ -22,12 +21,14 @@ const Checkout = () => {
   const [loading, setLoading] = useState(false);
 
   const fetchCart = useCallback(async () => {
-    const response = await fetch(`${API_URL}/cart`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    const response = await authFetch('/cart', { scope: 'user' });
+    if (response.status === 401) {
+      navigate('/sign-in');
+      return;
+    }
     const data = await response.json();
     setCart(data);
-  }, [API_URL, token]);
+  }, [navigate]);
 
   const fetchTapReady = useCallback(async () => {
     try {
@@ -37,16 +38,12 @@ const Checkout = () => {
     } catch (err) {
       setTapReady(false);
     }
-  }, [API_URL]);
+  }, []);
 
   useEffect(() => {
-    if (!token) {
-      navigate('/sign-in');
-      return;
-    }
     fetchCart();
     fetchTapReady();
-  }, [fetchCart, fetchTapReady, navigate, token]);
+  }, [fetchCart, fetchTapReady]);
 
   const subtotal = cart?.items?.reduce((sum, item) => sum + item.price * item.quantity, 0) || 0;
   const shippingFee = subtotal < 10 ? 1 : 0;
@@ -56,12 +53,12 @@ const Checkout = () => {
     setLoading(true);
     try {
       if (paymentMethod === 'tap') {
-        const tapResponse = await fetch(`${API_URL}/orders/tap/session`, {
+        const tapResponse = await authFetch('/orders/tap/session', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
           },
+          scope: 'user',
           body: JSON.stringify({
             shippingAddress: address,
             notes,
@@ -75,12 +72,12 @@ const Checkout = () => {
         return;
       }
 
-      const response = await fetch(`${API_URL}/orders/checkout`, {
+      const response = await authFetch('/orders/checkout', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
         },
+        scope: 'user',
         body: JSON.stringify({
           paymentMethod,
           shippingAddress: address,

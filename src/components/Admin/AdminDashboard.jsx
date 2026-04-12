@@ -2,6 +2,7 @@ import { useContext, useState, useEffect, useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { AdminContext } from '../../context/AdminContext';
 import { getAdminPaths } from './adminPaths';
+import { authFetch, API_URL } from '../../services/authFetch';
 import './AdminDashboard.css';
 
 const AdminDashboard = () => {
@@ -10,9 +11,6 @@ const AdminDashboard = () => {
   const location = useLocation();
   const isVisibleAdminRoute = location.pathname.startsWith('/admin');
   const adminPaths = getAdminPaths(isVisibleAdminRoute);
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
-  const token = localStorage.getItem('adminToken');
-
   const [activeSection, setActiveSection] = useState('overview');
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [metrics, setMetrics] = useState({
@@ -48,10 +46,10 @@ const AdminDashboard = () => {
     try {
       const [categoriesRes, productsRes, ordersRes, marketingRes, opsRes] = await Promise.all([
         fetch(`${API_URL}/categories`),
-        fetch(`${API_URL}/products/admin/all`, { headers: { Authorization: `Bearer ${token}` } }),
-        fetch(`${API_URL}/orders/admin`, { headers: { Authorization: `Bearer ${token}` } }),
-        fetch(`${API_URL}/users/marketing`, { headers: { Authorization: `Bearer ${token}` } }),
-        fetch(`${API_URL}/admin-portal/dashboard`, { headers: { Authorization: `Bearer ${token}` } }),
+        authFetch('/products/admin/all', { scope: 'admin' }),
+        authFetch('/orders/admin', { scope: 'admin' }),
+        authFetch('/users/marketing', { scope: 'admin' }),
+        authFetch('/admin-portal/dashboard', { scope: 'admin' }),
       ]);
 
       const [categoriesData, productsData, ordersData, marketingData, opsData] = await Promise.all([
@@ -92,7 +90,7 @@ const AdminDashboard = () => {
     } finally {
       setLoadingMetrics(false);
     }
-  }, [API_URL, token]);
+  }, []);
 
   useEffect(() => {
     fetchMetrics();

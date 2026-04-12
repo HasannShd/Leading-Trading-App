@@ -1,10 +1,9 @@
 import { useEffect, useState, useCallback } from 'react';
 import './AdminCategories.css';
 import AdminTopNav from './AdminTopNav';
+import { authFetch } from '../../services/authFetch';
 
 const AdminMarketing = () => {
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
-  const token = localStorage.getItem('adminToken');
   const [list, setList] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -13,9 +12,7 @@ const AdminMarketing = () => {
   const fetchList = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await fetch(`${API_URL}/users/marketing`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await authFetch('/users/marketing', { scope: 'admin' });
       const data = await response.json();
       if (!response.ok) {
         setError(data.err || 'Failed to fetch list');
@@ -28,7 +25,7 @@ const AdminMarketing = () => {
     } finally {
       setLoading(false);
     }
-  }, [API_URL, token]);
+  }, []);
 
   useEffect(() => {
     fetchList();

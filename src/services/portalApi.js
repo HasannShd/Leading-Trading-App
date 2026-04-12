@@ -1,20 +1,19 @@
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
-const getStoredToken = (role) => {
-  if (role === 'admin') return localStorage.getItem('adminToken');
-  if (role === 'sales_staff') return localStorage.getItem('staffToken');
-  return localStorage.getItem('token');
+const getScope = (role) => {
+  if (role === 'admin') return 'admin';
+  if (role === 'sales_staff') return 'sales_staff';
+  return 'user';
 };
 
 const request = async ({ path, method = 'GET', role = 'sales_staff', body, isForm = false }) => {
-  const token = getStoredToken(role);
-  const headers = {};
+  const headers = { 'X-Auth-Scope': getScope(role) };
 
   if (!isForm) headers['Content-Type'] = 'application/json';
-  if (token) headers.Authorization = `Bearer ${token}`;
 
   const response = await fetch(`${API_URL}${path}`, {
     method,
+    credentials: 'include',
     headers,
     body: body ? (isForm ? body : JSON.stringify(body)) : undefined,
   });

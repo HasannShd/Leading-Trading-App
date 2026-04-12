@@ -3,12 +3,11 @@ import { Link, useLocation } from 'react-router-dom';
 import './AdminCategories.css';
 import AdminTopNav from './AdminTopNav';
 import { getAdminPaths } from './adminPaths';
+import { authFetch } from '../../services/authFetch';
 
 const AdminOrders = () => {
   const location = useLocation();
   const adminPaths = getAdminPaths(location.pathname.startsWith('/admin'));
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
-  const token = localStorage.getItem('adminToken');
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -16,9 +15,7 @@ const AdminOrders = () => {
   const fetchOrders = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await fetch(`${API_URL}/orders/admin`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await authFetch('/orders/admin', { scope: 'admin' });
       const data = await response.json();
       if (!response.ok) {
         setError(data.message || 'Failed to fetch orders');
@@ -31,7 +28,7 @@ const AdminOrders = () => {
     } finally {
       setLoading(false);
     }
-  }, [API_URL, token]);
+  }, []);
 
   useEffect(() => {
     fetchOrders();
@@ -45,12 +42,12 @@ const AdminOrders = () => {
 
   const updateStatus = async (orderId, status) => {
     try {
-      const response = await fetch(`${API_URL}/orders/${orderId}/status`, {
+      const response = await authFetch(`/orders/${orderId}/status`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
         },
+        scope: 'admin',
         body: JSON.stringify({ status }),
       });
       if (!response.ok) {

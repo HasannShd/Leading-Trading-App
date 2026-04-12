@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { portalApi } from '../../services/portalApi';
+import { authFetch, API_URL } from '../../services/authFetch';
 import AdminTopNav from '../Admin/AdminTopNav';
 import '../Admin/AdminCategories.css';
 import { formatPortalDate, formatPortalDateTime } from '../../utils/portalDate';
@@ -71,9 +72,7 @@ const AdminResourcePage = ({ config }) => {
 
   const handleExport = async () => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/admin-portal/exports/${config.exportKey || configKey}`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('adminToken')}` },
-      });
+      const response = await authFetch(`/admin-portal/exports/${config.exportKey || configKey}`, { scope: 'admin' });
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
       const anchor = document.createElement('a');

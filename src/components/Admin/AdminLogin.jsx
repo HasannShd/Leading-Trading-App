@@ -1,6 +1,7 @@
 import { useState, useContext, useMemo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { AdminContext } from '../../context/AdminContext';
+import { authFetch, API_URL } from '../../services/authFetch';
 import './AdminLogin.css';
 
 const AdminLogin = () => {
@@ -36,10 +37,10 @@ const AdminLogin = () => {
     setForgotError('');
     setForgotMessage('');
     try {
-      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
-      const response = await fetch(`${API_URL}/auth/admin/forgot-password`, {
+      const response = await authFetch('/auth/admin/forgot-password', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        scope: 'admin',
         body: JSON.stringify({
           identifier: forgotIdentifier,
           appUrl: `${window.location.origin}${window.location.pathname}`,
@@ -66,8 +67,8 @@ const AdminLogin = () => {
       setResetError('Reset token is missing.');
       return;
     }
-    if (resetPassword.length < 8) {
-      setResetError('Password must be at least 8 characters.');
+    if (resetPassword.length < 10) {
+      setResetError('Password must be at least 10 characters.');
       return;
     }
     if (resetPassword !== resetConfirmPassword) {
@@ -76,10 +77,10 @@ const AdminLogin = () => {
     }
     setIsLoading(true);
     try {
-      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
-      const response = await fetch(`${API_URL}/auth/admin/reset-password`, {
+      const response = await authFetch('/auth/admin/reset-password', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        scope: 'admin',
         body: JSON.stringify({
           token: resetToken,
           password: resetPassword,
@@ -190,6 +191,7 @@ const AdminLogin = () => {
             {resetError && <div className="admin-error-message">{resetError}</div>}
             {resetMessage && <div className="admin-success-message">{resetMessage}</div>}
             <form className="admin-login-form" onSubmit={handleResetPassword}>
+              <div className="admin-success-message">Use at least 10 characters with uppercase, lowercase, number, and symbol.</div>
               <label className="admin-form-label">
                 New password
                 <input

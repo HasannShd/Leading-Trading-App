@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import './AdminProducts.css';
 import AdminTopNav from './AdminTopNav';
 import { getAdminPaths } from './adminPaths';
+import { authFetch, API_URL } from '../../services/authFetch';
 
 const AdminProducts = () => {
   const [products, setProducts] = useState([]);
@@ -29,12 +30,7 @@ const AdminProducts = () => {
   });
   const location = useLocation();
   const adminLoginPath = getAdminPaths(location.pathname.startsWith('/admin')).login;
-
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
-
-  const getAdminToken = () => localStorage.getItem('adminToken');
   const handleUnauthorized = () => {
-    localStorage.removeItem('adminToken');
     setError('Admin session expired. Please sign in again.');
     window.location.href = adminLoginPath;
   };
@@ -42,14 +38,7 @@ const AdminProducts = () => {
   const fetchProducts = useCallback(async () => {
     setLoading(true);
     try {
-      const token = getAdminToken();
-      if (!token) {
-        handleUnauthorized();
-        return;
-      }
-      const response = await fetch(`${API_URL}/products/admin/all`, {
-        headers: { 'Authorization': `Bearer ${token}` },
-      });
+      const response = await authFetch('/products/admin/all', { scope: 'admin' });
       if (response.status === 401) {
         handleUnauthorized();
         return;
@@ -117,14 +106,9 @@ const AdminProducts = () => {
     try {
       const data = new FormData();
       data.append('image', file);
-      const token = getAdminToken();
-      if (!token) {
-        handleUnauthorized();
-        return;
-      }
-      const response = await fetch(`${API_URL}/upload`, {
+      const response = await authFetch('/upload', {
         method: 'POST',
-        headers: { Authorization: `Bearer ${token}` },
+        scope: 'admin',
         body: data,
       });
       const resData = await response.json();
@@ -151,17 +135,12 @@ const AdminProducts = () => {
     setLoading(true);
     try {
       const uploaded = [];
-      const token = getAdminToken();
-      if (!token) {
-        handleUnauthorized();
-        return;
-      }
       for (const file of files) {
         const data = new FormData();
         data.append('image', file);
-        const response = await fetch(`${API_URL}/upload`, {
+        const response = await authFetch('/upload', {
           method: 'POST',
-          headers: { Authorization: `Bearer ${token}` },
+          scope: 'admin',
           body: data,
         });
         const resData = await response.json();
@@ -205,14 +184,9 @@ const AdminProducts = () => {
     try {
       const data = new FormData();
       data.append('image', file);
-      const token = getAdminToken();
-      if (!token) {
-        handleUnauthorized();
-        return;
-      }
-      const response = await fetch(`${API_URL}/upload`, {
+      const response = await authFetch('/upload', {
         method: 'POST',
-        headers: { Authorization: `Bearer ${token}` },
+        scope: 'admin',
         body: data,
       });
       const resData = await response.json();
@@ -269,18 +243,12 @@ const AdminProducts = () => {
         variants: normalizedVariants,
         images: formData.images || [],
       };
-      const token = getAdminToken();
-      if (!token) {
-        handleUnauthorized();
-        return;
-      }
-
-      const response = await fetch(url, {
+      const response = await authFetch(url.replace(API_URL, ''), {
         method,
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
         },
+        scope: 'admin',
         body: JSON.stringify(payload),
       });
 
@@ -350,14 +318,9 @@ const AdminProducts = () => {
 
     setLoading(true);
     try {
-      const token = getAdminToken();
-      if (!token) {
-        handleUnauthorized();
-        return;
-      }
-      const response = await fetch(`${API_URL}/products/${id}`, {
+      const response = await authFetch(`/products/${id}`, {
         method: 'DELETE',
-        headers: { 'Authorization': `Bearer ${token}` },
+        scope: 'admin',
       });
 
       if (!response.ok) {

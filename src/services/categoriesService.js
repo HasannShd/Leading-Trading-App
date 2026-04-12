@@ -1,12 +1,12 @@
 import axios from 'axios';
-
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+import { API_URL } from './authFetch';
 
 export const fetchCategories = () =>
   axios.get(`${API_URL}/categories`);
 
 const authHeaders = () => ({
-  headers: { Authorization: `Bearer ${localStorage.getItem('adminToken')}` },
+  withCredentials: true,
+  headers: { 'X-Auth-Scope': 'admin' },
 });
 
 export const createCategory = (data) =>

@@ -3,11 +3,9 @@ import * as XLSX from 'xlsx';
 import AdminTopNav from './AdminTopNav';
 import './AdminCategories.css';
 import './AdminImport.css';
+import { authFetch, API_URL } from '../../services/authFetch';
 
 const AdminImportProducts = () => {
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
-  const token = localStorage.getItem('adminToken');
-
   const [categories, setCategories] = useState([]);
   const [columns, setColumns] = useState([]);
   const [rows, setRows] = useState([]);
@@ -191,12 +189,12 @@ const AdminImportProducts = () => {
         ));
         if (missingNames.length > 0) {
           const created = await Promise.all(missingNames.map(async (name) => {
-            const response = await fetch(`${API_URL}/categories`, {
+            const response = await authFetch('/categories', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`,
               },
+              scope: 'admin',
               body: JSON.stringify({ name }),
             });
             const data = await response.json().catch(() => ({}));
@@ -237,12 +235,12 @@ const AdminImportProducts = () => {
         return;
       }
 
-      const response = await fetch(`${API_URL}/products/import`, {
+      const response = await authFetch('/products/import', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
         },
+        scope: 'admin',
         body: JSON.stringify({
           items,
         }),
@@ -265,11 +263,7 @@ const AdminImportProducts = () => {
     setError('');
     setStatus('');
     try {
-      const response = await fetch(`${API_URL}/products/admin/export`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
+      const response = await authFetch('/products/admin/export', { scope: 'admin' });
       if (!response.ok) {
         const data = await response.json().catch(() => null);
         setError(data?.message || 'Download failed.');

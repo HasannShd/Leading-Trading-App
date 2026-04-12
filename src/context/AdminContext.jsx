@@ -1,5 +1,6 @@
 import { createContext, useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { authFetch } from '../services/authFetch';
 
 export const AdminContext = createContext();
 
@@ -13,10 +14,9 @@ export const AdminProvider = ({ children }) => {
   const adminLoginPath = isVisibleAdminRoute ? '/admin/login' : '/.well-known/admin-access-sh123456';
   const isAdminRoute = location.pathname.startsWith('/.well-known/') || isVisibleAdminRoute;
 
-  const resetAdminSession = () => {
-    localStorage.removeItem('adminToken');
+  const resetAdminSession = (shouldRedirect = true) => {
     setAdmin(null);
-    if (isAdminRoute && location.pathname !== adminLoginPath) {
+    if (shouldRedirect && isAdminRoute && location.pathname !== adminLoginPath) {
       navigate(adminLoginPath, { replace: true });
     }
   };
@@ -27,41 +27,32 @@ export const AdminProvider = ({ children }) => {
       typeof window !== 'undefined' &&
       (location.pathname.includes('.well-known/admin') || location.pathname.startsWith('/admin'))
     ) {
-      const token = localStorage.getItem('adminToken');
-      if (!token && location.pathname !== adminLoginPath) {
+      if (!admin && !loading && location.pathname !== adminLoginPath) {
         navigate(adminLoginPath, { replace: true });
       }
     }
-  }, [adminLoginPath, location.pathname, navigate]);
+  }, [admin, adminLoginPath, loading, location.pathname, navigate]);
 
   useEffect(() => {
-    const token = localStorage.getItem('adminToken');
-    if (token) {
-      verifyAdmin(token);
-    } else {
-      setLoading(false);
-    }
+    verifyAdmin();
   }, []);
 
-  const verifyAdmin = async (token) => {
+  const verifyAdmin = async () => {
     try {
-      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
-      const response = await fetch(`${API_URL}/auth/me`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await authFetch('/auth/me', { scope: 'admin' });
       if (response.ok) {
         const data = await response.json();
         if (data.user.role === 'admin') {
           setAdmin(data.user);
         } else {
-          resetAdminSession();
+          resetAdminSession(false);
         }
       } else {
-        resetAdminSession();
+        resetAdminSession(false);
       }
     } catch (err) {
       console.error('Auth verification failed:', err);
-      resetAdminSession();
+      resetAdminSession(false);
     } finally {
       setLoading(false);
     }
@@ -71,10 +62,10 @@ export const AdminProvider = ({ children }) => {
     setLoading(true);
     setError(null);
     try {
-      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
-      const response = await fetch(`${API_URL}/auth/sign-in`, {
+      const response = await authFetch('/auth/sign-in', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        scope: 'admin',
         body: JSON.stringify({ identifier: username, password }),
       });
       const data = await response.json();
@@ -84,13 +75,7 @@ export const AdminProvider = ({ children }) => {
         return false;
       }
 
-      localStorage.setItem('adminToken', data.token);
-      
-      // Verify it's actually an admin
-      const API_URL2 = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
-      const meResponse = await fetch(`${API_URL2}/auth/me`, {
-        headers: { Authorization: `Bearer ${data.token}` },
-      });
+      const meResponse = await authFetch('/auth/me', { scope: 'admin' });
       const meData = await meResponse.json();
 
       if (!meResponse.ok || meData.user.role !== 'admin') {
@@ -109,8 +94,14 @@ export const AdminProvider = ({ children }) => {
     }
   };
 
-  const logout = () => {
-    resetAdminSession();
+  const logout = async () => {
+    try {
+      await authFetch('/auth/logout', { method: 'POST', scope: 'admin' });
+    } catch (err) {
+      console.error('Logout failed', err);
+    } finally {
+      resetAdminSession();
+    }
   };
 
   return (

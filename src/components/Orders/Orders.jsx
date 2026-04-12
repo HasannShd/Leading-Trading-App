@@ -1,22 +1,16 @@
 import { useEffect, useState, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './Orders.css';
+import { authFetch } from '../../services/authFetch';
 
 const Orders = () => {
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
-  const token = localStorage.getItem('token');
+  const navigate = useNavigate();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const downloadInvoice = async (orderId, invoiceNumber) => {
-    if (!token) {
-      alert('Please sign in to download the invoice.');
-      return;
-    }
     try {
-      const response = await fetch(`${API_URL}/orders/${orderId}/invoice`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await authFetch(`/orders/${orderId}/invoice`, { scope: 'user' });
         if (!response.ok) {
           const data = await response.json().catch(() => ({}));
           if (response.status === 401) {
@@ -43,9 +37,11 @@ const Orders = () => {
   const fetchOrders = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await fetch(`${API_URL}/orders`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await authFetch('/orders', { scope: 'user' });
+      if (response.status === 401) {
+        navigate('/sign-in');
+        return;
+      }
       const data = await response.json();
       setOrders(Array.isArray(data) ? data : []);
     } catch (err) {
@@ -53,11 +49,11 @@ const Orders = () => {
     } finally {
       setLoading(false);
     }
-  }, [API_URL, token]);
+  }, [navigate]);
 
   useEffect(() => {
-    if (token) fetchOrders();
-  }, [fetchOrders, token]);
+    fetchOrders();
+  }, [fetchOrders]);
 
   return (
     <main>

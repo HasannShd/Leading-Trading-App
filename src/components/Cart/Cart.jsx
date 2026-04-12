@@ -1,10 +1,9 @@
 import { useEffect, useState, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './Cart.css';
+import { authFetch } from '../../services/authFetch';
 
 const Cart = () => {
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
-  const token = localStorage.getItem('token');
   const navigate = useNavigate();
   const [cart, setCart] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -12,34 +11,32 @@ const Cart = () => {
   const fetchCart = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await fetch(`${API_URL}/cart`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await authFetch('/cart', { scope: 'user' });
       const data = await response.json();
+      if (response.status === 401) {
+        navigate('/sign-in');
+        return;
+      }
       setCart(data);
     } catch (err) {
       console.error('Failed to load cart', err);
     } finally {
       setLoading(false);
     }
-  }, [API_URL, token]);
+  }, [navigate]);
 
   useEffect(() => {
-    if (!token) {
-      navigate('/sign-in');
-      return;
-    }
     fetchCart();
-  }, [fetchCart, navigate, token]);
+  }, [fetchCart]);
 
   const updateQuantity = async (itemId, quantity) => {
     if (quantity < 1) return;
-    const response = await fetch(`${API_URL}/cart/items/${itemId}`, {
+    const response = await authFetch(`/cart/items/${itemId}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
       },
+      scope: 'user',
       body: JSON.stringify({ quantity }),
     });
     const data = await response.json();
@@ -47,9 +44,9 @@ const Cart = () => {
   };
 
   const removeItem = async (itemId) => {
-    const response = await fetch(`${API_URL}/cart/items/${itemId}`, {
+    const response = await authFetch(`/cart/items/${itemId}`, {
       method: 'DELETE',
-      headers: { Authorization: `Bearer ${token}` },
+      scope: 'user',
     });
     const data = await response.json();
     setCart(data);

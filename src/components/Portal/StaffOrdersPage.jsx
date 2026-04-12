@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { portalApi } from '../../services/portalApi';
+import { authFetch } from '../../services/authFetch';
 import { formatPortalDateTime } from '../../utils/portalDate';
 import './PortalShell.css';
 
@@ -154,9 +155,7 @@ const StaffOrdersPage = () => {
 
   const downloadExport = async (path, filename) => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}${path}`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('staffToken')}` },
-      });
+      const response = await authFetch(path, { scope: 'sales_staff' });
       if (!response.ok) throw new Error('Export failed.');
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);

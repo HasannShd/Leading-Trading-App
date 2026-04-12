@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { portalApi } from '../../services/portalApi';
+import { authFetch } from '../../services/authFetch';
 import AdminTopNav from '../Admin/AdminTopNav';
 import '../Admin/AdminCategories.css';
 import { formatPortalDate, formatPortalDateTime } from '../../utils/portalDate';
@@ -128,11 +129,9 @@ const AdminStaffPage = () => {
     try {
       const params = new URLSearchParams();
       if (summaryDate) params.set('date', summaryDate);
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/admin-portal/staff/${staffId}/report${params.toString() ? `?${params.toString()}` : ''}`,
-        {
-          headers: { Authorization: `Bearer ${localStorage.getItem('adminToken')}` },
-        }
+      const response = await authFetch(
+        `/admin-portal/staff/${staffId}/report${params.toString() ? `?${params.toString()}` : ''}`,
+        { scope: 'admin' }
       );
       if (!response.ok) throw new Error('Export failed.');
       const blob = await response.blob();

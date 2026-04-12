@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import './AdminCategories.css';
 import AdminTopNav from './AdminTopNav';
 import { getAdminPaths } from './adminPaths';
+import { authFetch, API_URL } from '../../services/authFetch';
 
 const AdminCategories = () => {
   const [categories, setCategories] = useState([]);
@@ -20,12 +21,7 @@ const AdminCategories = () => {
   });
   const location = useLocation();
   const adminLoginPath = getAdminPaths(location.pathname.startsWith('/admin')).login;
-
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
-
-  const getAdminToken = () => localStorage.getItem('adminToken');
   const handleUnauthorized = () => {
-    localStorage.removeItem('adminToken');
     setError('Admin session expired. Please sign in again.');
     window.location.href = adminLoginPath;
   };
@@ -79,14 +75,9 @@ const AdminCategories = () => {
     try {
       const data = new FormData();
       data.append('image', file);
-      const token = getAdminToken();
-      if (!token) {
-        handleUnauthorized();
-        return;
-      }
-      const response = await fetch(`${API_URL}/upload`, {
+      const response = await authFetch('/upload', {
         method: 'POST',
-        headers: { Authorization: `Bearer ${token}` },
+        scope: 'admin',
         body: data,
       });
       const resData = await response.json();
@@ -112,20 +103,15 @@ const AdminCategories = () => {
     setLoading(true);
 
     try {
-      const token = getAdminToken();
-      if (!token) {
-        handleUnauthorized();
-        return;
-      }
       const method = editingId ? 'PUT' : 'POST';
       const url = editingId ? `${API_URL}/categories/${editingId}` : `${API_URL}/categories`;
 
-      const response = await fetch(url, {
+      const response = await authFetch(url.replace(API_URL, ''), {
         method,
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
         },
+        scope: 'admin',
         body: JSON.stringify(formData),
       });
 
@@ -171,14 +157,9 @@ const AdminCategories = () => {
 
     setLoading(true);
     try {
-      const token = getAdminToken();
-      if (!token) {
-        handleUnauthorized();
-        return;
-      }
-      const response = await fetch(`${API_URL}/categories/${id}`, {
+      const response = await authFetch(`/categories/${id}`, {
         method: 'DELETE',
-        headers: { 'Authorization': `Bearer ${token}` },
+        scope: 'admin',
       });
 
       if (!response.ok) {

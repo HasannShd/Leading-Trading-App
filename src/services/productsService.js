@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { products } from './dataService';
-
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+import { API_URL } from './authFetch';
 
 // PUBLIC
 export const fetchProducts = (params = {}) =>
@@ -16,7 +15,8 @@ export const getProductsByCategory = (categorySlug) =>
 
 // ADMIN
 const authHeaders = () => ({
-  headers: { Authorization: `Bearer ${localStorage.getItem('adminToken')}` },
+  withCredentials: true,
+  headers: { 'X-Auth-Scope': 'admin' },
 });
 
 export const createProduct = (data) =>
