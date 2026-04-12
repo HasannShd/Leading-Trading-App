@@ -12,6 +12,7 @@ const AdminResourcePage = ({ config }) => {
   const [staff, setStaff] = useState([]);
   const [filters, setFilters] = useState({ user: '', status: '', date: '' });
   const [staffSummary, setStaffSummary] = useState(null);
+  const [selectedRecordId, setSelectedRecordId] = useState('');
 
   const buildQuery = () => {
     const params = new URLSearchParams();
@@ -39,6 +40,10 @@ const AdminResourcePage = ({ config }) => {
 
   useEffect(() => {
     load();
+  }, [config.endpoint, filters.user, filters.status, filters.date]);
+
+  useEffect(() => {
+    setSelectedRecordId('');
   }, [config.endpoint, filters.user, filters.status, filters.date]);
 
   useEffect(() => {
@@ -83,6 +88,7 @@ const AdminResourcePage = ({ config }) => {
 
   const configKey = config.endpoint.split('/').pop();
   const isAttendancePage = (config.exportKey || configKey) === 'attendance';
+  const isReportsPage = (config.exportKey || configKey) === 'reports';
 
   const recordTitle = (record) =>
     record.title ||
@@ -192,6 +198,7 @@ const AdminResourcePage = ({ config }) => {
   const pendingStatuses = new Set(['submitted', 'pending', 'under_review', 'reviewed', 'partial', 'overdue']);
   const pendingCount = records.filter((record) => pendingStatuses.has(record.status)).length;
   const assignedPeople = new Set(records.map((record) => record.user?._id).filter(Boolean)).size;
+  const selectedReport = records.find((record) => record._id === selectedRecordId) || null;
 
   return (
     <div className="admin-categories">
@@ -223,6 +230,8 @@ const AdminResourcePage = ({ config }) => {
             <p className="portal-section-copy">
               {isAttendancePage
                 ? 'Review check-in, check-out, mileage, and worked time clearly for each staff member. Use the filters to inspect one staff member or one working day.'
+                : isReportsPage
+                  ? 'Review daily reports only. Click one report to open its full details and notes.'
                 : 'Review entries below, use the filters to narrow the list, and update statuses from the cards when needed.'}
             </p>
           </div>
@@ -300,10 +309,6 @@ const AdminResourcePage = ({ config }) => {
             </div>
             <div className="portal-staff-summary-grid compact">
               <div className="portal-stat light">
-                <div className="portal-stat-value">{filters.date ? staffSummary.metrics.filteredAttendanceCount : staffSummary.metrics.attendanceCount}</div>
-                <div className="portal-stat-label">{filters.date ? 'Attendance on selected date' : 'Attendance'}</div>
-              </div>
-              <div className="portal-stat light">
                 <div className="portal-stat-value">{filters.date ? staffSummary.metrics.filteredReportsCount : staffSummary.metrics.reportsCount}</div>
                 <div className="portal-stat-label">{filters.date ? 'Reports on selected date' : 'Reports'}</div>
               </div>
@@ -316,58 +321,80 @@ const AdminResourcePage = ({ config }) => {
                 <div className="portal-stat-label">{filters.date ? 'Clients added on selected date' : 'Clients'}</div>
               </div>
             </div>
-            <div className="portal-staff-report-grid" style={{ marginTop: '0.5rem' }}>
-              <div className="portal-staff-report-block">
-                <div className="portal-brand-kicker">Latest Attendance</div>
+            {isReportsPage && (
+              <div className="portal-staff-report-block" style={{ marginTop: '0.5rem' }}>
+                <div className="portal-brand-kicker">Latest Report</div>
                 <div className="portal-staff-report-list">
                   <div className="portal-staff-report-row">
-                    <strong>Date</strong>
-                    <span>{staffSummary.latest.attendance?.date ? formatPortalDate(staffSummary.latest.attendance.date) : 'No attendance yet'}</span>
+                    <strong>Report date</strong>
+                    <span>{staffSummary.latest.report?.date ? formatPortalDate(staffSummary.latest.report.date) : 'No report yet'}</span>
                   </div>
                   <div className="portal-staff-report-row">
-                    <strong>Check in</strong>
-                    <span>{staffSummary.latest.attendance?.checkInTime ? formatPortalDateTime(staffSummary.latest.attendance.checkInTime) : 'Not recorded'}</span>
-                  </div>
-                  <div className="portal-staff-report-row">
-                    <strong>Check out</strong>
-                    <span>{staffSummary.latest.attendance?.checkOutTime ? formatPortalDateTime(staffSummary.latest.attendance.checkOutTime) : 'Not recorded'}</span>
-                  </div>
-                  <div className="portal-staff-report-row">
-                    <strong>Mileage</strong>
-                    <span>
-                      Start {staffSummary.latest.attendance?.mileageWeekStart ?? '-'} | End {staffSummary.latest.attendance?.mileageWeekEnd ?? '-'}
-                    </span>
-                  </div>
-                </div>
-              </div>
-              <div className="portal-staff-report-block">
-                <div className="portal-brand-kicker">Latest Related Work</div>
-                <div className="portal-staff-report-list">
-                  <div className="portal-staff-report-row">
-                    <strong>Report</strong>
+                    <strong>Submitted</strong>
                     <span>{staffSummary.latest.report?.createdAt ? formatPortalDateTime(staffSummary.latest.report.createdAt) : 'No report yet'}</span>
                   </div>
                   <div className="portal-staff-report-row">
-                    <strong>Report summary</strong>
+                    <strong>Summary</strong>
                     <span>{staffSummary.latest.report?.summary || 'No report yet'}</span>
-                  </div>
-                  <div className="portal-staff-report-row">
-                    <strong>Latest order</strong>
-                    <span>{staffSummary.latest.order?.createdAt ? formatPortalDateTime(staffSummary.latest.order.createdAt) : 'No order yet'}</span>
-                  </div>
-                  <div className="portal-staff-report-row">
-                    <strong>Latest visit</strong>
-                    <span>{staffSummary.latest.visit?.visitDate ? formatPortalDate(staffSummary.latest.visit.visitDate) : 'No visit yet'}</span>
                   </div>
                 </div>
               </div>
-            </div>
+            )}
           </div>
         )}
         {message && <div className="portal-badge status" style={{ marginTop: '1rem' }}>{message}</div>}
         <div className="portal-record-list" style={{ marginTop: '1rem' }}>
           {records.length ? (
-            records.map((record) => (isAttendancePage ? renderAttendanceRecord(record) : renderDefaultRecord(record)))
+            isReportsPage ? (
+              <>
+                <div className="portal-inline-list compact">
+                  {records.map((record) => (
+                    <button
+                      key={record._id}
+                      type="button"
+                      className={`portal-record-card portal-record-card-button${selectedReport?._id === record._id ? ' is-selected' : ''}`}
+                      onClick={() => setSelectedRecordId((current) => (current === record._id ? '' : record._id))}
+                    >
+                      <h3 className="portal-record-title">{record.user?.name || record.user?.username || 'Staff'}</h3>
+                      <div className="portal-record-meta">
+                        <span>{record.date ? formatPortalDate(record.date) : '-'}</span>
+                        <span>{record.createdAt ? formatPortalDateTime(record.createdAt) : '-'}</span>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+                {selectedReport && (
+                  <div className="portal-record-card">
+                    <h3 className="portal-record-title">{selectedReport.user?.name || selectedReport.user?.username || 'Daily Report'}</h3>
+                    <div className="portal-record-meta">
+                      <span>{selectedReport.date ? formatPortalDate(selectedReport.date) : '-'}</span>
+                      <span>{selectedReport.createdAt ? formatPortalDateTime(selectedReport.createdAt) : '-'}</span>
+                      <span>Follow up: {selectedReport.followUpNeeded ? 'Yes' : 'No'}</span>
+                    </div>
+                    <div className="portal-note-block">
+                      <div className="portal-detail-label">Summary</div>
+                      <div className="portal-record-copy">{selectedReport.summary || '-'}</div>
+                    </div>
+                    {selectedReport.notes && (
+                      <div className="portal-note-block">
+                        <div className="portal-detail-label">Notes</div>
+                        <div className="portal-record-copy">{selectedReport.notes}</div>
+                      </div>
+                    )}
+                    {!!selectedReport.visits?.length && (
+                      <div className="portal-note-block">
+                        <div className="portal-detail-label">Visits Mentioned</div>
+                        <div className="portal-record-copy">
+                          {selectedReport.visits.map((visit) => `${visit.clientName || 'Client'}: ${visit.outcome || '-'}`).join(' | ')}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </>
+            ) : (
+              records.map((record) => (isAttendancePage ? renderAttendanceRecord(record) : renderDefaultRecord(record)))
+            )
           ) : (
             <div className="portal-empty-state">
               <h3 className="portal-empty-title">Nothing to review yet</h3>
