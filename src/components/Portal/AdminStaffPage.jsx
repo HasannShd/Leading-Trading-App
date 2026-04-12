@@ -30,6 +30,17 @@ const formatActivityLabel = (value) =>
     .replaceAll('_', ' ')
     .replace(/\b\w/g, (char) => char.toUpperCase());
 
+const renderDetailGrid = (items) => (
+  <div className="portal-detail-grid">
+    {items.map(([label, value]) => (
+      <div className="portal-detail-item" key={label}>
+        <span className="portal-detail-label">{label}</span>
+        <span className="portal-detail-value">{value || '-'}</span>
+      </div>
+    ))}
+  </div>
+);
+
 const AdminStaffPage = () => {
   const [staff, setStaff] = useState([]);
   const [form, setForm] = useState(initialState);
@@ -349,17 +360,15 @@ const AdminStaffPage = () => {
                     staffSummary.records.attendance.map((entry) => (
                       <div className="portal-record-card" key={entry._id}>
                         <h3 className="portal-record-title">{formatPortalDate(entry.date)}</h3>
-                        <div className="portal-record-meta">
-                          <span>Check in: {entry.checkInTime ? formatPortalDateTime(entry.checkInTime) : 'Not recorded'}</span>
-                          <span>Check out: {entry.checkOutTime ? formatPortalDateTime(entry.checkOutTime) : 'Not recorded'}</span>
-                          <span>Worked: {entry.totalWorkedMinutes || 0} min</span>
-                        </div>
-                        <div className="portal-record-meta">
-                          <span>Week start km: {entry.mileageWeekStart ?? '-'}</span>
-                          <span>Entered: {entry.mileageWeekStartAt ? formatPortalDateTime(entry.mileageWeekStartAt) : '-'}</span>
-                          <span>Week end km: {entry.mileageWeekEnd ?? '-'}</span>
-                          <span>Entered: {entry.mileageWeekEndAt ? formatPortalDateTime(entry.mileageWeekEndAt) : '-'}</span>
-                        </div>
+                        {renderDetailGrid([
+                          ['Check in', entry.checkInTime ? formatPortalDateTime(entry.checkInTime) : 'Not recorded'],
+                          ['Check out', entry.checkOutTime ? formatPortalDateTime(entry.checkOutTime) : 'Not recorded'],
+                          ['Worked time', `${entry.totalWorkedMinutes || 0} min`],
+                          ['Week start km', entry.mileageWeekStart ?? '-'],
+                          ['Start entered', entry.mileageWeekStartAt ? formatPortalDateTime(entry.mileageWeekStartAt) : '-'],
+                          ['Week end km', entry.mileageWeekEnd ?? '-'],
+                          ['End entered', entry.mileageWeekEndAt ? formatPortalDateTime(entry.mileageWeekEndAt) : '-'],
+                        ])}
                       </div>
                     ))
                   ) : (
@@ -378,13 +387,21 @@ const AdminStaffPage = () => {
                     staffSummary.records.reports.map((entry) => (
                       <div className="portal-record-card" key={entry._id}>
                         <h3 className="portal-record-title">{formatPortalDate(entry.date)}</h3>
-                        <div className="portal-record-meta">
-                          <span>Created: {formatPortalDateTime(entry.createdAt)}</span>
-                          <span>Follow up: {entry.followUpNeeded ? 'Yes' : 'No'}</span>
-                          <span>Visits in report: {entry.visits?.length || 0}</span>
+                        {renderDetailGrid([
+                          ['Created', formatPortalDateTime(entry.createdAt)],
+                          ['Follow up', entry.followUpNeeded ? 'Yes' : 'No'],
+                          ['Visits in report', String(entry.visits?.length || 0)],
+                        ])}
+                        <div className="portal-note-block">
+                          <div className="portal-detail-label">Summary</div>
+                          <div className="portal-record-copy">{entry.summary}</div>
                         </div>
-                        <div className="portal-record-copy">{entry.summary}</div>
-                        {entry.notes && <div className="portal-record-copy">{entry.notes}</div>}
+                        {entry.notes && (
+                          <div className="portal-note-block">
+                            <div className="portal-detail-label">Notes</div>
+                            <div className="portal-record-copy">{entry.notes}</div>
+                          </div>
+                        )}
                       </div>
                     ))
                   ) : (
@@ -405,18 +422,24 @@ const AdminStaffPage = () => {
                     staffSummary.records.orders.map((entry) => (
                       <div className="portal-record-card" key={entry._id}>
                         <h3 className="portal-record-title">{entry.customerName || entry.companyName || 'Order'}</h3>
-                        <div className="portal-record-meta">
-                          <span>Submitted: {formatPortalDateTime(entry.submittedAt || entry.createdAt)}</span>
-                          <span>Status: {entry.status}</span>
-                          <span>Urgency: {entry.urgency}</span>
-                          <span>Client: {entry.client?.name || '-'}</span>
+                        {renderDetailGrid([
+                          ['Submitted', formatPortalDateTime(entry.submittedAt || entry.createdAt)],
+                          ['Status', entry.status],
+                          ['Urgency', entry.urgency],
+                          ['Client', entry.client?.name || '-'],
+                          ['Contact', entry.contactPerson || '-'],
+                          ['Items', String(entry.items?.length || 0)],
+                        ])}
+                        <div className="portal-note-block">
+                          <div className="portal-detail-label">Items</div>
+                          <div className="portal-record-copy">{formatItems(entry.items)}</div>
                         </div>
-                        <div className="portal-record-meta">
-                          <span>Contact: {entry.contactPerson || '-'}</span>
-                          <span>Items: {entry.items?.length || 0}</span>
-                        </div>
-                        <div className="portal-record-copy">{formatItems(entry.items)}</div>
-                        {entry.notes && <div className="portal-record-copy">{entry.notes}</div>}
+                        {entry.notes && (
+                          <div className="portal-note-block">
+                            <div className="portal-detail-label">Notes</div>
+                            <div className="portal-record-copy">{entry.notes}</div>
+                          </div>
+                        )}
                       </div>
                     ))
                   ) : (
@@ -435,18 +458,26 @@ const AdminStaffPage = () => {
                     staffSummary.records.visits.map((entry) => (
                       <div className="portal-record-card" key={entry._id}>
                         <h3 className="portal-record-title">{entry.client?.name || entry.clientName || 'Visit'}</h3>
-                        <div className="portal-record-meta">
-                          <span>Date: {formatPortalDate(entry.visitDate)}</span>
-                          <span>Time: {entry.visitTime || '-'}</span>
-                          <span>Logged: {formatPortalDateTime(entry.createdAt)}</span>
-                        </div>
-                        <div className="portal-record-meta">
-                          <span>Met: {entry.metPerson || '-'}</span>
-                          <span>Location: {entry.location || '-'}</span>
-                          <span>Purpose: {entry.purpose || '-'}</span>
-                        </div>
-                        {entry.discussionSummary && <div className="portal-record-copy">{entry.discussionSummary}</div>}
-                        {entry.outcome && <div className="portal-record-copy">{entry.outcome}</div>}
+                        {renderDetailGrid([
+                          ['Date', formatPortalDate(entry.visitDate)],
+                          ['Time', entry.visitTime || '-'],
+                          ['Logged', formatPortalDateTime(entry.createdAt)],
+                          ['Met person', entry.metPerson || '-'],
+                          ['Location', entry.location || '-'],
+                          ['Purpose', entry.purpose || '-'],
+                        ])}
+                        {entry.discussionSummary && (
+                          <div className="portal-note-block">
+                            <div className="portal-detail-label">Discussion</div>
+                            <div className="portal-record-copy">{entry.discussionSummary}</div>
+                          </div>
+                        )}
+                        {entry.outcome && (
+                          <div className="portal-note-block">
+                            <div className="portal-detail-label">Outcome</div>
+                            <div className="portal-record-copy">{entry.outcome}</div>
+                          </div>
+                        )}
                       </div>
                     ))
                   ) : (
@@ -467,20 +498,28 @@ const AdminStaffPage = () => {
                     staffSummary.records.clients.map((entry) => (
                       <div className="portal-record-card" key={entry._id}>
                         <h3 className="portal-record-title">{entry.name}</h3>
-                        <div className="portal-record-meta">
-                          <span>Created: {formatPortalDateTime(entry.createdAt)}</span>
-                          <span>Updated: {formatPortalDateTime(entry.updatedAt)}</span>
-                          <span>Type: {entry.companyType || '-'}</span>
-                          <span>Department: {entry.department || '-'}</span>
-                        </div>
-                        <div className="portal-record-meta">
-                          <span>Contact: {entry.contactPerson || '-'}</span>
-                          <span>Phone: {entry.phone || '-'}</span>
-                          <span>Email: {entry.email || '-'}</span>
-                          <span>Location: {entry.location || '-'}</span>
-                        </div>
-                        {entry.address && <div className="portal-record-copy">{entry.address}</div>}
-                        {entry.notes && <div className="portal-record-copy">{entry.notes}</div>}
+                        {renderDetailGrid([
+                          ['Created', formatPortalDateTime(entry.createdAt)],
+                          ['Updated', formatPortalDateTime(entry.updatedAt)],
+                          ['Type', entry.companyType || '-'],
+                          ['Department', entry.department || '-'],
+                          ['Contact', entry.contactPerson || '-'],
+                          ['Phone', entry.phone || '-'],
+                          ['Email', entry.email || '-'],
+                          ['Location', entry.location || '-'],
+                        ])}
+                        {entry.address && (
+                          <div className="portal-note-block">
+                            <div className="portal-detail-label">Address</div>
+                            <div className="portal-record-copy">{entry.address}</div>
+                          </div>
+                        )}
+                        {entry.notes && (
+                          <div className="portal-note-block">
+                            <div className="portal-detail-label">Notes</div>
+                            <div className="portal-record-copy">{entry.notes}</div>
+                          </div>
+                        )}
                       </div>
                     ))
                   ) : (
