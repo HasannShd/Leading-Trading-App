@@ -25,6 +25,11 @@ const matchesStaffSearch = (member, search) => {
 const formatItems = (items = []) =>
   items.map((item) => `${item.productName} x${item.quantity}${item.price ? ` @ ${item.price}` : ''}`).join(' | ');
 
+const formatActivityLabel = (value) =>
+  String(value || 'activity')
+    .replaceAll('_', ' ')
+    .replace(/\b\w/g, (char) => char.toUpperCase());
+
 const AdminStaffPage = () => {
   const [staff, setStaff] = useState([]);
   const [form, setForm] = useState(initialState);
@@ -116,6 +121,7 @@ const AdminStaffPage = () => {
   const inactiveCount = staff.length - activeCount;
   const filteredStaff = staff.filter((member) => matchesStaffSearch(member, staffSearch));
   const selectedStaff = staff.find((member) => member._id === selectedStaffId);
+  const compactActivity = (staffSummary?.recentActivity || []).slice(0, 6);
   const drillLinks = selectedStaffId
     ? [
         { href: `/admin/attendance?user=${selectedStaffId}`, label: 'Attendance' },
@@ -488,15 +494,15 @@ const AdminStaffPage = () => {
 
               <div className="portal-staff-report-block">
                 <div className="portal-brand-kicker">Recent Activity</div>
-                <div className="portal-record-list">
-                  {staffSummary.recentActivity.length ? (
-                    staffSummary.recentActivity.map((entry) => (
-                      <div className="portal-record-card" key={entry._id}>
-                        <h3 className="portal-record-title">{entry.action.replaceAll('_', ' ')}</h3>
-                        <div className="portal-record-meta">
+                <div className="portal-inline-list compact">
+                  {compactActivity.length ? (
+                    compactActivity.map((entry) => (
+                      <div className="portal-compact-row" key={entry._id}>
+                        <div className="portal-compact-row-main">
+                          <strong>{formatActivityLabel(entry.action)}</strong>
                           <span>{entry.module}</span>
-                          <span>{formatPortalDateTime(entry.createdAt)}</span>
                         </div>
+                        <span>{formatPortalDateTime(entry.createdAt)}</span>
                       </div>
                     ))
                   ) : (
