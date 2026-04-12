@@ -474,25 +474,10 @@ const AdminStaffPage = () => {
                       <div className="portal-record-card" key={entry._id}>
                         <h3 className="portal-record-title">{entry.client?.name || entry.clientName || 'Visit'}</h3>
                         {renderDetailGrid([
+                          ['Visited at', entry.location || entry.client?.name || entry.clientName || '-'],
                           ['Date', formatPortalDate(entry.visitDate)],
                           ['Time', entry.visitTime || '-'],
-                          ['Logged', formatPortalDateTime(entry.createdAt)],
-                          ['Met person', entry.metPerson || '-'],
-                          ['Location', entry.location || '-'],
-                          ['Purpose', entry.purpose || '-'],
                         ])}
-                        {entry.discussionSummary && (
-                          <div className="portal-note-block">
-                            <div className="portal-detail-label">Discussion</div>
-                            <div className="portal-record-copy">{entry.discussionSummary}</div>
-                          </div>
-                        )}
-                        {entry.outcome && (
-                          <div className="portal-note-block">
-                            <div className="portal-detail-label">Outcome</div>
-                            <div className="portal-record-copy">{entry.outcome}</div>
-                          </div>
-                        )}
                       </div>
                     ))
                   ) : (
