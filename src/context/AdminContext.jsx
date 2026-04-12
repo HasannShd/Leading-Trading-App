@@ -19,6 +19,7 @@ export const AdminProvider = ({ children }) => {
 
   const resetAdminSession = (shouldRedirect = true) => {
     localStorage.removeItem('adminToken');
+    localStorage.removeItem('adminTrustedDeviceToken');
     setAdmin(null);
     setError(null);
     if (shouldRedirect && isAdminRoute && location.pathname !== adminLoginPath) {
@@ -91,11 +92,12 @@ export const AdminProvider = ({ children }) => {
     setLoading(true);
     setError(null);
     try {
+      const trustedDeviceToken = localStorage.getItem('adminTrustedDeviceToken') || '';
       const response = await authFetch('/auth/sign-in', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         scope: 'admin',
-        body: JSON.stringify({ identifier: username, password }),
+        body: JSON.stringify({ identifier: username, password, trustedDeviceToken }),
       });
       const data = await response.json();
       
@@ -136,7 +138,7 @@ export const AdminProvider = ({ children }) => {
     }
   };
 
-  const verifyMfa = async (code) => {
+  const verifyMfa = async (code, trustDevice = false) => {
     setLoading(true);
     setError(null);
     try {
@@ -144,7 +146,7 @@ export const AdminProvider = ({ children }) => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         scope: 'admin',
-        body: JSON.stringify({ challengeToken: mfaChallenge, code }),
+        body: JSON.stringify({ challengeToken: mfaChallenge, code, trustDevice }),
       });
       const data = await response.json();
       if (!response.ok) {
@@ -153,6 +155,9 @@ export const AdminProvider = ({ children }) => {
       }
       if (data.token) {
         localStorage.setItem('adminToken', data.token);
+      }
+      if (data.trustedDeviceToken) {
+        localStorage.setItem('adminTrustedDeviceToken', data.trustedDeviceToken);
       }
       setAdmin(data.user);
       setMfaChallenge(null);

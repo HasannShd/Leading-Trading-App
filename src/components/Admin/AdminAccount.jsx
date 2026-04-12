@@ -11,6 +11,8 @@ const AdminAccount = () => {
   const [setupState, setSetupState] = useState(null);
   const [backupCodes, setBackupCodes] = useState([]);
   const [code, setCode] = useState('');
+  const [refreshCode, setRefreshCode] = useState('');
+  const [trustThisDevice, setTrustThisDevice] = useState(true);
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   const qrUrl = setupState?.otpAuthUrl
@@ -60,7 +62,7 @@ const AdminAccount = () => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         scope: 'admin',
-        body: JSON.stringify({ code }),
+        body: JSON.stringify({ code, trustDevice: trustThisDevice }),
       });
       const data = await response.json();
       if (!response.ok) {
@@ -68,6 +70,9 @@ const AdminAccount = () => {
         return;
       }
       setBackupCodes(data.backupCodes || []);
+      if (data.trustedDeviceToken) {
+        localStorage.setItem('adminTrustedDeviceToken', data.trustedDeviceToken);
+      }
       setSetupState(null);
       setCode('');
       setMessage('MFA enabled. Save the backup codes below.');
@@ -98,6 +103,51 @@ const AdminAccount = () => {
       loadMfaStatus();
     } catch (err) {
       setError('Could not disable MFA.');
+    }
+  };
+
+  const refreshRecoveryCodes = async () => {
+    setError('');
+    setMessage('');
+    try {
+      const response = await authFetch('/auth/admin/mfa/recovery-codes/refresh', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        scope: 'admin',
+        body: JSON.stringify({ code: refreshCode }),
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        setError(data.err || 'Could not refresh backup codes.');
+        return;
+      }
+      setBackupCodes(data.backupCodes || []);
+      setRefreshCode('');
+      setMessage('New backup codes generated. Save them now.');
+      loadMfaStatus();
+    } catch (err) {
+      setError('Could not refresh backup codes.');
+    }
+  };
+
+  const revokeTrustedDevices = async () => {
+    setError('');
+    setMessage('');
+    try {
+      const response = await authFetch('/auth/admin/mfa/trusted-devices', {
+        method: 'DELETE',
+        scope: 'admin',
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        setError(data.err || 'Could not revoke trusted devices.');
+        return;
+      }
+      localStorage.removeItem('adminTrustedDeviceToken');
+      setMessage(data.message || 'Trusted devices removed.');
+      loadMfaStatus();
+    } catch (err) {
+      setError('Could not revoke trusted devices.');
     }
   };
 
@@ -152,6 +202,13 @@ const AdminAccount = () => {
                 <div>{mfaStatus.smtpConfigured ? 'Configured' : 'Missing SMTP'}</div>
               </div>
             </div>
+            <div className="admin-category-tile" style={{ cursor: 'default' }}>
+              <span>📱</span>
+              <div>
+                <strong>Trusted devices</strong>
+                <div>{mfaStatus.trustedDevices?.length || 0} active</div>
+              </div>
+            </div>
           </div>
         )}
         {!!mfaStatus?.recommendedActions?.length && (
@@ -184,6 +241,12 @@ const AdminAccount = () => {
               <label>Enter the 6-digit code from the app</label>
               <input type="text" value={code} onChange={(e) => setCode(e.target.value)} placeholder="123456" />
             </div>
+            <div className="admin-form-group">
+              <label style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                <input type="checkbox" checked={trustThisDevice} onChange={(e) => setTrustThisDevice(e.target.checked)} />
+                Trust this device for 30 days after setup
+              </label>
+            </div>
             <div className="admin-form-actions">
               <button className="admin-btn-primary" onClick={confirmSetup}>Enable MFA</button>
             </div>
@@ -213,6 +276,33 @@ const AdminAccount = () => {
                 <li key={entry}><code>{entry}</code></li>
               ))}
             </ul>
+          </div>
+        )}
+
+        {mfaStatus?.mfaEnabled && (
+          <div className="admin-form-container">
+            <h2>Recovery and Trusted Devices</h2>
+            <p>Backup codes help if your phone is unavailable. Trusted devices can sign in without asking for the OTP each time for 30 days.</p>
+            <div className="admin-form-group">
+              <label>Enter current MFA code to generate new backup codes</label>
+              <input type="text" value={refreshCode} onChange={(e) => setRefreshCode(e.target.value)} placeholder="123456" />
+            </div>
+            <div className="admin-form-actions">
+              <button className="admin-btn-primary" onClick={refreshRecoveryCodes}>Generate New Backup Codes</button>
+              <button className="admin-btn-secondary" onClick={revokeTrustedDevices}>Remove Trusted Devices</button>
+            </div>
+            {!!mfaStatus?.trustedDevices?.length && (
+              <div style={{ marginTop: '1rem' }}>
+                <strong>Trusted devices</strong>
+                <ul>
+                  {mfaStatus.trustedDevices.map((entry, index) => (
+                    <li key={`${entry.label}-${entry.expiresAt}-${index}`}>
+                      {entry.label} | Last used {entry.lastUsedAt ? formatPortalDateTime(entry.lastUsedAt) : 'Unknown'} | Expires {entry.expiresAt ? formatPortalDateTime(entry.expiresAt) : 'Unknown'}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
         )}
       </div>

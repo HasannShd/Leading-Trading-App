@@ -16,6 +16,7 @@ const AdminLogin = () => {
   const [resetMessage, setResetMessage] = useState('');
   const [resetError, setResetError] = useState('');
   const [mfaCode, setMfaCode] = useState('');
+  const [trustDevice, setTrustDevice] = useState(true);
   const { login, error, mfaChallenge, verifyMfa } = useContext(AdminContext);
   const navigate = useNavigate();
   const location = useLocation();
@@ -35,7 +36,7 @@ const AdminLogin = () => {
   const handleMfaSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    const success = await verifyMfa(mfaCode);
+    const success = await verifyMfa(mfaCode, trustDevice);
     setIsLoading(false);
     if (success) {
       navigate(window.location.pathname.startsWith('/admin') ? '/admin/dashboard' : '/.well-known/admin-dashboard-sh123456');
@@ -149,6 +150,15 @@ const AdminLogin = () => {
                   autoComplete="one-time-code"
                   required
                 />
+              </label>
+              <label className="admin-form-label" style={{ flexDirection: 'row', alignItems: 'center', gap: '0.75rem' }}>
+                <input
+                  type="checkbox"
+                  checked={trustDevice}
+                  onChange={(e) => setTrustDevice(e.target.checked)}
+                  style={{ width: '18px', height: '18px' }}
+                />
+                Trust this device for 30 days
               </label>
               <button type="submit" className="admin-login-button" disabled={isLoading}>
                 {isLoading ? 'Verifying...' : 'Verify MFA'}
