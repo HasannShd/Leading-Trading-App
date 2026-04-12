@@ -30,6 +30,7 @@ const StaffResourcePage = ({ config }) => {
   }, [config.endpoint]);
 
   const fieldMap = useMemo(() => config.fields, [config.fields]);
+  const singularTitle = config.title.replace(/s$/, '') || 'Record';
 
   const handleChange = (name, value) => setValues((current) => ({ ...current, [name]: value }));
 
@@ -56,7 +57,7 @@ const StaffResourcePage = ({ config }) => {
       const payload = config.transformPayload ? config.transformPayload(values) : values;
       await portalApi.post(config.endpoint, payload, 'sales_staff');
       setValues(initialValues(fieldMap));
-      setMessage(`${config.title.slice(0, -1) || 'Record'} saved.`);
+      setMessage(`${singularTitle} saved successfully.`);
       load();
     } catch (err) {
       setMessage(err.message);
@@ -125,9 +126,9 @@ const StaffResourcePage = ({ config }) => {
         <div className="portal-section-head">
           <div>
             <div className="portal-brand-kicker">Easy Use</div>
-            <h2 className="portal-section-title" style={{ fontSize: '1.4rem' }}>Fill this in like a simple form</h2>
+            <h2 className="portal-section-title" style={{ fontSize: '1.4rem' }}>Simple steps</h2>
             <p className="portal-section-copy">
-              Complete the main details, then press save. If you have a receipt or document, upload it first. Your saved entries will appear below so you can review what you already submitted.
+              1. Fill the boxes. 2. Check the details. 3. Press the big save button at the bottom. After saving, your entry will appear below in the history list.
             </p>
           </div>
         </div>
@@ -137,7 +138,7 @@ const StaffResourcePage = ({ config }) => {
         <div className="portal-section-head">
           <div>
             <div className="portal-brand-kicker">New Entry</div>
-            <h2 className="portal-section-title" style={{ fontSize: '1.45rem' }}>Create New Entry</h2>
+            <h2 className="portal-section-title" style={{ fontSize: '1.45rem' }}>Enter {singularTitle.toLowerCase()} details</h2>
           </div>
         </div>
         <form className="portal-form" onSubmit={handleSubmit} style={{ marginTop: '1rem' }}>
@@ -171,10 +172,13 @@ const StaffResourcePage = ({ config }) => {
               </div>
             ))}
           </div>
-          {message && <div className="portal-badge status">{message}</div>}
-          <button className="portal-button primary" type="submit" disabled={busy}>
-            {busy ? 'Saving...' : `Save ${config.title.replace(/s$/, '')}`}
-          </button>
+          {message && <div className="portal-message-banner success">{message}</div>}
+          <div className="portal-submit-bar">
+            <div className="portal-submit-note">When you finish typing, press this button once.</div>
+            <button className="portal-button primary portal-save-button" type="submit" disabled={busy}>
+              {busy ? 'Saving...' : `Save ${singularTitle}`}
+            </button>
+          </div>
         </form>
       </div>
 
@@ -226,7 +230,7 @@ const StaffResourcePage = ({ config }) => {
             <div className="portal-empty-state">
               <h3 className="portal-empty-title">No entries yet</h3>
               <p className="portal-empty-copy">
-                Use the form above to create your first <strong>{config.title.replace(/s$/, '').toLowerCase()}</strong>. After saving, it will appear here in your history.
+                Use the form above to create your first <strong>{singularTitle.toLowerCase()}</strong>. After saving, it will appear here in your history.
               </p>
             </div>
           )}

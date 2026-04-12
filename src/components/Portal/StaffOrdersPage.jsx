@@ -205,11 +205,17 @@ const StaffOrdersPage = () => {
       <div className="portal-card portal-help-card">
         <div className="portal-section-head">
           <div>
-            <div className="portal-brand-kicker">Reports</div>
-            <h2 className="portal-section-title" style={{ fontSize: '1.45rem' }}>Export your own client and order history</h2>
+            <div className="portal-brand-kicker">Simple steps</div>
+            <h2 className="portal-section-title" style={{ fontSize: '1.45rem' }}>How to place an order</h2>
             <p className="portal-section-copy">
-              Download a CSV report whenever you need a record of your current client list or submitted orders.
+              1. Choose a client. 2. If the client is new, press <strong>Add New Client</strong>. 3. Fill the order. 4. Press the big save button.
             </p>
+          </div>
+        </div>
+        <div className="portal-section-head" style={{ marginTop: '1rem' }}>
+          <div>
+            <div className="portal-brand-kicker">Reports</div>
+            <p className="portal-section-copy">Download your own client list or order history whenever needed.</p>
           </div>
           <div className="portal-inline-actions">
             <button className="portal-inline-button ghost" type="button" onClick={() => downloadExport('/staff-portal/clients/export', 'my-clients.csv')}>
@@ -227,7 +233,7 @@ const StaffOrdersPage = () => {
           <div className="portal-section-head">
             <div>
               <div className="portal-brand-kicker">Your Clients</div>
-              <h2 className="portal-section-title" style={{ fontSize: '1.45rem' }}>Choose an existing client</h2>
+              <h2 className="portal-section-title" style={{ fontSize: '1.45rem' }}>Step 1: Choose a client</h2>
             </div>
             <button className="portal-inline-button secondary" type="button" onClick={() => setShowClientForm((current) => !current)}>
               {showClientForm ? 'Close Client Form' : 'Add New Client'}
@@ -295,9 +301,12 @@ const StaffOrdersPage = () => {
                   <textarea value={clientForm.notes} onChange={(e) => updateClientForm('notes', e.target.value)} />
                 </div>
               </div>
-              <button className="portal-button primary" type="submit" disabled={busy}>
-                {busy ? 'Saving...' : 'Create Client'}
-              </button>
+              <div className="portal-submit-bar">
+                <div className="portal-submit-note">If the client does not already exist, fill these boxes and press save.</div>
+                <button className="portal-button primary portal-save-button" type="submit" disabled={busy}>
+                  {busy ? 'Saving...' : 'Save New Client'}
+                </button>
+              </div>
             </form>
           )}
         </div>
@@ -306,7 +315,7 @@ const StaffOrdersPage = () => {
           <div className="portal-section-head">
             <div>
               <div className="portal-brand-kicker">New Order</div>
-              <h2 className="portal-section-title" style={{ fontSize: '1.45rem' }}>Submit order from selected client</h2>
+              <h2 className="portal-section-title" style={{ fontSize: '1.45rem' }}>Step 2: Fill the order</h2>
             </div>
           </div>
           {selectedClient ? (
@@ -353,10 +362,13 @@ const StaffOrdersPage = () => {
                 <input value={orderForm.notes} onChange={(e) => updateOrderForm('notes', e.target.value)} />
               </div>
             </div>
-            {message && <div className="portal-badge status">{message}</div>}
-            <button className="portal-button primary" type="submit" disabled={busy}>
-              {busy ? 'Submitting...' : 'Submit Order'}
-            </button>
+            {message && <div className="portal-message-banner success">{message}</div>}
+            <div className="portal-submit-bar">
+              <div className="portal-submit-note">Check the selected client and order items, then press this button once.</div>
+              <button className="portal-button primary portal-save-button" type="submit" disabled={busy}>
+                {busy ? 'Submitting...' : 'Save Order'}
+              </button>
+            </div>
           </form>
         </div>
       </div>
@@ -365,7 +377,7 @@ const StaffOrdersPage = () => {
         <div className="portal-section-head">
           <div>
             <div className="portal-brand-kicker">Order History</div>
-            <h2 className="portal-section-title" style={{ fontSize: '1.45rem' }}>Everything you already submitted</h2>
+            <h2 className="portal-section-title" style={{ fontSize: '1.45rem' }}>Your recent orders</h2>
           </div>
         </div>
         <div className="portal-record-list" style={{ marginTop: '1rem' }}>
@@ -377,10 +389,25 @@ const StaffOrdersPage = () => {
                 <h3 className="portal-record-title">{order.companyName || order.client?.name || order.customerName}</h3>
                 <div className="portal-record-meta">
                   <span className="portal-badge status">{order.status}</span>
-                  <span>{order.customerName}</span>
-                  {order.contactPerson && <span>{order.contactPerson}</span>}
                   <span>{formatPortalDateTime(order.createdAt)}</span>
-                  <span>{order.urgency}</span>
+                </div>
+                <div className="portal-staff-report-list">
+                  <div className="portal-staff-report-row">
+                    <strong>Customer</strong>
+                    <span>{order.customerName || '-'}</span>
+                  </div>
+                  <div className="portal-staff-report-row">
+                    <strong>Contact person</strong>
+                    <span>{order.contactPerson || '-'}</span>
+                  </div>
+                  <div className="portal-staff-report-row">
+                    <strong>Urgency</strong>
+                    <span>{order.urgency || 'normal'}</span>
+                  </div>
+                  <div className="portal-staff-report-row">
+                    <strong>Items</strong>
+                    <span>{(order.items || []).length}</span>
+                  </div>
                 </div>
                 <div className="portal-record-copy">
                   {(order.items || []).map((item) => `${item.productName} x${item.quantity}${item.price !== undefined ? ` @ ${item.price}` : ''}`).join(' | ')}

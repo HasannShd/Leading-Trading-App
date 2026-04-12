@@ -78,7 +78,7 @@ const StaffAttendance = () => {
             <div className="portal-brand-kicker">Attendance</div>
             <h1 className="portal-section-title">Check In / Check Out</h1>
             <p className="portal-section-copy" style={{ color: 'rgba(255,255,255,0.76)' }}>
-              Button-first attendance for field teams, with optional notes. Weekly car mileage is saved separately below.
+              Use the big buttons below for today. Weekly car mileage is saved in a separate step further down the page.
             </p>
           </div>
         </div>
@@ -107,25 +107,28 @@ const StaffAttendance = () => {
           </div>
         </div>
         <div className="portal-field" style={{ marginTop: '1rem' }}>
-          <label>Instruction / note</label>
+          <label>Optional note for today</label>
           <textarea value={note} onChange={(e) => setNote(e.target.value)} placeholder="Add field instruction, location note, or handover detail" />
         </div>
-        <div className="portal-actions" style={{ marginTop: '1rem' }}>
-          <button className="portal-button primary" onClick={() => submit('/staff-portal/attendance/check-in')} disabled={busy || !!todayRecord?.checkInTime}>
-            {busy ? 'Working...' : 'Check In'}
-          </button>
-          <button className="portal-button ghost" onClick={() => submit('/staff-portal/attendance/check-out')} disabled={busy || !todayRecord?.checkInTime || !!todayRecord?.checkOutTime}>
-            {busy ? 'Working...' : 'Check Out'}
-          </button>
+        {status && <div className="portal-message-banner success" style={{ marginTop: '1rem' }}>{status}</div>}
+        <div className="portal-submit-bar" style={{ marginTop: '1rem' }}>
+          <div className="portal-submit-note">Step 1: press the correct button once for today.</div>
+          <div className="portal-actions portal-actions-two">
+            <button className="portal-button primary portal-save-button" onClick={() => submit('/staff-portal/attendance/check-in')} disabled={busy || !!todayRecord?.checkInTime}>
+              {busy ? 'Working...' : 'Check In Now'}
+            </button>
+            <button className="portal-button ghost portal-save-button portal-save-button-ghost" onClick={() => submit('/staff-portal/attendance/check-out')} disabled={busy || !todayRecord?.checkInTime || !!todayRecord?.checkOutTime}>
+              {busy ? 'Working...' : 'Check Out Now'}
+            </button>
+          </div>
         </div>
-        {status && <div className="portal-badge status" style={{ marginTop: '1rem' }}>{status}</div>}
       </div>
 
       <div className="portal-card portal-help-card">
         <div className="portal-section-head">
           <div>
             <div className="portal-brand-kicker">Weekly Mileage</div>
-            <h2 className="portal-section-title" style={{ fontSize: '1.45rem' }}>Save this only once at the start and end of the week</h2>
+            <h2 className="portal-section-title" style={{ fontSize: '1.45rem' }}>Step 2: Save weekly mileage</h2>
             <p className="portal-section-copy">
               Use <strong>week start km</strong> one time when the work week begins and <strong>week end km</strong> one time when the work week finishes. You do not need to fill this every day.
             </p>
@@ -145,8 +148,9 @@ const StaffAttendance = () => {
           <label>Mileage note</label>
           <textarea value={mileageNote} onChange={(e) => setMileageNote(e.target.value)} placeholder="Optional note for office records" />
         </div>
-        <div className="portal-actions" style={{ marginTop: '1rem' }}>
-          <button className="portal-button secondary" type="button" onClick={saveMileage} disabled={busy}>
+        <div className="portal-submit-bar" style={{ marginTop: '1rem' }}>
+          <div className="portal-submit-note">Only use this when you are entering the start-of-week or end-of-week car reading.</div>
+          <button className="portal-button secondary portal-save-button" type="button" onClick={saveMileage} disabled={busy}>
             {busy ? 'Saving...' : 'Save Weekly Mileage'}
           </button>
         </div>
@@ -156,21 +160,38 @@ const StaffAttendance = () => {
         <div className="portal-section-head">
           <div>
             <div className="portal-brand-kicker">History</div>
-            <h2 className="portal-section-title" style={{ fontSize: '1.5rem' }}>Last 30 entries</h2>
+            <h2 className="portal-section-title" style={{ fontSize: '1.5rem' }}>Recent attendance history</h2>
           </div>
         </div>
         <div className="portal-record-list" style={{ marginTop: '1rem' }}>
           {records.map((record) => (
             <div className="portal-record-card" key={record._id}>
               <h3 className="portal-record-title">{formatPortalDate(record.date)}</h3>
-              <div className="portal-record-meta">
-                <span>In: {record.checkInTime ? formatPortalDateTime(record.checkInTime) : '-'}</span>
-                <span>Out: {record.checkOutTime ? formatPortalDateTime(record.checkOutTime) : '-'}</span>
-                <span>{record.totalWorkedMinutes || 0} mins</span>
-                {record.mileageWeekStart !== undefined && record.mileageWeekStart !== null && <span>Start km: {record.mileageWeekStart}</span>}
-                {record.mileageWeekStartAt && <span>Start entered: {formatPortalDateTime(record.mileageWeekStartAt)}</span>}
-                {record.mileageWeekEnd !== undefined && record.mileageWeekEnd !== null && <span>End km: {record.mileageWeekEnd}</span>}
-                {record.mileageWeekEndAt && <span>End entered: {formatPortalDateTime(record.mileageWeekEndAt)}</span>}
+              <div className="portal-staff-report-list">
+                <div className="portal-staff-report-row">
+                  <strong>Check in</strong>
+                  <span>{record.checkInTime ? formatPortalDateTime(record.checkInTime) : 'Not recorded'}</span>
+                </div>
+                <div className="portal-staff-report-row">
+                  <strong>Check out</strong>
+                  <span>{record.checkOutTime ? formatPortalDateTime(record.checkOutTime) : 'Not recorded'}</span>
+                </div>
+                <div className="portal-staff-report-row">
+                  <strong>Worked time</strong>
+                  <span>{record.totalWorkedMinutes || 0} minutes</span>
+                </div>
+                {(record.mileageWeekStart !== undefined && record.mileageWeekStart !== null) || record.mileageWeekStartAt ? (
+                  <div className="portal-staff-report-row">
+                    <strong>Week start mileage</strong>
+                    <span>{record.mileageWeekStart !== undefined && record.mileageWeekStart !== null ? `${record.mileageWeekStart}${record.mileageWeekStartAt ? ` • ${formatPortalDateTime(record.mileageWeekStartAt)}` : ''}` : 'Not recorded'}</span>
+                  </div>
+                ) : null}
+                {(record.mileageWeekEnd !== undefined && record.mileageWeekEnd !== null) || record.mileageWeekEndAt ? (
+                  <div className="portal-staff-report-row">
+                    <strong>Week end mileage</strong>
+                    <span>{record.mileageWeekEnd !== undefined && record.mileageWeekEnd !== null ? `${record.mileageWeekEnd}${record.mileageWeekEndAt ? ` • ${formatPortalDateTime(record.mileageWeekEndAt)}` : ''}` : 'Not recorded'}</span>
+                  </div>
+                ) : null}
               </div>
               {(record.checkInNote || record.checkOutNote) && (
                 <div className="portal-record-copy">
