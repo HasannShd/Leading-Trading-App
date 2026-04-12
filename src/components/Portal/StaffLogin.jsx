@@ -33,11 +33,11 @@ const StaffLogin = () => {
           </div>
           <form className="portal-form" onSubmit={handleSubmit}>
             <div className="portal-field">
-              <label>Username, email, or phone</label>
+              <label style={{ color: 'rgba(255,255,255,0.9)' }}>Username, email, or phone</label>
               <input value={identifier} onChange={(e) => setIdentifier(e.target.value)} placeholder="Enter your username" autoComplete="username" />
             </div>
             <div className="portal-field">
-              <label>Password</label>
+              <label style={{ color: 'rgba(255,255,255,0.9)' }}>Password</label>
               <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Enter your password" autoComplete="current-password" />
             </div>
             {error && <div className="portal-badge status">{error}</div>}

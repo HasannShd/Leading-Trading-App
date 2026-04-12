@@ -8,7 +8,6 @@ import './PortalShell.css';
 
 const initialState = {
   username: '',
-  name: '',
   email: '',
   phone: '',
   password: '',
@@ -107,7 +106,11 @@ const AdminStaffPage = () => {
     event.preventDefault();
     setMessage('');
     try {
-      await portalApi.post('/admin-portal/staff', form, 'admin');
+      const payload = {
+        ...form,
+        name: form.username.trim(),
+      };
+      await portalApi.post('/admin-portal/staff', payload, 'admin');
       setForm(initialState);
       setMessage('Staff user created.');
       load();
@@ -184,12 +187,12 @@ const AdminStaffPage = () => {
             <div className="portal-brand-kicker">Staff Setup</div>
             <h2 className="portal-section-title" style={{ fontSize: '1.45rem' }}>Make access simple</h2>
             <p className="portal-section-copy">
-              Create staff users here. Give them a simple username and password, then ask them to sign in from the staff portal on their phone.
+              Create staff users here. Use one simple name for both display and sign-in, then ask them to sign in from the staff portal on their phone.
             </p>
           </div>
         </div>
         <ul className="portal-help-list">
-          <li>Use short usernames staff can remember easily.</li>
+          <li>Use one short name staff can remember easily.</li>
           <li>Keep department names simple, like Sales, Medical, Dental, or Delivery.</li>
           <li>If someone should stop using the portal, press Deactivate instead of deleting them.</li>
         </ul>
@@ -219,8 +222,7 @@ const AdminStaffPage = () => {
         <form className="portal-form" onSubmit={handleSubmit} style={{ marginTop: '1rem' }}>
           <div className="portal-form-grid two">
             {Object.entries({
-              username: 'Username',
-              name: 'Name',
+              username: 'Name / Username',
               email: 'Email',
               phone: 'Phone',
               password: 'Password',

@@ -147,10 +147,6 @@ const Header = () => {
             Home
           </NavLink>
 
-          <NavLink to="/shop" onClick={() => setMobileNav(false)}>
-            Products
-          </NavLink>
-
           {/* Categories Dropdown */}
           <div
             className="nav-dropdown-wrapper"
@@ -236,6 +232,10 @@ const Header = () => {
               </div>
             )}
           </div>
+
+          <NavLink to="/shop" onClick={() => setMobileNav(false)}>
+            Products
+          </NavLink>
 
           <NavLink to="/careers" onClick={() => setMobileNav(false)}>
             Careers

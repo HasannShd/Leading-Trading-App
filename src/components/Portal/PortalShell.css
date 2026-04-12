@@ -914,6 +914,22 @@
   color: rgba(255, 255, 255, 0.76);
 }
 
+.portal-card.dark .portal-field label {
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.portal-card.dark .portal-badge.status {
+  background: rgba(255, 255, 255, 0.14);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.portal-card.dark .portal-field input::placeholder,
+.portal-card.dark .portal-field textarea::placeholder,
+.portal-card.dark .portal-field select::placeholder {
+  color: rgba(19, 39, 63, 0.52);
+}
+
 .portal-table {
   width: 100%;
   border-collapse: collapse;

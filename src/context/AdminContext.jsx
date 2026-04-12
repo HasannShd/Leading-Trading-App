@@ -17,6 +17,15 @@ export const AdminProvider = ({ children }) => {
   const adminAccountPath = isVisibleAdminRoute ? '/admin/account' : '/.well-known/admin-account-sh123456';
   const isAdminRoute = location.pathname.startsWith('/.well-known/') || isVisibleAdminRoute;
 
+  const applyAdminSession = (token, user) => {
+    if (token) {
+      localStorage.setItem('adminToken', token);
+    }
+    setAdmin(user || null);
+    setMfaChallenge(null);
+    setError(null);
+  };
+
   const resetAdminSession = (shouldRedirect = true) => {
     localStorage.removeItem('adminToken');
     localStorage.removeItem('adminTrustedDeviceToken');
@@ -72,8 +81,7 @@ export const AdminProvider = ({ children }) => {
       if (response.ok) {
         const data = await response.json();
         if (data.user.role === 'admin') {
-          setAdmin(data.user);
-          setMfaChallenge(null);
+          applyAdminSession(null, data.user);
         } else {
           resetAdminSession(false);
         }
@@ -82,7 +90,7 @@ export const AdminProvider = ({ children }) => {
       }
     } catch (err) {
       console.error('Auth verification failed:', err);
-      resetAdminSession(false);
+      setError('Could not verify the admin session. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -111,22 +119,14 @@ export const AdminProvider = ({ children }) => {
         return 'mfa_required';
       }
 
-      if (data.token) {
-        localStorage.setItem('adminToken', data.token);
-      }
-
-      const meResponse = await authFetch('/auth/me', { scope: 'admin' });
-      const meData = await meResponse.json();
-
-      if (!meResponse.ok || meData.user.role !== 'admin') {
+      if (!data.token || !data.user || data.user.role !== 'admin') {
         resetAdminSession();
         setError('Only admins can access this area');
         return false;
       }
 
-      setAdmin(meData.user);
-      setMfaChallenge(null);
-      if (!meData.user.mfaEnabled) {
+      applyAdminSession(data.token, data.user);
+      if (!data.user.mfaEnabled) {
         setError('MFA is recommended for this admin account. You can set it up from the Account page.');
       }
       return true;
@@ -159,8 +159,7 @@ export const AdminProvider = ({ children }) => {
       if (data.trustedDeviceToken) {
         localStorage.setItem('adminTrustedDeviceToken', data.trustedDeviceToken);
       }
-      setAdmin(data.user);
-      setMfaChallenge(null);
+      applyAdminSession(data.token, data.user);
       return true;
     } catch (err) {
       setError(err.message);

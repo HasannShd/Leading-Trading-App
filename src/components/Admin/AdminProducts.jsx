@@ -35,6 +35,11 @@ const AdminProducts = () => {
     window.location.href = adminLoginPath;
   };
 
+  const handleAdminPrecondition = (message) => {
+    setProducts([]);
+    setError(message || 'Admin setup is required before using this section.');
+  };
+
   const fetchProducts = useCallback(async () => {
     setLoading(true);
     try {
@@ -44,10 +49,19 @@ const AdminProducts = () => {
         return;
       }
       const data = await response.json();
-      setProducts(data);
-      // console.log('Products:', data);
+      if (response.status === 428) {
+        handleAdminPrecondition(data.message);
+        return;
+      }
+      if (!response.ok) {
+        setProducts([]);
+        setError(data.message || 'Failed to fetch products');
+        return;
+      }
+      setProducts(Array.isArray(data) ? data : []);
       setError(null);
     } catch (err) {
+      setProducts([]);
       setError('Failed to fetch products');
       console.error(err);
     } finally {
@@ -117,6 +131,10 @@ const AdminProducts = () => {
           handleUnauthorized();
           return;
         }
+        if (response.status === 428) {
+          handleAdminPrecondition(resData.message);
+          return;
+        }
         setError(resData.message || 'Upload failed');
         return;
       }
@@ -148,6 +166,10 @@ const AdminProducts = () => {
           if (response.status === 401) {
             handleUnauthorized();
             return;
+          }
+          if (response.status === 428) {
+            handleAdminPrecondition(resData.message);
+            break;
           }
           setError(resData.message || 'Upload failed');
           break;
@@ -259,6 +281,10 @@ const AdminProducts = () => {
           handleUnauthorized();
           return;
         }
+        if (response.status === 428) {
+          handleAdminPrecondition(data.message);
+          return;
+        }
         setError(data.message || 'Operation failed');
         return;
       }
@@ -327,6 +353,10 @@ const AdminProducts = () => {
         const data = await response.json();
         if (response.status === 401) {
           handleUnauthorized();
+          return;
+        }
+        if (response.status === 428) {
+          handleAdminPrecondition(data.message);
           return;
         }
         setError(data.message || 'Failed to delete');
