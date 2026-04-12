@@ -90,6 +90,7 @@ const AdminResourcePage = ({ config }) => {
   const isAttendancePage = (config.exportKey || configKey) === 'attendance';
   const isReportsPage = (config.exportKey || configKey) === 'reports';
   const isOrdersPage = (config.exportKey || configKey) === 'orders';
+  const isClientsPage = (config.exportKey || configKey) === 'clients';
 
   const recordTitle = (record) =>
     record.title ||
@@ -235,6 +236,8 @@ const AdminResourcePage = ({ config }) => {
                   ? 'Review daily reports only. Click one report to open its full details and notes.'
                   : isOrdersPage
                     ? 'Review sales orders only. Select a staff member if needed, then click an order to open its full details.'
+                    : isClientsPage
+                      ? 'Review client records only. Keep the staff filter if needed, then click a client to open the full client details.'
                 : 'Review entries below, use the filters to narrow the list, and update statuses from the cards when needed.'}
             </p>
           </div>
@@ -283,7 +286,7 @@ const AdminResourcePage = ({ config }) => {
             )}
           </div>
         )}
-        {staffSummary?.staff && (
+        {staffSummary?.staff && !isClientsPage && (
           <div className="portal-admin-staff-focus">
             <div className="portal-admin-staff-focus-head">
               <div>
@@ -483,6 +486,85 @@ const AdminResourcePage = ({ config }) => {
                         <button className="portal-inline-button secondary" type="button" onClick={() => handleStatusUpdate(selectedReport)}>
                           Update
                         </button>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </>
+            ) : isClientsPage ? (
+              <>
+                <div className="portal-inline-list compact">
+                  {records.map((record) => (
+                    <button
+                      key={record._id}
+                      type="button"
+                      className={`portal-record-card portal-record-card-button${selectedReport?._id === record._id ? ' is-selected' : ''}`}
+                      onClick={() => setSelectedRecordId((current) => (current === record._id ? '' : record._id))}
+                    >
+                      <h3 className="portal-record-title">{record.name || 'Client'}</h3>
+                      <div className="portal-record-meta">
+                        <span>{record.companyType || 'Client'}</span>
+                        <span>{record.location || 'No location'}</span>
+                        <span>{record.updatedAt ? formatPortalDateTime(record.updatedAt) : '-'}</span>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+                {selectedReport && (
+                  <div className="portal-record-card">
+                    <h3 className="portal-record-title">{selectedReport.name || 'Client'}</h3>
+                    <div className="portal-detail-grid">
+                      <div className="portal-detail-item">
+                        <span className="portal-detail-label">Assigned Staff</span>
+                        <span className="portal-detail-value">{selectedReport.assignedTo?.name || selectedReport.assignedTo?.username || '-'}</span>
+                      </div>
+                      <div className="portal-detail-item">
+                        <span className="portal-detail-label">Created By</span>
+                        <span className="portal-detail-value">{selectedReport.createdBy?.name || selectedReport.createdBy?.username || '-'}</span>
+                      </div>
+                      <div className="portal-detail-item">
+                        <span className="portal-detail-label">Type</span>
+                        <span className="portal-detail-value">{selectedReport.companyType || '-'}</span>
+                      </div>
+                      <div className="portal-detail-item">
+                        <span className="portal-detail-label">Department</span>
+                        <span className="portal-detail-value">{selectedReport.department || '-'}</span>
+                      </div>
+                      <div className="portal-detail-item">
+                        <span className="portal-detail-label">Contact</span>
+                        <span className="portal-detail-value">{selectedReport.contactPerson || '-'}</span>
+                      </div>
+                      <div className="portal-detail-item">
+                        <span className="portal-detail-label">Phone</span>
+                        <span className="portal-detail-value">{selectedReport.phone || '-'}</span>
+                      </div>
+                      <div className="portal-detail-item">
+                        <span className="portal-detail-label">Email</span>
+                        <span className="portal-detail-value">{selectedReport.email || '-'}</span>
+                      </div>
+                      <div className="portal-detail-item">
+                        <span className="portal-detail-label">Location</span>
+                        <span className="portal-detail-value">{selectedReport.location || '-'}</span>
+                      </div>
+                      <div className="portal-detail-item">
+                        <span className="portal-detail-label">Created</span>
+                        <span className="portal-detail-value">{selectedReport.createdAt ? formatPortalDateTime(selectedReport.createdAt) : '-'}</span>
+                      </div>
+                      <div className="portal-detail-item">
+                        <span className="portal-detail-label">Updated</span>
+                        <span className="portal-detail-value">{selectedReport.updatedAt ? formatPortalDateTime(selectedReport.updatedAt) : '-'}</span>
+                      </div>
+                    </div>
+                    {selectedReport.address && (
+                      <div className="portal-note-block">
+                        <div className="portal-detail-label">Address</div>
+                        <div className="portal-record-copy">{selectedReport.address}</div>
+                      </div>
+                    )}
+                    {selectedReport.notes && (
+                      <div className="portal-note-block">
+                        <div className="portal-detail-label">Notes</div>
+                        <div className="portal-record-copy">{selectedReport.notes}</div>
                       </div>
                     )}
                   </div>
