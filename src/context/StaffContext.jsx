@@ -10,15 +10,23 @@ export const StaffProvider = ({ children }) => {
   const [error, setError] = useState(null);
 
   const fetchMe = async () => {
+    const token = localStorage.getItem('staffToken');
+    if (!token) {
+      setStaff(null);
+      setLoading(false);
+      return;
+    }
     try {
       const response = await authFetch('/auth/me', { scope: 'sales_staff' });
       const data = await response.json();
       if (!response.ok || data.user?.role !== 'sales_staff') {
+        localStorage.removeItem('staffToken');
         setStaff(null);
         return;
       }
       setStaff(data.user);
     } catch (err) {
+      localStorage.removeItem('staffToken');
       setStaff(null);
     } finally {
       setLoading(false);
@@ -42,6 +50,7 @@ export const StaffProvider = ({ children }) => {
       const data = await response.json();
       if (!response.ok) throw new Error(data.err || 'Login failed');
 
+      localStorage.setItem('staffToken', data.token);
       await fetchMe();
       return true;
     } catch (err) {
@@ -57,6 +66,7 @@ export const StaffProvider = ({ children }) => {
     } catch (err) {
       console.error('Logout failed', err);
     } finally {
+      localStorage.removeItem('staffToken');
       setStaff(null);
     }
   };

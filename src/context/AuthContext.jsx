@@ -9,10 +9,20 @@ export const AuthProvider = ({ children }) => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetchMe();
+    const token = localStorage.getItem('token');
+    if (token) {
+      fetchMe(token);
+    } else {
+      setLoading(false);
+    }
   }, []);
 
-  const fetchMe = async () => {
+  const fetchMe = async (token = localStorage.getItem('token')) => {
+    if (!token) {
+      setUser(null);
+      setLoading(false);
+      return;
+    }
     try {
       const response = await authFetch('/auth/me', { scope: 'user' });
       if (response.ok) {
@@ -20,9 +30,11 @@ export const AuthProvider = ({ children }) => {
         setUser(data.user);
       } else {
         setUser(null);
+        localStorage.removeItem('token');
       }
     } catch (err) {
       setUser(null);
+      localStorage.removeItem('token');
     } finally {
       setLoading(false);
     }
@@ -43,7 +55,8 @@ export const AuthProvider = ({ children }) => {
         setError(data.err || 'Login failed');
         return false;
       }
-      await fetchMe();
+      localStorage.setItem('token', data.token);
+      await fetchMe(data.token);
       return true;
     } catch (err) {
       setError(err.message);
@@ -68,7 +81,8 @@ export const AuthProvider = ({ children }) => {
         setError(data.err || 'Registration failed');
         return false;
       }
-      await fetchMe();
+      localStorage.setItem('token', data.token);
+      await fetchMe(data.token);
       return true;
     } catch (err) {
       setError(err.message);
@@ -84,6 +98,7 @@ export const AuthProvider = ({ children }) => {
     } catch (err) {
       console.error('Logout failed', err);
     } finally {
+      localStorage.removeItem('token');
       setUser(null);
     }
   };

@@ -16,6 +16,7 @@ export const AdminProvider = ({ children }) => {
   const isAdminRoute = location.pathname.startsWith('/.well-known/') || isVisibleAdminRoute;
 
   const resetAdminSession = (shouldRedirect = true) => {
+    localStorage.removeItem('adminToken');
     setAdmin(null);
     if (shouldRedirect && isAdminRoute && location.pathname !== adminLoginPath) {
       navigate(adminLoginPath, { replace: true });
@@ -35,7 +36,12 @@ export const AdminProvider = ({ children }) => {
   }, [admin, adminLoginPath, loading, location.pathname, navigate]);
 
   useEffect(() => {
-    verifyAdmin();
+    const token = localStorage.getItem('adminToken');
+    if (token) {
+      verifyAdmin();
+    } else {
+      setLoading(false);
+    }
   }, []);
 
   const verifyAdmin = async () => {
@@ -82,6 +88,10 @@ export const AdminProvider = ({ children }) => {
         return 'mfa_required';
       }
 
+      if (data.token) {
+        localStorage.setItem('adminToken', data.token);
+      }
+
       const meResponse = await authFetch('/auth/me', { scope: 'admin' });
       const meData = await meResponse.json();
 
@@ -116,6 +126,9 @@ export const AdminProvider = ({ children }) => {
       if (!response.ok) {
         setError(data.err || 'MFA verification failed');
         return false;
+      }
+      if (data.token) {
+        localStorage.setItem('adminToken', data.token);
       }
       setAdmin(data.user);
       setMfaChallenge(null);
