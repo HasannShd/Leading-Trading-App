@@ -34,7 +34,7 @@ const AdminImportProducts = () => {
       }
     };
     fetchCategories();
-  }, [API_URL]);
+  }, []);
 
   const normalize = (value) =>
     String(value || '')

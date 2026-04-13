@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { portalApi } from '../../services/portalApi';
 import AdminTopNav from '../Admin/AdminTopNav';
 import { formatPortalDateTime } from '../../utils/portalDate';
@@ -21,7 +21,7 @@ const AdminMessagesPage = () => {
   const [sending, setSending] = useState(false);
   const [uploading, setUploading] = useState(false);
 
-  const loadLists = async () => {
+  const loadLists = useCallback(async () => {
     setLoading(true);
     try {
       const [staffResponse, threadsResponse] = await Promise.all([
@@ -40,7 +40,7 @@ const AdminMessagesPage = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [selectedStaffId]);
 
   const loadThread = async (staffId, markRead = true) => {
     if (!staffId) {
@@ -84,7 +84,7 @@ const AdminMessagesPage = () => {
 
   useEffect(() => {
     loadLists();
-  }, []);
+  }, [loadLists]);
 
   useEffect(() => {
     if (selectedStaffId) {

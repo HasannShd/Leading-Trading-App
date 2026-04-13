@@ -1,8 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { portalApi } from '../../services/portalApi';
 import { authFetch, API_URL } from '../../services/authFetch';
-import AdminTopNav from '../Admin/AdminTopNav';
-import '../Admin/AdminCategories.css';
 import { formatPortalDate, formatPortalDateTime } from '../../utils/portalDate';
 import './PortalShell.css';
 
@@ -15,20 +13,20 @@ const AdminResourcePage = ({ config }) => {
   const [staffSummary, setStaffSummary] = useState(null);
   const [selectedRecordId, setSelectedRecordId] = useState('');
 
-  const buildQuery = () => {
+  const buildQuery = useCallback(() => {
     const params = new URLSearchParams();
     if (config.supportsUser && filters.user) params.set('user', filters.user);
     if (config.supportsStatus && filters.status) params.set('status', filters.status);
     if (config.supportsDate && filters.date) params.set('date', filters.date);
     const query = params.toString();
     return query ? `${config.endpoint}?${query}` : config.endpoint;
-  };
+  }, [config.endpoint, config.supportsDate, config.supportsStatus, config.supportsUser, filters.date, filters.status, filters.user]);
 
-  const load = () =>
+  const load = useCallback(() =>
     portalApi
       .get(buildQuery(), 'admin')
       .then((response) => setRecords(response.data[Object.keys(response.data)[0]] || []))
-      .catch((err) => setMessage(err.message));
+      .catch((err) => setMessage(err.message)), [buildQuery]);
 
   useEffect(() => {
     if (config.supportsUser) {
@@ -41,7 +39,7 @@ const AdminResourcePage = ({ config }) => {
 
   useEffect(() => {
     load();
-  }, [config.endpoint, filters.user, filters.status, filters.date]);
+  }, [load]);
 
   useEffect(() => {
     setSelectedRecordId('');
@@ -203,8 +201,7 @@ const AdminResourcePage = ({ config }) => {
   const selectedReport = records.find((record) => record._id === selectedRecordId) || null;
 
   return (
-    <div className="admin-categories">
-      <AdminTopNav />
+    <div className="portal-admin-page">
       <section className="portal-page">
       <div className="portal-card portal-help-card">
         <div className="portal-section-head">

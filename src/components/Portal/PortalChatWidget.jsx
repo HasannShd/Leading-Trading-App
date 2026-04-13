@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { portalApi } from '../../services/portalApi';
 import { formatPortalDateTime } from '../../utils/portalDate';
 import './PortalShell.css';
@@ -33,7 +33,7 @@ const PortalChatWidget = ({ role = 'sales_staff' }) => {
     return thread?.unreadAdminCount || 0;
   }, [isAdmin, thread, threads]);
 
-  const loadStaffThread = async (markRead = false) => {
+  const loadStaffThread = useCallback(async (markRead = false) => {
     setLoading(true);
     try {
       const response = await portalApi.get('/staff-portal/messages', 'sales_staff');
@@ -58,9 +58,9 @@ const PortalChatWidget = ({ role = 'sales_staff' }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  const loadAdminList = async () => {
+  const loadAdminList = useCallback(async () => {
     setLoading(true);
     try {
       const response = await portalApi.get('/admin-portal/messages', 'admin');
@@ -74,9 +74,9 @@ const PortalChatWidget = ({ role = 'sales_staff' }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [selectedStaffId]);
 
-  const loadAdminThread = async (staffId, markRead = false) => {
+  const loadAdminThread = useCallback(async (staffId, markRead = false) => {
     if (!staffId) return;
     setLoading(true);
     try {
@@ -109,7 +109,7 @@ const PortalChatWidget = ({ role = 'sales_staff' }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     if (isAdmin) {
@@ -117,7 +117,7 @@ const PortalChatWidget = ({ role = 'sales_staff' }) => {
       return;
     }
     loadStaffThread();
-  }, [isAdmin]);
+  }, [isAdmin, loadAdminList, loadStaffThread]);
 
   useEffect(() => {
     if (!open) return;
@@ -127,7 +127,7 @@ const PortalChatWidget = ({ role = 'sales_staff' }) => {
       return;
     }
     loadStaffThread(true);
-  }, [isAdmin, open, selectedStaffId]);
+  }, [isAdmin, loadAdminList, loadAdminThread, loadStaffThread, open, selectedStaffId]);
 
   const orderedMessages = useMemo(
     () =>

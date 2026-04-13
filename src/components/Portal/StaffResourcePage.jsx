@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect } from 'react';
+import { useCallback, useMemo, useState, useEffect } from 'react';
 import { portalApi } from '../../services/portalApi';
 import './PortalShell.css';
 
@@ -16,18 +16,18 @@ const StaffResourcePage = ({ config }) => {
   const [message, setMessage] = useState('');
   const [statusDrafts, setStatusDrafts] = useState({});
 
-  const load = () => {
+  const load = useCallback(() => {
     setLoading(true);
     portalApi
       .get(config.endpoint, 'sales_staff')
       .then((response) => setRecords(response.data[Object.keys(response.data)[0]] || []))
       .catch((err) => setMessage(err.message))
       .finally(() => setLoading(false));
-  };
+  }, [config.endpoint]);
 
   useEffect(() => {
     load();
-  }, [config.endpoint]);
+  }, [load]);
 
   const fieldMap = useMemo(() => config.fields, [config.fields]);
   const singularTitle = config.title.replace(/s$/, '') || 'Record';

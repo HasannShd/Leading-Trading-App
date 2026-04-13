@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Checkout.css';
-import { authFetch } from '../../services/authFetch';
+import { authFetch, API_URL } from '../../services/authFetch';
 
 const Checkout = () => {
   const navigate = useNavigate();

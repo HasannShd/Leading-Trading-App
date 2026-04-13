@@ -39,7 +39,7 @@ const AdminCategories = () => {
     } finally {
       setLoading(false);
     }
-  }, [API_URL]);
+  }, []);
 
   useEffect(() => {
     fetchCategories();

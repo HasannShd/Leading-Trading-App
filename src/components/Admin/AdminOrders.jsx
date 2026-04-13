@@ -13,10 +13,10 @@ const AdminOrders = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const handleUnauthorized = () => {
+  const handleUnauthorized = useCallback(() => {
     setError('Admin session expired. Please sign in again.');
     window.location.href = adminLoginPath;
-  };
+  }, [adminLoginPath]);
 
   const handleAdminPrecondition = (message) => {
     setOrders([]);
@@ -49,7 +49,7 @@ const AdminOrders = () => {
     } finally {
       setLoading(false);
     }
-  }, [adminLoginPath]);
+  }, [handleUnauthorized]);
 
   useEffect(() => {
     fetchOrders();

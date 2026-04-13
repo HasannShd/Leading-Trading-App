@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { portalApi } from '../../services/portalApi';
 import AdminTopNav from '../Admin/AdminTopNav';
 import '../Admin/AdminCategories.css';
@@ -24,7 +24,7 @@ const AdminSchedulesPage = () => {
   const [form, setForm] = useState(emptyForm);
   const [message, setMessage] = useState('');
 
-  const load = async () => {
+  const load = useCallback(async () => {
     try {
       const [staffResponse, scheduleResponse] = await Promise.all([
         portalApi.get('/admin-portal/staff', 'admin'),
@@ -38,11 +38,11 @@ const AdminSchedulesPage = () => {
     } catch (err) {
       setMessage(err.message);
     }
-  };
+  }, [form.user]);
 
   useEffect(() => {
     load();
-  }, []);
+  }, [load]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();

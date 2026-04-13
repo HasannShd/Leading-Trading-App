@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { portalApi } from '../../services/portalApi';
-import { formatPortalDate, formatPortalDateTime, formatPortalPrettyDate } from '../../utils/portalDate';
+import { formatPortalDateTime, formatPortalPrettyDate } from '../../utils/portalDate';
 import './PortalShell.css';
 
 const quickLinks = [

@@ -1,8 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { portalApi } from '../../services/portalApi';
 import { authFetch } from '../../services/authFetch';
-import AdminTopNav from '../Admin/AdminTopNav';
-import '../Admin/AdminCategories.css';
 import { formatPortalDate, formatPortalDateTime } from '../../utils/portalDate';
 import './PortalShell.css';
 
@@ -21,9 +19,6 @@ const matchesStaffSearch = (member, search) => {
     .filter(Boolean)
     .some((value) => String(value).toLowerCase().includes(term));
 };
-
-const formatItems = (items = []) =>
-  items.map((item) => `${item.productName} x${item.quantity}${item.price ? ` @ ${item.price}` : ''}`).join(' | ');
 
 const formatActivityLabel = (value) =>
   String(value || 'activity')
@@ -63,7 +58,7 @@ const AdminStaffPage = () => {
     activity: false,
   });
 
-  const load = () =>
+  const load = useCallback(() =>
     portalApi
       .get('/admin-portal/staff', 'admin')
       .then((response) => {
@@ -72,11 +67,11 @@ const AdminStaffPage = () => {
           setSelectedStaffId(response.data.staff[0]._id);
         }
       })
-      .catch((err) => setMessage(err.message));
+      .catch((err) => setMessage(err.message)), [selectedStaffId]);
 
   useEffect(() => {
     load();
-  }, []);
+  }, [load]);
 
   useEffect(() => {
     if (!selectedStaffId) {
@@ -155,7 +150,6 @@ const AdminStaffPage = () => {
   const inactiveCount = staff.length - activeCount;
   const filteredStaff = staff.filter((member) => matchesStaffSearch(member, staffSearch));
   const selectedStaff = staff.find((member) => member._id === selectedStaffId);
-  const compactActivity = (staffSummary?.recentActivity || []).slice(0, 6);
   const toggleSection = (key) => {
     setExpandedSections((current) => ({ ...current, [key]: !current[key] }));
   };
@@ -178,8 +172,7 @@ const AdminStaffPage = () => {
     : [];
 
   return (
-    <div className="admin-categories">
-      <AdminTopNav />
+    <div className="portal-admin-page">
       <section className="portal-page">
       <div className="portal-card portal-help-card">
         <div className="portal-section-head">

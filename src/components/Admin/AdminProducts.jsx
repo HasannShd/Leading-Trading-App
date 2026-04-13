@@ -30,10 +30,10 @@ const AdminProducts = () => {
   });
   const location = useLocation();
   const adminLoginPath = getAdminPaths(location.pathname.startsWith('/admin')).login;
-  const handleUnauthorized = () => {
+  const handleUnauthorized = useCallback(() => {
     setError('Admin session expired. Please sign in again.');
     window.location.href = adminLoginPath;
-  };
+  }, [adminLoginPath]);
 
   const handleAdminPrecondition = (message) => {
     setProducts([]);
@@ -67,7 +67,7 @@ const AdminProducts = () => {
     } finally {
       setLoading(false);
     }
-  }, [API_URL]);
+  }, [handleUnauthorized]);
 
   const fetchCategories = useCallback(async () => {
     try {
@@ -77,7 +77,7 @@ const AdminProducts = () => {
     } catch (err) {
       console.error('Failed to fetch categories:', err);
     }
-  }, [API_URL]);
+  }, []);
 
   useEffect(() => {
     fetchProducts();

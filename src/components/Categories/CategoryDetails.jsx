@@ -81,7 +81,7 @@ const CategoryDetails = () => {
     };
 
     fetchCategoryAndProducts();
-  }, [API_URL, slug]);
+  }, [API_URL, navigate, slug]);
 
   const filteredProducts = useMemo(() => {
     const s = deferredQuery.toLowerCase().trim();

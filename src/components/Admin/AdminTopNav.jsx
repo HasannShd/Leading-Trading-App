@@ -9,6 +9,7 @@ const AdminTopNav = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
   const isVisibleAdminRoute = location.pathname.startsWith('/admin');
+  if (isVisibleAdminRoute) return null;
   const paths = getAdminPaths(isVisibleAdminRoute);
   const navGroups = isVisibleAdminRoute
     ? [

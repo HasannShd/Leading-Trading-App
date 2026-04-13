@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect } from 'react';
+import { createContext, useState, useEffect, useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { authFetch, getStoredToken } from '../services/authFetch';
 import { getTokenExpiryMs, isTokenExpired } from '../utils/sessionToken';
@@ -26,7 +26,7 @@ export const AdminProvider = ({ children }) => {
     setError(null);
   };
 
-  const resetAdminSession = (shouldRedirect = true) => {
+  const resetAdminSession = useCallback((shouldRedirect = true) => {
     localStorage.removeItem('adminToken');
     localStorage.removeItem('adminTrustedDeviceToken');
     setAdmin(null);
@@ -34,7 +34,7 @@ export const AdminProvider = ({ children }) => {
     if (shouldRedirect && isAdminRoute && location.pathname !== adminLoginPath) {
       navigate(adminLoginPath, { replace: true });
     }
-  };
+  }, [adminLoginPath, isAdminRoute, location.pathname, navigate]);
 
   // Prevent access to admin pages without authentication
   useEffect(() => {
@@ -48,34 +48,7 @@ export const AdminProvider = ({ children }) => {
     }
   }, [admin, adminLoginPath, loading, location.pathname, navigate]);
 
-  useEffect(() => {
-    const token = localStorage.getItem('adminToken');
-    if (token) {
-      verifyAdmin();
-    } else {
-      setLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    const token = getStoredToken('admin');
-    if (!token) return undefined;
-    if (isTokenExpired(token)) {
-      resetAdminSession(false);
-      setLoading(false);
-      return undefined;
-    }
-
-    const expiry = getTokenExpiryMs(token);
-    if (!expiry) return undefined;
-    const timeout = window.setTimeout(() => {
-      resetAdminSession();
-      setError('Your admin session expired. Please sign in again.');
-    }, Math.max(expiry - Date.now(), 0));
-    return () => window.clearTimeout(timeout);
-  }, [admin, location.pathname]);
-
-  const verifyAdmin = async () => {
+  const verifyAdmin = useCallback(async () => {
     try {
       const response = await authFetch('/auth/me', { scope: 'admin' });
       if (response.ok) {
@@ -94,7 +67,34 @@ export const AdminProvider = ({ children }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [resetAdminSession]);
+
+  useEffect(() => {
+    const token = localStorage.getItem('adminToken');
+    if (token) {
+      verifyAdmin();
+    } else {
+      setLoading(false);
+    }
+  }, [verifyAdmin]);
+
+  useEffect(() => {
+    const token = getStoredToken('admin');
+    if (!token) return undefined;
+    if (isTokenExpired(token)) {
+      resetAdminSession(false);
+      setLoading(false);
+      return undefined;
+    }
+
+    const expiry = getTokenExpiryMs(token);
+    if (!expiry) return undefined;
+    const timeout = window.setTimeout(() => {
+      resetAdminSession();
+      setError('Your admin session expired. Please sign in again.');
+    }, Math.max(expiry - Date.now(), 0));
+    return () => window.clearTimeout(timeout);
+  }, [admin, location.pathname, resetAdminSession]);
 
   const login = async (username, password) => {
     setLoading(true);
