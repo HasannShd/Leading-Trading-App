@@ -7,6 +7,7 @@ const Careers = () => {
   const [form, setForm] = useState({ name: '', email: '', phone: '', nationality: '', cv: null });
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState('');
+  const [submitting, setSubmitting] = useState(false);
 
   const handleChange = e => {
     const { name, value, files } = e.target;
@@ -20,7 +21,9 @@ const Careers = () => {
 
   const handleSubmit = async e => {
     e.preventDefault();
+    if (submitting) return;
     setError('');
+    setSubmitting(true);
     try {
       const data = new FormData();
       data.append('name', form.name);
@@ -34,11 +37,13 @@ const Careers = () => {
       });
       if (!response.ok) {
         setError('Failed to submit application. Please try again.');
+        setSubmitting(false);
         return;
       }
       setSubmitted(true);
     } catch (err) {
       setError('Failed to submit application. Please try again.');
+      setSubmitting(false);
     }
   };
 
@@ -141,7 +146,9 @@ const Careers = () => {
                 </span>
               </div>
             </label>
-            <button type="submit" className="btn">Submit Application</button>
+            <button type="submit" className="btn" disabled={submitting}>
+              {submitting ? 'Sending Application...' : 'Submit Application'}
+            </button>
           </form>
         )}
       </section>

@@ -7,8 +7,8 @@ const StaffAttendance = () => {
   const [records, setRecords] = useState([]);
   const [note, setNote] = useState('');
   const [mileageNote, setMileageNote] = useState('');
-  const [mileageWeekStart, setMileageWeekStart] = useState('');
-  const [mileageWeekEnd, setMileageWeekEnd] = useState('');
+  const [mileageDayStart, setMileageDayStart] = useState('');
+  const [mileageDayEnd, setMileageDayEnd] = useState('');
   const [status, setStatus] = useState('');
   const [busy, setBusy] = useState(false);
 
@@ -28,8 +28,8 @@ const StaffAttendance = () => {
 
   useEffect(() => {
     if (!todayRecord) return;
-    setMileageWeekStart(todayRecord.mileageWeekStart ?? '');
-    setMileageWeekEnd(todayRecord.mileageWeekEnd ?? '');
+    setMileageDayStart(todayRecord.mileageWeekStart ?? '');
+    setMileageDayEnd(todayRecord.mileageWeekEnd ?? '');
   }, [todayRecord]);
 
   const submit = async (path) => {
@@ -55,8 +55,8 @@ const StaffAttendance = () => {
     setStatus('');
     try {
       const payload = {
-        ...(mileageWeekStart !== '' ? { mileageWeekStart: Number(mileageWeekStart) } : {}),
-        ...(mileageWeekEnd !== '' ? { mileageWeekEnd: Number(mileageWeekEnd) } : {}),
+        ...(mileageDayStart !== '' ? { mileageWeekStart: Number(mileageDayStart) } : {}),
+        ...(mileageDayEnd !== '' ? { mileageWeekEnd: Number(mileageDayEnd) } : {}),
         note: mileageNote,
       };
       const response = await portalApi.post('/staff-portal/attendance/mileage', payload, 'sales_staff');
@@ -78,7 +78,7 @@ const StaffAttendance = () => {
             <div className="portal-brand-kicker">Attendance</div>
             <h1 className="portal-section-title">Check In / Check Out</h1>
             <p className="portal-section-copy" style={{ color: 'rgba(255,255,255,0.76)' }}>
-              Use the big buttons below for today. Weekly car mileage is saved in a separate step further down the page.
+              Use the big buttons below for today. Daily car mileage is saved in a separate step further down the page.
             </p>
           </div>
         </div>
@@ -94,14 +94,14 @@ const StaffAttendance = () => {
           <div className="portal-stat">
             <div className="portal-stat-value">{todayRecord?.mileageWeekStart ?? '-'}</div>
             <div className="portal-stat-label">
-              Week start km
+              Day start km
               {todayRecord?.mileageWeekStartAt ? ` • ${formatStamp(todayRecord.mileageWeekStartAt)}` : ''}
             </div>
           </div>
           <div className="portal-stat">
             <div className="portal-stat-value">{todayRecord?.mileageWeekEnd ?? '-'}</div>
             <div className="portal-stat-label">
-              Week end km
+              Day end km
               {todayRecord?.mileageWeekEndAt ? ` • ${formatStamp(todayRecord.mileageWeekEndAt)}` : ''}
             </div>
           </div>
@@ -127,21 +127,21 @@ const StaffAttendance = () => {
       <div className="portal-card portal-help-card">
         <div className="portal-section-head">
           <div>
-            <div className="portal-brand-kicker">Weekly Mileage</div>
-            <h2 className="portal-section-title" style={{ fontSize: '1.45rem' }}>Step 2: Save weekly mileage</h2>
+            <div className="portal-brand-kicker">Daily Mileage</div>
+            <h2 className="portal-section-title" style={{ fontSize: '1.45rem' }}>Step 2: Save daily mileage</h2>
             <p className="portal-section-copy">
-              Use <strong>week start km</strong> one time when the work week begins and <strong>week end km</strong> one time when the work week finishes. You do not need to fill this every day.
+              Use <strong>day start km</strong> when the work day begins and <strong>day end km</strong> when the work day finishes.
             </p>
           </div>
         </div>
         <div className="portal-form-grid two" style={{ marginTop: '1rem' }}>
           <div className="portal-field">
-            <label>Car mileage week start</label>
-            <input type="number" value={mileageWeekStart} onChange={(e) => setMileageWeekStart(e.target.value)} placeholder="Enter week start mileage" />
+            <label>Car mileage day start</label>
+            <input type="number" value={mileageDayStart} onChange={(e) => setMileageDayStart(e.target.value)} placeholder="Enter day start mileage" />
           </div>
           <div className="portal-field">
-            <label>Car mileage week end</label>
-            <input type="number" value={mileageWeekEnd} onChange={(e) => setMileageWeekEnd(e.target.value)} placeholder="Enter week end mileage" />
+            <label>Car mileage day end</label>
+            <input type="number" value={mileageDayEnd} onChange={(e) => setMileageDayEnd(e.target.value)} placeholder="Enter day end mileage" />
           </div>
         </div>
         <div className="portal-field" style={{ marginTop: '1rem' }}>
@@ -149,9 +149,9 @@ const StaffAttendance = () => {
           <textarea value={mileageNote} onChange={(e) => setMileageNote(e.target.value)} placeholder="Optional note for office records" />
         </div>
         <div className="portal-submit-bar" style={{ marginTop: '1rem' }}>
-          <div className="portal-submit-note">Only use this when you are entering the start-of-week or end-of-week car reading.</div>
+          <div className="portal-submit-note">Use this for the current day so office can see your start and end mileage clearly.</div>
           <button className="portal-button secondary portal-save-button" type="button" onClick={saveMileage} disabled={busy}>
-            {busy ? 'Saving...' : 'Save Weekly Mileage'}
+            {busy ? 'Saving...' : 'Save Daily Mileage'}
           </button>
         </div>
       </div>
@@ -182,13 +182,13 @@ const StaffAttendance = () => {
                 </div>
                 {(record.mileageWeekStart !== undefined && record.mileageWeekStart !== null) || record.mileageWeekStartAt ? (
                   <div className="portal-staff-report-row">
-                    <strong>Week start mileage</strong>
+                    <strong>Day start mileage</strong>
                     <span>{record.mileageWeekStart !== undefined && record.mileageWeekStart !== null ? `${record.mileageWeekStart}${record.mileageWeekStartAt ? ` • ${formatPortalDateTime(record.mileageWeekStartAt)}` : ''}` : 'Not recorded'}</span>
                   </div>
                 ) : null}
                 {(record.mileageWeekEnd !== undefined && record.mileageWeekEnd !== null) || record.mileageWeekEndAt ? (
                   <div className="portal-staff-report-row">
-                    <strong>Week end mileage</strong>
+                    <strong>Day end mileage</strong>
                     <span>{record.mileageWeekEnd !== undefined && record.mileageWeekEnd !== null ? `${record.mileageWeekEnd}${record.mileageWeekEndAt ? ` • ${formatPortalDateTime(record.mileageWeekEndAt)}` : ''}` : 'Not recorded'}</span>
                   </div>
                 ) : null}

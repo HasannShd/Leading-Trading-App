@@ -1,17 +1,18 @@
 // src/App.jsx
 
 import './App.css';
-import { Suspense, lazy, useEffect } from 'react';
+import { Suspense, lazy, useContext, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import Header from './components/Header/Header.jsx';
 import Footer from './components/Footer/Footer.jsx';
 import ProtectedAdminRoute from './components/ProtectedAdminRoute';
-import { AdminProvider } from './context/AdminContext';
+import { AdminContext, AdminProvider } from './context/AdminContext';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
-import { StaffProvider } from './context/StaffContext';
+import { StaffContext, StaffProvider } from './context/StaffContext';
 import ProtectedStaffRoute from './components/ProtectedStaffRoute';
 import { staffModuleConfigs, adminModuleConfigs } from './components/Portal/portalConfigs';
+import PortalChatWidget from './components/Portal/PortalChatWidget';
 import './components/Portal/PortalShell.css';
 
 const HomePage = lazy(() => import('./components/Homepage/Homepage'));
@@ -48,9 +49,17 @@ const AdminResourcePage = lazy(() => import('./components/Portal/AdminResourcePa
 
 const AppShell = () => {
   const location = useLocation();
+  const { admin } = useContext(AdminContext);
+  const { staff } = useContext(StaffContext);
   const isHeroPage = location.pathname === '/';
   const isAdminRoute = location.pathname.startsWith('/.well-known/') || location.pathname.startsWith('/admin');
   const isPortalRoute = isAdminRoute || location.pathname.startsWith('/staff');
+  const showAdminChat =
+    admin &&
+    isAdminRoute &&
+    !location.pathname.endsWith('/login') &&
+    !location.pathname.includes('admin-access-sh123456');
+  const showStaffChat = staff && location.pathname.startsWith('/staff') && location.pathname !== '/staff/login';
 
   return (
     <div className={`app${isHeroPage ? ' hero-page' : ''}${isPortalRoute ? ' admin-app' : ''}`}>
@@ -126,6 +135,8 @@ const AppShell = () => {
           </Routes>
         </Suspense>
       </main>
+      {showAdminChat ? <PortalChatWidget role="admin" /> : null}
+      {showStaffChat ? <PortalChatWidget role="sales_staff" /> : null}
       {!isPortalRoute && <Footer />}
     </div>
   );

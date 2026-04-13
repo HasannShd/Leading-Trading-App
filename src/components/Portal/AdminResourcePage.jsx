@@ -116,8 +116,8 @@ const AdminResourcePage = ({ config }) => {
       record.expenseDate,
       record.createdAt ? formatPortalDateTime(record.createdAt) : '',
       record.amount !== undefined ? `${record.amount} BHD` : '',
-      record.mileageWeekStart !== undefined && record.mileageWeekStart !== null ? `Start km ${record.mileageWeekStart}` : '',
-      record.mileageWeekEnd !== undefined && record.mileageWeekEnd !== null ? `End km ${record.mileageWeekEnd}` : '',
+      record.mileageWeekStart !== undefined && record.mileageWeekStart !== null ? `Day start km ${record.mileageWeekStart}` : '',
+      record.mileageWeekEnd !== undefined && record.mileageWeekEnd !== null ? `Day end km ${record.mileageWeekEnd}` : '',
     ].filter(Boolean);
 
   const renderAttendanceRecord = (record) => {
@@ -143,14 +143,14 @@ const AdminResourcePage = ({ config }) => {
             <span>{record.checkOutTime ? formatPortalDateTime(record.checkOutTime) : 'Not recorded'}</span>
           </div>
           <div className="portal-staff-report-row">
-            <strong>Week start mileage</strong>
+            <strong>Day start mileage</strong>
             <span>
               {record.mileageWeekStart ?? '-'}
               {record.mileageWeekStartAt ? ` • entered ${formatPortalDateTime(record.mileageWeekStartAt)}` : ''}
             </span>
           </div>
           <div className="portal-staff-report-row">
-            <strong>Week end mileage</strong>
+            <strong>Day end mileage</strong>
             <span>
               {record.mileageWeekEnd ?? '-'}
               {record.mileageWeekEndAt ? ` • entered ${formatPortalDateTime(record.mileageWeekEndAt)}` : ''}
@@ -231,7 +231,7 @@ const AdminResourcePage = ({ config }) => {
             <h1 className="portal-section-title" style={{ fontSize: '1.8rem' }}>{config.title}</h1>
             <p className="portal-section-copy">
               {isAttendancePage
-                ? 'Review check-in, check-out, mileage, and worked time clearly for each staff member. Use the filters to inspect one staff member or one working day.'
+                ? 'Review check-in, check-out, daily mileage, and worked time clearly for each staff member. Use the filters to inspect one staff member or one working day.'
                 : isReportsPage
                   ? 'Review daily reports only. Click one report to open its full details and notes.'
                   : isOrdersPage

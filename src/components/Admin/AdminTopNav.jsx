@@ -2,7 +2,6 @@ import { NavLink, useLocation } from 'react-router-dom';
 import { useContext, useState } from 'react';
 import { AdminContext } from '../../context/AdminContext';
 import { getAdminPaths } from './adminPaths';
-import PortalChatWidget from '../Portal/PortalChatWidget';
 import './AdminTopNav.css';
 
 const AdminTopNav = () => {
@@ -94,7 +93,6 @@ const AdminTopNav = () => {
           {admin?.username}
         </div>
       </div>
-      <PortalChatWidget role="admin" />
     </div>
   );
 };

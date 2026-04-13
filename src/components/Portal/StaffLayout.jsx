@@ -2,7 +2,6 @@ import { NavLink, Outlet, useLocation } from 'react-router-dom';
 import { useContext, useMemo, useState } from 'react';
 import { StaffContext } from '../../context/StaffContext';
 import { formatPortalPrettyDate } from '../../utils/portalDate';
-import PortalChatWidget from './PortalChatWidget';
 import './PortalShell.css';
 
 const navItems = [
@@ -72,7 +71,6 @@ const StaffLayout = () => {
       <div className="portal-content">
         <Outlet />
       </div>
-      <PortalChatWidget role="sales_staff" />
       <div className="portal-mobile-bottom-nav">
         {mobileQuickNav.map((item) => (
           <NavLink
