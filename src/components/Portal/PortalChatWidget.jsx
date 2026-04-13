@@ -199,7 +199,7 @@ const PortalChatWidget = ({ role = 'sales_staff' }) => {
       </button>
 
       {open ? (
-        <div className="portal-chat-panel">
+        <div className={`portal-chat-panel${isAdmin ? ' admin' : ' staff'}`}>
           <div className="portal-chat-panel-head">
             <div>
               <div className="portal-brand-kicker">Communication</div>

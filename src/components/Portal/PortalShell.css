@@ -762,6 +762,14 @@
   overflow: hidden;
 }
 
+.portal-chat-panel.admin {
+  width: min(52rem, calc(100vw - 2rem));
+}
+
+.portal-chat-panel.staff {
+  width: min(30rem, calc(100vw - 1.5rem));
+}
+
 .portal-chat-panel-head {
   display: flex;
   align-items: flex-start;
@@ -1264,10 +1272,18 @@
     align-items: start;
   }
 
-  .portal-chat-admin-shell {
-    grid-template-columns: minmax(13rem, 0.88fr) minmax(0, 1.25fr);
-    align-items: start;
-  }
+.portal-chat-admin-shell {
+  grid-template-columns: minmax(15rem, 18rem) minmax(0, 1fr);
+  align-items: start;
+}
+
+.portal-chat-thread {
+  align-content: start;
+}
+
+.portal-message-composer.compact {
+  align-content: start;
+}
 }
 
 @media (max-width: 900px) {
@@ -1300,6 +1316,11 @@
     max-height: min(78vh, 46rem);
     padding: 0.85rem;
     border-radius: 1.35rem 1.35rem 1rem 1rem;
+  }
+
+  .portal-chat-panel.admin,
+  .portal-chat-panel.staff {
+    width: 100%;
   }
 
   .portal-chat-panel-head {
