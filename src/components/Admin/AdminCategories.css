@@ -1,5 +1,5 @@
 .admin-categories {
-  max-width: 1240px;
+  max-width: 1360px;
   margin: 0 auto;
   padding: 0 20px 32px;
   min-height: 100vh;
@@ -12,6 +12,7 @@
   justify-content: space-between;
   gap: 16px;
   margin-bottom: 24px;
+  flex-wrap: wrap;
 }
 
 .admin-page-header h1 {
@@ -20,6 +21,7 @@
   line-height: 1;
   letter-spacing: -0.04em;
   color: #17304d;
+  text-wrap: balance;
 }
 
 .admin-add-btn,
@@ -78,6 +80,12 @@
   margin: 0 0 20px;
   color: #17304d;
   font-size: 1.35rem;
+}
+
+.admin-categories-list > h2,
+.admin-form-container > h2,
+.admin-category-header h2 {
+  text-wrap: balance;
 }
 
 .admin-form {
@@ -188,6 +196,7 @@
   border-bottom: 1px solid rgba(23, 48, 77, 0.08);
   font-size: 0.95rem;
   color: #17304d;
+  vertical-align: top;
 }
 
 .admin-table tbody tr:hover {
@@ -217,6 +226,7 @@
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
+  align-items: flex-start;
 }
 
 .btn-edit {
@@ -239,12 +249,12 @@
 
 .status-badge.active {
   background: rgba(66, 184, 131, 0.16);
-  color: #8ff0c3;
+  color: #1d7a53;
 }
 
 .status-badge.inactive {
   background: rgba(255, 120, 97, 0.14);
-  color: #ffd9cf;
+  color: #a8422d;
 }
 
 .admin-section-header,

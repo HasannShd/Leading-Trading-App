@@ -8,19 +8,29 @@ const AdminMarketing = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState('');
+  const handleAdminPrecondition = (message) => {
+    setList([]);
+    setError(message || 'Admin setup is required before using this section.');
+  };
 
   const fetchList = useCallback(async () => {
     setLoading(true);
     try {
       const response = await authFetch('/users/marketing', { scope: 'admin' });
       const data = await response.json();
+      if (response.status === 428) {
+        handleAdminPrecondition(data.message);
+        return;
+      }
       if (!response.ok) {
+        setList([]);
         setError(data.err || 'Failed to fetch list');
         return;
       }
-      setList(data);
+      setList(Array.isArray(data) ? data : []);
       setError(null);
     } catch (err) {
+      setList([]);
       setError('Failed to fetch list');
     } finally {
       setLoading(false);

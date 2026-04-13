@@ -1,5 +1,13 @@
 @import './AdminCategories.css';
 
+.admin-products {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 0 20px 36px;
+  min-height: 100vh;
+  color: #17304d;
+}
+
 .admin-products-toolbar {
   display: grid;
   gap: 10px;
@@ -8,7 +16,7 @@
 
 .admin-products-toolbar label {
   font-weight: 600;
-  color: rgba(248, 243, 235, 0.84);
+  color: #17304d;
 }
 
 .admin-search-control {
@@ -16,18 +24,21 @@
   grid-template-columns: 22px minmax(0, 1fr) auto;
   align-items: center;
   gap: 10px;
-  padding: 10px 12px;
-  border: 1px solid rgba(248, 243, 235, 0.1);
-  border-radius: 16px;
-  background: rgba(248, 243, 235, 0.06);
+  padding: 12px 14px;
+  border: 1px solid rgba(23, 48, 77, 0.1);
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(247, 242, 234, 0.94));
   max-width: 560px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 12px 24px rgba(42, 69, 95, 0.08);
 }
 
 .admin-search-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: rgba(231, 218, 201, 0.62);
+  color: rgba(53, 80, 109, 0.62);
   font-size: 1rem;
 }
 
@@ -35,12 +46,12 @@
   min-width: 0;
   border: none;
   background: transparent;
-  color: #f8f3eb;
+  color: #17304d;
   font: inherit;
 }
 
 .admin-search-control input::placeholder {
-  color: rgba(231, 218, 201, 0.52);
+  color: rgba(53, 80, 109, 0.56);
 }
 
 .admin-search-control input:focus {
@@ -55,9 +66,9 @@
 .admin-search-clear {
   padding: 8px 12px;
   border-radius: 999px;
-  border: 1px solid rgba(248, 243, 235, 0.1);
-  background: rgba(248, 243, 235, 0.08);
-  color: #f8f3eb;
+  border: 1px solid rgba(23, 48, 77, 0.1);
+  background: rgba(255, 255, 255, 0.92);
+  color: #17304d;
   font-weight: 600;
   cursor: pointer;
 }
@@ -74,8 +85,13 @@
 }
 
 @media (max-width: 640px) {
+  .admin-products {
+    padding: 0 12px 24px;
+  }
+
   .admin-search-control {
     grid-template-columns: 22px minmax(0, 1fr);
+    max-width: none;
   }
 
   .admin-search-clear {

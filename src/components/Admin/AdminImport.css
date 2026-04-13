@@ -1,37 +1,46 @@
 .admin-import {
   min-height: 100vh;
-  color: #f8f3eb;
+  color: #17304d;
   background:
-    radial-gradient(circle at 12% 0%, rgba(198, 145, 89, 0.12), transparent 24%),
-    linear-gradient(180deg, #091321 0%, #102036 100%);
+    radial-gradient(circle at 12% 0%, rgba(214, 171, 118, 0.14), transparent 24%),
+    radial-gradient(circle at top right, rgba(134, 179, 211, 0.16), transparent 22%),
+    linear-gradient(180deg, #f5efe5 0%, #edf4f8 48%, #f8fbfc 100%);
   padding: 0 0 48px;
 }
 
 .admin-import-shell {
-  width: min(1240px, calc(100% - 32px));
+  width: min(1360px, calc(100% - 32px));
   margin: 0 auto;
 }
 
 .admin-import-panel {
   width: 100%;
-  margin: 18px auto 0;
-  background: linear-gradient(180deg, rgba(18, 34, 55, 0.96), rgba(11, 22, 38, 0.94));
-  border: 1px solid rgba(248, 243, 235, 0.08);
+  margin: 20px auto 0;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(243, 238, 230, 0.92));
+  border: 1px solid rgba(23, 48, 77, 0.08);
   border-radius: 28px;
   padding: 28px;
-  box-shadow: 0 24px 54px rgba(7, 17, 31, 0.24);
-  color: #f8f3eb;
+  box-shadow: 0 18px 36px rgba(42, 69, 95, 0.12);
+  color: #17304d;
 }
 
 .admin-import-upload input[type="file"] {
   display: block;
   margin-top: 10px;
-  color: rgba(231, 218, 201, 0.84);
+  color: rgba(23, 48, 77, 0.74);
+}
+
+.admin-import .admin-page-header {
+  align-items: flex-end;
+}
+
+.admin-import .admin-page-header h1 {
+  color: #17304d;
 }
 
 .admin-import-kicker {
   margin: 0 0 10px;
-  color: rgba(215, 161, 106, 0.9);
+  color: #b57b43;
   text-transform: uppercase;
   letter-spacing: 0.16em;
   font-size: 0.8rem;
@@ -45,16 +54,18 @@
   min-height: 42px;
   padding: 0 16px;
   border-radius: 999px;
-  background: rgba(198, 145, 89, 0.14);
+  background: rgba(198, 145, 89, 0.12);
   border: 1px solid rgba(198, 145, 89, 0.18);
-  color: #f3d3ae;
+  color: #8a5c2c;
   font-weight: 700;
   white-space: nowrap;
 }
 
 .admin-import-label {
   font-weight: 600;
-  color: #ffffff;
+  color: #17304d;
+  display: inline-block;
+  margin-bottom: 8px;
 }
 
 .admin-import-map {
@@ -69,7 +80,7 @@
   display: flex;
   gap: 10px;
   align-items: center;
-  color: rgba(231, 218, 201, 0.72);
+  color: #5d7289;
   font-size: 0.95rem;
 }
 
@@ -77,16 +88,16 @@
   display: block;
   margin-bottom: 6px;
   font-weight: 600;
-  color: rgba(248, 243, 235, 0.84);
+  color: rgba(23, 48, 77, 0.86);
 }
 
 .admin-import-field select {
   width: 100%;
   padding: 12px 14px;
-  border: 1px solid rgba(248, 243, 235, 0.12);
+  border: 1px solid rgba(23, 48, 77, 0.12);
   border-radius: 14px;
   background: rgba(255, 255, 255, 0.88);
-  color: var(--ink);
+  color: #17304d;
 }
 
 .admin-import-summary {
@@ -97,12 +108,18 @@
   align-items: center;
   padding: 18px 20px;
   border-radius: 20px;
-  background: rgba(248, 243, 235, 0.05);
-  border: 1px solid rgba(248, 243, 235, 0.08);
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid rgba(23, 48, 77, 0.08);
 }
 
 .admin-import-preview {
   margin-top: 24px;
+}
+
+.admin-import-preview .admin-import-help,
+.admin-import .admin-import-help,
+.admin-import .admin-import-warning {
+  color: #5d7289;
 }
 
 .admin-import-preview-header {
@@ -115,14 +132,14 @@
 
 .admin-import-preview h3 {
   margin: 0 0 6px;
-  color: #ffffff;
+  color: #17304d;
 }
 
 .admin-import-table-wrap {
   max-height: 60vh;
   border-radius: 20px;
-  border: 1px solid rgba(248, 243, 235, 0.08);
-  background: rgba(248, 243, 235, 0.03);
+  border: 1px solid rgba(23, 48, 77, 0.08);
+  background: rgba(255, 255, 255, 0.72);
 }
 
 .admin-import-table-wrap .admin-table {
@@ -132,7 +149,7 @@
 .admin-import-table-wrap .admin-table thead {
   position: sticky;
   top: 0;
-  background: rgba(9, 19, 33, 0.96);
+  background: rgba(248, 245, 238, 0.98);
   backdrop-filter: blur(10px);
   z-index: 1;
 }
@@ -141,13 +158,13 @@
   width: 100%;
   margin: 12px auto 0;
   background: rgba(66, 184, 131, 0.14);
-  color: #b4f2d4;
+  color: #1d7a53;
   border: 1px solid rgba(66, 184, 131, 0.2);
 }
 
 @media (max-width: 720px) {
   .admin-import-shell {
-    width: min(1240px, calc(100% - 24px));
+    width: min(1360px, calc(100% - 24px));
   }
 
   .admin-import-map {
