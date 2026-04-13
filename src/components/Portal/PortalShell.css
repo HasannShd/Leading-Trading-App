@@ -1328,88 +1328,31 @@
 }
 
 @media (max-width: 640px) {
-  .portal-chat-widget {
-    right: 0.75rem;
-    left: auto;
-    bottom: calc(5rem + env(safe-area-inset-bottom, 0px));
-    justify-items: end;
-  }
-
-  .portal-chat-launcher {
-    min-height: 3.15rem;
-  }
-
-  .portal-chat-panel {
-    position: fixed;
-    left: 0.65rem;
-    right: 0.65rem;
-    bottom: calc(4.95rem + env(safe-area-inset-bottom, 0px));
-    width: auto;
-    max-height: min(74vh, 42rem);
-    padding: 0.8rem;
-    border-radius: 1.2rem;
-  }
-
-  .portal-chat-panel.admin,
-  .portal-chat-panel.staff {
-    width: 100%;
-  }
-
-  .portal-chat-panel-head {
-    align-items: center;
-  }
-
-  .portal-chat-panel-head .portal-section-title {
-    font-size: 1.45rem;
-  }
-
-  .portal-chat-admin-shell {
-    grid-template-columns: 1fr;
-    gap: 0.75rem;
-  }
-
-  .portal-chat-staff-list {
-    max-height: 18rem;
-  }
-
-  .portal-conversation-window.compact {
-    min-height: 16rem;
-    max-height: 32rem;
-    padding: 0.7rem;
-  }
-
-  .portal-message-composer.compact {
-    padding: 0.8rem;
-    border-radius: 1rem;
-  }
-
-  .portal-message-row.self .portal-message-bubble,
-  .portal-message-row.office .portal-message-bubble {
-    width: 100%;
-    max-width: 100%;
-  }
-
-  .portal-attachment-chip {
-    min-height: 2.15rem;
-    padding: 0.5rem 0.75rem;
-    font-size: 0.82rem;
+  .portal-shell.staff-shell,
+  .portal-shell.admin-shell {
+    padding-bottom: calc(5rem + env(safe-area-inset-bottom, 0px));
   }
 
   .portal-topbar {
     align-items: stretch;
-    gap: 0.75rem;
-    padding-inline: 0.75rem;
+    gap: 0.5rem;
+    padding: calc(0.45rem + env(safe-area-inset-top, 0px)) 0.6rem 0.5rem;
   }
 
   .portal-brand-title {
-    font-size: 1.5rem;
-    line-height: 1.02;
+    font-size: 1.08rem;
+    line-height: 1.04;
+  }
+
+  .portal-brand-kicker {
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
   }
 
   .portal-topbar-meta {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.55rem;
+    grid-template-columns: 1fr auto;
+    gap: 0.4rem;
     width: 100%;
   }
 
@@ -1417,44 +1360,47 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    grid-column: 1 / -1;
+    grid-column: auto;
   }
 
   .portal-chip,
-  .portal-inline-button {
-    min-height: 2.7rem;
-    justify-content: center;
+  .portal-inline-button,
+  .portal-button {
+    min-height: 2.4rem;
+    font-size: 0.82rem;
   }
 
   .portal-chip {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0.7rem 0.85rem;
+    padding: 0.45rem 0.62rem;
     text-align: center;
-    line-height: 1.3;
+    line-height: 1.2;
+    font-size: 0.72rem;
   }
 
   .portal-content {
-    width: min(100%, calc(100% - 0.8rem));
-    padding-top: 0.7rem;
+    width: calc(100% - 0.7rem);
+    padding-top: 0.45rem;
+    padding-bottom: 0.8rem;
   }
 
   .portal-staff-nav-wrap {
-    top: 126px;
+    top: 82px;
   }
 
   .portal-staff-nav-wrap:not(.open) {
     border-bottom-color: transparent;
-    background: rgba(248, 245, 238, 0.72);
+    background: rgba(248, 245, 238, 0.78);
   }
 
   .portal-staff-nav {
     display: none;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.55rem;
+    gap: 0.4rem;
     overflow: visible;
-    padding: 0.55rem 0 0.85rem;
+    padding: 0.4rem 0 0.55rem;
   }
 
   .portal-staff-nav.open {
@@ -1462,37 +1408,32 @@
   }
 
   .portal-staff-link {
-    min-height: 2.8rem;
+    min-height: 2.45rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0.65rem 0.75rem;
+    padding: 0.48rem 0.55rem;
     text-align: center;
     white-space: normal;
-    line-height: 1.2;
-    font-size: 0.88rem;
-  }
-
-  .portal-button,
-  .portal-inline-button {
-    min-height: 2.9rem;
-    font-size: 0.94rem;
+    line-height: 1.12;
+    font-size: 0.76rem;
+    border-radius: 0.85rem;
   }
 
   .portal-mobile-bottom-nav {
     position: fixed;
-    left: 0.7rem;
-    right: 0.7rem;
-    bottom: calc(0.7rem + env(safe-area-inset-bottom, 0px));
+    left: 0.55rem;
+    right: 0.55rem;
+    bottom: calc(0.55rem + env(safe-area-inset-bottom, 0px));
     z-index: 45;
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 0.45rem;
-    padding: 0.45rem;
-    border-radius: 1.25rem;
-    background: rgba(248, 245, 238, 0.92);
+    gap: 0.35rem;
+    padding: 0.35rem;
+    border-radius: 1rem;
+    background: rgba(248, 245, 238, 0.94);
     border: 1px solid rgba(13, 26, 43, 0.08);
-    box-shadow: 0 18px 40px rgba(12, 24, 42, 0.12);
+    box-shadow: 0 14px 28px rgba(12, 24, 42, 0.1);
     backdrop-filter: blur(18px);
   }
 
@@ -1500,13 +1441,13 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 2.75rem;
-    padding: 0.52rem 0.35rem;
-    border-radius: 1rem;
+    min-height: 2.45rem;
+    padding: 0.45rem 0.2rem;
+    border-radius: 0.8rem;
     text-decoration: none;
-    font-size: 0.76rem;
+    font-size: 0.7rem;
     font-weight: 700;
-    line-height: 1.15;
+    line-height: 1.05;
     text-align: center;
     color: var(--navy-700);
     background: rgba(255, 255, 255, 0.82);
@@ -1518,108 +1459,209 @@
     background: linear-gradient(135deg, #183251, #264c73);
   }
 
-  .portal-actions,
-  .portal-actions-two,
-  .portal-quick-links {
-    grid-template-columns: 1fr;
+  .portal-page,
+  .portal-admin-layout,
+  .portal-admin-sidebar,
+  .portal-grid,
+  .portal-record-list,
+  .portal-inline-list {
+    gap: 0.6rem;
   }
 
-  .portal-card {
-    padding: 0.8rem;
-    border-radius: 1.05rem;
-  }
-
-  .staff-shell > .portal-content:last-of-type {
-    padding-bottom: 6.5rem;
+  .portal-card,
+  .portal-submit-bar,
+  .portal-filter-bar,
+  .portal-record-card,
+  .portal-compact-row {
+    padding: 0.68rem;
+    border-radius: 0.9rem;
+    box-shadow: 0 12px 28px rgba(12, 24, 42, 0.05);
   }
 
   .portal-section-title {
-    font-size: clamp(1.1rem, 6vw, 1.45rem);
+    font-size: clamp(0.98rem, 5vw, 1.18rem);
   }
 
-  .portal-section-copy {
-    font-size: 0.9rem;
-    line-height: 1.5;
+  .portal-section-copy,
+  .portal-record-copy,
+  .portal-empty-copy {
+    font-size: 0.82rem;
+    line-height: 1.4;
   }
 
-  .portal-record-card,
-  .portal-compact-row,
-  .portal-submit-bar,
-  .portal-filter-bar {
-    border-radius: 1rem;
+  .portal-record-title {
+    font-size: 0.94rem;
+    line-height: 1.2;
   }
 
-  .portal-compact-row {
-    align-items: flex-start;
-    flex-direction: column;
+  .portal-record-meta {
+    gap: 0.3rem;
+    font-size: 0.72rem;
+  }
+
+  .portal-grid.stats,
+  .portal-actions,
+  .portal-actions-two,
+  .portal-quick-links,
+  .portal-staff-summary-grid,
+  .portal-staff-summary-grid.compact,
+  .portal-staff-highlight,
+  .portal-staff-report-grid,
+  .portal-detail-grid {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+
+  .portal-stat {
+    padding: 0.72rem;
+    border-radius: 0.9rem;
+  }
+
+  .portal-stat-value {
+    font-size: 1.08rem;
+  }
+
+  .portal-stat-label {
+    font-size: 0.72rem;
+    margin-top: 0.18rem;
+  }
+
+  .portal-soft-action-button,
+  .portal-button,
+  .portal-inline-button {
+    border-radius: 0.85rem;
+  }
+
+  .portal-actions .portal-button,
+  .portal-actions .portal-inline-button,
+  .portal-quick-links .portal-quick-link {
+    min-height: 2.55rem;
+    padding: 0.55rem 0.72rem;
+    font-size: 0.8rem;
+  }
+
+  .portal-quick-link {
+    border-radius: 0.85rem;
   }
 
   .portal-filter-bar {
     display: grid;
     grid-template-columns: 1fr;
+    gap: 0.45rem;
   }
 
   .portal-filter-bar select,
-  .portal-filter-bar input {
+  .portal-filter-bar input,
+  .portal-field input,
+  .portal-field textarea,
+  .portal-field select {
     width: 100%;
+    min-height: 2.6rem;
+    font-size: 16px;
+    border-radius: 0.85rem;
+    padding: 0.7rem 0.8rem;
   }
 
-  .portal-staff-summary-grid,
-  .portal-staff-highlight,
-  .portal-staff-report-grid {
-    grid-template-columns: 1fr;
+  .portal-field textarea,
+  .portal-chat-panel .portal-field textarea {
+    min-height: 4.1rem;
   }
 
-  .portal-detail-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .portal-thread-title-row,
-  .portal-message-meta {
+  .portal-compact-row,
+  .portal-staff-report-row {
     align-items: flex-start;
     flex-direction: column;
+    gap: 0.28rem;
   }
 
-  .portal-conversation-window {
-    min-height: 16rem;
+  .portal-staff-report-row span {
+    text-align: left;
+  }
+
+  .portal-admin-sidebar-card {
+    position: static;
+    padding: 0.75rem;
+  }
+
+  .portal-admin-nav {
+    gap: 0.38rem;
+    margin-top: 0.5rem;
+  }
+
+  .portal-admin-nav-section {
+    margin-top: 0.35rem;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+  }
+
+  .portal-admin-link {
+    padding: 0.6rem 0.72rem;
+    border-radius: 0.8rem;
+    font-size: 0.78rem;
+  }
+
+  .portal-chat-widget {
+    right: 0.65rem;
+    left: auto;
+    bottom: calc(4.4rem + env(safe-area-inset-bottom, 0px));
+    justify-items: end;
+  }
+
+  .portal-chat-launcher {
+    min-height: 3rem;
+  }
+
+  .portal-chat-launcher.mobile {
+    width: 3rem;
+    min-width: 3rem;
+    min-height: 3rem;
+  }
+
+  .portal-chat-panel {
+    position: fixed;
+    inset: calc(0.45rem + env(safe-area-inset-top, 0px)) 0.45rem calc(0.45rem + env(safe-area-inset-bottom, 0px)) 0.45rem;
+    width: auto;
     max-height: none;
-    padding: 0.7rem;
-  }
-
-  .portal-message-bubble {
-    width: 100%;
-    padding: 0.75rem 0.8rem;
+    padding: 0.55rem;
     border-radius: 0.95rem;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
   }
 
-  .portal-message-meta {
-    font-size: 0.75rem;
+  .portal-chat-panel.admin,
+  .portal-chat-panel.staff {
+    width: auto;
   }
 
-  .portal-message-copy {
-    font-size: 0.9rem;
-    line-height: 1.5;
-  }
-
-  .portal-staff-summary-grid.compact {
-    grid-template-columns: 1fr;
+  .portal-chat-panel-head {
+    align-items: center;
+    gap: 0.45rem;
   }
 
   .portal-chat-head-actions {
     margin-left: auto;
+    gap: 0.35rem;
   }
 
   .portal-chat-head-actions .portal-inline-button {
-    min-height: 2.55rem;
-    padding: 0.7rem 0.95rem;
+    min-height: 2.1rem;
+    padding: 0.42rem 0.65rem;
+    font-size: 0.76rem;
   }
 
-  .portal-thread-button {
-    box-shadow: none;
+  .portal-chat-panel-head .portal-section-title {
+    font-size: 1.08rem;
   }
 
-  .portal-thread-preview {
-    display: none;
+  .portal-chat-admin-shell {
+    grid-template-columns: 1fr;
+    gap: 0.45rem;
+    min-height: 0;
+  }
+
+  .portal-chat-staff-list,
+  .portal-chat-thread {
+    min-height: 0;
   }
 
   .portal-chat-thread {
@@ -1629,44 +1671,103 @@
   .portal-chat-thread.mobile-open,
   .portal-chat-panel.staff .portal-chat-thread {
     display: grid;
+    grid-template-rows: minmax(0, 1fr) auto;
+    gap: 0.45rem;
   }
 
-  .portal-chat-staff-list .portal-thread-list {
-    gap: 0.55rem;
+  .portal-thread-list {
+    gap: 0.35rem;
+    padding-right: 0;
   }
 
-  .portal-chat-staff-list .portal-thread-button strong {
-    font-size: 0.98rem;
-  }
-
-  .portal-stat-value {
-    font-size: 1.35rem;
-  }
-
-  .portal-detail-item {
+  .portal-thread-button,
+  .portal-thread-button.mobile {
+    gap: 0.15rem;
     padding: 0.65rem 0.75rem;
+    border-radius: 0.8rem;
+    box-shadow: none;
   }
 
-  .portal-record-card {
-    padding: 0.85rem;
+  .portal-thread-button.mobile .portal-thread-title-row {
+    flex-direction: row;
+    align-items: center;
   }
 
-  .portal-empty-state {
-    padding: 0.9rem;
+  .portal-thread-preview {
+    display: none;
   }
 
-  .portal-admin-staff-focus-head,
-  .portal-staff-summary-actions {
-    justify-items: stretch;
+  .portal-thread-button strong,
+  .portal-thread-button.mobile strong {
+    font-size: 0.86rem;
   }
 
-  .portal-staff-report-row {
+  .portal-thread-title-row,
+  .portal-message-meta {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .portal-conversation-window,
+  .portal-conversation-window.compact {
+    min-height: 0;
+    max-height: none;
+    padding: 0.4rem;
+    border-radius: 0.8rem;
+  }
+
+  .portal-message-stack {
+    gap: 0.4rem;
+  }
+
+  .portal-message-row.self .portal-message-bubble,
+  .portal-message-row.office .portal-message-bubble,
+  .portal-message-bubble {
+    width: 100%;
+    max-width: 100%;
+    padding: 0.58rem 0.65rem;
+    border-radius: 0.78rem;
+    box-shadow: none;
+  }
+
+  .portal-message-meta {
+    font-size: 0.68rem;
+  }
+
+  .portal-message-copy {
+    font-size: 0.8rem;
+    line-height: 1.35;
+  }
+
+  .portal-message-composer.compact,
+  .portal-message-composer {
+    padding: 0.55rem;
+    border-radius: 0.8rem;
+    gap: 0.45rem;
+  }
+
+  .portal-inline-actions.compact {
     gap: 0.35rem;
   }
 
-  .portal-staff-report-row span {
-    text-align: left;
+  .portal-inline-actions.compact .portal-inline-button {
+    flex: 1;
+  }
+
+  .portal-attachment-chip {
+    min-height: 1.9rem;
+    padding: 0.35rem 0.58rem;
+    font-size: 0.72rem;
+  }
+
+  .portal-chat-panel .portal-save-button {
+    min-height: 2.55rem;
+    font-size: 0.82rem;
+  }
+
+  .portal-message-banner,
+  .portal-empty-state {
+    padding: 0.7rem;
+    border-radius: 0.8rem;
   }
 }
