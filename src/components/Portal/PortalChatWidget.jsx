@@ -8,6 +8,7 @@ const attachmentLabel = (attachment) => attachment?.name || attachment?.url?.spl
 const PortalChatWidget = ({ role = 'sales_staff' }) => {
   const isAdmin = role === 'admin';
   const [open, setOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(() => (typeof window !== 'undefined' ? window.innerWidth <= 640 : false));
   const [threads, setThreads] = useState([]);
   const [thread, setThread] = useState(null);
   const [selectedStaffId, setSelectedStaffId] = useState('');
@@ -18,6 +19,14 @@ const PortalChatWidget = ({ role = 'sales_staff' }) => {
   const [loading, setLoading] = useState(false);
   const [sending, setSending] = useState(false);
   const [uploading, setUploading] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return undefined;
+    const handleResize = () => setIsMobile(window.innerWidth <= 640);
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const totalUnread = useMemo(() => {
     if (isAdmin) return threads.reduce((sum, entry) => sum + (entry.unreadStaffCount || 0), 0);
@@ -139,6 +148,14 @@ const PortalChatWidget = ({ role = 'sales_staff' }) => {
     );
   }, [isAdmin, search, threads]);
 
+  const selectedThreadLabel = useMemo(() => {
+    if (!isAdmin) return 'Office';
+    const current = threads.find((entry) => entry.staffUser?._id === selectedStaffId);
+    return current?.staffUser?.name || current?.staffUser?.username || 'Staff';
+  }, [isAdmin, selectedStaffId, threads]);
+
+  const showAdminThreadOnMobile = isAdmin && isMobile && Boolean(selectedStaffId);
+
   const removeAttachment = (url) => {
     setAttachments((current) => current.filter((entry) => entry.url !== url));
   };
@@ -193,8 +210,14 @@ const PortalChatWidget = ({ role = 'sales_staff' }) => {
 
   return (
     <div className={`portal-chat-widget${open ? ' open' : ''}`}>
-      <button type="button" className="portal-chat-launcher" onClick={() => setOpen((current) => !current)}>
-        <span>{open ? 'Close' : 'Chat'}</span>
+      <button
+        type="button"
+        className={`portal-chat-launcher${isMobile ? ' mobile' : ''}`}
+        onClick={() => setOpen((current) => !current)}
+        aria-label={open ? 'Close chat' : 'Open chat'}
+      >
+        <span className="portal-chat-launcher-icon">{open ? '×' : '💬'}</span>
+        {!isMobile ? <span>{open ? 'Close' : 'Chat'}</span> : null}
         {totalUnread ? <strong>{totalUnread}</strong> : null}
       </button>
 
@@ -203,47 +226,62 @@ const PortalChatWidget = ({ role = 'sales_staff' }) => {
           <div className="portal-chat-panel-head">
             <div>
               <div className="portal-brand-kicker">Communication</div>
-              <h3 className="portal-section-title">{isAdmin ? 'Admin Messages' : 'Office Chat'}</h3>
+              <h3 className="portal-section-title">
+                {showAdminThreadOnMobile ? selectedThreadLabel : isAdmin ? 'Messages' : 'Office Chat'}
+              </h3>
             </div>
-            <button type="button" className="portal-inline-button ghost" onClick={() => setOpen(false)}>
-              Close
-            </button>
+            <div className="portal-chat-head-actions">
+              {showAdminThreadOnMobile ? (
+                <button type="button" className="portal-inline-button ghost" onClick={() => setSelectedStaffId('')}>
+                  Back
+                </button>
+              ) : null}
+              <button type="button" className="portal-inline-button ghost" onClick={() => setOpen(false)}>
+                Close
+              </button>
+            </div>
           </div>
 
           {message ? <div className="portal-message-banner success">{message}</div> : null}
 
           {isAdmin ? (
             <div className="portal-chat-admin-shell">
-              <div className="portal-chat-staff-list">
-                <div className="portal-filter-bar compact">
-                  <input
-                    type="search"
-                    placeholder="Search staff"
-                    value={search}
-                    onChange={(event) => setSearch(event.target.value)}
-                  />
+              {!showAdminThreadOnMobile ? (
+                <div className="portal-chat-staff-list">
+                  {!isMobile ? (
+                    <div className="portal-filter-bar compact">
+                      <input
+                        type="search"
+                        placeholder="Search staff"
+                        value={search}
+                        onChange={(event) => setSearch(event.target.value)}
+                      />
+                    </div>
+                  ) : null}
+                  <div className="portal-thread-list">
+                    {visibleThreads.map((entry) => (
+                      <button
+                        key={entry.staffUser?._id}
+                        type="button"
+                        className={`portal-thread-button${selectedStaffId === entry.staffUser?._id ? ' is-selected' : ''}${isMobile ? ' mobile' : ''}`}
+                        onClick={() => setSelectedStaffId(entry.staffUser?._id || '')}
+                      >
+                        <div className="portal-thread-title-row">
+                          <strong>{entry.staffUser?.name || entry.staffUser?.username || 'Staff'}</strong>
+                          {entry.unreadStaffCount ? <span className="portal-badge status">{entry.unreadStaffCount}</span> : null}
+                        </div>
+                        {!isMobile ? (
+                          <div className="portal-thread-preview">
+                            {entry.lastMessage?.text || (entry.lastMessage?.attachments?.length ? `${entry.lastMessage.attachments.length} attachment(s)` : 'No messages yet')}
+                          </div>
+                        ) : null}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-                <div className="portal-thread-list">
-                  {visibleThreads.map((entry) => (
-                    <button
-                      key={entry.staffUser?._id}
-                      type="button"
-                      className={`portal-thread-button${selectedStaffId === entry.staffUser?._id ? ' is-selected' : ''}`}
-                      onClick={() => setSelectedStaffId(entry.staffUser?._id || '')}
-                    >
-                      <div className="portal-thread-title-row">
-                        <strong>{entry.staffUser?.name || entry.staffUser?.username || 'Staff'}</strong>
-                        {entry.unreadStaffCount ? <span className="portal-badge status">{entry.unreadStaffCount}</span> : null}
-                      </div>
-                      <div className="portal-thread-preview">
-                        {entry.lastMessage?.text || (entry.lastMessage?.attachments?.length ? `${entry.lastMessage.attachments.length} attachment(s)` : 'No messages yet')}
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              </div>
+              ) : null}
 
-              <div className="portal-chat-thread">
+              <div className={`portal-chat-thread${showAdminThreadOnMobile ? ' mobile-open' : ''}`}>
                 <div className="portal-conversation-window compact">
                   {loading ? (
                     <div className="portal-empty-state"><h3 className="portal-empty-title">Loading...</h3></div>
