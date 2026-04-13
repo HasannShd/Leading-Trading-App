@@ -1662,6 +1662,8 @@
   }
 
   .portal-topbar {
+    position: sticky;
+    top: 0;
     align-items: stretch;
     gap: 0.5rem;
     padding: calc(0.45rem + env(safe-area-inset-top, 0px)) 0.6rem 0.5rem;
@@ -1670,10 +1672,10 @@
   .portal-admin-topbar {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
-    width: calc(100% - 0.7rem);
-    margin-top: 0.35rem;
+    width: 100%;
+    margin-top: 0;
     padding: 0.62rem 0.72rem;
-    border-radius: 1.15rem;
+    border-radius: 0 0 1.15rem 1.15rem;
     box-shadow: 0 12px 28px rgba(12, 24, 42, 0.12);
   }
 
@@ -1713,7 +1715,7 @@
 
   .portal-content {
     width: calc(100% - 0.7rem);
-    padding-top: 0.45rem;
+    padding-top: 0.2rem;
     padding-bottom: 0.8rem;
   }
 
@@ -1739,12 +1741,15 @@
   }
 
   .portal-staff-nav-wrap {
-    top: 82px;
+    position: static;
+    top: auto;
+    backdrop-filter: none;
+    background: transparent;
+    border-bottom: none;
   }
 
   .portal-staff-nav-wrap:not(.open) {
-    border-bottom-color: transparent;
-    background: rgba(248, 245, 238, 0.78);
+    display: none;
   }
 
   .portal-staff-nav {
