@@ -30,7 +30,10 @@ const request = async ({ path, method = 'GET', role = 'sales_staff', body, isFor
   const data = contentType.includes('application/json') ? await response.json() : await response.text();
 
   if (!response.ok) {
-    throw new Error(data?.message || data?.err || 'Request failed.');
+    const error = new Error(data?.message || data?.err || 'Request failed.');
+    error.status = response.status;
+    error.data = data;
+    throw error;
   }
 
   return data;

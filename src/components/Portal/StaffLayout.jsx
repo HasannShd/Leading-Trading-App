@@ -11,6 +11,7 @@ const navItems = [
   { to: '/staff/orders', label: 'Orders' },
   { to: '/staff/clients', label: 'Clients' },
   { to: '/staff/visits', label: 'Visits' },
+  { to: '/staff/messages', label: 'Messages' },
   { to: '/staff/notifications', label: 'Notifications' },
 ];
 

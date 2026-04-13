@@ -22,6 +22,7 @@ const AdminTopNav = () => {
             { to: '/admin/orders', label: 'Staff Orders' },
             { to: '/admin/clients', label: 'Clients' },
             { to: '/admin/visits', label: 'Visits' },
+            { to: '/admin/messages', label: 'Messages' },
             { to: '/admin/logs', label: 'Logs' },
           ],
         },

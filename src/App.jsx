@@ -41,10 +41,12 @@ const StaffLogin = lazy(() => import('./components/Portal/StaffLogin'));
 const StaffDashboard = lazy(() => import('./components/Portal/StaffDashboard'));
 const StaffAttendance = lazy(() => import('./components/Portal/StaffAttendance'));
 const StaffNotificationsPage = lazy(() => import('./components/Portal/StaffNotificationsPage'));
+const StaffMessagesPage = lazy(() => import('./components/Portal/StaffMessagesPage'));
 const StaffResourcePage = lazy(() => import('./components/Portal/StaffResourcePage'));
 const StaffOrdersPage = lazy(() => import('./components/Portal/StaffOrdersPage'));
 const AdminStaffPage = lazy(() => import('./components/Portal/AdminStaffPage'));
 const AdminResourcePage = lazy(() => import('./components/Portal/AdminResourcePage'));
+const AdminMessagesPage = lazy(() => import('./components/Portal/AdminMessagesPage'));
 
 const AppShell = () => {
   const location = useLocation();
@@ -100,6 +102,7 @@ const AppShell = () => {
               <Route path="orders" element={<StaffOrdersPage />} />
               <Route path="clients" element={<StaffResourcePage config={staffModuleConfigs.clients} />} />
               <Route path="visits" element={<StaffResourcePage config={staffModuleConfigs.visits} />} />
+              <Route path="messages" element={<StaffMessagesPage />} />
               <Route path="notifications" element={<StaffNotificationsPage />} />
             </Route>
 
@@ -121,6 +124,7 @@ const AppShell = () => {
             <Route path="/admin/orders" element={<ProtectedAdminRoute element={<AdminResourcePage config={{ ...adminModuleConfigs.orders, exportKey: 'orders' }} />} />} />
             <Route path="/admin/clients" element={<ProtectedAdminRoute element={<AdminResourcePage config={adminModuleConfigs.clients} />} />} />
             <Route path="/admin/visits" element={<ProtectedAdminRoute element={<AdminResourcePage config={{ ...adminModuleConfigs.visits, exportKey: 'visits' }} />} />} />
+            <Route path="/admin/messages" element={<ProtectedAdminRoute element={<AdminMessagesPage />} />} />
             <Route path="/admin/notifications" element={<ProtectedAdminRoute element={<AdminResourcePage config={adminModuleConfigs.notifications} />} />} />
             <Route path="/admin/logs" element={<ProtectedAdminRoute element={<AdminResourcePage config={adminModuleConfigs.logs} />} />} />
           </Routes>
