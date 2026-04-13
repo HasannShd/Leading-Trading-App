@@ -287,24 +287,51 @@ const AdminImportProducts = () => {
   };
 
   return (
-    <div className="admin-import">
+    <div className="admin-import admin-surface">
       <AdminTopNav />
       <div className="admin-import-shell">
-        <div className="admin-page-header">
-          <div>
-            <p className="admin-import-kicker">Catalog Operations</p>
-            <h1>Import Products</h1>
-          </div>
-          {rows.length > 0 && (
-            <div className="admin-import-badge">
-              {rows.length.toLocaleString()} source rows loaded
+        <section className="admin-surface-hero">
+          <div className="admin-surface-eyebrow">Catalog Operations</div>
+          <div className="admin-surface-hero-row">
+            <div className="admin-surface-copy">
+              <h1>Import products with a cleaner mapping workflow.</h1>
+              <p>
+                Upload a spreadsheet, map the columns once, and review matched versus unmatched rows before importing into the visible catalog.
+              </p>
             </div>
-          )}
-        </div>
+            {rows.length > 0 && (
+              <div className="admin-surface-actions">
+                <div className="admin-import-badge">
+                  {rows.length.toLocaleString()} source rows loaded
+                </div>
+              </div>
+            )}
+          </div>
+          <div className="admin-surface-stats">
+            <div className="admin-surface-stat">
+              <strong>{parsedRows.length}</strong>
+              <span>Parsed rows</span>
+            </div>
+            <div className="admin-surface-stat">
+              <strong>{matchedRows.length}</strong>
+              <span>Matched rows</span>
+            </div>
+            <div className="admin-surface-stat">
+              <strong>{unmatchedRows.length}</strong>
+              <span>Unmatched rows</span>
+            </div>
+            <div className="admin-surface-stat">
+              <strong>{importReadyCount}</strong>
+              <span>Ready to import</span>
+            </div>
+          </div>
+        </section>
 
         {error && <div className="admin-error">{error}</div>}
         {status && <div className="admin-success">{status}</div>}
 
+        <div className="admin-surface-grid">
+          <div className="admin-side-stack">
         <div className="admin-import-panel">
           <div className="admin-import-upload">
             <label className="admin-import-label">Upload Excel or CSV</label>
@@ -466,6 +493,18 @@ const AdminImportProducts = () => {
               )}
             </div>
           )}
+        </div>
+          </div>
+          <aside className="admin-side-stack">
+            <div className="admin-note-card">
+              <h3>Import Checklist</h3>
+              <ul>
+                <li>Make sure the file has a reliable product name column and category column.</li>
+                <li>Check unmatched rows before importing so products do not disappear into the wrong category.</li>
+                <li>Use “create missing categories” only when the file structure is already clean.</li>
+              </ul>
+            </div>
+          </aside>
         </div>
       </div>
     </div>

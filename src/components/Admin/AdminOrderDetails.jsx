@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import './AdminCategories.css';
 import AdminTopNav from './AdminTopNav';
-import { authFetch, API_URL } from '../../services/authFetch';
+import { authFetch } from '../../services/authFetch';
 
 const AdminOrderDetails = () => {
   const { id } = useParams();
@@ -52,7 +52,7 @@ const AdminOrderDetails = () => {
 
   if (!order) {
     return (
-      <div className="admin-categories">
+      <div className="admin-categories admin-surface">
         <AdminTopNav />
         {error && <div className="admin-error">{error}</div>}
         <p className="loading">Loading...</p>
@@ -61,27 +61,79 @@ const AdminOrderDetails = () => {
   }
 
   return (
-    <div className="admin-categories">
+    <div className="admin-categories admin-surface">
       <AdminTopNav />
-      <div className="admin-page-header">
-        <h1>🧾 Order {order.invoiceNumber}</h1>
-      </div>
+      <section className="admin-surface-hero">
+        <div className="admin-surface-eyebrow">Order Review</div>
+        <div className="admin-surface-hero-row">
+          <div className="admin-surface-copy">
+            <h1>Review order {order.invoiceNumber} in one place.</h1>
+            <p>
+              Check the customer details, shipping address, line items, and invoice action without jumping between separate admin pages.
+            </p>
+          </div>
+          <div className="admin-surface-actions">
+            <button className="admin-btn-primary" onClick={downloadInvoice}>
+              Download Invoice
+            </button>
+          </div>
+        </div>
+        <div className="admin-surface-stats">
+          <div className="admin-surface-stat">
+            <strong>{order.status || '-'}</strong>
+            <span>Order status</span>
+          </div>
+          <div className="admin-surface-stat">
+            <strong>{Number(order.total || 0).toFixed(3)} BHD</strong>
+            <span>Total amount</span>
+          </div>
+          <div className="admin-surface-stat">
+            <strong>{order.items?.length || 0}</strong>
+            <span>Line items</span>
+          </div>
+          <div className="admin-surface-stat">
+            <strong>{order.paymentMethod || '-'}</strong>
+            <span>Payment method</span>
+          </div>
+        </div>
+      </section>
+
+      <section className="admin-profile-grid">
+        <div className="admin-profile-card">
+          <h3>Customer</h3>
+          <div className="admin-profile-list">
+            <div className="admin-profile-row"><span>Name</span><strong>{order.customer?.name || '-'}</strong></div>
+            <div className="admin-profile-row"><span>Email</span><strong>{order.customer?.email || '-'}</strong></div>
+            <div className="admin-profile-row"><span>Phone</span><strong>{order.customer?.phone || '-'}</strong></div>
+          </div>
+        </div>
+        <div className="admin-profile-card">
+          <h3>Shipping Address</h3>
+          <div className="admin-profile-list">
+            <div className="admin-profile-row"><span>Recipient</span><strong>{order.shippingAddress?.fullName || '-'}</strong></div>
+            <div className="admin-profile-row"><span>Address</span><strong>{[order.shippingAddress?.line1, order.shippingAddress?.line2].filter(Boolean).join(', ') || '-'}</strong></div>
+            <div className="admin-profile-row"><span>City / Country</span><strong>{[order.shippingAddress?.city, order.shippingAddress?.country].filter(Boolean).join(', ') || '-'}</strong></div>
+            <div className="admin-profile-row"><span>Postal Code</span><strong>{order.shippingAddress?.postalCode || '-'}</strong></div>
+          </div>
+        </div>
+        <div className="admin-profile-card">
+          <h3>Order Summary</h3>
+          <div className="admin-profile-list">
+            <div className="admin-profile-row"><span>Invoice</span><strong>{order.invoiceNumber || '-'}</strong></div>
+            <div className="admin-profile-row"><span>Status</span><strong>{order.status || '-'}</strong></div>
+            <div className="admin-profile-row"><span>Total</span><strong>{Number(order.total || 0).toFixed(3)} BHD</strong></div>
+            <div className="admin-profile-row"><span>Payment</span><strong>{order.paymentMethod || '-'}</strong></div>
+          </div>
+        </div>
+      </section>
 
       <div className="admin-categories-list">
-        <h2>Customer</h2>
-        <p>{order.customer?.name}</p>
-        <p>{order.customer?.email}</p>
-        <p>{order.customer?.phone}</p>
-
-        <h2>Shipping Address</h2>
-        <p>{order.shippingAddress?.fullName}</p>
-        <p>{order.shippingAddress?.line1}</p>
-        <p>{order.shippingAddress?.line2}</p>
-        <p>{order.shippingAddress?.city}</p>
-        <p>{order.shippingAddress?.country}</p>
-        <p>{order.shippingAddress?.postalCode}</p>
-
-        <h2>Items</h2>
+        <div className="admin-panel-heading">
+          <div>
+            <h2>Items</h2>
+            <p>Each line item shows the selected product, variant reference, quantity, and unit price.</p>
+          </div>
+        </div>
         <div className="categories-table-wrapper">
           <table className="admin-table">
             <thead>
@@ -95,20 +147,14 @@ const AdminOrderDetails = () => {
             <tbody>
               {order.items.map(item => (
                 <tr key={item._id}>
-                  <td className="col-name">{item.name}</td>
-                  <td>{item.size || item.sku || '-'}</td>
-                  <td>{item.quantity}</td>
-                  <td>{Number(item.price).toFixed(3)} BHD</td>
+                  <td className="col-name" data-label="Product">{item.name}</td>
+                  <td data-label="Variant">{item.size || item.sku || '-'}</td>
+                  <td data-label="Qty">{item.quantity}</td>
+                  <td data-label="Price">{Number(item.price).toFixed(3)} BHD</td>
                 </tr>
               ))}
             </tbody>
           </table>
-        </div>
-
-        <div className="admin-form-actions">
-          <button className="admin-btn-primary" onClick={downloadInvoice}>
-            Download Invoice
-          </button>
         </div>
       </div>
     </div>

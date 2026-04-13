@@ -55,6 +55,10 @@ const AdminOrders = () => {
     fetchOrders();
   }, [fetchOrders]);
 
+  const pendingCount = orders.filter((order) => ['pending', 'processing'].includes(order.status)).length;
+  const deliveredCount = orders.filter((order) => order.status === 'delivered').length;
+  const revenueTotal = orders.reduce((sum, order) => sum + Number(order.total || 0), 0);
+
   const formatDate = (value) => {
     if (!value) return '-';
     const date = new Date(value);
@@ -91,16 +95,51 @@ const AdminOrders = () => {
   };
 
   return (
-    <div className="admin-categories">
+    <div className="admin-categories admin-surface">
       <AdminTopNav />
-      <div className="admin-page-header">
-        <h1>📦 Orders</h1>
-      </div>
+      <section className="admin-surface-hero">
+        <div className="admin-surface-eyebrow">Website Orders</div>
+        <div className="admin-surface-hero-row">
+          <div className="admin-surface-copy">
+            <h1>Track customer orders without losing status context.</h1>
+            <p>
+              Review payment method, shipping progress, and total volume in one place, then move into the full order record only when needed.
+            </p>
+          </div>
+        </div>
+        <div className="admin-surface-stats">
+          <div className="admin-surface-stat">
+            <strong>{orders.length}</strong>
+            <span>Total orders</span>
+          </div>
+          <div className="admin-surface-stat">
+            <strong>{pendingCount}</strong>
+            <span>Need action</span>
+          </div>
+          <div className="admin-surface-stat">
+            <strong>{deliveredCount}</strong>
+            <span>Delivered</span>
+          </div>
+          <div className="admin-surface-stat">
+            <strong>{revenueTotal.toFixed(3)} BHD</strong>
+            <span>Total value</span>
+          </div>
+        </div>
+      </section>
 
       {error && <div className="admin-error">{error}</div>}
 
       <div className="admin-categories-list">
-        <h2>All Orders ({orders.length})</h2>
+        <div className="admin-panel-heading">
+          <div>
+            <h2>All Orders ({orders.length})</h2>
+            <p>Update fulfillment status quickly, then open the full order page for invoice and shipping details.</p>
+          </div>
+          <div className="admin-summary-pills">
+            <span className="admin-summary-pill"><strong>{pendingCount}</strong> pending or processing</span>
+            <span className="admin-summary-pill"><strong>{deliveredCount}</strong> delivered</span>
+          </div>
+        </div>
         {loading ? (
           <p className="loading">Loading...</p>
         ) : (
@@ -120,10 +159,10 @@ const AdminOrders = () => {
               <tbody>
                 {orders.map(order => (
                   <tr key={order._id}>
-                    <td className="col-name">{order.invoiceNumber}</td>
-                    <td>{order.customer?.name || '-'}</td>
-                    <td>{Number(order.total).toFixed(3)} BHD</td>
-                    <td>
+                    <td className="col-name" data-label="Invoice">{order.invoiceNumber}</td>
+                    <td data-label="Customer">{order.customer?.name || '-'}</td>
+                    <td data-label="Total">{Number(order.total).toFixed(3)} BHD</td>
+                    <td data-label="Status">
                       <select
                         value={order.status}
                         onChange={(e) => updateStatus(order._id, e.target.value)}
@@ -135,11 +174,11 @@ const AdminOrders = () => {
                         <option value="cancelled">Cancelled</option>
                       </select>
                     </td>
-                    <td>{order.paymentMethod}</td>
-                    <td className="col-date">
+                    <td data-label="Payment">{order.paymentMethod}</td>
+                    <td className="col-date" data-label="Created">
                       {formatDate(order.createdAt)}
                     </td>
-                    <td className="col-actions">
+                    <td className="col-actions" data-label="Actions">
                       <Link className="btn-edit" to={adminPaths.siteOrderDetails(order._id)}>
                         View
                       </Link>

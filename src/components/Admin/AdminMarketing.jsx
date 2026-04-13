@@ -52,18 +52,49 @@ const AdminMarketing = () => {
   };
 
   return (
-    <div className="admin-categories">
+    <div className="admin-categories admin-surface">
       <AdminTopNav />
-      <div className="admin-page-header">
-        <h1>📣 Marketing Emails</h1>
-        <button className="admin-add-btn" onClick={copyEmails}>Copy Emails</button>
-      </div>
+      <section className="admin-surface-hero">
+        <div className="admin-surface-eyebrow">Audience List</div>
+        <div className="admin-surface-hero-row">
+          <div className="admin-surface-copy">
+            <h1>Keep outreach contacts tidy and ready to export.</h1>
+            <p>Use this page to quickly copy the opted-in list for campaigns while checking the contact quality before sending anything out.</p>
+          </div>
+          <div className="admin-surface-actions">
+            <button className="admin-add-btn" onClick={copyEmails}>Copy Emails</button>
+          </div>
+        </div>
+        <div className="admin-surface-stats">
+          <div className="admin-surface-stat">
+            <strong>{list.length}</strong>
+            <span>Opted-in contacts</span>
+          </div>
+          <div className="admin-surface-stat">
+            <strong>{list.filter((entry) => entry.email).length}</strong>
+            <span>With email</span>
+          </div>
+          <div className="admin-surface-stat">
+            <strong>{list.filter((entry) => entry.phone).length}</strong>
+            <span>With phone</span>
+          </div>
+          <div className="admin-surface-stat">
+            <strong>{status ? 'Ready' : 'Live'}</strong>
+            <span>Clipboard tools</span>
+          </div>
+        </div>
+      </section>
 
       {error && <div className="admin-error">{error}</div>}
       {status && <div className="admin-success">{status}</div>}
 
       <div className="admin-categories-list">
-        <h2>Opted-in Users ({list.length})</h2>
+        <div className="admin-panel-heading">
+          <div>
+            <h2>Opted-in Users ({list.length})</h2>
+            <p>Review names, emails, and phone numbers before copying the list into your mailing workflow.</p>
+          </div>
+        </div>
         {loading ? (
           <p className="loading">Loading...</p>
         ) : (
@@ -79,9 +110,9 @@ const AdminMarketing = () => {
               <tbody>
                 {list.map(user => (
                   <tr key={user._id}>
-                    <td className="col-name">{user.name || '-'}</td>
-                    <td>{user.email}</td>
-                    <td>{user.phone || '-'}</td>
+                    <td className="col-name" data-label="Name">{user.name || '-'}</td>
+                    <td data-label="Email">{user.email}</td>
+                    <td data-label="Phone">{user.phone || '-'}</td>
                   </tr>
                 ))}
               </tbody>

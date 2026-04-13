@@ -491,31 +491,77 @@ const AdminProducts = () => {
     setError(null);
   };
 
+  const visibleProducts = products
+    .filter(product => !selectedCategoryId || product.categorySlug?._id === selectedCategoryId || product.categorySlug === selectedCategoryId)
+    .filter(product => {
+      const needle = searchTerm.trim().toLowerCase();
+      if (!needle) return true;
+      const haystack = [
+        product.name,
+        product.brand,
+        product.sku,
+      ].join(' ').toLowerCase();
+      return haystack.includes(needle);
+    });
+  const activeProducts = products.filter((product) => product.isActive !== false).length;
+  const featuredProducts = products.filter((product) => product.featured).length;
+  const withImages = products.filter((product) => hasProductImage(product)).length;
+
   return (
-    <div className="admin-products">
+    <div className="admin-products admin-surface">
       <AdminTopNav />
-      <div className="admin-page-header">
-        <h1>📦 Products Management</h1>
-        {!showForm && (
-          <button
-            className="admin-add-btn"
-            onClick={() => {
-              if (!selectedCategoryId) {
-                setError('Please choose a category before adding a product.');
-                return;
-              }
-              setFormData(prev => ({ ...prev, categorySlug: selectedCategoryId }));
-              setShowForm(true);
-            }}
-          >
-            + Add New Product
-          </button>
-        )}
-      </div>
+      <section className="admin-surface-hero">
+        <div className="admin-surface-eyebrow">Product Catalog</div>
+        <div className="admin-surface-hero-row">
+          <div className="admin-surface-copy">
+            <h1>Manage products with cleaner structure and faster editing.</h1>
+            <p>
+              Filter by category, keep media and descriptions complete, and update specifications or variants without losing track of the catalog quality.
+            </p>
+          </div>
+          <div className="admin-surface-actions">
+            {!showForm && (
+              <button
+                className="admin-add-btn"
+                onClick={() => {
+                  if (!selectedCategoryId) {
+                    setError('Please choose a category before adding a product.');
+                    return;
+                  }
+                  setFormData(prev => ({ ...prev, categorySlug: selectedCategoryId }));
+                  setShowForm(true);
+                }}
+              >
+                Add New Product
+              </button>
+            )}
+          </div>
+        </div>
+        <div className="admin-surface-stats">
+          <div className="admin-surface-stat">
+            <strong>{products.length}</strong>
+            <span>Total products</span>
+          </div>
+          <div className="admin-surface-stat">
+            <strong>{activeProducts}</strong>
+            <span>Active products</span>
+          </div>
+          <div className="admin-surface-stat">
+            <strong>{featuredProducts}</strong>
+            <span>Featured</span>
+          </div>
+          <div className="admin-surface-stat">
+            <strong>{withImages}</strong>
+            <span>With images</span>
+          </div>
+        </div>
+      </section>
 
       {error && <div className="admin-error">{error}</div>}
 
-      <div className="admin-category-section">
+      <div className="admin-surface-grid">
+        <div className="admin-side-stack">
+      <div className="admin-category-section admin-categories-list">
         <div className="admin-category-header">
           <h2>Categories</h2>
           <p>Pick a category folder to create products inside it.</p>
@@ -552,7 +598,12 @@ const AdminProducts = () => {
 
       {showForm && (
         <div className="admin-form-container">
-          <h2>{editingId ? 'Edit Product' : 'Add New Product'}</h2>
+          <div className="admin-panel-heading">
+            <div>
+              <h2>{editingId ? 'Edit Product' : 'Add New Product'}</h2>
+              <p>Keep names and pricing clear, then add specs and variants only where they help the buyer understand the product.</p>
+            </div>
+          </div>
           <form onSubmit={handleSubmit} className="admin-form">
             <div className="admin-form-group">
               <label>Product Name *</label>
@@ -865,8 +916,18 @@ const AdminProducts = () => {
         </div>
       )}
 
-      <div className="admin-products-list">
-        <h2>All Products ({products.filter(p => !selectedCategoryId || p.categorySlug?._id === selectedCategoryId || p.categorySlug === selectedCategoryId).length})</h2>
+      <div className="admin-products-list admin-categories-list">
+        <div className="admin-panel-heading">
+          <div>
+            <h2>All Products ({visibleProducts.length})</h2>
+            <p>Review the filtered catalog, fix missing media or descriptions, and open items for editing when details need cleanup.</p>
+          </div>
+          <div className="admin-summary-pills">
+            <span className="admin-summary-pill"><strong>{activeProducts}</strong> active</span>
+            <span className="admin-summary-pill"><strong>{featuredProducts}</strong> featured</span>
+            <span className="admin-summary-pill"><strong>{withImages}</strong> with images</span>
+          </div>
+        </div>
         <div className="admin-products-toolbar">
           <label htmlFor="admin-product-search">Search products</label>
           <div className="admin-search-control">
@@ -912,38 +973,26 @@ const AdminProducts = () => {
                 </tr>
               </thead>
               <tbody>
-                {products
-                  .filter(product => !selectedCategoryId || product.categorySlug?._id === selectedCategoryId || product.categorySlug === selectedCategoryId)
-                  .filter(product => {
-                    const needle = searchTerm.trim().toLowerCase();
-                    if (!needle) return true;
-                    const haystack = [
-                      product.name,
-                      product.brand,
-                      product.sku,
-                    ].join(' ').toLowerCase();
-                    return haystack.includes(needle);
-                  })
-                  .map(product => (
+                {visibleProducts.map(product => (
                   <tr key={product._id}>
-                    <td className="col-name">{product.name}</td>
-                    <td className="col-category">{product.categorySlug?.name || '-'}</td>
-                    <td className="col-brand">{product.brand || '-'}</td>
-                    <td className="col-sku">{product.sku || '-'}</td>
-                    <td className="col-image-flag">
+                    <td className="col-name" data-label="Name">{product.name}</td>
+                    <td className="col-category" data-label="Category">{product.categorySlug?.name || '-'}</td>
+                    <td className="col-brand" data-label="Brand">{product.brand || '-'}</td>
+                    <td className="col-sku" data-label="SKU">{product.sku || '-'}</td>
+                    <td className="col-image-flag" data-label="Image">
                       {hasProductImage(product) ? 'Yes' : 'No'}
                     </td>
-                    <td className="col-desc-flag">{product.description?.trim() ? 'Yes' : 'No'}</td>
-                    <td>{product.featured ? 'Yes' : 'No'}</td>
-                    <td className="col-status">
+                    <td className="col-desc-flag" data-label="Desc?">{product.description?.trim() ? 'Yes' : 'No'}</td>
+                    <td data-label="Featured">{product.featured ? 'Yes' : 'No'}</td>
+                    <td className="col-status" data-label="Status">
                       <span className={`status-badge ${product.isActive ? 'active' : 'inactive'}`}>
                         {product.isActive ? '✓ Active' : '○ Inactive'}
                       </span>
                     </td>
-                    <td className="col-date">
+                    <td className="col-date" data-label="Created">
                       {formatDate(product.createdAt)}
                     </td>
-                    <td className="col-actions">
+                    <td className="col-actions" data-label="Actions">
                       <button
                         className="btn-edit"
                         onClick={() => handleEdit(product)}
@@ -965,6 +1014,19 @@ const AdminProducts = () => {
             </table>
           </div>
         )}
+      </div>
+        </div>
+
+        <aside className="admin-side-stack">
+          <div className="admin-note-card">
+            <h3>Product Maintenance Tips</h3>
+            <ul>
+              <li>Pick a category first so new products land in the right place.</li>
+              <li>Fill media and description early because those gaps affect the public catalog immediately.</li>
+              <li>Use variants only when they describe a real buyer choice like type, size, or color.</li>
+            </ul>
+          </div>
+        </aside>
       </div>
     </div>
   );

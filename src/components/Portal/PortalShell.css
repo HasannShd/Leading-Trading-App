@@ -1668,6 +1668,8 @@
   }
 
   .portal-admin-topbar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
     width: calc(100% - 0.7rem);
     margin-top: 0.35rem;
     padding: 0.62rem 0.72rem;
@@ -1683,13 +1685,6 @@
   .portal-brand-kicker {
     font-size: 0.6rem;
     letter-spacing: 0.15em;
-  }
-
-  .portal-topbar-meta {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 0.4rem;
-    width: 100%;
   }
 
   .portal-mobile-menu-button {
@@ -1720,6 +1715,23 @@
     width: calc(100% - 0.7rem);
     padding-top: 0.45rem;
     padding-bottom: 0.8rem;
+  }
+
+  .portal-admin-app-shell {
+    grid-template-columns: 1fr;
+    gap: 0.7rem;
+  }
+
+  .portal-admin-main {
+    order: 1;
+  }
+
+  .portal-admin-sidebar {
+    order: 2;
+  }
+
+  .portal-admin-sidebar:not(.open) {
+    display: none;
   }
 
   .portal-admin-date {
@@ -1768,7 +1780,7 @@
     bottom: calc(0.55rem + env(safe-area-inset-bottom, 0px));
     z-index: 45;
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(5, minmax(0, 1fr));
     gap: 0.35rem;
     padding: 0.35rem;
     border-radius: 1rem;
@@ -1783,11 +1795,11 @@
     justify-items: center;
     align-content: center;
     gap: 0.12rem;
-    min-height: 2.2rem;
+    min-height: 2.35rem;
     padding: 0.35rem 0.12rem;
     border-radius: 0.7rem;
     text-decoration: none;
-    font-size: 0.62rem;
+    font-size: 0.58rem;
     font-weight: 700;
     line-height: 1;
     text-align: center;
@@ -1808,7 +1820,6 @@
 
   .portal-page,
   .portal-admin-layout,
-  .portal-admin-app-shell,
   .portal-admin-sidebar,
   .portal-grid,
   .portal-record-list,
@@ -1939,14 +1950,6 @@
     margin-top: 0;
   }
 
-  .portal-admin-sidebar:not(.open) .portal-admin-nav-group:not(:first-child) {
-    display: none;
-  }
-
-  .portal-admin-sidebar:not(.open) .portal-admin-nav-group:first-child .portal-admin-link:nth-of-type(n + 4) {
-    display: none;
-  }
-
   .portal-admin-nav-section {
     display: none;
   }
@@ -1980,6 +1983,7 @@
 
   .portal-admin-topbar-meta {
     grid-template-columns: minmax(0, 1fr) auto auto;
+    align-items: center;
   }
 
   .portal-admin-topbar .portal-inline-button.ghost {
@@ -1988,14 +1992,25 @@
     font-size: 0.72rem;
   }
 
+  .admin-user-chip {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
   .portal-admin-nav-title {
     font-size: 1rem;
   }
 
   .portal-admin-module-grid,
-  .portal-admin-snapshot-grid,
   .portal-admin-lower-grid {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
+    gap: 0.45rem;
+  }
+
+  .portal-admin-snapshot-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 0.45rem;
   }
 
@@ -2299,5 +2314,10 @@
   .portal-empty-state {
     padding: 0.7rem;
     border-radius: 0.8rem;
+  }
+
+  .portal-chat-widget {
+    right: 0.7rem;
+    bottom: calc(5.3rem + env(safe-area-inset-bottom, 0px));
   }
 }

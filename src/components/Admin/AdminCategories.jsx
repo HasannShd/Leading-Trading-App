@@ -189,24 +189,62 @@ const AdminCategories = () => {
   };
 
   const parentOptions = categories.filter((category) => category._id !== editingId);
+  const describedCount = categories.filter((category) => category.description?.trim()).length;
+  const topLevelCount = categories.filter((category) => !category.parent).length;
+  const childCount = categories.length - topLevelCount;
 
   return (
-    <div className="admin-categories">
+    <div className="admin-categories admin-surface">
       <AdminTopNav />
-      <div className="admin-page-header">
-        <h1>📁 Categories Management</h1>
-        {!showForm && (
-          <button className="admin-add-btn" onClick={() => setShowForm(true)}>
-            + Add New Category
-          </button>
-        )}
-      </div>
+      <section className="admin-surface-hero">
+        <div className="admin-surface-eyebrow">Catalog Structure</div>
+        <div className="admin-surface-hero-row">
+          <div className="admin-surface-copy">
+            <h1>Organize categories clearly for admins and buyers.</h1>
+            <p>
+              Keep the catalog easy to scan by maintaining clean parent-child structure, stable slugs, and short descriptions that explain each category properly.
+            </p>
+          </div>
+          <div className="admin-surface-actions">
+            {!showForm && (
+              <button className="admin-add-btn" onClick={() => setShowForm(true)}>
+                Add New Category
+              </button>
+            )}
+          </div>
+        </div>
+        <div className="admin-surface-stats">
+          <div className="admin-surface-stat">
+            <strong>{categories.length}</strong>
+            <span>Total categories</span>
+          </div>
+          <div className="admin-surface-stat">
+            <strong>{topLevelCount}</strong>
+            <span>Top-level groups</span>
+          </div>
+          <div className="admin-surface-stat">
+            <strong>{childCount}</strong>
+            <span>Sub-categories</span>
+          </div>
+          <div className="admin-surface-stat">
+            <strong>{describedCount}</strong>
+            <span>With descriptions</span>
+          </div>
+        </div>
+      </section>
 
       {error && <div className="admin-error">{error}</div>}
 
-      {showForm && (
+      <div className="admin-surface-grid">
+        <div className="admin-side-stack">
+          {showForm && (
         <div className="admin-form-container">
-          <h2>{editingId ? 'Edit Category' : 'Add New Category'}</h2>
+          <div className="admin-panel-heading">
+            <div>
+              <h2>{editingId ? 'Edit Category' : 'Add New Category'}</h2>
+              <p>Use short names, clean slugs, and simple hierarchy so the public catalog stays easy to navigate.</p>
+            </div>
+          </div>
           <form onSubmit={handleSubmit} className="admin-form">
             <div className="admin-form-group">
               <label>Category Name *</label>
@@ -311,7 +349,16 @@ const AdminCategories = () => {
       )}
 
       <div className="admin-categories-list">
-        <h2>All Categories ({categories.length})</h2>
+        <div className="admin-panel-heading">
+          <div>
+            <h2>All Categories ({categories.length})</h2>
+            <p>Review structure, fill missing descriptions, and fix naming before updating products.</p>
+          </div>
+          <div className="admin-summary-pills">
+            <span className="admin-summary-pill"><strong>{topLevelCount}</strong> main groups</span>
+            <span className="admin-summary-pill"><strong>{describedCount}</strong> described</span>
+          </div>
+        </div>
         
         {loading && !showForm && <p className="loading">Loading...</p>}
 
@@ -335,16 +382,16 @@ const AdminCategories = () => {
               <tbody>
                 {categories.map(cat => (
                   <tr key={cat._id}>
-                    <td className="col-name">{cat.name}</td>
-                    <td className="col-slug">{cat.parent?.name || '-'}</td>
-                    <td className="col-desc-flag">{cat.parent ? 'Sub' : 'Main'}</td>
-                    <td className="col-slug">{cat.slug || '-'}</td>
-                    <td className="col-desc">{cat.description || '-'}</td>
-                    <td className="col-desc-flag">{cat.description?.trim() ? 'Yes' : 'No'}</td>
-                    <td className="col-date">
+                    <td className="col-name" data-label="Name">{cat.name}</td>
+                    <td className="col-slug" data-label="Parent">{cat.parent?.name || '-'}</td>
+                    <td className="col-desc-flag" data-label="Level">{cat.parent ? 'Sub' : 'Main'}</td>
+                    <td className="col-slug" data-label="Slug">{cat.slug || '-'}</td>
+                    <td className="col-desc" data-label="Description">{cat.description || '-'}</td>
+                    <td className="col-desc-flag" data-label="Desc?">{cat.description?.trim() ? 'Yes' : 'No'}</td>
+                    <td className="col-date" data-label="Created">
                       {formatDate(cat.createdAt)}
                     </td>
-                    <td className="col-actions">
+                    <td className="col-actions" data-label="Actions">
                       <button
                         className="btn-edit"
                         onClick={() => handleEdit(cat)}
@@ -366,6 +413,19 @@ const AdminCategories = () => {
             </table>
           </div>
         )}
+      </div>
+        </div>
+
+        <aside className="admin-side-stack">
+          <div className="admin-note-card">
+            <h3>Category Quality Checklist</h3>
+            <ul>
+              <li>Keep parent groups broad and sub-categories specific.</li>
+              <li>Use readable slugs because product URLs and filters depend on them.</li>
+              <li>Add descriptions to the most important categories first.</li>
+            </ul>
+          </div>
+        </aside>
       </div>
     </div>
   );

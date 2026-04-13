@@ -152,20 +152,72 @@ const AdminAccount = () => {
   };
 
   return (
-    <div className="admin-categories">
+    <div className="admin-categories admin-surface">
       <AdminTopNav />
-      <div className="admin-page-header">
-        <h1>👤 Account</h1>
-      </div>
-      <div className="admin-categories-list">
-        <h2>Admin Profile</h2>
-        <p><strong>Username:</strong> {admin?.username}</p>
-        <p><strong>Role:</strong> {admin?.role}</p>
-        <p><strong>Email:</strong> {admin?.email || '-'}</p>
-      </div>
+      <section className="admin-surface-hero">
+        <div className="admin-surface-eyebrow">Security Center</div>
+        <div className="admin-surface-hero-row">
+          <div className="admin-surface-copy">
+            <h1>Keep admin access secure and easy to manage.</h1>
+            <p>
+              Review session security, MFA, trusted devices, and recovery access from one page. This area is designed for quick checks on laptop and clear actions on mobile.
+            </p>
+          </div>
+        </div>
+        <div className="admin-surface-stats">
+          <div className="admin-surface-stat">
+            <strong>{mfaStatus?.mfaEnabled ? 'Enabled' : 'Disabled'}</strong>
+            <span>MFA status</span>
+          </div>
+          <div className="admin-surface-stat">
+            <strong>{mfaStatus?.backupCodesRemaining ?? '-'}</strong>
+            <span>Backup codes left</span>
+          </div>
+          <div className="admin-surface-stat">
+            <strong>{mfaStatus?.trustedDevices?.length || 0}</strong>
+            <span>Trusted devices</span>
+          </div>
+          <div className="admin-surface-stat">
+            <strong>{mfaStatus?.adminSessionTtl || '8h'}</strong>
+            <span>Session window</span>
+          </div>
+        </div>
+      </section>
+
+      <section className="admin-profile-grid">
+        <div className="admin-profile-card">
+          <h3>Profile</h3>
+          <div className="admin-profile-list">
+            <div className="admin-profile-row"><span>Username</span><strong>{admin?.username || '-'}</strong></div>
+            <div className="admin-profile-row"><span>Role</span><strong>{admin?.role || '-'}</strong></div>
+            <div className="admin-profile-row"><span>Email</span><strong>{admin?.email || '-'}</strong></div>
+          </div>
+        </div>
+        <div className="admin-profile-card">
+          <h3>Security Snapshot</h3>
+          <div className="admin-profile-list">
+            <div className="admin-profile-row"><span>MFA</span><strong>{mfaStatus?.mfaEnabled ? 'Protected' : 'Needs setup'}</strong></div>
+            <div className="admin-profile-row"><span>Password updated</span><strong>{mfaStatus?.passwordChangedAt ? formatPortalDateTime(mfaStatus.passwordChangedAt) : 'Unknown'}</strong></div>
+            <div className="admin-profile-row"><span>Reset email</span><strong>{mfaStatus?.smtpConfigured ? 'Configured' : 'Missing SMTP'}</strong></div>
+          </div>
+        </div>
+        <div className="admin-profile-card">
+          <h3>Access Notes</h3>
+          <div className="admin-profile-list">
+            <div className="admin-profile-row"><span>Trusted devices</span><strong>{mfaStatus?.trustedDevices?.length || 0} active</strong></div>
+            <div className="admin-profile-row"><span>Session TTL</span><strong>{mfaStatus?.adminSessionTtl || '8h'}</strong></div>
+            <div className="admin-profile-row"><span>Recommended actions</span><strong>{mfaStatus?.recommendedActions?.length || 0}</strong></div>
+          </div>
+        </div>
+      </section>
 
       <div className="admin-categories-list">
-        <h2>MFA Security</h2>
+        <div className="admin-panel-heading">
+          <div>
+            <h2>MFA Security</h2>
+            <p>Use this section to enable MFA, manage backup codes, and remove trusted devices if account access changes.</p>
+          </div>
+        </div>
         {error && <div className="admin-error">{error}</div>}
         {message && <div className="admin-success">{message}</div>}
         <p><strong>Status:</strong> {mfaStatus?.mfaEnabled ? 'Enabled' : 'Disabled'}</p>
