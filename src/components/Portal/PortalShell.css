@@ -1397,10 +1397,10 @@
 
   .portal-staff-nav {
     display: none;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 0.4rem;
     overflow: visible;
-    padding: 0.4rem 0 0.55rem;
+    padding: 0.35rem 0 0.5rem;
   }
 
   .portal-staff-nav.open {
@@ -1408,16 +1408,17 @@
   }
 
   .portal-staff-link {
-    min-height: 2.45rem;
+    min-height: 2.15rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0.48rem 0.55rem;
+    padding: 0.38rem 0.45rem;
     text-align: center;
     white-space: normal;
-    line-height: 1.12;
-    font-size: 0.76rem;
-    border-radius: 0.85rem;
+    line-height: 1.05;
+    font-size: 0.68rem;
+    border-radius: 0.72rem;
+    font-weight: 700;
   }
 
   .portal-mobile-bottom-nav {
@@ -1441,13 +1442,13 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 2.45rem;
-    padding: 0.45rem 0.2rem;
-    border-radius: 0.8rem;
+    min-height: 2.2rem;
+    padding: 0.35rem 0.12rem;
+    border-radius: 0.7rem;
     text-decoration: none;
-    font-size: 0.7rem;
+    font-size: 0.62rem;
     font-weight: 700;
-    line-height: 1.05;
+    line-height: 1;
     text-align: center;
     color: var(--navy-700);
     background: rgba(255, 255, 255, 0.82);
@@ -1535,13 +1536,14 @@
   .portal-actions .portal-button,
   .portal-actions .portal-inline-button,
   .portal-quick-links .portal-quick-link {
-    min-height: 2.55rem;
-    padding: 0.55rem 0.72rem;
-    font-size: 0.8rem;
+    min-height: 2.2rem;
+    padding: 0.4rem 0.55rem;
+    font-size: 0.72rem;
+    line-height: 1.05;
   }
 
   .portal-quick-link {
-    border-radius: 0.85rem;
+    border-radius: 0.72rem;
   }
 
   .portal-filter-bar {
@@ -1595,9 +1597,10 @@
   }
 
   .portal-admin-link {
-    padding: 0.6rem 0.72rem;
-    border-radius: 0.8rem;
-    font-size: 0.78rem;
+    padding: 0.46rem 0.58rem;
+    border-radius: 0.72rem;
+    font-size: 0.7rem;
+    line-height: 1.05;
   }
 
   .portal-chat-widget {
