@@ -9,6 +9,7 @@ const linkGroups = [
     items: [
       { to: '/admin/dashboard', label: 'Overview', icon: '⌂' },
       { to: '/admin/staff', label: 'Staff Team', icon: '◉' },
+      { to: '/admin/messages', label: 'Messages', icon: '✉' },
       { to: '/admin/attendance', label: 'Attendance', icon: '◌' },
       { to: '/admin/reports', label: 'Reports', icon: '▤' },
       { to: '/admin/orders', label: 'Staff Orders', icon: '▣' },
@@ -34,8 +35,8 @@ const linkGroups = [
 const mobileQuickLinks = [
   { to: '/admin/dashboard', label: 'Home', icon: '⌂' },
   { to: '/admin/staff', label: 'Staff', icon: '◉' },
-  { to: '/admin/catalog/products', label: 'Catalog', icon: '◇' },
-  { to: '/admin/site-orders', label: 'Orders', icon: '▥' },
+  { to: '/admin/messages', label: 'Messages', icon: '✉' },
+  { to: '/admin/orders', label: 'Orders', icon: '▣' },
   { to: '/admin/account', label: 'Account', icon: '⚙' },
 ];
 

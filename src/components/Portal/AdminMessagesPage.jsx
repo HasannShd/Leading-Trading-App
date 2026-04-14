@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { portalApi } from '../../services/portalApi';
 import AdminTopNav from '../Admin/AdminTopNav';
 import { formatPortalDateTime } from '../../utils/portalDate';
@@ -20,6 +21,7 @@ const AdminMessagesPage = () => {
   const [threadLoading, setThreadLoading] = useState(false);
   const [sending, setSending] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const loadLists = useCallback(async () => {
     setLoading(true);
@@ -32,7 +34,10 @@ const AdminMessagesPage = () => {
       const nextThreads = threadsResponse.data.threads || [];
       setStaff(nextStaff);
       setThreads(nextThreads);
-      if (!selectedStaffId) {
+      const requestedStaffId = searchParams.get('staffId') || '';
+      if (requestedStaffId && nextStaff.some((entry) => entry._id === requestedStaffId)) {
+        setSelectedStaffId(requestedStaffId);
+      } else if (!selectedStaffId) {
         setSelectedStaffId(nextThreads[0]?.staffUser?._id || nextStaff[0]?._id || '');
       }
     } catch (err) {
@@ -40,9 +45,9 @@ const AdminMessagesPage = () => {
     } finally {
       setLoading(false);
     }
-  }, [selectedStaffId]);
+  }, [searchParams, selectedStaffId]);
 
-  const loadThread = async (staffId, markRead = true) => {
+  const loadThread = useCallback(async (staffId, markRead = true) => {
     if (!staffId) {
       setThread(null);
       return;
@@ -80,7 +85,7 @@ const AdminMessagesPage = () => {
     } finally {
       setThreadLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     loadLists();
@@ -88,9 +93,14 @@ const AdminMessagesPage = () => {
 
   useEffect(() => {
     if (selectedStaffId) {
+      setSearchParams((current) => {
+        const next = new URLSearchParams(current);
+        next.set('staffId', selectedStaffId);
+        return next;
+      }, { replace: true });
       loadThread(selectedStaffId);
     }
-  }, [selectedStaffId]);
+  }, [loadThread, selectedStaffId, setSearchParams]);
 
   const threadSummaryByStaff = useMemo(
     () => new Map(threads.map((entry) => [entry.staffUser?._id, entry])),

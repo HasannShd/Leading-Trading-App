@@ -173,6 +173,33 @@ const AdminAccount = () => {
     }
   };
 
+  const sendTestPushNotification = async () => {
+    const token = localStorage.getItem('adminToken');
+    if (!token) {
+      setError('Admin session expired. Please sign in again.');
+      return;
+    }
+    setPushBusy(true);
+    setError('');
+    setMessage('');
+    try {
+      const response = await authFetch('/auth/admin/push/test', {
+        method: 'POST',
+        scope: 'admin',
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        setError(data.err || 'Could not send a test notification.');
+        return;
+      }
+      setMessage(data.message || 'Test notification sent.');
+    } catch (err) {
+      setError(err.message || 'Could not send a test notification.');
+    } finally {
+      setPushBusy(false);
+    }
+  };
+
   const disablePushNotifications = async (endpoint) => {
     const token = localStorage.getItem('adminToken');
     if (!token) {
@@ -336,6 +363,14 @@ const AdminAccount = () => {
               disabled={pushBusy || !mfaStatus?.pushConfigured || !isPushSupported()}
             >
               {pushBusy ? 'Saving...' : 'Enable Push on This Device'}
+            </button>
+            <button
+              className="admin-btn-secondary"
+              type="button"
+              onClick={sendTestPushNotification}
+              disabled={pushBusy || !mfaStatus?.pushConfigured || !mfaStatus?.pushSubscriptions?.length}
+            >
+              Send Test Notification
             </button>
           </div>
           {!!mfaStatus?.pushSubscriptions?.length && (

@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { portalApi } from '../../services/portalApi';
 import { authFetch, API_URL } from '../../services/authFetch';
 import { formatPortalDate, formatPortalDateTime } from '../../utils/portalDate';
@@ -12,6 +13,8 @@ const AdminResourcePage = ({ config }) => {
   const [filters, setFilters] = useState({ user: '', status: '', date: '' });
   const [staffSummary, setStaffSummary] = useState(null);
   const [selectedRecordId, setSelectedRecordId] = useState('');
+  const [searchParams] = useSearchParams();
+  const focusedRecordId = searchParams.get('focus') || '';
 
   const buildQuery = useCallback(() => {
     const params = new URLSearchParams();
@@ -44,6 +47,13 @@ const AdminResourcePage = ({ config }) => {
   useEffect(() => {
     setSelectedRecordId('');
   }, [config.endpoint, filters.user, filters.status, filters.date]);
+
+  useEffect(() => {
+    if (!focusedRecordId) return;
+    if (records.some((record) => record._id === focusedRecordId)) {
+      setSelectedRecordId(focusedRecordId);
+    }
+  }, [focusedRecordId, records]);
 
   useEffect(() => {
     if (!filters.user) {
@@ -198,7 +208,10 @@ const AdminResourcePage = ({ config }) => {
   const pendingStatuses = new Set(['submitted', 'pending', 'under_review', 'reviewed', 'partial', 'overdue']);
   const pendingCount = records.filter((record) => pendingStatuses.has(record.status)).length;
   const assignedPeople = new Set(records.map((record) => record.user?._id).filter(Boolean)).size;
-  const selectedReport = records.find((record) => record._id === selectedRecordId) || null;
+  const selectedReport = useMemo(
+    () => records.find((record) => record._id === selectedRecordId) || null,
+    [records, selectedRecordId]
+  );
 
   return (
     <div className="portal-admin-page">

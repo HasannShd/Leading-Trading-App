@@ -41,6 +41,7 @@ const AdminOrderDetails = lazy(() => import('./components/Admin/AdminOrderDetail
 const AdminAccount = lazy(() => import('./components/Admin/AdminAccount'));
 const AdminPortalLayout = lazy(() => import('./components/Portal/AdminPortalLayout'));
 const AdminDashboardPage = lazy(() => import('./components/Portal/AdminDashboardPage'));
+const AdminMessagesPage = lazy(() => import('./components/Portal/AdminMessagesPage'));
 const StaffLayout = lazy(() => import('./components/Portal/StaffLayout'));
 const StaffLogin = lazy(() => import('./components/Portal/StaffLogin'));
 const StaffDashboard = lazy(() => import('./components/Portal/StaffDashboard'));
@@ -129,6 +130,7 @@ const AppShell = () => {
               <Route path="marketing" element={<AdminMarketing />} />
               <Route path="account" element={<AdminAccount />} />
               <Route path="staff" element={<AdminStaffPage />} />
+              <Route path="messages" element={<AdminMessagesPage />} />
               <Route path="attendance" element={<AdminResourcePage config={{ ...adminModuleConfigs.attendance, exportKey: 'attendance' }} />} />
               <Route path="reports" element={<AdminResourcePage config={{ ...adminModuleConfigs.reports, exportKey: 'reports' }} />} />
               <Route path="orders" element={<AdminResourcePage config={{ ...adminModuleConfigs.orders, exportKey: 'orders' }} />} />
