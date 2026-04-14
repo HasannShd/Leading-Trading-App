@@ -89,6 +89,16 @@ npm run dev
 npm run build
 ```
 
+## Admin Catalog Import
+
+- `/admin/catalog/import` accepts CSV uploads only
+- export Excel or Google Sheets files to `.csv` before importing
+- the download action still exports the current catalog from the backend
+
+## CI
+
+- GitHub Actions now runs lint and build checks on pushes to `main` and on pull requests
+
 ## Notes
 
 - Admin, staff, and customer sessions are stored separately.

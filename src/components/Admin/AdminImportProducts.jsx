@@ -1,9 +1,65 @@
 import { useDeferredValue, useEffect, useMemo, useState } from 'react';
-import * as XLSX from 'xlsx';
 import AdminTopNav from './AdminTopNav';
 import './AdminCategories.css';
 import './AdminImport.css';
 import { authFetch, API_URL } from '../../services/authFetch';
+
+const parseCsvText = (text) => {
+  const rows = [];
+  let currentCell = '';
+  let currentRow = [];
+  let inQuotes = false;
+
+  const pushCell = () => {
+    currentRow.push(currentCell.trim());
+    currentCell = '';
+  };
+
+  const pushRow = () => {
+    if (currentRow.some((cell) => cell)) {
+      rows.push(currentRow);
+    }
+    currentRow = [];
+  };
+
+  for (let index = 0; index < text.length; index += 1) {
+    const char = text[index];
+    const nextChar = text[index + 1];
+
+    if (char === '"') {
+      if (inQuotes && nextChar === '"') {
+        currentCell += '"';
+        index += 1;
+        continue;
+      }
+      inQuotes = !inQuotes;
+      continue;
+    }
+
+    if (!inQuotes && char === ',') {
+      pushCell();
+      continue;
+    }
+
+    if (!inQuotes && (char === '\n' || char === '\r')) {
+      pushCell();
+      pushRow();
+      if (char === '\r' && nextChar === '\n') {
+        index += 1;
+      }
+      continue;
+    }
+
+    currentCell += char;
+  }
+
+  if (currentCell || currentRow.length) {
+    pushCell();
+    pushRow();
+  }
+
+  return rows;
+};
 
 const AdminImportProducts = () => {
   const [categories, setCategories] = useState([]);
@@ -81,10 +137,13 @@ const AdminImportProducts = () => {
     setDescriptionCol('');
 
     try {
-      const buffer = await file.arrayBuffer();
-      const workbook = XLSX.read(buffer, { type: 'array' });
-      const sheet = workbook.Sheets[workbook.SheetNames[0]];
-      const raw = XLSX.utils.sheet_to_json(sheet, { header: 1, blankrows: false });
+      if (!file.name.toLowerCase().endsWith('.csv')) {
+        setError('Only CSV imports are supported now. Export the spreadsheet as .csv and upload it again.');
+        return;
+      }
+
+      const text = await file.text();
+      const raw = parseCsvText(text.replace(/^\uFEFF/, ''));
       const cleaned = raw
         .map(row => row.map(cell => (cell ?? '').toString().trim()))
         .filter(row => row.some(cell => cell));
@@ -118,7 +177,7 @@ const AdminImportProducts = () => {
       setPriceCol(findByLabel('price') || findByLabel('baseprice') || findByLabel('base price') || '');
       setDescriptionCol(findByLabel('description') || findByLabel('desc') || '');
     } catch (err) {
-      setError('Failed to read the file. Please upload a valid .xlsx or .csv.');
+      setError('Failed to read the file. Please upload a valid CSV file.');
     }
   };
 
@@ -334,10 +393,10 @@ const AdminImportProducts = () => {
           <div className="admin-side-stack">
         <div className="admin-import-panel">
           <div className="admin-import-upload">
-            <label className="admin-import-label">Upload Excel or CSV</label>
-            <input type="file" accept=".xlsx,.xls,.csv" onChange={handleFile} />
+            <label className="admin-import-label">Upload CSV</label>
+            <input type="file" accept=".csv,text/csv" onChange={handleFile} />
             <p className="admin-import-help">
-              The file must include a product name column and a category column.
+              Upload a CSV export that includes a product name column and a category column.
               Categories are matched to the existing categories in the website by name or slug.
             </p>
             <button
@@ -346,7 +405,7 @@ const AdminImportProducts = () => {
               onClick={handleDownload}
               disabled={downloading}
             >
-              {downloading ? 'Downloading...' : 'Download current list (CSV)'}
+              {downloading ? 'Downloading...' : 'Download current list'}
             </button>
           </div>
 
