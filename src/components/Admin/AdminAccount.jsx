@@ -4,6 +4,7 @@ import AdminTopNav from './AdminTopNav';
 import './AdminCategories.css';
 import { authFetch } from '../../services/authFetch';
 import { formatPortalDateTime } from '../../utils/portalDate';
+import { isPushSupported, registerAdminPush, unregisterAdminPush } from '../../utils/pushNotifications';
 
 const AdminAccount = () => {
   const { admin } = useContext(AdminContext);
@@ -13,6 +14,7 @@ const AdminAccount = () => {
   const [code, setCode] = useState('');
   const [refreshCode, setRefreshCode] = useState('');
   const [trustThisDevice, setTrustThisDevice] = useState(true);
+  const [pushBusy, setPushBusy] = useState(false);
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   const qrUrl = setupState?.otpAuthUrl
@@ -151,6 +153,46 @@ const AdminAccount = () => {
     }
   };
 
+  const enablePushNotifications = async () => {
+    const token = localStorage.getItem('adminToken');
+    if (!token) {
+      setError('Admin session expired. Please sign in again.');
+      return;
+    }
+    setPushBusy(true);
+    setError('');
+    setMessage('');
+    try {
+      await registerAdminPush(token);
+      setMessage('Browser push notifications enabled on this device.');
+      await loadMfaStatus();
+    } catch (err) {
+      setError(err.message || 'Could not enable push notifications.');
+    } finally {
+      setPushBusy(false);
+    }
+  };
+
+  const disablePushNotifications = async (endpoint) => {
+    const token = localStorage.getItem('adminToken');
+    if (!token) {
+      setError('Admin session expired. Please sign in again.');
+      return;
+    }
+    setPushBusy(true);
+    setError('');
+    setMessage('');
+    try {
+      await unregisterAdminPush(token, endpoint);
+      setMessage('Browser push notifications disabled for this device.');
+      await loadMfaStatus();
+    } catch (err) {
+      setError(err.message || 'Could not disable push notifications.');
+    } finally {
+      setPushBusy(false);
+    }
+  };
+
   return (
     <div className="admin-categories admin-surface">
       <AdminTopNav />
@@ -178,6 +220,10 @@ const AdminAccount = () => {
             <span>Trusted devices</span>
           </div>
           <div className="admin-surface-stat">
+            <strong>{mfaStatus?.pushSubscriptions?.length || 0}</strong>
+            <span>Push devices</span>
+          </div>
+          <div className="admin-surface-stat">
             <strong>{mfaStatus?.adminSessionTtl || '8h'}</strong>
             <span>Session window</span>
           </div>
@@ -199,12 +245,14 @@ const AdminAccount = () => {
             <div className="admin-profile-row"><span>MFA</span><strong>{mfaStatus?.mfaEnabled ? 'Protected' : 'Needs setup'}</strong></div>
             <div className="admin-profile-row"><span>Password updated</span><strong>{mfaStatus?.passwordChangedAt ? formatPortalDateTime(mfaStatus.passwordChangedAt) : 'Unknown'}</strong></div>
             <div className="admin-profile-row"><span>Reset email</span><strong>{mfaStatus?.smtpConfigured ? 'Configured' : 'Missing SMTP'}</strong></div>
+            <div className="admin-profile-row"><span>Push delivery</span><strong>{mfaStatus?.pushConfigured ? 'Configured' : 'Missing VAPID keys'}</strong></div>
           </div>
         </div>
         <div className="admin-profile-card">
           <h3>Access Notes</h3>
           <div className="admin-profile-list">
             <div className="admin-profile-row"><span>Trusted devices</span><strong>{mfaStatus?.trustedDevices?.length || 0} active</strong></div>
+            <div className="admin-profile-row"><span>Push devices</span><strong>{mfaStatus?.pushSubscriptions?.length || 0} active</strong></div>
             <div className="admin-profile-row"><span>Session TTL</span><strong>{mfaStatus?.adminSessionTtl || '8h'}</strong></div>
             <div className="admin-profile-row"><span>Recommended actions</span><strong>{mfaStatus?.recommendedActions?.length || 0}</strong></div>
           </div>
@@ -273,6 +321,47 @@ const AdminAccount = () => {
             </ul>
           </div>
         )}
+
+        <div className="admin-form-container">
+          <h2>Mobile and browser alerts</h2>
+          <p>
+            Enable browser push notifications on this device to receive instant staff order and message alerts from the website itself. This works best on Android and on iPhone when the site is added to the home screen.
+          </p>
+          <p><strong>Server push status:</strong> {mfaStatus?.pushConfigured ? 'Configured' : 'Not configured'}</p>
+          <p><strong>Browser support:</strong> {isPushSupported() ? 'Supported on this device' : 'Not supported in this browser'}</p>
+          <div className="admin-form-actions">
+            <button
+              className="admin-btn-primary"
+              onClick={enablePushNotifications}
+              disabled={pushBusy || !mfaStatus?.pushConfigured || !isPushSupported()}
+            >
+              {pushBusy ? 'Saving...' : 'Enable Push on This Device'}
+            </button>
+          </div>
+          {!!mfaStatus?.pushSubscriptions?.length && (
+            <div style={{ marginTop: '16px' }}>
+              <h3>Active push devices</h3>
+              <div className="admin-profile-list">
+                {mfaStatus.pushSubscriptions.map((entry) => (
+                  <div className="admin-profile-row" key={entry.endpoint}>
+                    <span>
+                      {entry.label || 'Browser device'}
+                      {entry.lastUsedAt ? ` • ${formatPortalDateTime(entry.lastUsedAt)}` : ''}
+                    </span>
+                    <button
+                      type="button"
+                      className="admin-btn-secondary"
+                      onClick={() => disablePushNotifications(entry.endpoint)}
+                      disabled={pushBusy}
+                    >
+                      Remove
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
 
         {!mfaStatus?.mfaEnabled && !setupState && (
           <button className="admin-add-btn" onClick={startSetup}>Start MFA Setup</button>

@@ -93,4 +93,5 @@ npm run build
 
 - Admin, staff, and customer sessions are stored separately.
 - Scroll-based cinematic effects automatically back off on reduced-motion, save-data, and small-screen sessions.
+- Admin push notifications can be enabled from the account page when the backend is configured with VAPID keys.
 - This repo currently has build verification but no dedicated frontend unit-test suite.
