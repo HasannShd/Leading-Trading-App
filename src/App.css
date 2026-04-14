@@ -102,6 +102,10 @@ select:focus-visible {
   text-align: center;
 }
 
+.app-boundary-panel {
+  max-width: 560px;
+}
+
 .app:not(.hero-page) .app-main {
   padding-top: 108px;
 }

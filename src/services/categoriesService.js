@@ -1,19 +1,48 @@
-import axios from 'axios';
 import { API_URL } from './authFetch';
 
+const requestJson = async (path, options = {}) => {
+  const response = await fetch(`${API_URL}${path}`, options);
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    const error = new Error(data?.message || data?.err || 'Request failed.');
+    error.status = response.status;
+    error.data = data;
+    throw error;
+  }
+  return data;
+};
+
 export const fetchCategories = () =>
-  axios.get(`${API_URL}/categories`);
+  requestJson('/categories');
 
 const authHeaders = () => ({
-  withCredentials: true,
   headers: { 'X-Auth-Scope': 'admin' },
 });
 
 export const createCategory = (data) =>
-  axios.post(`${API_URL}/categories`, data, authHeaders());
+  requestJson('/categories', {
+    method: 'POST',
+    ...authHeaders(),
+    headers: {
+      'Content-Type': 'application/json',
+      ...authHeaders().headers,
+    },
+    body: JSON.stringify(data),
+  });
 
 export const updateCategory = (id, data) =>
-  axios.put(`${API_URL}/categories/${id}`, data, authHeaders());
+  requestJson(`/categories/${id}`, {
+    method: 'PUT',
+    ...authHeaders(),
+    headers: {
+      'Content-Type': 'application/json',
+      ...authHeaders().headers,
+    },
+    body: JSON.stringify(data),
+  });
 
 export const deleteCategory = (id) =>
-  axios.delete(`${API_URL}/categories/${id}`, authHeaders());
+  requestJson(`/categories/${id}`, {
+    method: 'DELETE',
+    ...authHeaders(),
+  });

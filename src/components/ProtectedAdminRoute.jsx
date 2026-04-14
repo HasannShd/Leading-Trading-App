@@ -23,7 +23,7 @@ const ProtectedAdminRoute = ({ element }) => {
   }
 
   if (!admin) {
-    return <Navigate to={location.pathname.startsWith('/admin') ? '/admin/login' : '/.well-known/admin-access-sh123456'} replace />;
+    return <Navigate to="/admin/login" replace state={{ from: location }} />;
   }
 
   return element;

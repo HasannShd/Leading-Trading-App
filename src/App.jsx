@@ -3,8 +3,10 @@
 import './App.css';
 import { Suspense, lazy, useContext, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
+import AppErrorBoundary from './components/AppErrorBoundary.jsx';
 import Header from './components/Header/Header.jsx';
 import Footer from './components/Footer/Footer.jsx';
+import NotFoundPage from './components/NotFoundPage.jsx';
 import ProtectedAdminRoute from './components/ProtectedAdminRoute';
 import { AdminContext, AdminProvider } from './context/AdminContext';
 import { AuthProvider } from './context/AuthContext';
@@ -54,13 +56,12 @@ const AppShell = () => {
   const { admin } = useContext(AdminContext);
   const { staff } = useContext(StaffContext);
   const isHeroPage = location.pathname === '/';
-  const isAdminRoute = location.pathname.startsWith('/.well-known/') || location.pathname.startsWith('/admin');
+  const isAdminRoute = location.pathname.startsWith('/admin');
   const isPortalRoute = isAdminRoute || location.pathname.startsWith('/staff');
   const showAdminChat =
     admin &&
     isAdminRoute &&
-    !location.pathname.endsWith('/login') &&
-    !location.pathname.includes('admin-access-sh123456');
+    !location.pathname.endsWith('/login');
   const showStaffChat = staff && location.pathname.startsWith('/staff') && location.pathname !== '/staff/login';
 
   return (
@@ -87,16 +88,16 @@ const AppShell = () => {
             <Route path="/checkout" element={<ProtectedRoute element={<Checkout />} />} />
             <Route path="/orders" element={<ProtectedRoute element={<Orders />} />} />
 
-            {/* Admin Routes - Hidden */}
-            <Route path="/.well-known/admin-access-sh123456" element={<AdminLogin />} />
-            <Route path="/.well-known/admin-dashboard-sh123456" element={<ProtectedAdminRoute element={<AdminDashboard />} />} />
-            <Route path="/.well-known/admin-categories-sh123456" element={<ProtectedAdminRoute element={<AdminCategories />} />} />
-            <Route path="/.well-known/admin-products-sh123456" element={<ProtectedAdminRoute element={<AdminProducts />} />} />
-            <Route path="/.well-known/admin-import-sh123456" element={<ProtectedAdminRoute element={<AdminImportProducts />} />} />
-            <Route path="/.well-known/admin-orders-sh123456" element={<ProtectedAdminRoute element={<AdminOrders />} />} />
-            <Route path="/.well-known/admin-orders/:id" element={<ProtectedAdminRoute element={<AdminOrderDetails />} />} />
-            <Route path="/.well-known/admin-marketing-sh123456" element={<ProtectedAdminRoute element={<AdminMarketing />} />} />
-            <Route path="/.well-known/admin-account-sh123456" element={<ProtectedAdminRoute element={<AdminAccount />} />} />
+            {/* Legacy hidden admin paths now redirect into the visible admin portal */}
+            <Route path="/.well-known/admin-access-sh123456" element={<Navigate to="/admin/login" replace />} />
+            <Route path="/.well-known/admin-dashboard-sh123456" element={<Navigate to="/admin/dashboard" replace />} />
+            <Route path="/.well-known/admin-categories-sh123456" element={<Navigate to="/admin/catalog/categories" replace />} />
+            <Route path="/.well-known/admin-products-sh123456" element={<Navigate to="/admin/catalog/products" replace />} />
+            <Route path="/.well-known/admin-import-sh123456" element={<Navigate to="/admin/catalog/import" replace />} />
+            <Route path="/.well-known/admin-orders-sh123456" element={<Navigate to="/admin/site-orders" replace />} />
+            <Route path="/.well-known/admin-orders/:id" element={<Navigate to="/admin/site-orders" replace />} />
+            <Route path="/.well-known/admin-marketing-sh123456" element={<Navigate to="/admin/marketing" replace />} />
+            <Route path="/.well-known/admin-account-sh123456" element={<Navigate to="/admin/account" replace />} />
 
             {/* Staff portal */}
             <Route path="/staff/login" element={<StaffLogin />} />
@@ -136,6 +137,7 @@ const AppShell = () => {
               <Route path="notifications" element={<AdminResourcePage config={adminModuleConfigs.notifications} />} />
               <Route path="logs" element={<AdminResourcePage config={adminModuleConfigs.logs} />} />
             </Route>
+            <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </Suspense>
       </main>
@@ -159,14 +161,16 @@ const ScrollToTop = () => {
 export default function App() {
   return (
     <Router>
-      <ScrollToTop />
-      <AuthProvider>
-        <AdminProvider>
-          <StaffProvider>
-            <AppShell />
-          </StaffProvider>
-        </AdminProvider>
-      </AuthProvider>
+      <AppErrorBoundary>
+        <ScrollToTop />
+        <AuthProvider>
+          <AdminProvider>
+            <StaffProvider>
+              <AppShell />
+            </StaffProvider>
+          </AdminProvider>
+        </AuthProvider>
+      </AppErrorBoundary>
     </Router>
   );
 }

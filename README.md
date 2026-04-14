@@ -1,25 +1,30 @@
 # LTE Frontend
 
-## Overview
+React + Vite frontend for the LTE public website and internal portals.
 
-This frontend now serves three surfaces inside one React + Vite app:
+## What This App Contains
 
-- public LTE website
-- existing hidden admin product/category management pages
-- new internal staff and admin operations portal
+- Public marketing and catalog website
+- Customer auth, cart, checkout, and order history
+- Visible admin portal under `/admin`
+- Staff portal under `/staff`
+- Legacy hidden admin URLs now redirected into the visible admin portal for compatibility
 
-## Frontend Route Areas
+## Runtime Surfaces
 
-Public:
+Public website:
 
 - `/`
-- `/products`
+- `/categories`
 - `/categories/:slug`
+- `/shop`
 - `/product/:id`
 - `/about`
 - `/careers`
 - `/contact`
 - `/cart`
+- `/sign-in`
+- `/sign-up`
 - `/checkout`
 - `/orders`
 
@@ -28,57 +33,50 @@ Staff portal:
 - `/staff/login`
 - `/staff/dashboard`
 - `/staff/attendance`
-- `/staff/schedule`
 - `/staff/reports`
 - `/staff/orders`
-- `/staff/expenses`
 - `/staff/clients`
 - `/staff/visits`
-- `/staff/followups`
-- `/staff/quotations`
-- `/staff/collections`
-- `/staff/requests`
-- `/staff/demand`
-- `/staff/issues`
 - `/staff/notifications`
 
-Admin operations portal:
+Admin portal:
 
 - `/admin/login`
 - `/admin/dashboard`
 - `/admin/staff`
 - `/admin/attendance`
-- `/admin/schedules`
 - `/admin/reports`
 - `/admin/orders`
-- `/admin/expenses`
 - `/admin/clients`
 - `/admin/visits`
-- `/admin/followups`
-- `/admin/quotations`
-- `/admin/collections`
-- `/admin/requests`
-- `/admin/demand`
-- `/admin/issues`
+- `/admin/notifications`
 - `/admin/logs`
+- `/admin/catalog/categories`
+- `/admin/catalog/products`
+- `/admin/catalog/import`
+- `/admin/site-orders`
+- `/admin/marketing`
+- `/admin/account`
 
-Existing hidden admin routes remain in place for the current product/category website management system.
+## Key Frontend Structure
 
-## Environment Setup
+- [src/App.jsx](./src/App.jsx): route map and portal/public shell switching
+- [src/context](./src/context): user, admin, and staff auth/session contexts
+- [src/components/Homepage](./src/components/Homepage): public landing page
+- [src/components/Shop](./src/components/Shop): catalog browsing and product detail
+- [src/components/Admin](./src/components/Admin): catalog and website-management screens
+- [src/components/Portal](./src/components/Portal): staff/admin operations portal screens
+- [src/services](./src/services): API and auth wrappers
 
-Copy `.env.example` to `.env`:
+## Environment
 
-```bash
-cp .env.example .env
-```
-
-Set:
+Copy `.env.example` to `.env` and set:
 
 ```bash
 VITE_API_URL=http://localhost:5000/api
 ```
 
-## Run Locally
+## Run
 
 ```bash
 npm install
@@ -91,13 +89,8 @@ npm run dev
 npm run build
 ```
 
-## Mobile-First Notes
+## Notes
 
-The staff portal is designed mobile-first:
-
-- bottom navigation
-- touch-friendly cards and forms
-- fast single-column task flow
-- phone-friendly upload and date inputs
-
-The admin portal is responsive, but more desktop-oriented for oversight and filtering.
+- Admin, staff, and customer sessions are stored separately.
+- Scroll-based cinematic effects automatically back off on reduced-motion, save-data, and small-screen sessions.
+- This repo currently has build verification but no dedicated frontend unit-test suite.

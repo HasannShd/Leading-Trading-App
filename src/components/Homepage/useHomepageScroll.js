@@ -13,7 +13,9 @@ export const useHomepageScroll = (rootRef, enabled = true) => {
     if (!enabled || !root) return undefined;
 
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReducedMotion) return undefined;
+    const saveDataEnabled = Boolean(navigator.connection?.saveData);
+    const isSmallScreen = window.matchMedia('(max-width: 640px)').matches;
+    if (prefersReducedMotion || saveDataEnabled || isSmallScreen) return undefined;
 
     const ctx = gsap.context(() => {
       const hero = root.querySelector('.home-hero');

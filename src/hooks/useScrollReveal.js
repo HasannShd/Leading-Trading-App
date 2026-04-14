@@ -12,7 +12,8 @@ export const useScrollReveal = (rootRef, enabled = true) => {
     if (!enabled || !root) return undefined;
 
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReducedMotion || typeof IntersectionObserver === 'undefined') {
+    const saveDataEnabled = Boolean(navigator.connection?.saveData);
+    if (prefersReducedMotion || saveDataEnabled || typeof IntersectionObserver === 'undefined') {
       root.querySelectorAll('.animate-on-scroll').forEach((item) => item.classList.add('is-visible'));
       return undefined;
     }

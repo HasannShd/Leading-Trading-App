@@ -29,7 +29,7 @@ const AdminLogin = () => {
     const success = await login(identifier, password);
     setIsLoading(false);
     if (success === true) {
-      navigate(window.location.pathname.startsWith('/admin') ? '/admin/dashboard' : '/.well-known/admin-dashboard-sh123456');
+      navigate('/admin/dashboard');
     }
   };
 
@@ -39,7 +39,7 @@ const AdminLogin = () => {
     const success = await verifyMfa(mfaCode, trustDevice);
     setIsLoading(false);
     if (success) {
-      navigate(window.location.pathname.startsWith('/admin') ? '/admin/dashboard' : '/.well-known/admin-dashboard-sh123456');
+      navigate('/admin/dashboard');
     }
   };
 

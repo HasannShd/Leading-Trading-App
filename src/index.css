@@ -2,6 +2,10 @@
 
 * { box-sizing: border-box; }
 
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
 *::selection {
   background: rgba(168, 119, 68, 0.22);
   color: #08111d;
@@ -31,11 +35,24 @@ html, body, #root {
 
 html {
   scroll-padding-top: 118px;
+  scrollbar-gutter: stable;
 }
 
 a { color: inherit; text-decoration: none; }
 
-img { max-width: 100%; display: block; }
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+button,
+a,
+input,
+select,
+textarea {
+  touch-action: manipulation;
+}
 
 .animate-on-scroll {
   opacity: 0;
@@ -45,6 +62,7 @@ img { max-width: 100%; display: block; }
     transform 0.6s ease-out;
   transition-delay: calc(var(--reveal-index, 0) * var(--reveal-step, 140ms));
   will-change: opacity, transform;
+  backface-visibility: hidden;
 }
 
 .animate-on-scroll.is-visible {
@@ -67,5 +85,14 @@ img { max-width: 100%; display: block; }
   .animate-on-scroll {
     opacity: 1 !important;
     transform: none !important;
+  }
+}
+
+@media (max-width: 640px) {
+  input,
+  select,
+  textarea,
+  button {
+    font-size: 16px;
   }
 }

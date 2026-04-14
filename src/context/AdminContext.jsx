@@ -12,10 +12,9 @@ export const AdminProvider = ({ children }) => {
   const [mfaChallenge, setMfaChallenge] = useState(null);
   const location = useLocation();
   const navigate = useNavigate();
-  const isVisibleAdminRoute = location.pathname.startsWith('/admin');
-  const adminLoginPath = isVisibleAdminRoute ? '/admin/login' : '/.well-known/admin-access-sh123456';
-  const adminAccountPath = isVisibleAdminRoute ? '/admin/account' : '/.well-known/admin-account-sh123456';
-  const isAdminRoute = location.pathname.startsWith('/.well-known/') || isVisibleAdminRoute;
+  const adminLoginPath = '/admin/login';
+  const adminAccountPath = '/admin/account';
+  const isAdminRoute = location.pathname.startsWith('/admin');
 
   const applyAdminSession = (token, user) => {
     if (token) {
@@ -40,7 +39,7 @@ export const AdminProvider = ({ children }) => {
   useEffect(() => {
     if (
       typeof window !== 'undefined' &&
-      (location.pathname.includes('.well-known/admin') || location.pathname.startsWith('/admin'))
+      location.pathname.startsWith('/admin')
     ) {
       if (!admin && !loading && location.pathname !== adminLoginPath) {
         navigate(adminLoginPath, { replace: true });
