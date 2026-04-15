@@ -115,6 +115,49 @@
   line-height: 1.5;
 }
 
+/* ── Skeleton hero while loading ────────────── */
+.category-details-hero--skeleton {
+  pointer-events: none;
+}
+
+.category-details-hero-skeleton-left,
+.category-details-hero-skeleton-right {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.category-details-hero-skeleton-right {
+  justify-content: flex-start;
+  gap: 16px;
+}
+
+.cat-skel {
+  border-radius: 10px;
+}
+
+.cat-skel--eyebrow { height: 10px; width: 100px; border-radius: 999px; }
+.cat-skel--title   { height: 28px; width: 100%; }
+.cat-skel--short   { width: 72%; }
+.cat-skel--body    { height: 14px; width: 100%; }
+.cat-skel--shorter { width: 82%; }
+.cat-skel--stat    { height: 88px; border-radius: 18px; }
+.cat-skel--btn     { height: 48px; border-radius: 999px; width: 80%; }
+
+/* reuse shimmer from SkeletonGrid */
+.skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(248, 243, 235, 0.1)  0%,
+    rgba(248, 243, 235, 0.22) 45%,
+    rgba(198, 145, 89, 0.14)  55%,
+    rgba(248, 243, 235, 0.1)  100%
+  );
+  background-size: 300% 100%;
+  animation: shimmer 1.8s ease-in-out infinite;
+}
+
+/* ── Products section ───────────────────────── */
 .category-details-products-title {
   color: var(--navy-900);
   margin: 0;

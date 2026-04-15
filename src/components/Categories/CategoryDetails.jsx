@@ -2,6 +2,7 @@ import { useDeferredValue, useEffect, useMemo, useRef, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import Input from '../Common/Input';
 import StatePanel from '../Common/StatePanel';
+import SkeletonGrid from '../Common/SkeletonGrid';
 import { normalizeImageSrc } from '../../utils/normalizeImageSrc';
 import { useScrollReveal } from '../../hooks/useScrollReveal';
 import { useCountUp } from '../../hooks/useCountUp';
@@ -120,12 +121,23 @@ const CategoryDetails = () => {
     <main>
       <section className="category-details-shell" ref={rootRef}>
         {loading ? (
-          <StatePanel
-            eyebrow="Loading"
-            title="Preparing the category catalog"
-            description="We’re loading the category details and the related products."
-            variant="loading"
-          />
+          <>
+            <div className="category-details-hero category-details-hero--skeleton">
+              <div className="category-details-hero-skeleton-left">
+                <div className="cat-skel cat-skel--eyebrow skeleton-shimmer" />
+                <div className="cat-skel cat-skel--title skeleton-shimmer" />
+                <div className="cat-skel cat-skel--title cat-skel--short skeleton-shimmer" />
+                <div className="cat-skel cat-skel--body skeleton-shimmer" />
+                <div className="cat-skel cat-skel--body cat-skel--shorter skeleton-shimmer" />
+              </div>
+              <div className="category-details-hero-skeleton-right">
+                <div className="cat-skel cat-skel--stat skeleton-shimmer" />
+                <div className="cat-skel cat-skel--stat skeleton-shimmer" />
+                <div className="cat-skel cat-skel--btn skeleton-shimmer" />
+              </div>
+            </div>
+            <SkeletonGrid count={9} />
+          </>
         ) : (
           <>
             <section className="category-details-hero">
@@ -220,10 +232,11 @@ const CategoryDetails = () => {
                         {productImage && !imageFailed ? (
                           <div className="category-details-product-media">
                             <img
-                              src={normalizeImageSrc(productImage)}
+                              src={normalizeImageSrc(productImage, { width: 480 })}
                               alt={p.name}
                               className="category-details-product-img"
                               loading="lazy"
+                              decoding="async"
                               onError={() => {
                                 setBrokenImages((prev) => ({ ...prev, [p._id]: true }));
                               }}

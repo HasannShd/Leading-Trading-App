@@ -607,17 +607,28 @@
 }
 
 .sector-shot__media {
-  min-height: 420px;
+  /* aspect-ratio keeps the area proportional regardless of copy height */
+  aspect-ratio: 16 / 9;
   border-radius: 26px;
   overflow: hidden;
-  background: rgba(248, 243, 235, 0.08);
+  background: rgba(12, 24, 40, 0.6);
   border: 1px solid rgba(248, 243, 235, 0.08);
+  flex-shrink: 0;
 }
 
 .sector-shot__media img {
   width: 100%;
   height: 100%;
+  display: block;
   object-fit: cover;
+  object-position: center;
+  transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+@media (pointer: fine) {
+  .sector-shot__frame:hover .sector-shot__media img {
+    transform: scale(1.03);
+  }
 }
 
 .trust-stage__copy {
@@ -1122,53 +1133,106 @@
   font-weight: 800;
 }
 
+/* ── Why LTE / Credibility section ─────────────────────── */
+
 .credibility-stage__grid {
   margin-top: 24px;
 }
 
+/* Full dark cinematic panel */
 .credibility-stage__panel {
   display: grid;
-  grid-template-columns: minmax(0, 1.02fr) minmax(340px, 0.98fr);
-  gap: 24px;
-  padding: 34px;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 0.88fr);
+  gap: 0;
+  padding: 0;
   border-radius: 34px;
   background:
-    radial-gradient(circle at top right, rgba(198, 145, 89, 0.14), transparent 28%),
-    linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(245, 241, 234, 0.94));
-  border: 1px solid rgba(19, 48, 78, 0.08);
-  box-shadow: 0 26px 52px rgba(7, 17, 31, 0.08);
-  align-items: start;
+    radial-gradient(circle at 8% 80%, rgba(198, 145, 89, 0.18), transparent 32%),
+    radial-gradient(circle at 92% 10%, rgba(29, 70, 111, 0.22), transparent 30%),
+    linear-gradient(135deg, #08121e 0%, #0e2237 52%, #152d46 100%);
+  border: 1px solid rgba(248, 243, 235, 0.08);
+  box-shadow: 0 32px 64px rgba(7, 17, 31, 0.2);
+  align-items: stretch;
+  overflow: hidden;
+  color: #f8f3eb;
 }
 
+/* Left: statement */
 .credibility-stage__statement {
-  max-width: 760px;
+  padding: 48px 44px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  justify-content: center;
+  border-right: 1px solid rgba(248, 243, 235, 0.07);
 }
 
 .credibility-stage__statement .home-eyebrow {
-  color: #7b5229;
+  color: rgba(236, 214, 191, 0.86);
 }
 
+.credibility-stage__statement .home-eyebrow::before {
+  background: linear-gradient(90deg, rgba(198, 145, 89, 0.9), rgba(198, 145, 89, 0));
+}
+
+/* Override the shared h2 rule for dark bg */
 .credibility-stage__statement h2 {
-  max-width: 11ch;
+  margin: 18px 0 0;
+  font-size: clamp(1.9rem, 2.8vw, 3.2rem);
+  line-height: 1.06;
+  letter-spacing: -0.045em;
+  color: #f8f3eb;
+  max-width: 18ch;
 }
 
+.credibility-stage__statement p {
+  margin: 18px 0 0;
+  color: rgba(231, 218, 201, 0.74);
+  line-height: 1.82;
+  max-width: 46ch;
+}
+
+/* Right: dark glass cards */
 .credibility-stage__support {
   display: grid;
-  gap: 16px;
+  gap: 0;
+  align-content: stretch;
 }
 
 .credibility-support-card {
-  padding: 24px;
-  border-radius: 26px;
-  background: linear-gradient(180deg, rgba(11, 24, 40, 0.98), rgba(18, 38, 61, 0.96));
-  border: 1px solid rgba(248, 243, 235, 0.08);
-  box-shadow: 0 22px 44px rgba(7, 17, 31, 0.12);
+  position: relative;
+  padding: 36px 32px 32px 36px;
+  overflow: hidden;
+  transition: background 0.26s ease;
+}
+
+/* Divider between cards */
+.credibility-support-card + .credibility-support-card {
+  border-top: 1px solid rgba(248, 243, 235, 0.07);
+}
+
+/* Gold left accent bar */
+.credibility-support-card::before {
+  content: '';
+  position: absolute;
+  inset: 24px auto 24px 0;
+  width: 3px;
+  border-radius: 0 2px 2px 0;
+  background: linear-gradient(180deg, rgba(211, 157, 99, 0.9), rgba(168, 119, 68, 0.15));
+}
+
+@media (pointer: fine) {
+  .credibility-support-card:hover {
+    background: rgba(248, 243, 235, 0.04);
+  }
 }
 
 .credibility-support-card span {
   display: inline-flex;
-  color: rgba(236, 214, 191, 0.84);
-  font-size: 0.76rem;
+  align-items: center;
+  gap: 8px;
+  color: rgba(211, 157, 99, 0.9);
+  font-size: 0.75rem;
   font-weight: 800;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -1176,10 +1240,11 @@
 
 .credibility-support-card p {
   margin: 14px 0 0;
-  color: rgba(244, 237, 229, 0.82);
-  line-height: 1.8;
+  color: rgba(231, 218, 201, 0.76);
+  line-height: 1.82;
 }
 
+/* Stats row below the panel */
 .credibility-stage__stats {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -1187,14 +1252,14 @@
 }
 
 .credibility-stat {
-  min-height: 220px;
+  min-height: 200px;
   padding: 28px 24px;
 }
 
 .credibility-stat strong {
   display: block;
   margin-bottom: 14px;
-  font-size: clamp(1.9rem, 3vw, 2.9rem);
+  font-size: clamp(1.6rem, 2.6vw, 2.6rem);
   line-height: 1.02;
   letter-spacing: -0.05em;
   color: var(--navy-900);
@@ -1350,7 +1415,6 @@
   }
 
   .sector-shot__frame,
-  .credibility-stage__panel,
   .final-cta__panel,
   .pillar-card,
   .featured-band,
@@ -1358,6 +1422,17 @@
   .featured-spotlight,
   .featured-compact {
     padding: 24px;
+  }
+
+  /* Credibility panel — stacked: swap border direction, reduce padding */
+  .credibility-stage__statement {
+    padding: 32px 28px;
+    border-right: none;
+    border-bottom: 1px solid rgba(248, 243, 235, 0.07);
+  }
+
+  .credibility-support-card {
+    padding: 28px 24px 24px 28px;
   }
 
   .home-btn {

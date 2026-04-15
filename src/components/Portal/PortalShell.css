@@ -1280,6 +1280,22 @@
   border: 1px solid rgba(13, 26, 43, 0.08);
   background: linear-gradient(180deg, rgba(243, 247, 252, 0.96), rgba(255, 255, 255, 0.98));
   box-shadow: 0 14px 32px rgba(12, 24, 42, 0.06);
+  transition: transform 0.22s cubic-bezier(0.23, 1, 0.32, 1),
+              box-shadow 0.22s ease,
+              border-color 0.22s ease;
+}
+
+@media (pointer: fine) {
+  .portal-admin-module-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 22px 44px rgba(12, 24, 42, 0.1);
+    border-color: rgba(183, 132, 66, 0.2);
+  }
+
+  .portal-admin-module-card:hover .portal-admin-module-icon {
+    background: rgba(183, 132, 66, 0.12);
+    color: #875625;
+  }
 }
 
 .portal-admin-module-card.soft {
@@ -1297,6 +1313,7 @@
   color: var(--navy-800);
   font-size: 1.05rem;
   font-weight: 800;
+  transition: background 0.22s ease, color 0.22s ease;
 }
 
 .portal-admin-module-copy {
