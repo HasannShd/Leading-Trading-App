@@ -7,6 +7,7 @@ import AppErrorBoundary from './components/AppErrorBoundary.jsx';
 import Header from './components/Header/Header.jsx';
 import Footer from './components/Footer/Footer.jsx';
 import PageTransition from './components/Common/PageTransition.jsx';
+import BackToTop from './components/Common/BackToTop.jsx';
 import NotFoundPage from './components/NotFoundPage.jsx';
 import ProtectedAdminRoute from './components/ProtectedAdminRoute';
 import { AdminContext, AdminProvider } from './context/AdminContext';
@@ -32,7 +33,6 @@ const Orders = lazy(() => import('./components/Orders/Orders'));
 const SignIn = lazy(() => import('./components/Auth/SignIn'));
 const SignUp = lazy(() => import('./components/Auth/SignUp'));
 const AdminLogin = lazy(() => import('./components/Admin/AdminLogin'));
-const AdminDashboard = lazy(() => import('./components/Admin/AdminDashboard'));
 const AdminCategories = lazy(() => import('./components/Admin/AdminCategories'));
 const AdminProducts = lazy(() => import('./components/Admin/AdminProducts'));
 const AdminImportProducts = lazy(() => import('./components/Admin/AdminImportProducts'));
@@ -71,7 +71,18 @@ const AppShell = () => {
       <PageTransition />
       {!isPortalRoute && <Header />}
       <main className="app-main">
-        <Suspense fallback={<div className="app-route-shell"><div className="app-route-shell-card">Loading workspace...</div></div>}>
+        <Suspense fallback={
+          <div className="app-route-shell">
+            <div className="app-route-skeleton">
+              <div className="app-route-skeleton-eyebrow" />
+              <div className="app-route-skeleton-title" />
+              <div className="app-route-skeleton-title short" />
+              <div className="app-route-skeleton-body" />
+              <div className="app-route-skeleton-body shorter" />
+              <div className="app-route-skeleton-body" />
+            </div>
+          </div>
+        }>
           <Routes>
             {/* Public Routes */}
             <Route path="/" element={<HomePage />} />
@@ -148,6 +159,7 @@ const AppShell = () => {
       {showAdminChat ? <PortalChatWidget role="admin" /> : null}
       {showStaffChat ? <PortalChatWidget role="sales_staff" /> : null}
       {!isPortalRoute && <Footer />}
+      {!isPortalRoute && <BackToTop />}
     </div>
   );
 };

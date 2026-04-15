@@ -1,0 +1,64 @@
+.back-to-top {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 200;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1px solid rgba(168, 119, 68, 0.3);
+  background: linear-gradient(135deg, rgba(211, 157, 99, 0.92) 0%, rgba(135, 86, 37, 0.94) 100%);
+  color: #fffdf8;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  box-shadow: 0 12px 28px rgba(135, 86, 37, 0.28), 0 2px 8px rgba(7, 17, 31, 0.12);
+  /* Hidden by default — opacity + translateY */
+  opacity: 0;
+  transform: translateY(16px) scale(0.88);
+  pointer-events: none;
+  transition: opacity 0.3s cubic-bezier(0.23, 1, 0.32, 1),
+              transform 0.3s cubic-bezier(0.23, 1, 0.32, 1),
+              box-shadow 0.22s ease,
+              background 0.22s ease;
+  backdrop-filter: blur(12px);
+}
+
+.back-to-top--visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+@media (pointer: fine) {
+  .back-to-top:hover {
+    background: linear-gradient(135deg, #dba76a 0%, #905f2e 100%);
+    box-shadow: 0 18px 36px rgba(135, 86, 37, 0.36), 0 2px 8px rgba(7, 17, 31, 0.16);
+    transform: translateY(-3px) scale(1);
+  }
+}
+
+.back-to-top:active {
+  transform: scale(0.94);
+}
+
+/* Keep above portal bottom nav on mobile */
+@media (max-width: 700px) {
+  .back-to-top {
+    bottom: 20px;
+    right: 16px;
+    width: 44px;
+    height: 44px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .back-to-top {
+    transition: opacity 0.2s ease;
+    transform: none;
+  }
+
+  .back-to-top--visible {
+    transform: none;
+  }
+}

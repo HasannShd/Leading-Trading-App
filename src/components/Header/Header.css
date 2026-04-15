@@ -119,6 +119,7 @@
   border: 1px solid transparent;
   transition: color 0.2s ease, background 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
   white-space: nowrap;
+  position: relative;
 }
 
 .header.scrolled .nav a,
@@ -138,6 +139,19 @@
   transform: translateY(-1px);
 }
 
+/* Gold dot below active link */
+.nav a.active::after {
+  content: '';
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(211, 157, 99, 0.9);
+}
+
 .header.scrolled .nav a:hover,
 .header.scrolled .nav .nav-dropdown-toggle:hover,
 .header.scrolled .nav a.active,
@@ -147,6 +161,12 @@
   background: rgba(168, 119, 68, 0.12);
   border-color: rgba(168, 119, 68, 0.14);
   color: var(--navy-900);
+}
+
+/* Gold dot on scrolled/light background */
+.header.scrolled .nav a.active::after,
+.app:not(.hero-page) .nav a.active::after {
+  background: #a87744;
 }
 
 .nav-dropdown-wrapper {

@@ -4,7 +4,14 @@ import Input from '../Common/Input';
 import StatePanel from '../Common/StatePanel';
 import { normalizeImageSrc } from '../../utils/normalizeImageSrc';
 import { useScrollReveal } from '../../hooks/useScrollReveal';
+import { useCountUp } from '../../hooks/useCountUp';
 import './CategoryDetails.css';
+
+// Inline animated stat number
+const StatCount = ({ value }) => {
+  const ref = useCountUp(value, { duration: 1.3 });
+  return <strong ref={ref}>{value}</strong>;
+};
 
 const legacyCategorySlugMap = {
   'lab-devices-consumables': 'laboratory',
@@ -127,7 +134,7 @@ const CategoryDetails = () => {
                 {category.parent ? (
                   <div className="category-details-breadcrumb animate-on-scroll">
                     <Link to={`/categories/${category.parent.slug || category.parent._id}`}>{category.parent.name}</Link>
-                    <span>/</span>
+                    <span className="category-details-breadcrumb-sep">›</span>
                     <strong>{category.name}</strong>
                   </div>
                 ) : null}
@@ -139,11 +146,11 @@ const CategoryDetails = () => {
 
               <div className="category-details-hero-meta animate-stagger" data-stagger-step="120ms">
                 <div className="category-details-meta-card animate-on-scroll">
-                  <strong>{products.length}</strong>
+                  <StatCount value={products.length} />
                   <span>products currently listed</span>
                 </div>
                 <div className="category-details-meta-card animate-on-scroll">
-                  <strong>{new Set(products.map((product) => product.brand).filter(Boolean)).size || 1}</strong>
+                  <StatCount value={new Set(products.map((product) => product.brand).filter(Boolean)).size || 1} />
                   <span>brands represented</span>
                 </div>
                 <Link className="btn primary animate-on-scroll" to="/contact">Request sourcing support</Link>

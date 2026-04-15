@@ -89,17 +89,63 @@ select:focus-visible {
   padding: 40px 24px 72px;
 }
 
-.app-route-shell-card {
-  min-width: min(420px, 100%);
-  padding: 20px 24px;
-  border-radius: 24px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(245, 240, 231, 0.92));
-  border: 1px solid rgba(168, 119, 68, 0.16);
-  box-shadow: 0 26px 50px rgba(7, 17, 31, 0.1);
-  color: var(--navy-900);
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  text-align: center;
+/* Shimmer skeleton replaces the old text card */
+.app-route-skeleton {
+  width: min(560px, 90vw);
+  padding: 32px;
+  border-radius: 28px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(244, 240, 232, 0.92));
+  border: 1px solid rgba(168, 119, 68, 0.12);
+  box-shadow: 0 26px 50px rgba(7, 17, 31, 0.08);
+  display: grid;
+  gap: 14px;
+}
+
+.app-route-skeleton-eyebrow {
+  width: 80px;
+  height: 8px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(168, 119, 68, 0.12) 0%, rgba(168, 119, 68, 0.28) 50%, rgba(168, 119, 68, 0.12) 100%);
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.6s ease-in-out infinite;
+}
+
+.app-route-skeleton-title {
+  height: 22px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(7, 17, 31, 0.06) 0%, rgba(7, 17, 31, 0.12) 50%, rgba(7, 17, 31, 0.06) 100%);
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.6s ease-in-out infinite 0.1s;
+}
+
+.app-route-skeleton-title.short {
+  width: 65%;
+}
+
+.app-route-skeleton-body {
+  height: 14px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(7, 17, 31, 0.04) 0%, rgba(7, 17, 31, 0.09) 50%, rgba(7, 17, 31, 0.04) 100%);
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.6s ease-in-out infinite 0.2s;
+}
+
+.app-route-skeleton-body.shorter {
+  width: 80%;
+}
+
+@keyframes skeleton-shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-route-skeleton-eyebrow,
+  .app-route-skeleton-title,
+  .app-route-skeleton-body {
+    animation: none;
+    opacity: 0.6;
+  }
 }
 
 .app-boundary-panel {
