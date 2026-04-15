@@ -4,14 +4,14 @@ self.addEventListener('push', (event) => {
     payload = event.data ? event.data.json() : {};
   } catch (error) {
     payload = {
-      title: 'LTE Admin Alert',
+      title: 'LTE Alert',
       body: event.data ? event.data.text() : '',
-      url: '/admin/dashboard',
-      tag: 'lte-admin-alert',
+      url: '/',
+      tag: 'lte-alert',
     };
   }
 
-  const title = payload.title || 'LTE Admin Alert';
+  const title = payload.title || 'LTE Alert';
   const options = {
     body: payload.body || '',
     icon: '/company-logo.png',

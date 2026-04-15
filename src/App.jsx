@@ -48,6 +48,8 @@ const StaffLogin = lazy(() => import('./components/Portal/StaffLogin'));
 const StaffDashboard = lazy(() => import('./components/Portal/StaffDashboard'));
 const StaffAttendance = lazy(() => import('./components/Portal/StaffAttendance'));
 const StaffNotificationsPage = lazy(() => import('./components/Portal/StaffNotificationsPage'));
+const StaffMessagesPage = lazy(() => import('./components/Portal/StaffMessagesPage'));
+const StaffAccount = lazy(() => import('./components/Portal/StaffAccount'));
 const StaffResourcePage = lazy(() => import('./components/Portal/StaffResourcePage'));
 const StaffOrdersPage = lazy(() => import('./components/Portal/StaffOrdersPage'));
 const AdminStaffPage = lazy(() => import('./components/Portal/AdminStaffPage'));
@@ -126,7 +128,9 @@ const AppShell = () => {
               <Route path="orders" element={<StaffOrdersPage />} />
               <Route path="clients" element={<StaffResourcePage config={staffModuleConfigs.clients} />} />
               <Route path="visits" element={<StaffResourcePage config={staffModuleConfigs.visits} />} />
+              <Route path="messages" element={<StaffMessagesPage />} />
               <Route path="notifications" element={<StaffNotificationsPage />} />
+              <Route path="account" element={<StaffAccount />} />
             </Route>
 
             {/* Visible admin routes */}

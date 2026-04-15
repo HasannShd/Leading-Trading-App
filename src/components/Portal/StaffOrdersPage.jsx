@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { portalApi } from '../../services/portalApi';
 import { authFetch } from '../../services/authFetch';
 import { formatPortalDateTime } from '../../utils/portalDate';
@@ -43,6 +44,7 @@ const parseLineItems = (value) =>
     .filter((item) => item.productName);
 
 const StaffOrdersPage = () => {
+  const location = useLocation();
   const [clients, setClients] = useState([]);
   const [orders, setOrders] = useState([]);
   const [clientQuery, setClientQuery] = useState('');
@@ -53,6 +55,7 @@ const StaffOrdersPage = () => {
   const [busy, setBusy] = useState(false);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState('');
+  const [focusedOrderId, setFocusedOrderId] = useState('');
   const draftKey = 'staff-draft:orders-workspace';
 
   const load = async () => {
@@ -74,6 +77,10 @@ const StaffOrdersPage = () => {
   useEffect(() => {
     load();
   }, []);
+
+  useEffect(() => {
+    setFocusedOrderId(new URLSearchParams(location.search).get('focus') || '');
+  }, [location.search]);
 
   useEffect(() => {
     const raw = localStorage.getItem(draftKey);
@@ -436,7 +443,7 @@ const StaffOrdersPage = () => {
             <div className="portal-record-card">Loading...</div>
           ) : orders.length ? (
             orders.map((order) => (
-              <div className="portal-record-card" key={order._id}>
+              <div className={`portal-record-card${focusedOrderId === order._id ? ' is-selected' : ''}`} key={order._id}>
                 <h3 className="portal-record-title">{order.companyName || order.client?.name || order.customerName}</h3>
                 <div className="portal-record-meta">
                   <span className="portal-badge status">{order.status}</span>

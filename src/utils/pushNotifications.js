@@ -25,15 +25,15 @@ export const isPushSupported = () =>
   'PushManager' in window &&
   'Notification' in window;
 
-export const registerAdminPush = async (token) => {
+const registerPush = async ({ token, pathPrefix, scope }) => {
   if (!isPushSupported()) {
     throw new Error('This browser does not support web push notifications.');
   }
 
-  const keyData = await fetchJson('/auth/admin/push/public-key', {
+  const keyData = await fetchJson(`/auth/${pathPrefix}/push/public-key`, {
     headers: {
       Authorization: `Bearer ${token}`,
-      'X-Auth-Scope': 'admin',
+      'X-Auth-Scope': scope,
     },
   });
 
@@ -51,11 +51,11 @@ export const registerAdminPush = async (token) => {
       applicationServerKey: urlBase64ToUint8Array(keyData.publicKey),
     }));
 
-  await fetchJson('/auth/admin/push/subscribe', {
+  await fetchJson(`/auth/${pathPrefix}/push/subscribe`, {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${token}`,
-      'X-Auth-Scope': 'admin',
+      'X-Auth-Scope': scope,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ subscription: subscription.toJSON() }),
@@ -64,7 +64,7 @@ export const registerAdminPush = async (token) => {
   return subscription;
 };
 
-export const unregisterAdminPush = async (token, endpoint) => {
+const unregisterPush = async ({ token, endpoint, pathPrefix, scope }) => {
   if (!isPushSupported()) {
     return;
   }
@@ -78,14 +78,26 @@ export const unregisterAdminPush = async (token, endpoint) => {
   }
 
   if (targetEndpoint) {
-    await fetchJson('/auth/admin/push/unsubscribe', {
+    await fetchJson(`/auth/${pathPrefix}/push/unsubscribe`, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,
-        'X-Auth-Scope': 'admin',
+        'X-Auth-Scope': scope,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ endpoint: targetEndpoint }),
     });
   }
 };
+
+export const registerAdminPush = async (token) =>
+  registerPush({ token, pathPrefix: 'admin', scope: 'admin' });
+
+export const unregisterAdminPush = async (token, endpoint) =>
+  unregisterPush({ token, endpoint, pathPrefix: 'admin', scope: 'admin' });
+
+export const registerStaffPush = async (token) =>
+  registerPush({ token, pathPrefix: 'staff', scope: 'sales_staff' });
+
+export const unregisterStaffPush = async (token, endpoint) =>
+  unregisterPush({ token, endpoint, pathPrefix: 'staff', scope: 'sales_staff' });

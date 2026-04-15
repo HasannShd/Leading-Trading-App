@@ -37,7 +37,9 @@ Staff portal:
 - `/staff/orders`
 - `/staff/clients`
 - `/staff/visits`
+- `/staff/messages`
 - `/staff/notifications`
+- `/staff/account`
 
 Admin portal:
 
@@ -103,6 +105,6 @@ npm run build
 
 - Admin, staff, and customer sessions are stored separately.
 - Scroll-based cinematic effects automatically back off on reduced-motion, save-data, and small-screen sessions.
-- Admin push notifications can be enabled from the account page when the backend is configured with VAPID keys.
+- Admin and staff push notifications can be enabled from their account pages when the backend is configured with VAPID keys.
 - iPhone/iPad web push requires opening the installed home-screen web app and granting notification permission there.
 - This repo currently has build verification but no dedicated frontend unit-test suite.
