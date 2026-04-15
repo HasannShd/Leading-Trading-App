@@ -159,10 +159,32 @@
   border-radius: 24px;
   outline: none;
   text-decoration: none;
+  transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+@media (pointer: fine) {
+  .categories-card-link:hover {
+    transform: translateY(-4px);
+  }
+}
+
+@media (pointer: coarse) {
+  .categories-card-link:active {
+    transform: scale(0.98);
+  }
 }
 
 .categories-card {
   height: 100%;
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.categories-card-link:hover .card {
+  box-shadow:
+    0 28px 52px rgba(7, 17, 31, 0.12),
+    0 0 0 1px rgba(168, 119, 68, 0.18),
+    0 0 0 4px rgba(168, 119, 68, 0.04);
+  border-color: rgba(168, 119, 68, 0.2);
 }
 
 .categories-card-link:focus-visible .card {
@@ -170,15 +192,33 @@
   box-shadow: 0 0 0 3px rgba(168, 119, 68, 0.14);
 }
 
+/* Cinematic dark image area — product imagery pops against dark background */
 .categories-card-image {
-  aspect-ratio: 4 / 3;
-  background: linear-gradient(180deg, rgba(248, 246, 241, 1), rgba(236, 237, 238, 0.96));
+  position: relative;
+  aspect-ratio: 16 / 10;
+  background: linear-gradient(160deg, #0d1e32 0%, #152c46 55%, #0a1928 100%);
   display: grid;
   place-items: center;
-  color: var(--navy-800);
-  border-radius: 18px;
+  color: rgba(248, 243, 235, 0.28);
+  border-radius: 16px;
   overflow: hidden;
-  border: 1px solid rgba(19, 48, 78, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: box-shadow 0.3s ease;
+}
+
+.categories-card-link:hover .categories-card-image {
+  box-shadow: inset 0 0 0 1px rgba(198, 145, 89, 0.22);
+}
+
+/* Subtle bottom fade so text below the image reads cleanly */
+.categories-card-image::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 0;
+  height: 40%;
+  background: linear-gradient(to top, rgba(10, 22, 38, 0.54), transparent);
+  pointer-events: none;
+  border-radius: 0 0 16px 16px;
 }
 
 .categories-card-image img {
@@ -186,7 +226,20 @@
   height: 100%;
   object-fit: contain;
   object-position: center;
-  padding: 16px;
+  padding: 18px;
+  transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.categories-card-link:hover .categories-card-image img {
+  transform: scale(1.04);
+}
+
+/* Fallback letter when no image */
+.categories-card-image span {
+  font-size: 2.8rem;
+  font-weight: 800;
+  color: rgba(248, 243, 235, 0.2);
+  letter-spacing: -0.05em;
 }
 
 .categories-card-content {
@@ -209,9 +262,29 @@
   letter-spacing: 0.14em;
 }
 
+/* Animated arrow replaces the flat "Open" text */
 .categories-card-topline strong {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   color: var(--navy-700);
   font-size: 0.82rem;
+  transition: gap 0.2s ease, color 0.2s ease;
+}
+
+.categories-card-topline strong::after {
+  content: '→';
+  font-size: 0.9em;
+  transition: transform 0.2s ease;
+}
+
+.categories-card-link:hover .categories-card-topline strong {
+  color: #875625;
+  gap: 7px;
+}
+
+.categories-card-link:hover .categories-card-topline strong::after {
+  transform: translateX(3px);
 }
 
 .categories-card-title {
@@ -234,16 +307,36 @@
   gap: 8px;
 }
 
-.categories-card-children span,
+.categories-card-children span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  padding: 0 11px;
+  border-radius: 999px;
+  background: rgba(19, 48, 78, 0.06);
+  border: 1px solid rgba(19, 48, 78, 0.08);
+  color: var(--navy-700);
+  font-size: 0.77rem;
+  font-weight: 600;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.categories-card-link:hover .categories-card-children span {
+  background: rgba(168, 119, 68, 0.08);
+  border-color: rgba(168, 119, 68, 0.14);
+  color: #7b4e20;
+}
+
 .categories-card-children strong {
   display: inline-flex;
   align-items: center;
-  min-height: 34px;
-  padding: 0 12px;
+  min-height: 30px;
+  padding: 0 11px;
   border-radius: 999px;
-  background: rgba(19, 48, 78, 0.06);
-  color: var(--navy-700);
-  font-size: 0.8rem;
+  background: rgba(168, 119, 68, 0.08);
+  border: 1px solid rgba(168, 119, 68, 0.14);
+  color: #876342;
+  font-size: 0.77rem;
   font-weight: 700;
 }
 

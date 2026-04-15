@@ -247,6 +247,9 @@ const Shop = () => {
                 <Link key={product._id} to={`/product/${product._id}`} className="shop-card-link animate-on-scroll" onMouseMove={handleTiltMove} onMouseLeave={handleTiltReset}>
                   <Card className="shop-card">
                     <div className="shop-card-media">
+                      {product.featured && (
+                        <span className="shop-card-badge">Featured</span>
+                      )}
                       {productImage && !imageFailed ? (
                         <img
                           src={normalizeImageSrc(productImage, { width: 480 })}
@@ -266,7 +269,6 @@ const Shop = () => {
                     <div className="shop-card-body">
                       <div className="shop-card-kicker">
                         <span>{product.brand || 'Sourcing item'}</span>
-                        {product.featured ? <strong>Featured</strong> : null}
                       </div>
                       <h3>{product.name}</h3>
                       <p>{product.description?.trim() || 'Open the product to review variants, specifications, and request options.'}</p>

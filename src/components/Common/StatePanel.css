@@ -1,5 +1,5 @@
 .state-panel {
-  padding: 28px;
+  padding: 36px 32px;
   border-radius: 28px;
   border: 1px solid rgba(19, 48, 78, 0.08);
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(244, 240, 232, 0.92));
@@ -7,26 +7,76 @@
   text-align: left;
 }
 
+/* ── Loading ───────────────────────── */
 .state-panel--loading {
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(244, 240, 232, 0.88));
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(244, 240, 232, 0.88));
 }
 
+.state-panel--loading .state-panel-eyebrow {
+  color: #6b8caa;
+}
+
+.state-panel--loading .state-panel-eyebrow::before {
+  background: linear-gradient(90deg, rgba(70, 120, 168, 0.7), transparent);
+}
+
+/* Animated loading dots after eyebrow text */
+.state-panel--loading .state-panel-eyebrow::after {
+  content: '';
+  display: inline-block;
+  width: 28px;
+  height: 8px;
+  margin-left: 10px;
+  vertical-align: middle;
+  background: radial-gradient(circle, rgba(70, 120, 168, 0.6) 30%, transparent 70%),
+              radial-gradient(circle, rgba(70, 120, 168, 0.6) 30%, transparent 70%),
+              radial-gradient(circle, rgba(70, 120, 168, 0.6) 30%, transparent 70%);
+  background-size: 8px 8px;
+  background-position: 0 50%, 12px 50%, 24px 50%;
+  background-repeat: no-repeat;
+  animation: loading-dots 1.2s ease-in-out infinite;
+}
+
+@keyframes loading-dots {
+  0%, 100% { opacity: 0.3; transform: translateY(0); }
+  33%       { opacity: 1;   transform: translateY(-2px); }
+  66%       { opacity: 0.6; transform: translateY(1px); }
+}
+
+/* ── Error ─────────────────────────── */
 .state-panel--error {
-  border-color: rgba(185, 83, 68, 0.18);
-  background: linear-gradient(180deg, rgba(255, 247, 245, 0.98), rgba(248, 237, 232, 0.92));
+  border-color: rgba(185, 83, 68, 0.2);
+  background: linear-gradient(180deg, rgba(255, 248, 246, 0.98), rgba(249, 238, 234, 0.92));
 }
 
+.state-panel--error .state-panel-eyebrow {
+  color: #b44b38;
+}
+
+.state-panel--error .state-panel-eyebrow::before {
+  background: linear-gradient(90deg, rgba(180, 75, 56, 0.7), transparent);
+}
+
+/* ── Success ───────────────────────── */
 .state-panel--success {
-  border-color: rgba(60, 149, 108, 0.18);
+  border-color: rgba(60, 149, 108, 0.2);
   background: linear-gradient(180deg, rgba(245, 255, 251, 0.98), rgba(235, 247, 242, 0.92));
 }
 
+.state-panel--success .state-panel-eyebrow {
+  color: #2d8a5e;
+}
+
+.state-panel--success .state-panel-eyebrow::before {
+  background: linear-gradient(90deg, rgba(45, 138, 94, 0.7), transparent);
+}
+
+/* ── Shared elements ───────────────── */
 .state-panel-eyebrow {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  margin-bottom: 14px;
+  margin-bottom: 16px;
   color: #876342;
   font-size: 0.78rem;
   font-weight: 800;
@@ -36,25 +86,34 @@
 
 .state-panel-eyebrow::before {
   content: '';
+  flex-shrink: 0;
   width: 34px;
   height: 1px;
-  background: linear-gradient(90deg, rgba(168, 119, 68, 0.9), rgba(168, 119, 68, 0));
+  background: linear-gradient(90deg, rgba(168, 119, 68, 0.9), transparent);
 }
 
 .state-panel h3 {
   margin: 0;
-  font-size: clamp(1.5rem, 2.6vw, 2rem);
-  line-height: 1.04;
+  font-size: clamp(1.4rem, 2.6vw, 1.9rem);
+  line-height: 1.08;
+  letter-spacing: -0.04em;
   color: var(--navy-900);
 }
 
 .state-panel p {
   margin: 12px 0 0;
-  max-width: 640px;
-  line-height: 1.75;
+  max-width: 600px;
+  line-height: 1.78;
   color: var(--muted);
 }
 
 .state-panel-action {
-  margin-top: 18px;
+  margin-top: 22px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .state-panel--loading .state-panel-eyebrow::after {
+    animation: none;
+    opacity: 0.6;
+  }
 }
