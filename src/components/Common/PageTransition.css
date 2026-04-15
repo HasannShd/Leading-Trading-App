@@ -1,0 +1,34 @@
+.page-transition-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9990;
+  pointer-events: none;
+  background: linear-gradient(135deg, #07111f 0%, #0d2236 60%, #0a1a2e 100%);
+
+  /* Resting state: hidden above the viewport */
+  transform: scaleY(0);
+  transform-origin: top center;
+}
+
+/* Curtain lifts upward off the screen when a new route mounts */
+.page-transition-overlay.page-transition--reveal {
+  animation: curtain-lift 0.65s cubic-bezier(0.76, 0, 0.24, 1) forwards;
+}
+
+@keyframes curtain-lift {
+  0% {
+    transform: scaleY(1);
+    transform-origin: bottom center;
+  }
+  100% {
+    transform: scaleY(0);
+    transform-origin: bottom center;
+  }
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .page-transition-overlay.page-transition--reveal {
+    animation: none;
+  }
+}

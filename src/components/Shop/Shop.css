@@ -163,16 +163,45 @@
   border-radius: 24px;
   text-decoration: none;
   color: inherit;
-  transition: transform 0.24s ease, box-shadow 0.24s ease;
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+  /* 3D tilt — driven by CSS custom props set via JS on pointer:fine */
+  --tilt-x: 0deg;
+  --tilt-y: 0deg;
 }
 
-.shop-card-link:hover {
-  transform: translateY(-4px);
+/* 3D tilt only on pointer:fine (mouse) — instant follow during move */
+@media (pointer: fine) {
+  .shop-card-link {
+    transform: perspective(900px) rotateX(var(--tilt-x)) rotateY(var(--tilt-y));
+    transition: transform 0.12s ease;
+    will-change: transform;
+  }
+
+  .shop-card-link:hover {
+    transition: transform 0.08s ease;
+  }
+
+  /* Smooth snap-back when mouse leaves */
+  .shop-card-link[style*="0deg"] {
+    transition: transform 0.45s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+}
+
+/* Fallback lift for touch / coarse devices */
+@media (pointer: coarse) {
+  .shop-card-link:active {
+    transform: scale(0.98);
+  }
 }
 
 .shop-card-link:hover .card {
-  box-shadow: 0 26px 48px rgba(7, 17, 31, 0.1);
-  border-color: rgba(168, 119, 68, 0.18);
+  box-shadow: 0 32px 56px rgba(7, 17, 31, 0.13), 0 0 0 1px rgba(168, 119, 68, 0.16);
+  border-color: rgba(168, 119, 68, 0.2);
+}
+
+/* Image zoom on hover */
+.shop-card-link:hover .shop-card-media img {
+  transform: scale(1.04);
 }
 
 .shop-card {
@@ -192,6 +221,8 @@
   object-fit: contain;
   object-position: center;
   padding: 16px;
+  transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+  will-change: transform;
 }
 
 .shop-card-placeholder {

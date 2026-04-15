@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import Input from '../Common/Input';
 import Card from '../Common/Card';
 import StatePanel from '../Common/StatePanel';
+import SkeletonGrid from '../Common/SkeletonGrid';
 import { normalizeImageSrc } from '../../utils/normalizeImageSrc';
 import { buildCategoryTree } from '../../utils/categoryTree';
 import { useScrollReveal } from '../../hooks/useScrollReveal';
@@ -100,6 +101,21 @@ const Shop = () => {
   };
 
   const totalPages = Math.max(1, Math.ceil(total / 12));
+
+  // 3D tilt — only fires on pointer:fine (desktop); CSS handles the transform
+  const handleTiltMove = useCallback((e) => {
+    const card = e.currentTarget;
+    const rect = card.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
+    const y = -((e.clientY - rect.top) / rect.height - 0.5) * 2;
+    card.style.setProperty('--tilt-x', `${y * 6}deg`);
+    card.style.setProperty('--tilt-y', `${x * 6}deg`);
+  }, []);
+
+  const handleTiltReset = useCallback((e) => {
+    e.currentTarget.style.setProperty('--tilt-x', '0deg');
+    e.currentTarget.style.setProperty('--tilt-y', '0deg');
+  }, []);
 
   const featuredCount = useMemo(
     () => products.filter((product) => product.featured === true).length,
@@ -205,12 +221,7 @@ const Shop = () => {
         </section>
 
         {loading ? (
-          <StatePanel
-            eyebrow="Loading"
-            title="Preparing the product catalog"
-            description="We’re collecting the latest products, categories, and current catalog filters."
-            variant="loading"
-          />
+          <SkeletonGrid count={12} />
         ) : error ? (
           <StatePanel
             eyebrow="Unavailable"
@@ -233,14 +244,15 @@ const Shop = () => {
               const imageFailed = brokenImages[product._id] === true;
 
               return (
-                <Link key={product._id} to={`/product/${product._id}`} className="shop-card-link animate-on-scroll">
+                <Link key={product._id} to={`/product/${product._id}`} className="shop-card-link animate-on-scroll" onMouseMove={handleTiltMove} onMouseLeave={handleTiltReset}>
                   <Card className="shop-card">
                     <div className="shop-card-media">
                       {productImage && !imageFailed ? (
                         <img
-                          src={normalizeImageSrc(productImage)}
+                          src={normalizeImageSrc(productImage, { width: 480 })}
                           alt={product.name}
                           loading="lazy"
+                          decoding="async"
                           onError={() => {
                             setBrokenImages((prev) => ({ ...prev, [product._id]: true }));
                           }}

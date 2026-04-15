@@ -37,7 +37,7 @@ html, body, #root {
   background: var(--bg);
   color: var(--ink);
   width: 100%;
-  scroll-behavior: smooth;
+  /* scroll-behavior handled by Lenis on desktop; native on touch */
 }
 
 h1, h2, h3 {

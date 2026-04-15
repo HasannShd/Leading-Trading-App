@@ -1,0 +1,71 @@
+/* Only active when cursor-ready class is on body (pointer:fine devices only) */
+@media (pointer: fine) {
+  body.cursor-ready,
+  body.cursor-ready * {
+    cursor: none !important;
+  }
+}
+
+.cursor-dot,
+.cursor-ring {
+  /* Hidden by default; JS makes them visible on first mousemove */
+  opacity: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99999;
+  will-change: transform;
+  /* Don't render on touch devices at all */
+  display: none;
+}
+
+@media (pointer: fine) {
+  .cursor-dot,
+  .cursor-ring {
+    display: block;
+  }
+}
+
+/* ── Dot ─────────────────────────────── */
+.cursor-dot {
+  width: 6px;
+  height: 6px;
+  background: #c69159;
+  transition: opacity 0.2s ease, width 0.2s ease, height 0.2s ease, background 0.2s ease;
+}
+
+.cursor-dot.cursor-dot--hover {
+  width: 4px;
+  height: 4px;
+  background: #ffffff;
+}
+
+/* ── Ring ────────────────────────────── */
+.cursor-ring {
+  width: 34px;
+  height: 34px;
+  border: 1.5px solid rgba(198, 145, 89, 0.7);
+  background: transparent;
+  transition:
+    opacity 0.3s ease,
+    width 0.35s cubic-bezier(0.23, 1, 0.32, 1),
+    height 0.35s cubic-bezier(0.23, 1, 0.32, 1),
+    border-color 0.25s ease,
+    background 0.25s ease;
+}
+
+.cursor-ring.cursor-ring--hover {
+  width: 52px;
+  height: 52px;
+  border-color: rgba(198, 145, 89, 0.45);
+  background: rgba(198, 145, 89, 0.06);
+}
+
+.cursor-ring.cursor-ring--click {
+  width: 26px;
+  height: 26px;
+  border-color: rgba(198, 145, 89, 0.9);
+  background: rgba(198, 145, 89, 0.12);
+}

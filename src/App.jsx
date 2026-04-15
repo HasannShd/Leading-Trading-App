@@ -6,6 +6,8 @@ import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'r
 import AppErrorBoundary from './components/AppErrorBoundary.jsx';
 import Header from './components/Header/Header.jsx';
 import Footer from './components/Footer/Footer.jsx';
+import Cursor from './components/Common/Cursor.jsx';
+import PageTransition from './components/Common/PageTransition.jsx';
 import NotFoundPage from './components/NotFoundPage.jsx';
 import ProtectedAdminRoute from './components/ProtectedAdminRoute';
 import { AdminContext, AdminProvider } from './context/AdminContext';
@@ -67,6 +69,8 @@ const AppShell = () => {
 
   return (
     <div className={`app${isHeroPage ? ' hero-page' : ''}${isPortalRoute ? ' admin-app' : ''}`}>
+      <Cursor />
+      <PageTransition />
       {!isPortalRoute && <Header />}
       <main className="app-main">
         <Suspense fallback={<div className="app-route-shell"><div className="app-route-shell-card">Loading workspace...</div></div>}>
