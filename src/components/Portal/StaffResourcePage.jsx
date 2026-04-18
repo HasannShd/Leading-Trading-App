@@ -8,6 +8,24 @@ const initialValues = (fields) =>
     return acc;
   }, {});
 
+const trimOptionalValues = (value) => {
+  if (Array.isArray(value)) {
+    return value.map(trimOptionalValues);
+  }
+
+  if (value && typeof value === 'object') {
+    return Object.fromEntries(
+      Object.entries(value).map(([key, entry]) => [key, trimOptionalValues(entry)])
+    );
+  }
+
+  if (typeof value === 'string') {
+    return value.trim();
+  }
+
+  return value;
+};
+
 const StaffResourcePage = ({ config }) => {
   const [values, setValues] = useState(() => initialValues(config.fields));
   const [records, setRecords] = useState([]);
@@ -74,7 +92,8 @@ const StaffResourcePage = ({ config }) => {
     setBusy(true);
     setMessage('');
     try {
-      const payload = config.transformPayload ? config.transformPayload(values) : values;
+      const normalizedValues = trimOptionalValues(values);
+      const payload = config.transformPayload ? config.transformPayload(normalizedValues) : normalizedValues;
       await portalApi.post(config.endpoint, payload, 'sales_staff');
       setValues(initialValues(fieldMap));
       localStorage.removeItem(draftKey);
@@ -172,7 +191,10 @@ const StaffResourcePage = ({ config }) => {
           <div className="portal-form-grid two">
             {fieldMap.map((field) => (
               <div className="portal-field" key={field.name} style={field.type === 'textarea' ? { gridColumn: '1 / -1' } : undefined}>
-                <label>{field.label}</label>
+                <label>
+                  {field.label}
+                  {!field.required ? ' (Optional)' : ''}
+                </label>
                 {field.type === 'textarea' ? (
                   <textarea value={values[field.name] || ''} onChange={(e) => handleChange(field.name, e.target.value)} placeholder={field.placeholder} />
                 ) : field.type === 'select' ? (
@@ -201,7 +223,7 @@ const StaffResourcePage = ({ config }) => {
           </div>
           {message && <div className="portal-message-banner success">{message}</div>}
           <div className="portal-submit-bar">
-            <div className="portal-submit-note">When you finish typing, press this button once. Drafts are saved on this phone until you submit or clear them.</div>
+            <div className="portal-submit-note">Only the required fields need to be filled. If something is not applicable, leave it blank and save.</div>
             <div className="portal-actions-two">
               <button className="portal-button ghost portal-save-button portal-save-button-ghost" type="button" onClick={clearDraft} disabled={busy}>
                 Clear Draft
