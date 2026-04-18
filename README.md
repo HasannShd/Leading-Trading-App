@@ -31,6 +31,7 @@ Public website:
 Staff portal:
 
 - `/staff/login`
+- `/staff/install`
 - `/staff/dashboard`
 - `/staff/attendance`
 - `/staff/reports`

@@ -31,6 +31,9 @@ const StaffLogin = () => {
           <div className="portal-badge status" style={{ marginBottom: '1rem', width: 'fit-content' }}>
             Use your staff username and password given by the office
           </div>
+          <div className="portal-record-copy" style={{ marginBottom: '1rem', color: 'rgba(255,255,255,0.78)' }}>
+            To install the staff app on iPhone, open <strong>/staff/install</strong> in Safari and add that page to the home screen.
+          </div>
           <form className="portal-form" onSubmit={handleSubmit}>
             <div className="portal-field">
               <label style={{ color: 'rgba(255,255,255,0.9)' }}>Username, email, or phone</label>

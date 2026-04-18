@@ -45,6 +45,7 @@ const AdminDashboardPage = lazy(() => import('./components/Portal/AdminDashboard
 const AdminMessagesPage = lazy(() => import('./components/Portal/AdminMessagesPage'));
 const StaffLayout = lazy(() => import('./components/Portal/StaffLayout'));
 const StaffLogin = lazy(() => import('./components/Portal/StaffLogin'));
+const StaffInstallPage = lazy(() => import('./components/Portal/StaffInstallPage'));
 const StaffDashboard = lazy(() => import('./components/Portal/StaffDashboard'));
 const StaffAttendance = lazy(() => import('./components/Portal/StaffAttendance'));
 const StaffNotificationsPage = lazy(() => import('./components/Portal/StaffNotificationsPage'));
@@ -116,6 +117,7 @@ const AppShell = () => {
             <Route path="/.well-known/admin-account-sh123456" element={<Navigate to="/admin/account" replace />} />
 
             {/* Staff portal */}
+            <Route path="/staff/install" element={<StaffInstallPage />} />
             <Route path="/staff/login" element={<StaffLogin />} />
             <Route
               path="/staff"
