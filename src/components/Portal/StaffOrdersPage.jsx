@@ -50,6 +50,8 @@ const StaffOrdersPage = () => {
   const [clients, setClients] = useState([]);
   const [orders, setOrders] = useState([]);
   const [clientQuery, setClientQuery] = useState('');
+  const [orderQuery, setOrderQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState('all');
   const [selectedClientId, setSelectedClientId] = useState('');
   const [clientForm, setClientForm] = useState(blankClient);
   const [orderForm, setOrderForm] = useState(blankOrder);
@@ -130,6 +132,24 @@ const StaffOrdersPage = () => {
     () => clients.find((client) => client._id === (selectedClientId || orderForm.client)),
     [clients, selectedClientId, orderForm.client]
   );
+
+  const filteredOrders = useMemo(() => {
+    const query = orderQuery.trim().toLowerCase();
+    return orders.filter((order) => {
+      const matchesStatus = statusFilter === 'all' || order.status === statusFilter;
+      if (!matchesStatus) return false;
+      if (!query) return true;
+      return [
+        order.customerName,
+        order.companyName,
+        order.contactPerson,
+        order.client?.name,
+        ...(order.items || []).map((item) => item.productName),
+      ]
+        .filter(Boolean)
+        .some((value) => String(value).toLowerCase().includes(query));
+    });
+  }, [orderQuery, orders, statusFilter]);
 
   useEffect(() => {
     if (!selectedClient) return;
@@ -492,14 +512,28 @@ const StaffOrdersPage = () => {
         <div className="portal-section-head">
           <div>
             <div className="portal-brand-kicker">Order History</div>
-            <h2 className="portal-section-title" style={{ fontSize: '1.45rem' }}>Your recent orders</h2>
+            <h2 className="portal-section-title" style={{ fontSize: '1.45rem' }}>Your order history</h2>
           </div>
+        </div>
+        <div className="portal-filter-bar" style={{ marginTop: '1rem' }}>
+          <input
+            type="search"
+            value={orderQuery}
+            onChange={(e) => setOrderQuery(e.target.value)}
+            placeholder="Search by company, customer, contact, or item"
+          />
+          <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
+            <option value="all">All statuses</option>
+            {['submitted', 'reviewed', 'emailed', 'confirmed', 'delivered', 'cancelled'].map((status) => (
+              <option key={status} value={status}>{status}</option>
+            ))}
+          </select>
         </div>
         <div className="portal-record-list" style={{ marginTop: '1rem' }}>
           {loading ? (
             <div className="portal-record-card">Loading...</div>
-          ) : orders.length ? (
-            orders.map((order) => (
+          ) : filteredOrders.length ? (
+            filteredOrders.map((order) => (
               <div className={`portal-record-card${focusedOrderId === order._id ? ' is-selected' : ''}`} key={order._id}>
                 <h3 className="portal-record-title">{order.companyName || order.client?.name || order.customerName}</h3>
                 <div className="portal-record-meta">
@@ -548,12 +582,29 @@ const StaffOrdersPage = () => {
                     {order.notes ? <div><strong>Notes:</strong> {order.notes}</div> : null}
                   </div>
                 )}
+                {!!order.statusHistory?.length && (
+                  <div className="portal-record-copy" style={{ marginTop: '0.85rem' }}>
+                    <strong>Status history</strong>
+                    <div style={{ marginTop: '0.4rem' }}>
+                      {order.statusHistory
+                        .slice()
+                        .reverse()
+                        .map((entry, index) => (
+                          <div key={`${order._id}-${entry.changedAt || index}`}>
+                            {entry.status || 'updated'}
+                            {entry.note ? ` • ${entry.note}` : ''}
+                            {entry.changedAt ? ` • ${formatPortalDateTime(entry.changedAt)}` : ''}
+                          </div>
+                        ))}
+                    </div>
+                  </div>
+                )}
               </div>
             ))
           ) : (
             <div className="portal-empty-state">
-              <h3 className="portal-empty-title">No orders yet</h3>
-              <p className="portal-empty-copy">Select or create a client above, then submit the first order from this workspace.</p>
+              <h3 className="portal-empty-title">No matching orders</h3>
+              <p className="portal-empty-copy">Change the filters or submit a new order from this workspace.</p>
             </div>
           )}
         </div>
