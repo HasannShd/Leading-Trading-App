@@ -32,6 +32,7 @@ Staff portal:
 
 - `/staff/login`
 - `/staff/install`
+- `/staff-app.html`
 - `/staff/dashboard`
 - `/staff/attendance`
 - `/staff/reports`
@@ -107,5 +108,6 @@ npm run build
 - Admin, staff, and customer sessions are stored separately.
 - Scroll-based cinematic effects automatically back off on reduced-motion, save-data, and small-screen sessions.
 - Admin and staff push notifications can be enabled from their account pages when the backend is configured with VAPID keys.
+- iPhone install shortcuts work most reliably from the static launcher pages `/staff-app.html` and `/admin-app.html`.
 - iPhone/iPad web push requires opening the installed home-screen web app and granting notification permission there.
 - This repo currently has build verification but no dedicated frontend unit-test suite.

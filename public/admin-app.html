@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="theme-color" content="#0c1d32" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/company-logo.png" />
+    <link rel="manifest" href="/admin.webmanifest" />
+    <title>LTE Admin App Install</title>
+    <style>
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        padding: 24px;
+        background:
+          radial-gradient(circle at top right, rgba(197, 160, 111, 0.18), transparent 24%),
+          linear-gradient(180deg, #112842, #0c1d32 72%);
+        color: #f8f5ee;
+        font-family: Georgia, "Times New Roman", serif;
+      }
+
+      main {
+        width: min(100%, 560px);
+        border-radius: 28px;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        background: rgba(255, 255, 255, 0.08);
+        box-shadow: 0 24px 80px rgba(0, 0, 0, 0.28);
+        padding: 28px;
+        backdrop-filter: blur(16px);
+      }
+
+      h1 {
+        margin: 0 0 12px;
+        font-size: clamp(2rem, 5vw, 2.8rem);
+      }
+
+      p, li, a {
+        color: rgba(248, 245, 238, 0.88);
+        line-height: 1.6;
+      }
+
+      .kicker {
+        font-size: 0.72rem;
+        letter-spacing: 0.24em;
+        text-transform: uppercase;
+        color: #d6b27d;
+        margin-bottom: 12px;
+      }
+
+      a.button {
+        display: inline-flex;
+        margin-top: 12px;
+        padding: 12px 18px;
+        border-radius: 999px;
+        background: #d6b27d;
+        color: #0c1d32;
+        text-decoration: none;
+        font-weight: 700;
+      }
+
+      code {
+        background: rgba(255, 255, 255, 0.08);
+        padding: 2px 6px;
+        border-radius: 6px;
+      }
+    </style>
+    <script>
+      (function () {
+        var standalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+        if (!standalone) return;
+        var target = localStorage.getItem('adminToken') ? '/admin/dashboard' : '/admin/login';
+        window.location.replace(target);
+      })();
+    </script>
+  </head>
+  <body>
+    <main>
+      <div class="kicker">LTE Admin Access</div>
+      <h1>Install The Admin App</h1>
+      <p>Add this exact page to your iPhone home screen. The installed icon will open the admin portal, not the main website.</p>
+      <ol>
+        <li>Open this page in Safari.</li>
+        <li>Tap Share, then choose <strong>Add to Home Screen</strong>.</li>
+        <li>Open the new icon from your home screen.</li>
+      </ol>
+      <p>Install URL: <code>/admin-app.html</code></p>
+      <a class="button" href="/admin/login">Open Admin Login</a>
+    </main>
+  </body>
+</html>
