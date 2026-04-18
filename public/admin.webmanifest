@@ -1,0 +1,25 @@
+{
+  "name": "LTE Admin Portal",
+  "short_name": "LTE Admin",
+  "description": "Leading Trading Est admin portal web app.",
+  "id": "/admin/",
+  "start_url": "/admin/dashboard",
+  "scope": "/admin/",
+  "display": "standalone",
+  "background_color": "#0c1d32",
+  "theme_color": "#0c1d32",
+  "icons": [
+    {
+      "src": "/company-logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

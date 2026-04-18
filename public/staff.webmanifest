@@ -1,0 +1,25 @@
+{
+  "name": "LTE Staff Portal",
+  "short_name": "LTE Staff",
+  "description": "Leading Trading Est staff portal web app.",
+  "id": "/staff/",
+  "start_url": "/staff/dashboard",
+  "scope": "/staff/",
+  "display": "standalone",
+  "background_color": "#0c1d32",
+  "theme_color": "#0c1d32",
+  "icons": [
+    {
+      "src": "/company-logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

@@ -43,6 +43,8 @@ const parseLineItems = (value) =>
     })
     .filter((item) => item.productName);
 
+const attachmentLabel = (attachment) => attachment?.name || attachment?.url?.split('/').pop() || 'Attachment';
+
 const StaffOrdersPage = () => {
   const location = useLocation();
   const [clients, setClients] = useState([]);
@@ -56,6 +58,7 @@ const StaffOrdersPage = () => {
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState('');
   const [focusedOrderId, setFocusedOrderId] = useState('');
+  const [orderAttachments, setOrderAttachments] = useState([]);
   const draftKey = 'staff-draft:orders-workspace';
 
   const load = async () => {
@@ -89,6 +92,7 @@ const StaffOrdersPage = () => {
       const parsed = JSON.parse(raw);
       if (parsed.clientForm) setClientForm((current) => ({ ...current, ...parsed.clientForm }));
       if (parsed.orderForm) setOrderForm((current) => ({ ...current, ...parsed.orderForm }));
+      if (Array.isArray(parsed.orderAttachments)) setOrderAttachments(parsed.orderAttachments);
       if (parsed.clientQuery) setClientQuery(parsed.clientQuery);
       if (parsed.selectedClientId) setSelectedClientId(parsed.selectedClientId);
       if (parsed.showClientForm) setShowClientForm(Boolean(parsed.showClientForm));
@@ -104,12 +108,13 @@ const StaffOrdersPage = () => {
       JSON.stringify({
         clientForm,
         orderForm,
+        orderAttachments,
         clientQuery,
         selectedClientId,
         showClientForm,
       })
     );
-  }, [clientForm, clientQuery, draftKey, orderForm, selectedClientId, showClientForm]);
+  }, [clientForm, clientQuery, draftKey, orderAttachments, orderForm, selectedClientId, showClientForm]);
 
   const filteredClients = useMemo(() => {
     const query = clientQuery.trim().toLowerCase();
@@ -177,9 +182,11 @@ const StaffOrdersPage = () => {
       const payload = {
         ...orderForm,
         items: parseLineItems(orderForm.itemsText),
+        attachments: orderAttachments,
       };
       await portalApi.post('/staff-portal/orders', payload, 'sales_staff');
       setOrderForm(blankOrder);
+      setOrderAttachments([]);
       setClientForm(blankClient);
       setSelectedClientId('');
       localStorage.removeItem(draftKey);
@@ -196,6 +203,7 @@ const StaffOrdersPage = () => {
     localStorage.removeItem(draftKey);
     setClientForm(blankClient);
     setOrderForm(blankOrder);
+    setOrderAttachments([]);
     setClientQuery('');
     setSelectedClientId('');
     setShowClientForm(false);
@@ -216,6 +224,35 @@ const StaffOrdersPage = () => {
     } catch (err) {
       setMessage(err.message || 'Export failed.');
     }
+  };
+
+  const handleOrderFiles = async (event) => {
+    const files = Array.from(event.target.files || []);
+    if (!files.length) return;
+    setBusy(true);
+    setMessage('');
+    try {
+      const uploaded = await Promise.all(
+        files.map(async (file) => {
+          const url = await portalApi.uploadFile(file, 'sales_staff');
+          return {
+            name: file.name,
+            url,
+            mimeType: file.type,
+          };
+        })
+      );
+      setOrderAttachments((current) => [...current, ...uploaded]);
+    } catch (err) {
+      setMessage(err.message || 'Order attachment upload failed.');
+    } finally {
+      setBusy(false);
+      event.target.value = '';
+    }
+  };
+
+  const removeOrderAttachment = (url) => {
+    setOrderAttachments((current) => current.filter((entry) => entry.url !== url));
   };
 
   return (
@@ -415,9 +452,29 @@ const StaffOrdersPage = () => {
                 <input value={orderForm.notes} onChange={(e) => updateOrderForm('notes', e.target.value)} />
               </div>
             </div>
+            <div className="portal-inline-actions" style={{ marginTop: '1rem' }}>
+              <label className="portal-inline-button secondary portal-file-label">
+                {busy ? 'Uploading...' : 'Attach Images or Files'}
+                <input type="file" multiple accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.csv,.txt" onChange={handleOrderFiles} hidden />
+              </label>
+            </div>
+            {orderAttachments.length ? (
+              <div className="portal-attachment-list editor" style={{ marginTop: '0.9rem' }}>
+                {orderAttachments.map((attachment) => (
+                  <button
+                    key={attachment.url}
+                    type="button"
+                    className="portal-attachment-chip removable"
+                    onClick={() => removeOrderAttachment(attachment.url)}
+                  >
+                    {attachmentLabel(attachment)} ×
+                  </button>
+                ))}
+              </div>
+            ) : null}
             {message && <div className="portal-message-banner success">{message}</div>}
             <div className="portal-submit-bar">
-              <div className="portal-submit-note">Check the selected client and order items, then press this button once. Drafts are saved on this phone until you submit or clear them.</div>
+              <div className="portal-submit-note">Check the selected client, order items, and any supporting files, then press this button once. Drafts are saved on this phone until you submit or clear them.</div>
               <div className="portal-actions-two">
                 <button className="portal-button ghost portal-save-button portal-save-button-ghost" type="button" onClick={clearDraft} disabled={busy}>
                   Clear Draft
@@ -470,6 +527,21 @@ const StaffOrdersPage = () => {
                 <div className="portal-record-copy">
                   {(order.items || []).map((item) => `${item.productName} x${item.quantity}${item.price !== undefined ? ` @ ${item.price}` : ''}`).join(' | ')}
                 </div>
+                {order.attachments?.length ? (
+                  <div className="portal-attachment-list" style={{ marginTop: '0.85rem' }}>
+                    {order.attachments.map((attachment) => (
+                      <a
+                        key={`${order._id}-${attachment.url}`}
+                        className="portal-attachment-chip"
+                        href={attachment.url}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        {attachmentLabel(attachment)}
+                      </a>
+                    ))}
+                  </div>
+                ) : null}
                 {(order.notes || order.deliveryNote) && (
                   <div className="portal-record-copy">
                     {order.deliveryNote ? <div><strong>Delivery:</strong> {order.deliveryNote}</div> : null}

@@ -5,7 +5,19 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
     <link rel="apple-touch-icon" href="/company-logo.png" />
     <link rel="manifest" href="/site.webmanifest" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <script>
+      (function () {
+        var path = window.location.pathname || '/';
+        var manifestHref = '/site.webmanifest';
+        if (path.indexOf('/staff') === 0) manifestHref = '/staff.webmanifest';
+        if (path.indexOf('/admin') === 0) manifestHref = '/admin.webmanifest';
+        var manifestLink = document.querySelector('link[rel="manifest"]');
+        if (manifestLink) manifestLink.setAttribute('href', manifestHref);
+      })();
+    </script>
     <!-- Preconnect to external resources -->
     <link rel="preconnect" href="https://res.cloudinary.com" />
     <link rel="dns-prefetch" href="https://res.cloudinary.com" />
