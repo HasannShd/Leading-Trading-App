@@ -2,6 +2,7 @@ import { createContext, useEffect, useState } from 'react';
 import { portalApi } from '../services/portalApi';
 import { authFetch, getStoredToken } from '../services/authFetch';
 import { getTokenExpiryMs, isTokenExpired } from '../utils/sessionToken';
+import { storePasswordCredential } from '../utils/credentialStore';
 
 export const StaffContext = createContext();
 
@@ -72,6 +73,11 @@ export const StaffProvider = ({ children }) => {
       if (!response.ok) throw new Error(data.err || 'Login failed');
 
       localStorage.setItem('staffToken', data.token);
+      await storePasswordCredential({
+        identifier,
+        password,
+        name: data.user?.name || data.user?.username || identifier,
+      });
       await fetchMe();
       return true;
     } catch (err) {

@@ -1,13 +1,19 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { StaffContext } from '../../context/StaffContext';
 import './PortalShell.css';
 
 const StaffLogin = () => {
-  const { login, error, loading } = useContext(StaffContext);
+  const { login, error, loading, staff } = useContext(StaffContext);
   const navigate = useNavigate();
   const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
+
+  useEffect(() => {
+    if (staff) {
+      navigate('/staff/dashboard', { replace: true });
+    }
+  }, [navigate, staff]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -37,13 +43,16 @@ const StaffLogin = () => {
           <form className="portal-form" onSubmit={handleSubmit}>
             <div className="portal-field">
               <label style={{ color: 'rgba(255,255,255,0.9)' }}>Username, email, or phone</label>
-              <input value={identifier} onChange={(e) => setIdentifier(e.target.value)} placeholder="Enter your username" autoComplete="username" />
+              <input name="username" value={identifier} onChange={(e) => setIdentifier(e.target.value)} placeholder="Enter your username" autoComplete="username webauthn" />
             </div>
             <div className="portal-field">
               <label style={{ color: 'rgba(255,255,255,0.9)' }}>Password</label>
-              <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Enter your password" autoComplete="current-password" />
+              <input name="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Enter your password" autoComplete="current-password" />
             </div>
             {error && <div className="portal-badge status">{error}</div>}
+            <div className="portal-record-copy" style={{ color: 'rgba(255,255,255,0.74)' }}>
+              Your phone can usually save this password after the first successful sign-in for faster access next time.
+            </div>
             <button className="portal-button primary" type="submit" disabled={loading}>
               {loading ? 'Signing in...' : 'Sign In'}
             </button>

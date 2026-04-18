@@ -2,6 +2,7 @@ import { createContext, useState, useEffect, useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { authFetch, getStoredToken } from '../services/authFetch';
 import { getTokenExpiryMs, isTokenExpired } from '../utils/sessionToken';
+import { storePasswordCredential } from '../utils/credentialStore';
 
 export const AdminContext = createContext();
 
@@ -124,6 +125,11 @@ export const AdminProvider = ({ children }) => {
         return false;
       }
 
+      await storePasswordCredential({
+        identifier: username,
+        password,
+        name: data.user.name || data.user.username || username,
+      });
       applyAdminSession(data.token, data.user);
       if (!data.user.mfaEnabled) {
         setError('MFA is recommended for this admin account. You can set it up from the Account page.');

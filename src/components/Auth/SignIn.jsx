@@ -1,14 +1,20 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 import './Auth.css';
 
 const SignIn = () => {
-  const { login, error } = useContext(AuthContext);
+  const { user, login, error } = useContext(AuthContext);
   const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user) {
+      navigate('/cart', { replace: true });
+    }
+  }, [navigate, user]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -30,10 +36,11 @@ const SignIn = () => {
             Email or Username
             <input
               type="text"
+              name="username"
               value={identifier}
               onChange={(e) => setIdentifier(e.target.value)}
               placeholder="Enter your email or username"
-              autoComplete="username"
+              autoComplete="username webauthn"
               required
             />
           </label>
@@ -41,6 +48,7 @@ const SignIn = () => {
             Password
             <input
               type="password"
+              name="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               autoComplete="current-password"

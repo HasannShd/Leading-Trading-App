@@ -1,4 +1,4 @@
-import { useState, useContext, useMemo } from 'react';
+import { useState, useContext, useMemo, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { AdminContext } from '../../context/AdminContext';
 import { authFetch, API_URL } from '../../services/authFetch';
@@ -17,11 +17,17 @@ const AdminLogin = () => {
   const [resetError, setResetError] = useState('');
   const [mfaCode, setMfaCode] = useState('');
   const [trustDevice, setTrustDevice] = useState(true);
-  const { login, error, mfaChallenge, verifyMfa } = useContext(AdminContext);
+  const { admin, login, error, mfaChallenge, verifyMfa } = useContext(AdminContext);
   const navigate = useNavigate();
   const location = useLocation();
   const resetToken = useMemo(() => new URLSearchParams(location.search).get('resetToken') || '', [location.search]);
   const [mode, setMode] = useState(resetToken ? 'reset' : 'login');
+
+  useEffect(() => {
+    if (admin) {
+      navigate('/admin/dashboard', { replace: true });
+    }
+  }, [admin, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -175,11 +181,12 @@ const AdminLogin = () => {
                 Email or username
                 <input
                   type="text"
+                  name="username"
                   value={identifier}
                   onChange={(e) => setIdentifier(e.target.value)}
                   className="admin-form-input"
                   placeholder="Enter your admin email or username"
-                  autoComplete="username"
+                  autoComplete="username webauthn"
                   required
                 />
               </label>
@@ -188,6 +195,7 @@ const AdminLogin = () => {
                 Password
                 <input
                   type="password"
+                  name="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="admin-form-input"
@@ -204,6 +212,9 @@ const AdminLogin = () => {
               >
                 {isLoading ? 'Logging in...' : 'Login'}
               </button>
+              <div className="admin-login-subtitle" style={{ marginTop: '0.75rem' }}>
+                On supported phones, the browser can offer to save this password after the first successful login.
+              </div>
             </form>
           </>
         )}

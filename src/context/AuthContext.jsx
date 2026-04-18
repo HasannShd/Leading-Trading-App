@@ -1,5 +1,6 @@
 import { createContext, useState, useEffect } from 'react';
 import { authFetch } from '../services/authFetch';
+import { storePasswordCredential } from '../utils/credentialStore';
 
 export const AuthContext = createContext();
 
@@ -56,6 +57,11 @@ export const AuthProvider = ({ children }) => {
         return false;
       }
       localStorage.setItem('token', data.token);
+      await storePasswordCredential({
+        identifier,
+        password,
+        name: data.user?.name || data.user?.username || identifier,
+      });
       await fetchMe(data.token);
       return true;
     } catch (err) {
