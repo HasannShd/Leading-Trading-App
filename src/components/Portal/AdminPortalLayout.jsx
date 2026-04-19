@@ -42,14 +42,17 @@ const mobileQuickLinks = [
 ];
 
 const getNavBreadcrumb = (pathname) => {
+  let best = null;
   for (const group of linkGroups) {
     for (const item of group.items) {
       if (pathname === item.to || pathname.startsWith(item.to + '/')) {
-        return { section: group.section, label: item.label };
+        if (!best || item.to.length > best.item.to.length) {
+          best = { group, item };
+        }
       }
     }
   }
-  return null;
+  return best ? { section: best.group.section, label: best.item.label } : null;
 };
 
 const getInitials = (name) =>
