@@ -920,6 +920,27 @@
   gap: 0.8rem;
 }
 
+.portal-message-date-break {
+  display: flex;
+  justify-content: center;
+  margin: 0.15rem 0 0.1rem;
+}
+
+.portal-message-date-break span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 1.9rem;
+  padding: 0.3rem 0.8rem;
+  border-radius: 999px;
+  background: rgba(21, 49, 79, 0.08);
+  border: 1px solid rgba(13, 26, 43, 0.08);
+  color: var(--navy-700);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
 .portal-message-row {
   display: flex;
 }

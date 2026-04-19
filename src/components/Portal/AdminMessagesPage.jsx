@@ -1,14 +1,15 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { portalApi } from '../../services/portalApi';
 import AdminTopNav from '../Admin/AdminTopNav';
-import { formatPortalDateTime } from '../../utils/portalDate';
+import PortalMessageThread from './PortalMessageThread';
 import '../Admin/AdminCategories.css';
 import './PortalShell.css';
 
 const attachmentLabel = (attachment) => attachment?.name || attachment?.url?.split('/').pop() || 'Attachment';
 
 const AdminMessagesPage = () => {
+  const [isMobile, setIsMobile] = useState(() => (typeof window !== 'undefined' ? window.innerWidth <= 640 : false));
   const [staff, setStaff] = useState([]);
   const [threads, setThreads] = useState([]);
   const [selectedStaffId, setSelectedStaffId] = useState('');
@@ -22,6 +23,15 @@ const AdminMessagesPage = () => {
   const [sending, setSending] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
+  const threadRequestIdRef = useRef(0);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return undefined;
+    const handleResize = () => setIsMobile(window.innerWidth <= 640);
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const loadLists = useCallback(async () => {
     setLoading(true);
@@ -37,7 +47,7 @@ const AdminMessagesPage = () => {
       const requestedStaffId = searchParams.get('staffId') || '';
       if (requestedStaffId && nextStaff.some((entry) => entry._id === requestedStaffId)) {
         setSelectedStaffId(requestedStaffId);
-      } else if (!selectedStaffId) {
+      } else if (!selectedStaffId && !isMobile) {
         setSelectedStaffId(nextThreads[0]?.staffUser?._id || nextStaff[0]?._id || '');
       }
     } catch (err) {
@@ -45,17 +55,19 @@ const AdminMessagesPage = () => {
     } finally {
       setLoading(false);
     }
-  }, [searchParams, selectedStaffId]);
+  }, [isMobile, searchParams, selectedStaffId]);
 
   const loadThread = useCallback(async (staffId, markRead = true) => {
     if (!staffId) {
       setThread(null);
       return;
     }
+    const requestId = ++threadRequestIdRef.current;
     setThreadLoading(true);
     try {
       const response = await portalApi.get(`/admin-portal/messages/${staffId}`, 'admin');
       const nextThread = response.data.thread;
+      if (requestId !== threadRequestIdRef.current) return;
       setThread(nextThread);
       if (markRead) {
         const unread = (nextThread.messages || []).some(
@@ -99,7 +111,14 @@ const AdminMessagesPage = () => {
         return next;
       }, { replace: true });
       loadThread(selectedStaffId);
+      return;
     }
+    setThread(null);
+    setSearchParams((current) => {
+      const next = new URLSearchParams(current);
+      next.delete('staffId');
+      return next;
+    }, { replace: true });
   }, [loadThread, selectedStaffId, setSearchParams]);
 
   const threadSummaryByStaff = useMemo(
@@ -124,6 +143,19 @@ const AdminMessagesPage = () => {
       ),
     [thread]
   );
+
+  const showMobileThread = isMobile && Boolean(selectedStaffId);
+
+  const selectStaffThread = (staffId) => {
+    setSelectedStaffId(staffId);
+    setMessage('');
+  };
+
+  const resetMobileSelection = () => {
+    setSelectedStaffId('');
+    setThread(null);
+    setMessage('');
+  };
 
   const handleFiles = async (event) => {
     const files = Array.from(event.target.files || []);
@@ -218,7 +250,7 @@ const AdminMessagesPage = () => {
                 onChange={(event) => setSearch(event.target.value)}
               />
             </div>
-            <div className="portal-thread-list" style={{ marginTop: '1rem' }}>
+            <div className="portal-thread-list" style={{ marginTop: '1rem', display: showMobileThread ? 'none' : undefined }}>
               {loading ? (
                 <div className="portal-empty-state">
                   <h3 className="portal-empty-title">Loading staff...</h3>
@@ -232,7 +264,7 @@ const AdminMessagesPage = () => {
                       key={member._id}
                       type="button"
                       className={`portal-thread-button${selectedStaffId === member._id ? ' is-selected' : ''}`}
-                      onClick={() => setSelectedStaffId(member._id)}
+                      onClick={() => selectStaffThread(member._id)}
                     >
                       <div className="portal-thread-title-row">
                         <strong>{member.name || member.username}</strong>
@@ -254,7 +286,7 @@ const AdminMessagesPage = () => {
             </div>
           </div>
 
-          <div className="portal-thread-panel">
+          <div className="portal-thread-panel" style={{ display: !showMobileThread && isMobile ? 'none' : undefined }}>
             <div className="portal-section-head">
               <div>
                 <div className="portal-brand-kicker">Saved thread</div>
@@ -270,9 +302,16 @@ const AdminMessagesPage = () => {
                 ) : null}
               </div>
               {selectedStaffId ? (
-                <button className="portal-inline-button ghost" type="button" onClick={() => loadThread(selectedStaffId, false)}>
-                  Refresh
-                </button>
+                <div className="portal-inline-actions compact">
+                  {isMobile ? (
+                    <button className="portal-inline-button ghost" type="button" onClick={resetMobileSelection}>
+                      Back
+                    </button>
+                  ) : null}
+                  <button className="portal-inline-button ghost" type="button" onClick={() => loadThread(selectedStaffId, false)}>
+                    Refresh
+                  </button>
+                </div>
               ) : null}
             </div>
 
@@ -282,37 +321,11 @@ const AdminMessagesPage = () => {
                   <h3 className="portal-empty-title">Loading messages...</h3>
                 </div>
               ) : orderedMessages.length ? (
-                <div className="portal-message-stack">
-                  {orderedMessages.map((entry) => (
-                    <div
-                      key={entry._id}
-                      className={`portal-message-row ${entry.senderRole === 'admin' ? 'self' : 'office'}`}
-                    >
-                      <div className="portal-message-bubble">
-                        <div className="portal-message-meta">
-                          <strong>{entry.senderRole === 'admin' ? 'Admin' : entry.sender?.name || entry.sender?.username || 'Staff'}</strong>
-                          <span>{formatPortalDateTime(entry.createdAt)}</span>
-                        </div>
-                        {entry.text && <p className="portal-message-copy">{entry.text}</p>}
-                        {entry.attachments?.length ? (
-                          <div className="portal-attachment-list">
-                            {entry.attachments.map((attachment) => (
-                              <a
-                                key={`${entry._id}-${attachment.url}`}
-                                className="portal-attachment-chip"
-                                href={attachment.url}
-                                target="_blank"
-                                rel="noreferrer"
-                              >
-                                {attachmentLabel(attachment)}
-                              </a>
-                            ))}
-                          </div>
-                        ) : null}
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                <PortalMessageThread
+                  messages={orderedMessages}
+                  selfRole="admin"
+                  resolveSenderLabel={(entry) => (entry.senderRole === 'admin' ? 'Admin' : entry.sender?.name || entry.sender?.username || 'Staff')}
+                />
               ) : (
                 <div className="portal-empty-state">
                   <h3 className="portal-empty-title">No messages yet</h3>

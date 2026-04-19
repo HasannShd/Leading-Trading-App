@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { portalApi } from '../../services/portalApi';
-import { formatPortalDateTime } from '../../utils/portalDate';
+import PortalMessageThread from './PortalMessageThread';
 import './PortalShell.css';
 
 const draftKey = 'staff-draft:messages';
@@ -187,37 +187,11 @@ const StaffMessagesPage = () => {
                 <h3 className="portal-empty-title">Loading messages...</h3>
               </div>
             ) : orderedMessages.length ? (
-              <div className="portal-message-stack">
-                {orderedMessages.map((entry) => (
-                  <div
-                    key={entry._id}
-                    className={`portal-message-row ${entry.senderRole === 'sales_staff' ? 'self' : 'office'}`}
-                  >
-                    <div className="portal-message-bubble">
-                      <div className="portal-message-meta">
-                        <strong>{entry.senderRole === 'sales_staff' ? 'You' : 'Office'}</strong>
-                        <span>{formatPortalDateTime(entry.createdAt)}</span>
-                      </div>
-                      {entry.text && <p className="portal-message-copy">{entry.text}</p>}
-                      {entry.attachments?.length ? (
-                        <div className="portal-attachment-list">
-                          {entry.attachments.map((attachment) => (
-                            <a
-                              key={`${entry._id}-${attachment.url}`}
-                              className="portal-attachment-chip"
-                              href={attachment.url}
-                              target="_blank"
-                              rel="noreferrer"
-                            >
-                              {attachmentLabel(attachment)}
-                            </a>
-                          ))}
-                        </div>
-                      ) : null}
-                    </div>
-                  </div>
-                ))}
-              </div>
+                <PortalMessageThread
+                  messages={orderedMessages}
+                  selfRole="sales_staff"
+                  resolveSenderLabel={(entry) => (entry.senderRole === 'sales_staff' ? 'You' : 'Office')}
+                />
             ) : (
               <div className="portal-empty-state">
                 <h3 className="portal-empty-title">No messages yet</h3>
