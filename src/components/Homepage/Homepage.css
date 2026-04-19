@@ -122,6 +122,21 @@
   pointer-events: none;
 }
 
+/* Parallax depth layer — oversized so yPercent movement never exposes edges */
+.home-hero__depth {
+  position: absolute;
+  top: -15%;
+  left: -8%;
+  width: 116%;
+  height: 130%;
+  background:
+    radial-gradient(ellipse 55% 48% at 72% 38%, rgba(168, 119, 68, 0.09), transparent 70%),
+    radial-gradient(ellipse 48% 40% at 18% 62%, rgba(14, 36, 66, 0.13), transparent 68%);
+  pointer-events: none;
+  z-index: 0;
+  will-change: transform;
+}
+
 .home-hero__grid {
   display: grid;
   grid-template-columns: minmax(0, 1.02fr) minmax(460px, 0.98fr);

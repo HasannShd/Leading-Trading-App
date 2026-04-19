@@ -30,6 +30,20 @@ export const useHomepageScroll = (rootRef, enabled = true) => {
       }
 
       if (hero) {
+        /* bg layer drifts forward (down) as you scroll — creates depth vs the content layers */
+        gsap.utils.toArray(hero.querySelectorAll('[data-hero-parallax="bg"]')).forEach((element) => {
+          gsap.to(element, {
+            yPercent: 16,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: hero,
+              start: 'top top',
+              end: 'bottom top',
+              scrub: 1.1,
+            },
+          });
+        });
+
         gsap.utils.toArray(hero.querySelectorAll('[data-hero-parallax="slow"]')).forEach((element) => {
           gsap.to(element, {
             yPercent: -8,

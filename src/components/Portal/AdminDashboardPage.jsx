@@ -2,7 +2,13 @@ import { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { portalApi } from '../../services/portalApi';
 import { AdminContext } from '../../context/AdminContext';
+import { useCountUp } from '../../hooks/useCountUp';
 import './PortalShell.css';
+
+const AnimatedCount = ({ value }) => {
+  const ref = useCountUp(value, { duration: 1.2 });
+  return <strong ref={ref}>{value}</strong>;
+};
 
 const AdminDashboardPage = () => {
   const { admin } = useContext(AdminContext);
@@ -54,7 +60,7 @@ const AdminDashboardPage = () => {
         <div className="portal-admin-snapshot-grid">
           {snapshotMetrics.map(([label, value]) => (
             <div className="portal-admin-snapshot-card" key={label}>
-              <strong>{value}</strong>
+              <AnimatedCount value={value} />
               <span>{label}</span>
             </div>
           ))}
@@ -90,19 +96,19 @@ const AdminDashboardPage = () => {
           <h2 className="portal-section-title portal-admin-panel-title">Keep the day moving</h2>
           <div className="portal-admin-focus-list">
             <div className="portal-admin-focus-row">
-              <strong>{metrics.checkedInToday ?? 0}</strong>
+              <AnimatedCount value={metrics.checkedInToday ?? 0} />
               <span>Staff checked in and ready for field work.</span>
             </div>
             <div className="portal-admin-focus-row">
-              <strong>{metrics.pendingOrders ?? 0}</strong>
+              <AnimatedCount value={metrics.pendingOrders ?? 0} />
               <span>Staff orders still need review or follow-up.</span>
             </div>
             <div className="portal-admin-focus-row">
-              <strong>{metrics.pendingReports ?? 0}</strong>
+              <AnimatedCount value={metrics.pendingReports ?? 0} />
               <span>Daily reports are waiting for office review.</span>
             </div>
             <div className="portal-admin-focus-row">
-              <strong>{metrics.notCheckedIn ?? 0}</strong>
+              <AnimatedCount value={metrics.notCheckedIn ?? 0} />
               <span>Team members have not checked in yet today.</span>
             </div>
           </div>
