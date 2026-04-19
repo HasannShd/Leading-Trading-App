@@ -131,35 +131,37 @@ const AdminResourcePage = ({ config }) => {
   const renderAttendanceRecord = (record) => {
     const attendanceStatus = record.checkInTime && record.checkOutTime ? 'Complete day' : record.checkInTime ? 'Checked in only' : 'No check-in';
     return (
-      <div className="portal-record-card" key={record._id}>
-        <div className="portal-staff-report-row">
-          <strong>{record.user?.name || record.user?.username || 'Staff'}</strong>
-          <span>{record.date ? formatPortalDate(record.date) : 'No date'}</span>
-        </div>
-        <div className="portal-record-meta">
+      <div className="portal-record-card portal-attendance-record-card" key={record._id}>
+        <div className="portal-attendance-record-head">
+          <div className="portal-attendance-record-identity">
+            <strong>{record.user?.name || record.user?.username || 'Staff'}</strong>
+            <span>{record.date ? formatPortalDate(record.date) : 'No date'}</span>
+          </div>
           <span className="portal-badge status">{attendanceStatus}</span>
+        </div>
+        <div className="portal-record-meta portal-attendance-record-meta">
           <span>Logged: {record.createdAt ? formatPortalDateTime(record.createdAt) : '-'}</span>
           <span>Total worked: {record.totalWorkedMinutes || 0} min</span>
         </div>
-        <div className="portal-staff-report-list">
-          <div className="portal-staff-report-row">
-            <strong>Check in</strong>
-            <span>{record.checkInTime ? formatPortalDateTime(record.checkInTime) : 'Not recorded'}</span>
+        <div className="portal-attendance-detail-grid">
+          <div className="portal-detail-item compact">
+            <span className="portal-detail-label">Check in</span>
+            <span className="portal-detail-value">{record.checkInTime ? formatPortalDateTime(record.checkInTime) : 'Not recorded'}</span>
           </div>
-          <div className="portal-staff-report-row">
-            <strong>Check out</strong>
-            <span>{record.checkOutTime ? formatPortalDateTime(record.checkOutTime) : 'Not recorded'}</span>
+          <div className="portal-detail-item compact">
+            <span className="portal-detail-label">Check out</span>
+            <span className="portal-detail-value">{record.checkOutTime ? formatPortalDateTime(record.checkOutTime) : 'Not recorded'}</span>
           </div>
-          <div className="portal-staff-report-row">
-            <strong>Day start mileage</strong>
-            <span>
+          <div className="portal-detail-item compact">
+            <span className="portal-detail-label">Day start mileage</span>
+            <span className="portal-detail-value">
               {record.mileageWeekStart ?? '-'}
               {record.mileageWeekStartAt ? ` • entered ${formatPortalDateTime(record.mileageWeekStartAt)}` : ''}
             </span>
           </div>
-          <div className="portal-staff-report-row">
-            <strong>Day end mileage</strong>
-            <span>
+          <div className="portal-detail-item compact">
+            <span className="portal-detail-label">Day end mileage</span>
+            <span className="portal-detail-value">
               {record.mileageWeekEnd ?? '-'}
               {record.mileageWeekEndAt ? ` • entered ${formatPortalDateTime(record.mileageWeekEndAt)}` : ''}
             </span>
@@ -234,7 +236,7 @@ const AdminResourcePage = ({ config }) => {
         </ul>
       </div>
 
-      <div className="portal-card">
+      <div className={`portal-card${isAttendancePage ? ' portal-resource-card compact' : ''}`}>
         <div className="portal-section-head">
           <div>
             <div className="portal-brand-kicker">Admin View</div>
@@ -257,7 +259,7 @@ const AdminResourcePage = ({ config }) => {
             <button className="portal-inline-button ghost" type="button" onClick={handleExport}>Export CSV</button>
           )}
         </div>
-        <div className="portal-grid stats portal-module-stats" style={{ marginTop: '1rem' }}>
+        <div className={`portal-grid stats portal-module-stats${isAttendancePage ? ' compact' : ''}`} style={{ marginTop: '1rem' }}>
           <div className="portal-stat light">
             <div className="portal-stat-value">{records.length}</div>
             <div className="portal-stat-label">Visible records</div>
@@ -272,7 +274,7 @@ const AdminResourcePage = ({ config }) => {
           </div>
         </div>
         {(config.supportsUser || config.supportsStatus || config.supportsDate) && (
-          <div className="portal-filter-bar">
+          <div className={`portal-filter-bar${isAttendancePage ? ' compact' : ''}`}>
             {config.supportsUser && (
               <select value={filters.user} onChange={(e) => setFilters((current) => ({ ...current, user: e.target.value }))}>
                 <option value="">All staff</option>

@@ -514,6 +514,90 @@
   gap: 0.55rem;
 }
 
+.portal-resource-card.compact {
+  padding: 0.95rem;
+}
+
+.portal-module-stats.compact {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.6rem;
+}
+
+.portal-module-stats.compact .portal-stat {
+  min-height: 0;
+  padding: 0.75rem 0.8rem;
+  border-radius: 1rem;
+}
+
+.portal-module-stats.compact .portal-stat-value {
+  font-size: 1.45rem;
+}
+
+.portal-filter-bar.compact {
+  padding: 0.7rem;
+  gap: 0.55rem;
+}
+
+.portal-filter-bar.compact select,
+.portal-filter-bar.compact input {
+  min-height: 2.65rem;
+  padding: 0.68rem 0.82rem;
+}
+
+.portal-attendance-record-card {
+  gap: 0.5rem;
+  padding: 0.85rem;
+}
+
+.portal-attendance-record-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.portal-attendance-record-identity {
+  display: grid;
+  gap: 0.18rem;
+}
+
+.portal-attendance-record-identity strong {
+  color: var(--navy-900);
+  font-size: 1rem;
+}
+
+.portal-attendance-record-identity span {
+  color: var(--navy-600);
+  font-size: 0.84rem;
+}
+
+.portal-attendance-record-meta {
+  gap: 0.35rem;
+  font-size: 0.8rem;
+}
+
+.portal-attendance-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.55rem;
+}
+
+.portal-detail-item.compact {
+  gap: 0.14rem;
+  padding: 0.62rem 0.72rem;
+  border-radius: 0.85rem;
+}
+
+.portal-detail-item.compact .portal-detail-label {
+  font-size: 0.68rem;
+}
+
+.portal-detail-item.compact .portal-detail-value {
+  font-size: 0.84rem;
+  line-height: 1.35;
+}
+
 .portal-compact-row {
   display: flex;
   justify-content: space-between;
@@ -1963,6 +2047,11 @@
     display: grid;
     grid-template-columns: 1fr;
     gap: 0.45rem;
+  }
+
+  .portal-module-stats.compact,
+  .portal-attendance-detail-grid {
+    grid-template-columns: 1fr;
   }
 
   .portal-filter-bar select,
