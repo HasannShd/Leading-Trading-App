@@ -8,6 +8,7 @@ const quickLinks = [
   { to: '/staff/attendance', label: 'Check In / Out' },
   { to: '/staff/reports', label: 'Submit Report' },
   { to: '/staff/orders', label: 'Submit Order' },
+  { to: '/staff/order-history', label: 'My Orders' },
   { to: '/staff/visits', label: 'Log Visit' },
   { to: '/staff/clients', label: 'Open Clients' },
 ];
@@ -63,7 +64,7 @@ const StaffDashboard = () => {
             {data.attendanceStatus?.checkedOut ? 'Attendance Complete' : data.attendanceStatus?.checkedIn ? 'Open Check Out' : 'Open Check In'}
           </Link>
           <Link className="portal-button ghost" to="/staff/orders">
-            Open Orders
+            New Order
           </Link>
         </div>
       </div>

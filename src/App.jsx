@@ -54,6 +54,7 @@ const StaffMessagesPage = lazy(() => import('./components/Portal/StaffMessagesPa
 const StaffAccount = lazy(() => import('./components/Portal/StaffAccount'));
 const StaffResourcePage = lazy(() => import('./components/Portal/StaffResourcePage'));
 const StaffOrdersPage = lazy(() => import('./components/Portal/StaffOrdersPage'));
+const StaffOrderHistoryPage = lazy(() => import('./components/Portal/StaffOrderHistoryPage'));
 const AdminStaffPage = lazy(() => import('./components/Portal/AdminStaffPage'));
 const AdminResourcePage = lazy(() => import('./components/Portal/AdminResourcePage'));
 
@@ -129,6 +130,7 @@ const AppShell = () => {
               <Route path="attendance" element={<StaffAttendance />} />
               <Route path="reports" element={<StaffResourcePage config={staffModuleConfigs.reports} />} />
               <Route path="orders" element={<StaffOrdersPage />} />
+              <Route path="order-history" element={<StaffOrderHistoryPage />} />
               <Route path="clients" element={<StaffResourcePage config={staffModuleConfigs.clients} />} />
               <Route path="visits" element={<StaffResourcePage config={staffModuleConfigs.visits} />} />
               <Route path="messages" element={<StaffMessagesPage />} />

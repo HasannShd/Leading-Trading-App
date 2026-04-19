@@ -6,7 +6,7 @@ import './PortalShell.css';
 
 const getNotificationTarget = (notification) => {
   if (notification.relatedModule === 'sales_order' && notification.relatedRecord) {
-    return `/staff/orders?focus=${encodeURIComponent(String(notification.relatedRecord))}`;
+    return `/staff/order-history?focus=${encodeURIComponent(String(notification.relatedRecord))}`;
   }
 
   if (notification.relatedModule === 'messages') {
