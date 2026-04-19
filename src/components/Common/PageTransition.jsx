@@ -16,8 +16,7 @@ export default function PageTransition() {
 
     // Remove any lingering class first, then force reflow so the animation replays
     overlay.classList.remove('page-transition--reveal');
-    // eslint-disable-next-line no-unused-expressions
-    overlay.offsetHeight; // reflow
+    void overlay.offsetHeight;
     overlay.classList.add('page-transition--reveal');
 
     const id = setTimeout(() => {

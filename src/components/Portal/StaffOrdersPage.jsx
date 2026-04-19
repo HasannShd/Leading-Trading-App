@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { portalApi } from '../../services/portalApi';
 import { authFetch } from '../../services/authFetch';
+import { formatPortalDateTime } from '../../utils/portalDate';
 import './PortalShell.css';
 
 const blankClient = {
@@ -54,6 +55,8 @@ const parseLineItems = (value) =>
       };
     })
     .filter((item) => item.productName);
+
+const attachmentLabel = (attachment) => attachment?.name || attachment?.url?.split('/').pop() || 'Attachment';
 
 const StaffOrdersPage = () => {
   const [clients, setClients] = useState([]);
@@ -323,7 +326,9 @@ const StaffOrdersPage = () => {
           </div>
 
           <div className="portal-record-list" style={{ marginTop: '1rem' }}>
-            {filteredClients.length ? (
+            {loading ? (
+              <div className="portal-record-card">Loading clients...</div>
+            ) : filteredClients.length ? (
               filteredClients.map((client) => (
                 <button
                   key={client._id}
