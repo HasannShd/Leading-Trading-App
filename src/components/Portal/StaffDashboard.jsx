@@ -2,7 +2,13 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { portalApi } from '../../services/portalApi';
 import { formatPortalDateTime, formatPortalPrettyDate } from '../../utils/portalDate';
+import { useCountUp } from '../../hooks/useCountUp';
 import './PortalShell.css';
+
+const AnimatedCount = ({ value }) => {
+  const ref = useCountUp(value, { duration: 1.2 });
+  return <div className="portal-stat-value" ref={ref}>{value}</div>;
+};
 
 const quickLinks = [
   { to: '/staff/attendance', label: 'Check In / Out' },
@@ -47,15 +53,15 @@ const StaffDashboard = () => {
             </div>
           </div>
           <div className="portal-stat">
-            <div className="portal-stat-value">{data.quickStats.recentOrders}</div>
+            <AnimatedCount value={data.quickStats.recentOrders} />
             <div className="portal-stat-label">Recent orders</div>
           </div>
           <div className="portal-stat">
-            <div className="portal-stat-value">{data.quickStats.unreadNotifications}</div>
+            <AnimatedCount value={data.quickStats.unreadNotifications} />
             <div className="portal-stat-label">Unread notifications</div>
           </div>
           <div className="portal-stat">
-            <div className="portal-stat-value">{data.recentActivity.length}</div>
+            <AnimatedCount value={data.recentActivity.length} />
             <div className="portal-stat-label">Recent activity items</div>
           </div>
         </div>
