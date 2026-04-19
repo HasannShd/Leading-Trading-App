@@ -28,6 +28,20 @@ const blankOrder = {
   notes: '',
 };
 
+const parseQuantity = (value) => {
+  const normalized = String(value || '').trim();
+  if (!normalized) return 1;
+
+  const directNumber = Number(normalized);
+  if (Number.isFinite(directNumber) && directNumber > 0) return directNumber;
+
+  const numericMatch = normalized.match(/-?\d+(?:\.\d+)?/);
+  if (!numericMatch) return 1;
+
+  const parsedNumber = Number(numericMatch[0]);
+  return Number.isFinite(parsedNumber) && parsedNumber > 0 ? parsedNumber : 1;
+};
+
 const parseLineItems = (value) =>
   String(value || '')
     .split('\n')
@@ -37,7 +51,7 @@ const parseLineItems = (value) =>
       const [productName = '', quantity = '1', price = ''] = line.split('|').map((part) => part.trim());
       return {
         productName,
-        quantity: Number(quantity) || 1,
+        quantity: parseQuantity(quantity),
         ...(price !== '' ? { price: Number(price) || 0 } : {}),
       };
     })

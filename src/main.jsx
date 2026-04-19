@@ -8,6 +8,14 @@ import { initLenis } from './utils/lenis.js'
 // Initialise Lenis smooth scroll (no-op on touch / reduced-motion devices)
 initLenis();
 
+const isStandalone =
+  window.matchMedia?.('(display-mode: standalone)')?.matches || window.navigator.standalone === true;
+
+if (isStandalone) {
+  document.documentElement.classList.add('app-standalone');
+  document.body.classList.add('app-standalone');
+}
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <App />

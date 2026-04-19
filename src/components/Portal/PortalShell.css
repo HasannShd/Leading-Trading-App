@@ -44,6 +44,10 @@
   border-bottom: 1px solid rgba(13, 26, 43, 0.08);
 }
 
+.app-standalone .portal-topbar {
+  padding-top: max(0.35rem, env(safe-area-inset-top, 0px));
+}
+
 .portal-brand {
   display: flex;
   flex-direction: column;
@@ -1684,6 +1688,10 @@
     align-items: stretch;
     gap: 0.5rem;
     padding: calc(0.45rem + env(safe-area-inset-top, 0px)) 0.6rem 0.5rem;
+  }
+
+  .app-standalone .portal-topbar {
+    padding-top: max(0.2rem, env(safe-area-inset-top, 0px));
   }
 
   .portal-admin-topbar {
