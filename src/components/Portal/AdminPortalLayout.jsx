@@ -21,6 +21,7 @@ const linkGroups = [
   {
     section: 'Website Control',
     items: [
+      { to: '/admin/website', label: 'Website', icon: '◫' },
       { to: '/admin/catalog', label: 'Catalog', icon: '◫' },
       { to: '/admin/catalog/categories', label: 'Categories', icon: '□' },
       { to: '/admin/catalog/products', label: 'Products', icon: '◇' },

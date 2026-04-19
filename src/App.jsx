@@ -42,6 +42,7 @@ const AdminOrderDetails = lazy(() => import('./components/Admin/AdminOrderDetail
 const AdminAccount = lazy(() => import('./components/Admin/AdminAccount'));
 const AdminPortalLayout = lazy(() => import('./components/Portal/AdminPortalLayout'));
 const AdminDashboardPage = lazy(() => import('./components/Portal/AdminDashboardPage'));
+const AdminWebsitePage = lazy(() => import('./components/Portal/AdminWebsitePage'));
 const AdminMessagesPage = lazy(() => import('./components/Portal/AdminMessagesPage'));
 const StaffLayout = lazy(() => import('./components/Portal/StaffLayout'));
 const StaffLogin = lazy(() => import('./components/Portal/StaffLogin'));
@@ -140,6 +141,7 @@ const AppShell = () => {
             <Route path="/admin" element={<ProtectedAdminRoute element={<AdminPortalLayout />} />}>
               <Route index element={<Navigate to="/admin/dashboard" replace />} />
               <Route path="dashboard" element={<AdminDashboardPage />} />
+              <Route path="website" element={<AdminWebsitePage />} />
               <Route path="catalog" element={<Navigate to="/admin/catalog/products" replace />} />
               <Route path="catalog/categories" element={<AdminCategories />} />
               <Route path="catalog/products" element={<AdminProducts />} />

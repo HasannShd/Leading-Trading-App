@@ -30,15 +30,6 @@ const AdminDashboardPage = () => {
     { label: 'Visits', to: '/admin/visits', meta: 'Field records', icon: '◍' },
   ];
 
-  const websiteLinks = [
-    { label: 'Categories', to: '/admin/catalog/categories', meta: 'Structure catalog', icon: '□' },
-    { label: 'Products', to: '/admin/catalog/products', meta: 'Manage stock list', icon: '◇' },
-    { label: 'Import', to: '/admin/catalog/import', meta: 'Bulk upload', icon: '↥' },
-    { label: 'Website Orders', to: '/admin/site-orders', meta: 'Customer orders', icon: '▥' },
-    { label: 'Marketing', to: '/admin/marketing', meta: 'Lead contacts', icon: '✦' },
-    { label: 'Account', to: '/admin/account', meta: 'Security + profile', icon: '⚙' },
-  ];
-
   const snapshotMetrics = [
     ['Staff Ready', metrics.checkedInToday ?? 0],
     ['Open Orders', metrics.pendingOrders ?? 0],
@@ -53,7 +44,7 @@ const AdminDashboardPage = () => {
           <div className="portal-brand-kicker">Office Command Center</div>
           <h1 className="portal-section-title">Hi, {adminName}</h1>
           <p className="portal-section-copy portal-admin-hero-copy">
-            Watch the team, review work coming in, and move into the catalog or customer side without leaving this panel.
+            Watch the team, review incoming work, and stay focused on staff operations from one smaller command view.
           </p>
           <div className="portal-admin-hero-pills">
             <span className="portal-admin-hero-pill">Daily control</span>
@@ -93,59 +84,7 @@ const AdminDashboardPage = () => {
         </div>
       </div>
 
-      <div className="portal-card portal-admin-tile-section">
-        <div className="portal-section-head">
-          <div>
-            <div className="portal-brand-kicker">Website Control</div>
-            <h2 className="portal-section-title portal-admin-panel-title">Catalog and site tools</h2>
-            <p className="portal-section-copy">
-              Switch from team operations into products, categories, imports, website orders, and marketing without leaving the panel.
-            </p>
-          </div>
-        </div>
-        <div className="portal-admin-module-grid website">
-          {websiteLinks.map((item) => (
-            <Link key={item.to} to={item.to} className="portal-admin-module-card soft" style={{ textDecoration: 'none', color: 'inherit' }}>
-              <div className="portal-admin-module-icon" aria-hidden="true">{item.icon}</div>
-              <div className="portal-admin-module-copy">
-                <strong>{item.label}</strong>
-                <span>{item.meta}</span>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </div>
-
-      <div className="portal-admin-lower-grid">
-        <div className="portal-card portal-admin-activity-panel">
-          <div className="portal-section-head">
-            <div>
-              <div className="portal-brand-kicker">Latest Activity</div>
-              <h2 className="portal-section-title portal-admin-panel-title">Audit snapshot</h2>
-            </div>
-          </div>
-          {data.recentActivity?.length ? (
-            <div className="portal-record-list portal-admin-activity-list">
-              {data.recentActivity.slice(0, 5).map((item) => (
-                <div className="portal-record-card portal-admin-activity-row" key={item._id}>
-                  <div className="portal-admin-activity-main">
-                    <h3 className="portal-record-title">{item.action}</h3>
-                    <div className="portal-record-meta">
-                      <span>{item.user?.name || item.user?.username || '-'}</span>
-                      <span>{item.module}</span>
-                    </div>
-                  </div>
-                  <span className="portal-admin-activity-time">{new Date(item.createdAt).toLocaleString()}</span>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <p className="portal-section-copy">
-              No staff activity has been logged yet. Create staff users, review attendance, or open the website control tools above.
-            </p>
-          )}
-        </div>
-
+      <div className="portal-admin-lower-grid focus-only">
         <div className="portal-card portal-admin-focus-panel">
           <div className="portal-brand-kicker">Today’s Focus</div>
           <h2 className="portal-section-title portal-admin-panel-title">Keep the day moving</h2>

@@ -1342,6 +1342,10 @@
   gap: 1rem;
 }
 
+.portal-admin-lower-grid.focus-only {
+  grid-template-columns: minmax(0, 1fr);
+}
+
 .portal-admin-activity-panel,
 .portal-admin-focus-panel {
   padding: 1.2rem;
