@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { portalApi } from '../../services/portalApi';
+import { formatOrderItem } from '../../utils/orderItems';
 import { formatPortalDateTime } from '../../utils/portalDate';
 import './PortalShell.css';
 
@@ -133,7 +134,7 @@ const StaffOrderHistoryPage = () => {
                   </div>
                 </div>
                 <div className="portal-record-copy">
-                  {(order.items || []).map((item) => `${item.productName} x${item.quantity}${item.price !== undefined ? ` @ ${item.price}` : ''}`).join(' | ')}
+                  {(order.items || []).map((item) => formatOrderItem(item)).join(' | ')}
                 </div>
                 {order.attachments?.length ? (
                   <div className="portal-attachment-list" style={{ marginTop: '0.85rem' }}>

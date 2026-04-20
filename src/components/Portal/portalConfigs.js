@@ -1,31 +1,4 @@
-const parseQuantity = (value) => {
-  const normalized = String(value || '').trim();
-  if (!normalized) return 1;
-
-  const directNumber = Number(normalized);
-  if (Number.isFinite(directNumber) && directNumber > 0) return directNumber;
-
-  const numericMatch = normalized.match(/-?\d+(?:\.\d+)?/);
-  if (!numericMatch) return 1;
-
-  const parsedNumber = Number(numericMatch[0]);
-  return Number.isFinite(parsedNumber) && parsedNumber > 0 ? parsedNumber : 1;
-};
-
-export const parseLineItems = (value) =>
-  String(value || '')
-    .split('\n')
-    .map((line) => line.trim())
-    .filter(Boolean)
-    .map((line) => {
-      const [productName = '', quantity = '1', price = ''] = line.split('|').map((part) => part.trim());
-      return {
-        productName,
-        quantity: parseQuantity(quantity),
-        ...(price !== '' ? { price: Number(price) || 0 } : {}),
-      };
-    })
-    .filter((item) => item.productName);
+import { parseLineItems } from '../../utils/orderItems';
 
 export const staffModuleConfigs = {
   reports: {
@@ -60,7 +33,7 @@ export const staffModuleConfigs = {
         label: 'Items',
         type: 'textarea',
         required: true,
-        placeholder: 'One line per item: Product Name | Quantity | Price',
+        placeholder: 'One line per item: Product Name | Quantity | UOM | Price. Example: Ultrasound Gel | 7 | pcs | 2.500',
       },
       {
         name: 'urgency',

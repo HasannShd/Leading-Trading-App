@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { portalApi } from '../../services/portalApi';
 import { authFetch } from '../../services/authFetch';
 import { formatPortalDateTime } from '../../utils/portalDate';
+import { parseLineItems } from '../../utils/orderItems';
 import './PortalShell.css';
 
 const blankClient = {
@@ -26,35 +27,6 @@ const blankOrder = {
   deliveryNote: '',
   notes: '',
 };
-
-const parseQuantity = (value) => {
-  const normalized = String(value || '').trim();
-  if (!normalized) return 1;
-
-  const directNumber = Number(normalized);
-  if (Number.isFinite(directNumber) && directNumber > 0) return directNumber;
-
-  const numericMatch = normalized.match(/-?\d+(?:\.\d+)?/);
-  if (!numericMatch) return 1;
-
-  const parsedNumber = Number(numericMatch[0]);
-  return Number.isFinite(parsedNumber) && parsedNumber > 0 ? parsedNumber : 1;
-};
-
-const parseLineItems = (value) =>
-  String(value || '')
-    .split('\n')
-    .map((line) => line.trim())
-    .filter(Boolean)
-    .map((line) => {
-      const [productName = '', quantity = '1', price = ''] = line.split('|').map((part) => part.trim());
-      return {
-        productName,
-        quantity: parseQuantity(quantity),
-        ...(price !== '' ? { price: Number(price) || 0 } : {}),
-      };
-    })
-    .filter((item) => item.productName);
 
 const attachmentLabel = (attachment) => attachment?.name || attachment?.url?.split('/').pop() || 'Attachment';
 
@@ -433,7 +405,7 @@ const StaffOrdersPage = () => {
                 <textarea
                   value={orderForm.itemsText}
                   onChange={(e) => updateOrderForm('itemsText', e.target.value)}
-                  placeholder="One line per item: Product Name | Quantity | Price"
+                  placeholder="One line per item: Product Name | Quantity | UOM | Price. Example: Ultrasound Gel | 7 | pcs | 2.500"
                 />
               </div>
               <div className="portal-field">
@@ -467,7 +439,7 @@ const StaffOrdersPage = () => {
             ) : null}
             {message && <div className="portal-message-banner success">{message}</div>}
             <div className="portal-submit-bar">
-              <div className="portal-submit-note">Check the selected client, order items, and any supporting files, then press this button once. Drafts are saved on this phone until you submit or clear them.</div>
+              <div className="portal-submit-note">Check the selected client, order items, and any supporting files, then press this button once. UOM is free text, so staff can write units like pcs, box, pack, carton, ml, or any other unit needed.</div>
               <div className="portal-actions-two">
                 <button className="portal-button ghost portal-save-button portal-save-button-ghost" type="button" onClick={clearDraft} disabled={busy}>
                   Clear Draft

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { portalApi } from '../../services/portalApi';
 import { authFetch, API_URL } from '../../services/authFetch';
+import { formatOrderItem } from '../../utils/orderItems';
 import { formatPortalDate, formatPortalDateTime } from '../../utils/portalDate';
 import './PortalShell.css';
 
@@ -472,7 +473,7 @@ const AdminResourcePage = ({ config }) => {
                     <div className="portal-note-block">
                       <div className="portal-detail-label">Items</div>
                       <div className="portal-record-copy">
-                        {(selectedReport.items || []).map((item) => `${item.productName} x${item.quantity}${item.price ? ` @ ${item.price}` : ''}`).join(' | ') || '-'}
+                        {(selectedReport.items || []).map((item) => formatOrderItem(item)).join(' | ') || '-'}
                       </div>
                     </div>
                     {selectedReport.deliveryNote && (
