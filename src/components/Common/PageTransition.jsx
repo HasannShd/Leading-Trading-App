@@ -8,22 +8,38 @@ import './PageTransition.css';
  */
 export default function PageTransition() {
   const overlayRef = useRef(null);
+  const frameRef = useRef(0);
   const location = useLocation();
 
   useEffect(() => {
     const overlay = overlayRef.current;
     if (!overlay) return;
 
-    // Remove any lingering class first, then force reflow so the animation replays
-    overlay.classList.remove('page-transition--reveal');
-    void overlay.offsetHeight;
-    overlay.classList.add('page-transition--reveal');
+    try {
+      overlay.classList.remove('page-transition--reveal');
+      cancelAnimationFrame(frameRef.current);
+      frameRef.current = window.requestAnimationFrame(() => {
+        if (!overlayRef.current?.isConnected) return;
+        void overlayRef.current.offsetHeight;
+        overlayRef.current.classList.add('page-transition--reveal');
+      });
+    } catch (error) {
+      console.error('Page transition animation failed', error);
+      return undefined;
+    }
 
     const id = setTimeout(() => {
-      overlay.classList.remove('page-transition--reveal');
+      try {
+        overlayRef.current?.classList.remove('page-transition--reveal');
+      } catch (error) {
+        console.error('Page transition cleanup failed', error);
+      }
     }, 700);
 
-    return () => clearTimeout(id);
+    return () => {
+      clearTimeout(id);
+      cancelAnimationFrame(frameRef.current);
+    };
   }, [location.pathname]);
 
   return (

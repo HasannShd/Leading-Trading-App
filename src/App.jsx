@@ -184,19 +184,27 @@ const ScrollToTop = () => {
   return null;
 };
 
+const RoutedApp = () => {
+  const location = useLocation();
+
+  return (
+    <AppErrorBoundary resetKey={location.pathname}>
+      <ScrollToTop />
+      <AuthProvider>
+        <AdminProvider>
+          <StaffProvider>
+            <AppShell />
+          </StaffProvider>
+        </AdminProvider>
+      </AuthProvider>
+    </AppErrorBoundary>
+  );
+};
+
 export default function App() {
   return (
     <Router>
-      <AppErrorBoundary>
-        <ScrollToTop />
-        <AuthProvider>
-          <AdminProvider>
-            <StaffProvider>
-              <AppShell />
-            </StaffProvider>
-          </AdminProvider>
-        </AuthProvider>
-      </AppErrorBoundary>
+      <RoutedApp />
     </Router>
   );
 }
