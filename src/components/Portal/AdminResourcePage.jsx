@@ -20,7 +20,7 @@ const AdminResourcePage = ({ config }) => {
   const statusOptions = config.statusOptions || [];
   const prettyStatus = (value) => String(value || '-').replace(/_/g, ' ');
   const getOrderFacilityName = (record) =>
-    record.companyName || record.client?.name || record.customerName || record.contactPerson || 'Order';
+    record.companyName || record.client?.name || 'Facility not set';
 
   const buildQuery = useCallback(() => {
     const params = new URLSearchParams();
@@ -426,7 +426,8 @@ const AdminResourcePage = ({ config }) => {
                     >
                       <h3 className="portal-record-title">{getOrderFacilityName(record)}</h3>
                       <div className="portal-record-meta">
-                        <span>{record.createdAt ? formatPortalDateTime(record.createdAt) : '-'}</span>
+                        <span>{record.requestedForDate || '-'}</span>
+                        {record.orderTiming === 'tomorrow' ? <span>Order for tomorrow</span> : null}
                         {record.status && <span className="portal-badge status">{prettyStatus(record.status)}</span>}
                       </div>
                     </button>
@@ -437,6 +438,7 @@ const AdminResourcePage = ({ config }) => {
                     <h3 className="portal-record-title">{getOrderFacilityName(selectedReport)}</h3>
                     <div className="portal-record-meta">
                       <span>{selectedReport.createdAt ? formatPortalDateTime(selectedReport.createdAt) : '-'}</span>
+                      <span>{selectedReport.requestedForDate || '-'}</span>
                       <span>{prettyStatus(selectedReport.status)}</span>
                       <span>{selectedReport.urgency || '-'}</span>
                     </div>
@@ -448,6 +450,14 @@ const AdminResourcePage = ({ config }) => {
                       <div className="portal-detail-item">
                         <span className="portal-detail-label">Contact</span>
                         <span className="portal-detail-value">{selectedReport.contactPerson || '-'}</span>
+                      </div>
+                      <div className="portal-detail-item">
+                        <span className="portal-detail-label">Requested for</span>
+                        <span className="portal-detail-value">{selectedReport.requestedForDate || '-'}</span>
+                      </div>
+                      <div className="portal-detail-item">
+                        <span className="portal-detail-label">Order timing</span>
+                        <span className="portal-detail-value">{selectedReport.orderTiming === 'tomorrow' ? 'Order for tomorrow' : 'Order for today'}</span>
                       </div>
                       <div className="portal-detail-item">
                         <span className="portal-detail-label">VAT</span>

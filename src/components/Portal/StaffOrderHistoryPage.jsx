@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { portalApi } from '../../services/portalApi';
 import { formatOrderItem } from '../../utils/orderItems';
@@ -6,18 +6,23 @@ import { formatPortalDateTime } from '../../utils/portalDate';
 import './PortalShell.css';
 
 const attachmentLabel = (attachment) => attachment?.name || attachment?.url?.split('/').pop() || 'Attachment';
+const getFacilityName = (order) => order.companyName || order.client?.name || 'Facility not set';
 
 const StaffOrderHistoryPage = () => {
   const location = useLocation();
+  const selectedOrderRef = useRef(null);
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState('');
   const [orderQuery, setOrderQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
-  const [focusedOrderId, setFocusedOrderId] = useState('');
+  const [dateFilter, setDateFilter] = useState('');
+  const [sortOrder, setSortOrder] = useState('newest');
+  const [selectedOrderId, setSelectedOrderId] = useState('');
 
   useEffect(() => {
-    setFocusedOrderId(new URLSearchParams(location.search).get('focus') || '');
+    const focusedOrderId = new URLSearchParams(location.search).get('focus') || '';
+    if (focusedOrderId) setSelectedOrderId(focusedOrderId);
   }, [location.search]);
 
   useEffect(() => {
@@ -38,21 +43,43 @@ const StaffOrderHistoryPage = () => {
 
   const filteredOrders = useMemo(() => {
     const query = orderQuery.trim().toLowerCase();
-    return orders.filter((order) => {
+    const nextOrders = orders.filter((order) => {
       const matchesStatus = statusFilter === 'all' || order.status === statusFilter;
-      if (!matchesStatus) return false;
+      const matchesDate = !dateFilter || (order.requestedForDate || order.createdAt?.slice?.(0, 10)) === dateFilter;
+      if (!matchesStatus || !matchesDate) return false;
       if (!query) return true;
       return [
+        getFacilityName(order),
         order.customerName,
-        order.companyName,
         order.contactPerson,
-        order.client?.name,
+        order.requestedForDate,
         ...(order.items || []).map((item) => item.productName),
       ]
         .filter(Boolean)
         .some((value) => String(value).toLowerCase().includes(query));
     });
-  }, [orderQuery, orders, statusFilter]);
+
+    return nextOrders.sort((left, right) => {
+      const leftKey = `${left.requestedForDate || ''}|${left.createdAt || ''}`;
+      const rightKey = `${right.requestedForDate || ''}|${right.createdAt || ''}`;
+      return sortOrder === 'oldest' ? leftKey.localeCompare(rightKey) : rightKey.localeCompare(leftKey);
+    });
+  }, [dateFilter, orderQuery, orders, sortOrder, statusFilter]);
+
+  const selectedOrder = useMemo(
+    () => filteredOrders.find((order) => order._id === selectedOrderId) || filteredOrders[0] || null,
+    [filteredOrders, selectedOrderId]
+  );
+
+  useEffect(() => {
+    if (!selectedOrder) return;
+    setSelectedOrderId(selectedOrder._id);
+  }, [selectedOrder?._id]);
+
+  useEffect(() => {
+    if (!selectedOrder || !selectedOrderRef.current) return;
+    selectedOrderRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, [selectedOrder]);
 
   return (
     <section className="portal-page">
@@ -62,7 +89,7 @@ const StaffOrderHistoryPage = () => {
             <div className="portal-brand-kicker">Order Review</div>
             <h1 className="portal-section-title">My previous orders</h1>
             <p className="portal-section-copy" style={{ color: 'rgba(255,255,255,0.76)' }}>
-              Review your older orders, track status changes, and reopen attachments or order details whenever you need them.
+              Review your older orders, sort them by requested date, and open only the one you need instead of scrolling through the whole history.
             </p>
           </div>
         </div>
@@ -72,12 +99,12 @@ const StaffOrderHistoryPage = () => {
             <div className="portal-stat-label">Orders submitted</div>
           </div>
           <div className="portal-stat">
-            <div className="portal-stat-value">{orders.filter((order) => ['submitted', 'reviewed', 'emailed', 'confirmed'].includes(order.status)).length}</div>
-            <div className="portal-stat-label">Active pipeline</div>
+            <div className="portal-stat-value">{orders.filter((order) => order.orderTiming === 'tomorrow').length}</div>
+            <div className="portal-stat-label">Queued for tomorrow</div>
           </div>
           <div className="portal-stat">
-            <div className="portal-stat-value">{orders.filter((order) => order.status === 'delivered').length}</div>
-            <div className="portal-stat-label">Delivered</div>
+            <div className="portal-stat-value">{orders.filter((order) => ['submitted', 'reviewed', 'emailed', 'confirmed'].includes(order.status)).length}</div>
+            <div className="portal-stat-label">Active pipeline</div>
           </div>
         </div>
       </div>
@@ -95,7 +122,7 @@ const StaffOrderHistoryPage = () => {
             type="search"
             value={orderQuery}
             onChange={(e) => setOrderQuery(e.target.value)}
-            placeholder="Search by company, customer, contact, or item"
+            placeholder="Search by facility, contact, requested date, or item"
           />
           <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
             <option value="all">All statuses</option>
@@ -103,83 +130,96 @@ const StaffOrderHistoryPage = () => {
               <option key={status} value={status}>{status}</option>
             ))}
           </select>
+          <input type="date" value={dateFilter} onChange={(e) => setDateFilter(e.target.value)} />
+          <select value={sortOrder} onChange={(e) => setSortOrder(e.target.value)}>
+            <option value="newest">Newest requested date</option>
+            <option value="oldest">Oldest requested date</option>
+          </select>
         </div>
+
         <div className="portal-record-list" style={{ marginTop: '1rem' }}>
           {loading ? (
             <div className="portal-record-card">Loading...</div>
           ) : filteredOrders.length ? (
-            filteredOrders.map((order) => (
-              <div className={`portal-record-card${focusedOrderId === order._id ? ' is-selected' : ''}`} key={order._id}>
-                <h3 className="portal-record-title">{order.companyName || order.client?.name || order.customerName}</h3>
-                <div className="portal-record-meta">
-                  <span className="portal-badge status">{order.status}</span>
-                  <span>{formatPortalDateTime(order.createdAt)}</span>
-                </div>
-                <div className="portal-staff-report-list">
-                  <div className="portal-staff-report-row">
-                    <strong>Customer</strong>
-                    <span>{order.customerName || '-'}</span>
+            <>
+              <div className="portal-inline-list compact">
+                {filteredOrders.map((order) => (
+                  <button
+                    key={order._id}
+                    type="button"
+                    className={`portal-record-card portal-record-card-button${selectedOrder?._id === order._id ? ' is-selected' : ''}`}
+                    onClick={() => setSelectedOrderId(order._id)}
+                  >
+                    <h3 className="portal-record-title">{getFacilityName(order)}</h3>
+                    <div className="portal-record-meta">
+                      <span className="portal-badge status">{order.status}</span>
+                      <span>{order.requestedForDate || '-'}</span>
+                      {order.orderTiming === 'tomorrow' ? <span>Order for tomorrow</span> : null}
+                    </div>
+                  </button>
+                ))}
+              </div>
+
+              {selectedOrder ? (
+                <div className="portal-record-card" ref={selectedOrderRef}>
+                  <h3 className="portal-record-title">{getFacilityName(selectedOrder)}</h3>
+                  <div className="portal-record-meta">
+                    <span className="portal-badge status">{selectedOrder.status}</span>
+                    <span>Requested for {selectedOrder.requestedForDate || '-'}</span>
+                    <span>{selectedOrder.orderTiming === 'tomorrow' ? 'Order for tomorrow' : 'Order for today'}</span>
+                    <span>{formatPortalDateTime(selectedOrder.createdAt)}</span>
                   </div>
-                  <div className="portal-staff-report-row">
-                    <strong>Contact person</strong>
-                    <span>{order.contactPerson || '-'}</span>
-                  </div>
-                  <div className="portal-staff-report-row">
-                    <strong>Urgency</strong>
-                    <span>{order.urgency || 'normal'}</span>
-                  </div>
-                  <div className="portal-staff-report-row">
-                    <strong>Items</strong>
-                    <span>{(order.items || []).length}</span>
-                  </div>
-                  <div className="portal-staff-report-row">
-                    <strong>VAT</strong>
-                    <span>{order.vatApplicable ? order.vatAmount ?? 'Applicable' : 'Not applied'}</span>
-                  </div>
-                </div>
-                <div className="portal-record-copy">
-                  {(order.items || []).map((item) => formatOrderItem(item)).join(' | ')}
-                </div>
-                {order.attachments?.length ? (
-                  <div className="portal-attachment-list" style={{ marginTop: '0.85rem' }}>
-                    {order.attachments.map((attachment) => (
-                      <a
-                        key={`${order._id}-${attachment.url}`}
-                        className="portal-attachment-chip"
-                        href={attachment.url}
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        {attachmentLabel(attachment)}
-                      </a>
-                    ))}
-                  </div>
-                ) : null}
-                {(order.notes || order.deliveryNote) && (
-                  <div className="portal-record-copy">
-                    {order.deliveryNote ? <div><strong>Delivery:</strong> {order.deliveryNote}</div> : null}
-                    {order.notes ? <div><strong>Notes:</strong> {order.notes}</div> : null}
-                  </div>
-                )}
-                {!!order.statusHistory?.length && (
-                  <div className="portal-record-copy" style={{ marginTop: '0.85rem' }}>
-                    <strong>Status history</strong>
-                    <div style={{ marginTop: '0.4rem' }}>
-                      {order.statusHistory
-                        .slice()
-                        .reverse()
-                        .map((entry, index) => (
-                          <div key={`${order._id}-${entry.changedAt || index}`}>
-                            {entry.status || 'updated'}
-                            {entry.note ? ` • ${entry.note}` : ''}
-                            {entry.changedAt ? ` • ${formatPortalDateTime(entry.changedAt)}` : ''}
-                          </div>
-                        ))}
+                  <div className="portal-detail-grid">
+                    <div className="portal-detail-item">
+                      <span className="portal-detail-label">Facility</span>
+                      <span className="portal-detail-value">{getFacilityName(selectedOrder)}</span>
+                    </div>
+                    <div className="portal-detail-item">
+                      <span className="portal-detail-label">Contact person</span>
+                      <span className="portal-detail-value">{selectedOrder.contactPerson || '-'}</span>
+                    </div>
+                    <div className="portal-detail-item">
+                      <span className="portal-detail-label">Customer name</span>
+                      <span className="portal-detail-value">{selectedOrder.customerName || '-'}</span>
+                    </div>
+                    <div className="portal-detail-item">
+                      <span className="portal-detail-label">Urgency</span>
+                      <span className="portal-detail-value">{selectedOrder.urgency || 'normal'}</span>
                     </div>
                   </div>
-                )}
-              </div>
-            ))
+                  <div className="portal-note-block">
+                    <div className="portal-detail-label">Items</div>
+                    <div className="portal-record-copy">
+                      {(selectedOrder.items || []).map((item) => formatOrderItem(item)).join(' | ')}
+                    </div>
+                  </div>
+                  {selectedOrder.attachments?.length ? (
+                    <div className="portal-note-block">
+                      <div className="portal-detail-label">Attachments</div>
+                      <div className="portal-attachment-list">
+                        {selectedOrder.attachments.map((attachment) => (
+                          <a
+                            key={`${selectedOrder._id}-${attachment.url}`}
+                            className="portal-attachment-chip"
+                            href={attachment.url}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            {attachmentLabel(attachment)}
+                          </a>
+                        ))}
+                      </div>
+                    </div>
+                  ) : null}
+                  {(selectedOrder.notes || selectedOrder.deliveryNote) && (
+                    <div className="portal-record-copy">
+                      {selectedOrder.deliveryNote ? <div><strong>Delivery:</strong> {selectedOrder.deliveryNote}</div> : null}
+                      {selectedOrder.notes ? <div><strong>Notes:</strong> {selectedOrder.notes}</div> : null}
+                    </div>
+                  )}
+                </div>
+              ) : null}
+            </>
           ) : (
             <div className="portal-empty-state">
               <h3 className="portal-empty-title">No matching orders</h3>

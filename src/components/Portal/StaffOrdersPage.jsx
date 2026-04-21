@@ -23,8 +23,7 @@ const blankOrder = {
   contactPerson: '',
   itemsText: '',
   urgency: 'normal',
-  vatApplicable: false,
-  vatAmount: '',
+  orderTiming: 'today',
   deliveryNote: '',
   notes: '',
 };
@@ -188,11 +187,6 @@ const StaffOrdersPage = () => {
         ...orderForm,
         items: parseLineItems(orderForm.itemsText),
         attachments: orderAttachments,
-        vatApplicable: Boolean(orderForm.vatApplicable),
-        vatAmount:
-          orderForm.vatApplicable && orderForm.vatAmount !== ''
-            ? Number(orderForm.vatAmount)
-            : undefined,
       };
       await portalApi.post('/staff-portal/orders', payload, 'sales_staff');
       setOrderForm(blankOrder);
@@ -402,40 +396,18 @@ const StaffOrdersPage = () => {
                 </select>
               </div>
               <div className="portal-field">
-                <label>VAT Applicable</label>
-                <select
-                  value={orderForm.vatApplicable ? 'yes' : 'no'}
-                  onChange={(e) => {
-                    const nextValue = e.target.value === 'yes';
-                    setOrderForm((current) => ({
-                      ...current,
-                      vatApplicable: nextValue,
-                      vatAmount: nextValue ? current.vatAmount : '',
-                    }));
-                  }}
-                >
-                  <option value="no">No</option>
-                  <option value="yes">Yes</option>
+                <label>Order Timing</label>
+                <select value={orderForm.orderTiming} onChange={(e) => updateOrderForm('orderTiming', e.target.value)}>
+                  <option value="today">Order for today</option>
+                  <option value="tomorrow">Order for tomorrow</option>
                 </select>
-              </div>
-              <div className="portal-field">
-                <label>VAT Amount / Rate</label>
-                <input
-                  type="number"
-                  step="0.001"
-                  min="0"
-                  value={orderForm.vatAmount}
-                  onChange={(e) => updateOrderForm('vatAmount', e.target.value)}
-                  placeholder="Optional"
-                  disabled={!orderForm.vatApplicable}
-                />
               </div>
               <div className="portal-field" style={{ gridColumn: '1 / -1' }}>
                 <label>Items</label>
                 <textarea
                   value={orderForm.itemsText}
                   onChange={(e) => updateOrderForm('itemsText', e.target.value)}
-                  placeholder="One line per item: Product Name | Quantity | UOM | Price. Example: Ultrasound Gel | 7 | pcs | 2.500"
+                  placeholder="Paste or type one item per line. Best format: Product Name | Quantity | UOM | VAT | Price. Example: Ultrasound Gel | 7 | pcs | 10 | 2.500"
                 />
               </div>
               <div className="portal-field">
