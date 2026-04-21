@@ -644,6 +644,8 @@
 .portal-record-copy {
   color: var(--navy-700);
   line-height: 1.55;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .portal-detail-grid {
@@ -673,6 +675,8 @@
   color: var(--navy-900);
   font-weight: 600;
   line-height: 1.35;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .portal-note-block {
@@ -1095,6 +1099,7 @@
   align-items: center;
   justify-content: center;
   min-height: 2.4rem;
+  max-width: 100%;
   padding: 0.55rem 0.9rem;
   border-radius: 999px;
   border: 1px solid rgba(13, 26, 43, 0.08);
@@ -1103,6 +1108,8 @@
   text-decoration: none;
   font-size: 0.86rem;
   font-weight: 600;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .portal-message-row.self .portal-attachment-chip {
@@ -2042,6 +2049,28 @@
     padding: 0.4rem 0.55rem;
     font-size: 0.72rem;
     line-height: 1.05;
+  }
+
+  .portal-inline-actions {
+    align-items: stretch;
+  }
+
+  .portal-inline-actions > select,
+  .portal-inline-actions > input,
+  .portal-inline-actions > textarea,
+  .portal-inline-actions > button {
+    flex: 1 1 100%;
+    min-width: 0;
+  }
+
+  .portal-inline-actions > .portal-badge {
+    width: fit-content;
+    max-width: 100%;
+  }
+
+  .portal-attachment-chip {
+    justify-content: flex-start;
+    text-align: left;
   }
 
   .portal-quick-link {
