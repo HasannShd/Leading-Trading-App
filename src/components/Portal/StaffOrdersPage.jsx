@@ -423,7 +423,6 @@ const StaffOrdersPage = () => {
                 <input
                   type="file"
                   multiple
-                  accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.csv,.txt"
                   onChange={handleOrderFiles}
                   disabled={busy}
                 />

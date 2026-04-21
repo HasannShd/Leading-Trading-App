@@ -354,7 +354,7 @@ const AdminMessagesPage = () => {
               <div className="portal-inline-actions">
                 <label className="portal-inline-button secondary portal-file-label">
                   {uploading ? 'Uploading...' : 'Attach Files'}
-                  <input type="file" multiple accept="image/*,.pdf,.doc,.docx,.xls,.xlsx" onChange={handleFiles} hidden />
+                  <input type="file" multiple onChange={handleFiles} hidden />
                 </label>
                 <button className="portal-inline-button ghost" type="button" onClick={() => { setDraft(''); setAttachments([]); }}>
                   Clear

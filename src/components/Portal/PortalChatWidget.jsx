@@ -325,7 +325,7 @@ const PortalChatWidget = ({ role = 'sales_staff' }) => {
                   <div className="portal-inline-actions compact">
                     <label className="portal-inline-button secondary portal-file-label">
                       {uploading ? 'Uploading...' : 'Attach'}
-                      <input type="file" multiple accept="image/*,.pdf,.doc,.docx,.xls,.xlsx" onChange={handleFiles} hidden />
+                      <input type="file" multiple onChange={handleFiles} hidden />
                     </label>
                     <button type="button" className="portal-inline-button ghost" onClick={() => { setDraft(''); setAttachments([]); }}>
                       Clear
@@ -371,7 +371,7 @@ const PortalChatWidget = ({ role = 'sales_staff' }) => {
                 <div className="portal-inline-actions compact">
                   <label className="portal-inline-button secondary portal-file-label">
                     {uploading ? 'Uploading...' : 'Attach'}
-                    <input type="file" multiple accept="image/*,.pdf,.doc,.docx,.xls,.xlsx" onChange={handleFiles} hidden />
+                    <input type="file" multiple onChange={handleFiles} hidden />
                   </label>
                   <button type="button" className="portal-inline-button ghost" onClick={() => { setDraft(''); setAttachments([]); }}>
                     Clear

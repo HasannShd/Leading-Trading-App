@@ -222,7 +222,7 @@ const StaffResourcePage = ({ config }) => {
                   </select>
                 ) : field.type === 'file' ? (
                   <div className="portal-file-row">
-                    <input type="file" accept="image/*,.pdf" onChange={(e) => handleFile(field.name, e.target.files?.[0])} />
+                    <input type="file" onChange={(e) => handleFile(field.name, e.target.files?.[0])} />
                     {values[field.name] && <span className="portal-badge">Uploaded</span>}
                   </div>
                 ) : (
