@@ -155,18 +155,6 @@ const StaffMessagesPage = () => {
         </div>
       </div>
 
-      <div className="portal-card portal-help-card">
-        <div className="portal-section-head">
-          <div>
-            <div className="portal-brand-kicker">How to use this</div>
-            <h2 className="portal-section-title" style={{ fontSize: '1.45rem' }}>Keep field communication in one place</h2>
-            <p className="portal-section-copy">
-              Use this page for updates that need office attention. You can attach photos, PDFs, and supporting files before pressing send.
-            </p>
-          </div>
-        </div>
-      </div>
-
       <div className="portal-card">
         <div className="portal-section-head">
           <div>
@@ -224,14 +212,18 @@ const StaffMessagesPage = () => {
             {attachments.length ? (
               <div className="portal-attachment-list editor">
                 {attachments.map((attachment) => (
-                  <button
-                    key={attachment.url}
-                    type="button"
-                    className="portal-attachment-chip removable"
-                    onClick={() => removeAttachment(attachment.url)}
-                  >
-                    {attachmentLabel(attachment)} ×
-                  </button>
+                  <div key={attachment.url} className="portal-inline-actions" style={{ gap: '0.5rem' }}>
+                    <a className="portal-attachment-chip" href={attachment.url} target="_blank" rel="noreferrer">
+                      {attachmentLabel(attachment)}
+                    </a>
+                    <button
+                      type="button"
+                      className="portal-attachment-chip removable"
+                      onClick={() => removeAttachment(attachment.url)}
+                    >
+                      Remove ×
+                    </button>
+                  </div>
                 ))}
               </div>
             ) : null}

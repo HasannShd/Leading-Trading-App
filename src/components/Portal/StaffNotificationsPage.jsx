@@ -120,14 +120,11 @@ const StaffNotificationsPage = () => {
         </div>
       </div>
 
-      <div className="portal-card portal-help-card">
+      <div className="portal-card">
         <div className="portal-section-head">
           <div>
-            <div className="portal-brand-kicker">Actions</div>
-            <h2 className="portal-section-title" style={{ fontSize: '1.4rem' }}>Stay on top of updates</h2>
-            <p className="portal-section-copy">
-              Use the filter to focus on unread items, open a notification to jump into the related order or message thread, and clear the whole unread list once you are done.
-            </p>
+            <div className="portal-brand-kicker">Notifications</div>
+            <h2 className="portal-section-title" style={{ fontSize: '1.8rem' }}>Recent staff alerts</h2>
           </div>
           <div className="portal-inline-actions">
             <select value={filter} onChange={(e) => setFilter(e.target.value)} disabled={busy}>
@@ -142,15 +139,6 @@ const StaffNotificationsPage = () => {
             >
               Mark All Read
             </button>
-          </div>
-        </div>
-      </div>
-
-      <div className="portal-card">
-        <div className="portal-section-head">
-          <div>
-            <div className="portal-brand-kicker">Notifications</div>
-            <h2 className="portal-section-title" style={{ fontSize: '1.8rem' }}>Recent staff alerts</h2>
           </div>
         </div>
         {message && <div className="portal-badge status" style={{ marginTop: '1rem' }}>{message}</div>}

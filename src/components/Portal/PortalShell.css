@@ -327,6 +327,10 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
+.portal-order-actions {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
 .portal-soft-actions {
   gap: 0.9rem;
 }
@@ -2000,6 +2004,7 @@
   .portal-grid.stats,
   .portal-actions,
   .portal-actions-two,
+  .portal-order-actions,
   .portal-quick-links,
   .portal-staff-summary-grid,
   .portal-staff-summary-grid.compact,

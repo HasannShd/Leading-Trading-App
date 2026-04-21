@@ -70,6 +70,7 @@ export const staffModuleConfigs = {
     description: 'Log every visit with outcomes and next steps so field activity is always recorded.',
     endpoint: '/staff-portal/visits',
     fields: [
+      { name: 'client', label: 'Saved Client', type: 'select', source: 'clients' },
       { name: 'clientName', label: 'Client Name', placeholder: 'Leave blank if not applicable' },
       { name: 'visitDate', label: 'Visit Date', type: 'date', required: true },
       { name: 'visitTime', label: 'Visit Time', type: 'time', placeholder: 'Optional' },

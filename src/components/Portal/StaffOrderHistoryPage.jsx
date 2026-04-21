@@ -132,6 +132,10 @@ const StaffOrderHistoryPage = () => {
                     <strong>Items</strong>
                     <span>{(order.items || []).length}</span>
                   </div>
+                  <div className="portal-staff-report-row">
+                    <strong>VAT</strong>
+                    <span>{order.vatApplicable ? order.vatAmount ?? 'Applicable' : 'Not applied'}</span>
+                  </div>
                 </div>
                 <div className="portal-record-copy">
                   {(order.items || []).map((item) => formatOrderItem(item)).join(' | ')}

@@ -449,6 +449,12 @@ const AdminResourcePage = ({ config }) => {
                         <span className="portal-detail-label">Contact</span>
                         <span className="portal-detail-value">{selectedReport.contactPerson || '-'}</span>
                       </div>
+                      <div className="portal-detail-item">
+                        <span className="portal-detail-label">VAT</span>
+                        <span className="portal-detail-value">
+                          {selectedReport.vatApplicable ? selectedReport.vatAmount ?? 'Applicable' : 'Not applied'}
+                        </span>
+                      </div>
                     </div>
                     <div className="portal-note-block">
                       <div className="portal-detail-label">Items</div>
