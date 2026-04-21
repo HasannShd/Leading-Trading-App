@@ -81,19 +81,13 @@ const AdminWebsitePage = () => {
           <div>
             <div className="portal-brand-kicker">Website Control</div>
             <h1 className="portal-section-title portal-admin-panel-title">Catalog and site tools</h1>
-            <p className="portal-section-copy">
-              Manage categories, products, imports, website orders, marketing, and account settings from one website workspace.
-            </p>
           </div>
         </div>
-        <div className="portal-card portal-help-card" style={{ marginTop: '1rem' }}>
+        <div className="portal-card" style={{ marginTop: '1rem' }}>
           <div className="portal-section-head">
             <div>
               <div className="portal-brand-kicker">Manual Export</div>
               <h2 className="portal-section-title" style={{ fontSize: '1.45rem' }}>Download full system workbook</h2>
-              <p className="portal-section-copy">
-                Export website, admin, and staff panel data into one Excel file for manual review or offline archiving.
-              </p>
             </div>
             <button className="portal-inline-button secondary" type="button" onClick={downloadFullExport} disabled={downloading}>
               {downloading ? 'Preparing export...' : 'Download Full Export'}
@@ -102,14 +96,11 @@ const AdminWebsitePage = () => {
           {status ? <div className="portal-message-banner success">{status}</div> : null}
           {error ? <div className="portal-message-banner">{error}</div> : null}
         </div>
-        <div className="portal-card portal-help-card" style={{ marginTop: '1rem' }}>
+        <div className="portal-card" style={{ marginTop: '1rem' }}>
           <div className="portal-section-head">
             <div>
               <div className="portal-brand-kicker">Recovery Export</div>
               <h2 className="portal-section-title" style={{ fontSize: '1.45rem' }}>Download round-trip recovery archive</h2>
-              <p className="portal-section-copy">
-                This JSON archive keeps raw records, nested data, and IDs intact so it can be imported back for recovery. Store it securely.
-              </p>
             </div>
             <button className="portal-inline-button secondary" type="button" onClick={downloadRecoveryExport} disabled={downloadingRecovery}>
               {downloadingRecovery ? 'Preparing archive...' : 'Download Recovery Archive'}

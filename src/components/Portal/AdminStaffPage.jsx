@@ -174,23 +174,6 @@ const AdminStaffPage = () => {
   return (
     <div className="portal-admin-page">
       <section className="portal-page">
-      <div className="portal-card portal-help-card">
-        <div className="portal-section-head">
-          <div>
-            <div className="portal-brand-kicker">Staff Setup</div>
-            <h2 className="portal-section-title" style={{ fontSize: '1.45rem' }}>Make access simple</h2>
-            <p className="portal-section-copy">
-              Create staff users here. Use one simple name for both display and sign-in, then ask them to sign in from the staff portal on their phone.
-            </p>
-          </div>
-        </div>
-        <ul className="portal-help-list">
-          <li>Use one short name staff can remember easily.</li>
-          <li>Keep department names simple, like Sales, Medical, Dental, or Delivery.</li>
-          <li>If someone should stop using the portal, press Deactivate instead of deleting them.</li>
-        </ul>
-      </div>
-
       <div className="portal-card">
         <div className="portal-section-head">
           <div>
@@ -233,7 +216,6 @@ const AdminStaffPage = () => {
           </div>
           {message && <div className="portal-badge status">{message}</div>}
           <div className="portal-submit-bar">
-            <div className="portal-submit-note">When the details are ready, press this button once.</div>
             <button className="portal-button primary portal-save-button" type="submit">Create Staff User</button>
           </div>
         </form>
