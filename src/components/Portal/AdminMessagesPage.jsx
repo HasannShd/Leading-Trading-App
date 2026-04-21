@@ -7,6 +7,7 @@ import '../Admin/AdminCategories.css';
 import './PortalShell.css';
 
 const attachmentLabel = (attachment) => attachment?.name || attachment?.url?.split('/').pop() || 'Attachment';
+const getThreadMessages = (thread) => (Array.isArray(thread?.messages) ? thread.messages : []);
 
 const AdminMessagesPage = () => {
   const [isMobile, setIsMobile] = useState(() => (typeof window !== 'undefined' ? window.innerWidth <= 640 : false));
@@ -80,7 +81,7 @@ const AdminMessagesPage = () => {
             current
               ? {
                   ...current,
-                  messages: current.messages.map((entry) =>
+                  messages: getThreadMessages(current).map((entry) =>
                     entry.senderRole === 'sales_staff' ? { ...entry, readByAdmin: true } : entry
                   ),
                 }
@@ -144,7 +145,7 @@ const AdminMessagesPage = () => {
 
   const orderedMessages = useMemo(
     () =>
-      [...(thread?.messages || [])].sort(
+      [...getThreadMessages(thread)].sort(
         (left, right) => new Date(left.createdAt).getTime() - new Date(right.createdAt).getTime()
       ),
     [thread]

@@ -62,9 +62,9 @@ const AdminResourcePage = ({ config }) => {
   }, [focusedRecordId, records]);
 
   useEffect(() => {
-    if (!selectedReport || !selectedRecordRef.current) return;
+    if (!selectedRecordId || !selectedRecordRef.current) return;
     selectedRecordRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }, [selectedReport]);
+  }, [selectedRecordId]);
 
   useEffect(() => {
     if (!filters.user) {

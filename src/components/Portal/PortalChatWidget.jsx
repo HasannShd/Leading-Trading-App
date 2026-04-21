@@ -4,6 +4,7 @@ import PortalMessageThread from './PortalMessageThread';
 import './PortalShell.css';
 
 const attachmentLabel = (attachment) => attachment?.name || attachment?.url?.split('/').pop() || 'Attachment';
+const getThreadMessages = (thread) => (Array.isArray(thread?.messages) ? thread.messages : []);
 
 const PortalChatWidget = ({ role = 'sales_staff' }) => {
   const isAdmin = role === 'admin';
@@ -53,7 +54,7 @@ const PortalChatWidget = ({ role = 'sales_staff' }) => {
             ? {
                 ...current,
                 unreadAdminCount: 0,
-                messages: current.messages.map((entry) =>
+                messages: getThreadMessages(current).map((entry) =>
                   entry.senderRole === 'admin' ? { ...entry, readByStaff: true } : entry
                 ),
               }
@@ -99,7 +100,7 @@ const PortalChatWidget = ({ role = 'sales_staff' }) => {
           current
             ? {
                 ...current,
-                messages: current.messages.map((entry) =>
+                messages: getThreadMessages(current).map((entry) =>
                   entry.senderRole === 'sales_staff' ? { ...entry, readByAdmin: true } : entry
                 ),
               }
@@ -138,7 +139,7 @@ const PortalChatWidget = ({ role = 'sales_staff' }) => {
 
   const orderedMessages = useMemo(
     () =>
-      [...(thread?.messages || [])].sort(
+      [...getThreadMessages(thread)].sort(
         (left, right) => new Date(left.createdAt).getTime() - new Date(right.createdAt).getTime()
       ),
     [thread]

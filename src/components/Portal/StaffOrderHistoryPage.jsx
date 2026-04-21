@@ -73,8 +73,8 @@ const StaffOrderHistoryPage = () => {
 
   useEffect(() => {
     if (!selectedOrder) return;
-    setSelectedOrderId(selectedOrder._id);
-  }, [selectedOrder?._id]);
+    setSelectedOrderId((current) => (current === selectedOrder._id ? current : selectedOrder._id));
+  }, [selectedOrder]);
 
   useEffect(() => {
     if (!selectedOrder || !selectedOrderRef.current) return;

@@ -56,7 +56,14 @@ const getNavBreadcrumb = (pathname) => {
 };
 
 const getInitials = (name) =>
-  name.split(' ').map((w) => w[0]).slice(0, 2).join('').toUpperCase();
+  String(name || 'Admin')
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean)
+    .map((word) => word[0])
+    .slice(0, 2)
+    .join('')
+    .toUpperCase() || 'AD';
 
 const AdminPortalLayout = () => {
   const { admin, logout } = useContext(AdminContext);

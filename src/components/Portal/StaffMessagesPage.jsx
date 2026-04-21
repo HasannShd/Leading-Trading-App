@@ -6,6 +6,7 @@ import './PortalShell.css';
 const draftKey = 'staff-draft:messages';
 
 const attachmentLabel = (attachment) => attachment?.name || attachment?.url?.split('/').pop() || 'Attachment';
+const getThreadMessages = (thread) => (Array.isArray(thread?.messages) ? thread.messages : []);
 
 const StaffMessagesPage = () => {
   const [thread, setThread] = useState(null);
@@ -31,7 +32,7 @@ const StaffMessagesPage = () => {
             ? {
                 ...current,
                 unreadAdminCount: 0,
-                messages: current.messages.map((entry) =>
+                messages: getThreadMessages(current).map((entry) =>
                   entry.senderRole === 'admin' ? { ...entry, readByStaff: true } : entry
                 ),
               }
@@ -50,7 +51,8 @@ const StaffMessagesPage = () => {
   }, []);
 
   useEffect(() => {
-    const raw = localStorage.getItem(draftKey);
+    if (typeof window === 'undefined') return;
+    const raw = window.localStorage.getItem(draftKey);
     if (!raw) return;
     try {
       const parsed = JSON.parse(raw);
@@ -62,12 +64,13 @@ const StaffMessagesPage = () => {
   }, []);
 
   useEffect(() => {
-    localStorage.setItem(draftKey, JSON.stringify({ text: draft, attachments }));
+    if (typeof window === 'undefined') return;
+    window.localStorage.setItem(draftKey, JSON.stringify({ text: draft, attachments }));
   }, [attachments, draft]);
 
   const orderedMessages = useMemo(
     () =>
-      [...(thread?.messages || [])].sort(
+      [...getThreadMessages(thread)].sort(
         (left, right) => new Date(left.createdAt).getTime() - new Date(right.createdAt).getTime()
       ),
     [thread]
@@ -122,7 +125,9 @@ const StaffMessagesPage = () => {
       setThread(response.data.thread);
       setDraft('');
       setAttachments([]);
-      localStorage.removeItem(draftKey);
+      if (typeof window !== 'undefined') {
+        window.localStorage.removeItem(draftKey);
+      }
       setMessage('Message sent to the office.');
     } catch (err) {
       setMessage(err.message);
@@ -204,7 +209,17 @@ const StaffMessagesPage = () => {
                 {uploading ? 'Uploading...' : 'Attach Files'}
                 <input type="file" multiple onChange={handleFiles} hidden />
               </label>
-              <button className="portal-inline-button ghost" type="button" onClick={() => { setDraft(''); setAttachments([]); localStorage.removeItem(draftKey); }}>
+              <button
+                className="portal-inline-button ghost"
+                type="button"
+                onClick={() => {
+                  setDraft('');
+                  setAttachments([]);
+                  if (typeof window !== 'undefined') {
+                    window.localStorage.removeItem(draftKey);
+                  }
+                }}
+              >
                 Clear Draft
               </button>
             </div>
