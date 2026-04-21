@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { portalApi } from '../../services/portalApi';
 import { authFetch } from '../../services/authFetch';
 import { formatPortalDate, formatPortalDateTime } from '../../utils/portalDate';
@@ -83,6 +83,26 @@ const AdminStaffPage = () => {
     clients: false,
     activity: false,
   });
+  const summary = useMemo(
+    () => ({
+      ...emptyStaffSummary,
+      ...(staffSummary || {}),
+      metrics: {
+        ...emptyStaffSummary.metrics,
+        ...(staffSummary?.metrics || {}),
+      },
+      records: {
+        ...emptyStaffSummary.records,
+        ...(staffSummary?.records || {}),
+      },
+      recentActivity: Array.isArray(staffSummary?.recentActivity) ? staffSummary.recentActivity : [],
+    }),
+    [staffSummary]
+  );
+  const selectedClient = useMemo(
+    () => summary.records.clients.find((entry) => entry._id === selectedClientId) || null,
+    [selectedClientId, summary.records.clients]
+  );
 
   const load = useCallback(() =>
     portalApi
@@ -186,19 +206,6 @@ const AdminStaffPage = () => {
   const inactiveCount = staff.length - activeCount;
   const filteredStaff = staff.filter((member) => matchesStaffSearch(member, staffSearch));
   const selectedStaff = staff.find((member) => member._id === selectedStaffId);
-  const summary = {
-    ...emptyStaffSummary,
-    ...(staffSummary || {}),
-    metrics: {
-      ...emptyStaffSummary.metrics,
-      ...(staffSummary?.metrics || {}),
-    },
-    records: {
-      ...emptyStaffSummary.records,
-      ...(staffSummary?.records || {}),
-    },
-    recentActivity: Array.isArray(staffSummary?.recentActivity) ? staffSummary.recentActivity : [],
-  };
   const toggleSection = (key) => {
     setExpandedSections((current) => ({ ...current, [key]: !current[key] }));
   };
@@ -208,8 +215,6 @@ const AdminStaffPage = () => {
     return expandedSections[key] ? safeRecords : safeRecords.slice(0, previewCount);
   };
   const visibleClients = getVisibleRecords('clients', summary.records.clients);
-  const selectedClient =
-    summary.records.clients.find((entry) => entry._id === selectedClientId) || null;
   const drillLinks = selectedStaffId
     ? [
         { href: `/admin/attendance?user=${selectedStaffId}`, label: 'Attendance' },
