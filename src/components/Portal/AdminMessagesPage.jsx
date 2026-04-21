@@ -24,6 +24,7 @@ const AdminMessagesPage = () => {
   const [uploading, setUploading] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const threadRequestIdRef = useRef(0);
+  const threadPanelRef = useRef(null);
 
   useEffect(() => {
     if (typeof window === 'undefined') return undefined;
@@ -120,6 +121,11 @@ const AdminMessagesPage = () => {
       return next;
     }, { replace: true });
   }, [loadThread, selectedStaffId, setSearchParams]);
+
+  useEffect(() => {
+    if (!selectedStaffId || !threadPanelRef.current) return;
+    threadPanelRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, [selectedStaffId]);
 
   const threadSummaryByStaff = useMemo(
     () => new Map(threads.map((entry) => [entry.staffUser?._id, entry])),
@@ -286,7 +292,7 @@ const AdminMessagesPage = () => {
             </div>
           </div>
 
-          <div className="portal-thread-panel" style={{ display: !showMobileThread && isMobile ? 'none' : undefined }}>
+          <div className="portal-thread-panel" ref={threadPanelRef} style={{ display: !showMobileThread && isMobile ? 'none' : undefined }}>
             <div className="portal-section-head">
               <div>
                 <div className="portal-brand-kicker">Saved thread</div>
@@ -358,14 +364,18 @@ const AdminMessagesPage = () => {
               {attachments.length ? (
                 <div className="portal-attachment-list editor">
                   {attachments.map((attachment) => (
-                    <button
-                      key={attachment.url}
-                      type="button"
-                      className="portal-attachment-chip removable"
-                      onClick={() => removeAttachment(attachment.url)}
-                    >
-                      {attachmentLabel(attachment)} ×
-                    </button>
+                    <div key={attachment.url} className="portal-inline-actions" style={{ gap: '0.5rem' }}>
+                      <a className="portal-attachment-chip" href={attachment.url} target="_blank" rel="noreferrer">
+                        {attachmentLabel(attachment)}
+                      </a>
+                      <button
+                        type="button"
+                        className="portal-attachment-chip removable"
+                        onClick={() => removeAttachment(attachment.url)}
+                      >
+                        Remove ×
+                      </button>
+                    </div>
                   ))}
                 </div>
               ) : null}
