@@ -77,8 +77,10 @@ export const parseLineItems = (value) =>
 export const formatOrderItem = (item) => {
   if (!item?.productName) return '-';
   const quantity = item.quantity ?? 0;
+  const hasExplicitStructure = Boolean(item.uom || item.vatApplicable || item.price !== undefined && item.price !== null);
+  const quantityLabel = quantity === 1 && !hasExplicitStructure ? '' : ` x${quantity}`;
   const uom = item.uom ? ` ${item.uom}` : '';
   const vat = item.vatApplicable ? ` | VAT ${item.vatAmount ?? 'Yes'}` : '';
   const price = item.price !== undefined && item.price !== null ? ` @ ${item.price}` : '';
-  return `${item.productName} x${quantity}${uom}${vat}${price}`;
+  return `${item.productName}${quantityLabel}${uom}${vat}${price}`;
 };
