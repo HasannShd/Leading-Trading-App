@@ -73,7 +73,8 @@ const StaffOrdersPage = () => {
   }, []);
 
   useEffect(() => {
-    const raw = localStorage.getItem(draftKey);
+    if (typeof window === 'undefined') return;
+    const raw = window.localStorage.getItem(draftKey);
     if (!raw) return;
     try {
       const parsed = JSON.parse(raw);
@@ -90,7 +91,8 @@ const StaffOrdersPage = () => {
   }, []);
 
   useEffect(() => {
-    localStorage.setItem(
+    if (typeof window === 'undefined') return;
+    window.localStorage.setItem(
       draftKey,
       JSON.stringify({
         clientForm,
@@ -164,7 +166,8 @@ const StaffOrdersPage = () => {
   };
 
   const saveDraft = () => {
-    localStorage.setItem(
+    if (typeof window === 'undefined') return;
+    window.localStorage.setItem(
       draftKey,
       JSON.stringify({
         clientForm,
@@ -193,7 +196,9 @@ const StaffOrdersPage = () => {
       setOrderAttachments([]);
       setClientForm(blankClient);
       setSelectedClientId('');
-      localStorage.removeItem(draftKey);
+      if (typeof window !== 'undefined') {
+        window.localStorage.removeItem(draftKey);
+      }
       setMessage('Order submitted.');
       await load();
     } catch (err) {
@@ -204,7 +209,9 @@ const StaffOrdersPage = () => {
   };
 
   const clearDraft = () => {
-    localStorage.removeItem(draftKey);
+    if (typeof window !== 'undefined') {
+      window.localStorage.removeItem(draftKey);
+    }
     setClientForm(blankClient);
     setOrderForm(blankOrder);
     setOrderAttachments([]);
