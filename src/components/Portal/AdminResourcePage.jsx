@@ -21,6 +21,12 @@ const AdminResourcePage = ({ config }) => {
   const prettyStatus = (value) => String(value || '-').replace(/_/g, ' ');
   const getOrderFacilityName = (record) =>
     record.companyName || record.client?.name || 'Facility not set';
+  const getOrderListDateLabel = (record) => {
+    if (record.requestedForDate) return `Requested ${formatPortalDate(record.requestedForDate)}`;
+    if (record.submittedAt) return `Submitted ${formatPortalDate(record.submittedAt)}`;
+    if (record.createdAt) return `Submitted ${formatPortalDate(record.createdAt)}`;
+    return 'Date not set';
+  };
 
   const buildQuery = useCallback(() => {
     const params = new URLSearchParams();
@@ -426,7 +432,7 @@ const AdminResourcePage = ({ config }) => {
                     >
                       <h3 className="portal-record-title">{getOrderFacilityName(record)}</h3>
                       <div className="portal-record-meta">
-                        <span>{record.requestedForDate || '-'}</span>
+                        <span>{getOrderListDateLabel(record)}</span>
                         {record.orderTiming === 'tomorrow' ? <span>Order for tomorrow</span> : null}
                         {record.status && <span className="portal-badge status">{prettyStatus(record.status)}</span>}
                       </div>
