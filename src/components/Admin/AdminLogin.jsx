@@ -35,7 +35,7 @@ const AdminLogin = () => {
     const success = await login(identifier, password);
     setIsLoading(false);
     if (success === true) {
-      window.location.replace('/admin/dashboard');
+      navigate('/admin/dashboard', { replace: true });
     }
   };
 
@@ -45,7 +45,7 @@ const AdminLogin = () => {
     const success = await verifyMfa(mfaCode, trustDevice);
     setIsLoading(false);
     if (success) {
-      window.location.replace('/admin/dashboard');
+      navigate('/admin/dashboard', { replace: true });
     }
   };
 
