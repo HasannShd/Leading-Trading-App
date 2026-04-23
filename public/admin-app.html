@@ -71,25 +71,9 @@
     </style>
     <script>
       (function () {
-        function hasValidToken(key) {
-          var token = localStorage.getItem(key);
-          if (!token) return false;
-          try {
-            var payload = JSON.parse(atob(token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')));
-            if (payload.exp && payload.exp * 1000 <= Date.now()) {
-              localStorage.removeItem(key);
-              return false;
-            }
-            return true;
-          } catch (error) {
-            localStorage.removeItem(key);
-            return false;
-          }
-        }
-
         var standalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
         if (!standalone) return;
-        var target = hasValidToken('adminToken') ? '/admin/dashboard' : '/admin/login';
+        var target = localStorage.getItem('adminToken') ? '/admin/dashboard' : '/admin/login';
         window.location.replace(target);
       })();
     </script>

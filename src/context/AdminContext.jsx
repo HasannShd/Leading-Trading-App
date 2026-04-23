@@ -6,23 +6,8 @@ import { storePasswordCredential } from '../utils/credentialStore';
 
 export const AdminContext = createContext();
 
-const ADMIN_TOKEN_KEY = 'adminToken';
-const ADMIN_PROFILE_KEY = 'adminProfile';
-const ADMIN_TRUSTED_DEVICE_KEY = 'adminTrustedDeviceToken';
-
-const readStoredAdmin = () => {
-  try {
-    const token = getStoredToken('admin');
-    const profile = JSON.parse(localStorage.getItem(ADMIN_PROFILE_KEY) || 'null');
-    if (token && profile?.role === 'admin') return profile;
-  } catch (error) {
-    localStorage.removeItem(ADMIN_PROFILE_KEY);
-  }
-  return null;
-};
-
 export const AdminProvider = ({ children }) => {
-  const [admin, setAdmin] = useState(() => readStoredAdmin());
+  const [admin, setAdmin] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [mfaChallenge, setMfaChallenge] = useState(null);
@@ -34,10 +19,7 @@ export const AdminProvider = ({ children }) => {
 
   const applyAdminSession = (token, user) => {
     if (token) {
-      localStorage.setItem(ADMIN_TOKEN_KEY, token);
-    }
-    if (user?.role === 'admin') {
-      localStorage.setItem(ADMIN_PROFILE_KEY, JSON.stringify(user));
+      localStorage.setItem('adminToken', token);
     }
     setAdmin(user || null);
     setMfaChallenge(null);
@@ -45,9 +27,8 @@ export const AdminProvider = ({ children }) => {
   };
 
   const resetAdminSession = useCallback((shouldRedirect = true) => {
-    localStorage.removeItem(ADMIN_TOKEN_KEY);
-    localStorage.removeItem(ADMIN_PROFILE_KEY);
-    localStorage.removeItem(ADMIN_TRUSTED_DEVICE_KEY);
+    localStorage.removeItem('adminToken');
+    localStorage.removeItem('adminTrustedDeviceToken');
     setAdmin(null);
     setError(null);
     if (shouldRedirect && isAdminRoute && location.pathname !== adminLoginPath) {
@@ -68,43 +49,34 @@ export const AdminProvider = ({ children }) => {
   }, [admin, adminLoginPath, loading, location.pathname, navigate]);
 
   const verifyAdmin = useCallback(async () => {
-    if (!getStoredToken('admin')) {
-      resetAdminSession(false);
-      setLoading(false);
-      return;
-    }
-
     try {
       const response = await authFetch('/auth/me', { scope: 'admin' });
       if (response.ok) {
         const data = await response.json();
         if (data.user.role === 'admin') {
           applyAdminSession(null, data.user);
-        } else if (!admin && !getStoredToken('admin')) {
+        } else {
           resetAdminSession(false);
         }
-      } else if (!admin && !getStoredToken('admin')) {
+      } else {
         resetAdminSession(false);
       }
     } catch (err) {
       console.error('Auth verification failed:', err);
-      if (localStorage.getItem(ADMIN_TOKEN_KEY)) {
-        setError('Could not verify the admin session. Check the connection and try again.');
-      } else {
-        resetAdminSession(false);
-      }
+      setError('Could not verify the admin session. Please try again.');
     } finally {
       setLoading(false);
     }
-  }, [admin, resetAdminSession]);
+  }, [resetAdminSession]);
 
   useEffect(() => {
-    if (isAdminRoute) {
+    const token = localStorage.getItem('adminToken');
+    if (token) {
       verifyAdmin();
     } else {
       setLoading(false);
     }
-  }, [isAdminRoute, verifyAdmin]);
+  }, [verifyAdmin]);
 
   useEffect(() => {
     const token = getStoredToken('admin');
@@ -128,7 +100,7 @@ export const AdminProvider = ({ children }) => {
     setLoading(true);
     setError(null);
     try {
-      const trustedDeviceToken = localStorage.getItem(ADMIN_TRUSTED_DEVICE_KEY) || '';
+      const trustedDeviceToken = localStorage.getItem('adminTrustedDeviceToken') || '';
       const response = await authFetch('/auth/sign-in', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -153,11 +125,11 @@ export const AdminProvider = ({ children }) => {
         return false;
       }
 
-      storePasswordCredential({
+      await storePasswordCredential({
         identifier: username,
         password,
         name: data.user.name || data.user.username || username,
-      }).catch(() => {});
+      });
       applyAdminSession(data.token, data.user);
       if (!data.user.mfaEnabled) {
         setError('MFA is recommended for this admin account. You can set it up from the Account page.');
@@ -187,10 +159,10 @@ export const AdminProvider = ({ children }) => {
         return false;
       }
       if (data.token) {
-        localStorage.setItem(ADMIN_TOKEN_KEY, data.token);
+        localStorage.setItem('adminToken', data.token);
       }
       if (data.trustedDeviceToken) {
-        localStorage.setItem(ADMIN_TRUSTED_DEVICE_KEY, data.trustedDeviceToken);
+        localStorage.setItem('adminTrustedDeviceToken', data.trustedDeviceToken);
       }
       applyAdminSession(data.token, data.user);
       return true;
