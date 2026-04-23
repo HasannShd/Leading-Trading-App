@@ -73,12 +73,12 @@ export const StaffProvider = ({ children }) => {
       if (!response.ok) throw new Error(data.err || 'Login failed');
 
       localStorage.setItem('staffToken', data.token);
-      await storePasswordCredential({
+      setStaff(data.user);
+      storePasswordCredential({
         identifier,
         password,
         name: data.user?.name || data.user?.username || identifier,
-      });
-      await fetchMe();
+      }).catch(() => {});
       return true;
     } catch (err) {
       setError(err.message);
