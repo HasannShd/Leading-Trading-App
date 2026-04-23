@@ -46,7 +46,9 @@ export const StaffProvider = ({ children }) => {
       localStorage.removeItem('staffToken');
       setStaff(null);
       setLoading(false);
-      setError('Your session expired. Please sign in again.');
+      if (window.location.pathname !== '/staff/login') {
+        setError('Your session expired. Please sign in again.');
+      }
       return undefined;
     }
     const expiry = getTokenExpiryMs(token);
@@ -54,7 +56,9 @@ export const StaffProvider = ({ children }) => {
     const timeout = window.setTimeout(() => {
       localStorage.removeItem('staffToken');
       setStaff(null);
-      setError('Your session expired. Please sign in again.');
+      if (window.location.pathname !== '/staff/login') {
+        setError('Your session expired. Please sign in again.');
+      }
     }, Math.max(expiry - Date.now(), 0));
     return () => window.clearTimeout(timeout);
   }, [staff]);

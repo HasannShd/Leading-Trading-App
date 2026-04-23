@@ -90,8 +90,10 @@ export const AdminProvider = ({ children }) => {
     const expiry = getTokenExpiryMs(token);
     if (!expiry) return undefined;
     const timeout = window.setTimeout(() => {
-      resetAdminSession();
-      setError('Your admin session expired. Please sign in again.');
+      resetAdminSession(location.pathname !== adminLoginPath);
+      if (location.pathname !== adminLoginPath) {
+        setError('Your admin session expired. Please sign in again.');
+      }
     }, Math.max(expiry - Date.now(), 0));
     return () => window.clearTimeout(timeout);
   }, [admin, location.pathname, resetAdminSession]);
