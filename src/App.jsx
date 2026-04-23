@@ -119,6 +119,7 @@ const AppShell = () => {
             <Route path="/.well-known/admin-account-sh123456" element={<Navigate to="/admin/account" replace />} />
 
             {/* Staff portal */}
+            <Route path="/staff-app" element={<StaffInstallPage />} />
             <Route path="/staff/install" element={<StaffInstallPage />} />
             <Route path="/staff/login" element={<StaffLogin />} />
             <Route
@@ -139,6 +140,7 @@ const AppShell = () => {
             </Route>
 
             {/* Visible admin routes */}
+            <Route path="/admin-app" element={<Navigate to="/admin/dashboard" replace />} />
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/admin" element={<ProtectedAdminRoute element={<AdminPortalLayout />} />}>
               <Route index element={<Navigate to="/admin/dashboard" replace />} />
