@@ -1869,12 +1869,12 @@
     gap: 0.7rem;
   }
 
-  .portal-admin-main {
-    order: 1;
+  .portal-admin-sidebar {
+    order: 0;
   }
 
-  .portal-admin-sidebar {
-    order: 2;
+  .portal-admin-main {
+    order: 1;
   }
 
   .portal-admin-sidebar:not(.open) {
@@ -1930,7 +1930,7 @@
     bottom: calc(0.55rem + env(safe-area-inset-bottom, 0px));
     z-index: 45;
     display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-columns: repeat(6, minmax(0, 1fr));
     gap: 0.35rem;
     padding: 0.35rem;
     border-radius: 1rem;
@@ -1949,7 +1949,7 @@
     padding: 0.35rem 0.12rem;
     border-radius: 0.7rem;
     text-decoration: none;
-    font-size: 0.58rem;
+    font-size: 0.54rem;
     font-weight: 700;
     line-height: 1;
     text-align: center;

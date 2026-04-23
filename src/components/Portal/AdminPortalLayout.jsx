@@ -38,6 +38,7 @@ const mobileQuickLinks = [
   { to: '/admin/staff', label: 'Staff', icon: '◉' },
   { to: '/admin/messages', label: 'Messages', icon: '✉' },
   { to: '/admin/orders', label: 'Orders', icon: '▣' },
+  { to: '/admin/website', label: 'Website', icon: '◫' },
   { to: '/admin/account', label: 'Account', icon: '⚙' },
 ];
 
