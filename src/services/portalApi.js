@@ -1,3 +1,5 @@
+import { isTokenExpired } from '../utils/sessionToken';
+
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 const getScope = (role) => {
@@ -7,9 +9,13 @@ const getScope = (role) => {
 };
 
 const getStoredToken = (role) => {
-  if (role === 'admin') return localStorage.getItem('adminToken');
-  if (role === 'sales_staff') return localStorage.getItem('staffToken');
-  return localStorage.getItem('token');
+  const key = role === 'admin' ? 'adminToken' : role === 'sales_staff' ? 'staffToken' : 'token';
+  const token = localStorage.getItem(key);
+  if (token && isTokenExpired(token)) {
+    localStorage.removeItem(key);
+    return null;
+  }
+  return token;
 };
 
 const request = async ({ path, method = 'GET', role = 'sales_staff', body, isForm = false }) => {

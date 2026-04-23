@@ -12,12 +12,13 @@ export const StaffProvider = ({ children }) => {
   const [error, setError] = useState(null);
 
   const fetchMe = async () => {
-    const token = localStorage.getItem('staffToken');
+    getStoredToken('sales_staff');
+    setError(null);
     try {
       const response = await authFetch('/auth/me', { scope: 'sales_staff' });
       const data = await response.json();
       if (!response.ok || data.user?.role !== 'sales_staff') {
-        if (token) localStorage.removeItem('staffToken');
+        localStorage.removeItem('staffToken');
         setStaff(null);
         return;
       }
@@ -39,7 +40,10 @@ export const StaffProvider = ({ children }) => {
 
   useEffect(() => {
     const token = getStoredToken('sales_staff');
-    if (!token) return undefined;
+    if (!token) {
+      setError(null);
+      return undefined;
+    }
     if (isTokenExpired(token)) {
       localStorage.removeItem('staffToken');
       setStaff(null);
