@@ -65,6 +65,7 @@ export const StaffProvider = ({ children }) => {
   const login = async (identifier, password) => {
     setLoading(true);
     setError(null);
+    localStorage.removeItem('staffToken');
     try {
       const response = await authFetch('/auth/login', {
         method: 'POST',
@@ -74,19 +75,25 @@ export const StaffProvider = ({ children }) => {
       });
       const data = await response.json();
       if (!response.ok) throw new Error(data.err || 'Login failed');
+      if (!data.token || data.user?.role !== 'sales_staff') {
+        throw new Error('Only staff accounts can access this area.');
+      }
 
       localStorage.setItem('staffToken', data.token);
-      await storePasswordCredential({
+      setStaff(data.user);
+      storePasswordCredential({
         identifier,
         password,
         name: data.user?.name || data.user?.username || identifier,
-      });
-      await fetchMe();
+      }).catch(() => {});
       return true;
     } catch (err) {
+      localStorage.removeItem('staffToken');
+      setStaff(null);
       setError(err.message);
-      setLoading(false);
       return false;
+    } finally {
+      setLoading(false);
     }
   };
 
