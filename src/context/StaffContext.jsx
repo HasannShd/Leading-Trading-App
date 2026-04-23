@@ -74,6 +74,7 @@ export const StaffProvider = ({ children }) => {
 
       localStorage.setItem('staffToken', data.token);
       setStaff(data.user);
+      setLoading(false);
       storePasswordCredential({
         identifier,
         password,
