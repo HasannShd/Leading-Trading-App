@@ -1,6 +1,7 @@
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
 import { useContext, useEffect, useMemo, useState } from 'react';
 import { AdminContext } from '../../context/AdminContext';
+import BackToTop from '../Common/BackToTop';
 import './PortalShell.css';
 
 const linkGroups = [
@@ -164,6 +165,7 @@ const AdminPortalLayout = () => {
           </NavLink>
         ))}
       </div>
+      <BackToTop className="admin-back-to-top" />
     </div>
   );
 };
