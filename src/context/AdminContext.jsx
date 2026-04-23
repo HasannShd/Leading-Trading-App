@@ -63,7 +63,11 @@ export const AdminProvider = ({ children }) => {
       }
     } catch (err) {
       console.error('Auth verification failed:', err);
-      setError('Could not verify the admin session. Please try again.');
+      if (localStorage.getItem('adminToken')) {
+        setError('Could not verify the admin session. Check the connection and try again.');
+      } else {
+        resetAdminSession(false);
+      }
     } finally {
       setLoading(false);
     }

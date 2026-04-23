@@ -28,8 +28,11 @@ export const StaffProvider = ({ children }) => {
       }
       setStaff(data.user);
     } catch (err) {
-      localStorage.removeItem('staffToken');
-      setStaff(null);
+      if (localStorage.getItem('staffToken')) {
+        setError('Could not verify the staff session. Check the connection and try again.');
+      } else {
+        setStaff(null);
+      }
     } finally {
       setLoading(false);
     }
