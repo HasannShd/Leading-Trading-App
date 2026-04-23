@@ -13,16 +13,11 @@ export const StaffProvider = ({ children }) => {
 
   const fetchMe = async () => {
     const token = localStorage.getItem('staffToken');
-    if (!token) {
-      setStaff(null);
-      setLoading(false);
-      return;
-    }
     try {
       const response = await authFetch('/auth/me', { scope: 'sales_staff' });
       const data = await response.json();
       if (!response.ok || data.user?.role !== 'sales_staff') {
-        localStorage.removeItem('staffToken');
+        if (token) localStorage.removeItem('staffToken');
         setStaff(null);
         return;
       }
