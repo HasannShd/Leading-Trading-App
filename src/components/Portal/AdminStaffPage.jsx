@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { portalApi } from '../../services/portalApi';
 import { authFetch } from '../../services/authFetch';
 import { formatPortalDate, formatPortalDateTime } from '../../utils/portalDate';
@@ -38,6 +38,30 @@ const renderDetailGrid = (items) => (
 
 const DETAIL_PREVIEW_COUNT = 3;
 const ATTENDANCE_PREVIEW_COUNT = 6;
+const emptyStaffSummary = {
+  staff: null,
+  metrics: {
+    attendanceCount: 0,
+    filteredAttendanceCount: 0,
+    reportsCount: 0,
+    filteredReportsCount: 0,
+    ordersCount: 0,
+    filteredOrdersCount: 0,
+    visitsCount: 0,
+    filteredVisitsCount: 0,
+    clientsCount: 0,
+    filteredClientsCount: 0,
+    unreadNotifications: 0,
+  },
+  records: {
+    attendance: [],
+    reports: [],
+    orders: [],
+    visits: [],
+    clients: [],
+  },
+  recentActivity: [],
+};
 
 const AdminStaffPage = () => {
   const [staff, setStaff] = useState([]);
@@ -49,6 +73,8 @@ const AdminStaffPage = () => {
   const [staffSummary, setStaffSummary] = useState(null);
   const [summaryLoading, setSummaryLoading] = useState(false);
   const [selectedClientId, setSelectedClientId] = useState('');
+  const summaryRef = useRef(null);
+  const selectedClientRef = useRef(null);
   const [expandedSections, setExpandedSections] = useState({
     attendance: false,
     reports: false,
@@ -57,6 +83,26 @@ const AdminStaffPage = () => {
     clients: false,
     activity: false,
   });
+  const summary = useMemo(
+    () => ({
+      ...emptyStaffSummary,
+      ...(staffSummary || {}),
+      metrics: {
+        ...emptyStaffSummary.metrics,
+        ...(staffSummary?.metrics || {}),
+      },
+      records: {
+        ...emptyStaffSummary.records,
+        ...(staffSummary?.records || {}),
+      },
+      recentActivity: Array.isArray(staffSummary?.recentActivity) ? staffSummary.recentActivity : [],
+    }),
+    [staffSummary]
+  );
+  const selectedClient = useMemo(
+    () => summary.records.clients.find((entry) => entry._id === selectedClientId) || null,
+    [selectedClientId, summary.records.clients]
+  );
 
   const load = useCallback(() =>
     portalApi
@@ -96,6 +142,16 @@ const AdminStaffPage = () => {
       .catch((err) => setMessage(err.message))
       .finally(() => setSummaryLoading(false));
   }, [selectedStaffId, summaryDate]);
+
+  useEffect(() => {
+    if (!selectedStaffId || !summaryRef.current) return;
+    summaryRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, [selectedStaffId]);
+
+  useEffect(() => {
+    if (!selectedClient || !selectedClientRef.current) return;
+    selectedClientRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, [selectedClient]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -155,11 +211,10 @@ const AdminStaffPage = () => {
   };
   const getVisibleRecords = (key, records = []) => {
     const previewCount = key === 'attendance' ? ATTENDANCE_PREVIEW_COUNT : DETAIL_PREVIEW_COUNT;
-    return expandedSections[key] ? records : records.slice(0, previewCount);
+    const safeRecords = Array.isArray(records) ? records : [];
+    return expandedSections[key] ? safeRecords : safeRecords.slice(0, previewCount);
   };
-  const visibleClients = getVisibleRecords('clients', staffSummary?.records?.clients || []);
-  const selectedClient =
-    (staffSummary?.records?.clients || []).find((entry) => entry._id === selectedClientId) || null;
+  const visibleClients = getVisibleRecords('clients', summary.records.clients);
   const drillLinks = selectedStaffId
     ? [
         { href: `/admin/attendance?user=${selectedStaffId}`, label: 'Attendance' },
@@ -174,24 +229,7 @@ const AdminStaffPage = () => {
   return (
     <div className="portal-admin-page">
       <section className="portal-page">
-      <div className="portal-card portal-help-card">
-        <div className="portal-section-head">
-          <div>
-            <div className="portal-brand-kicker">Staff Setup</div>
-            <h2 className="portal-section-title" style={{ fontSize: '1.45rem' }}>Make access simple</h2>
-            <p className="portal-section-copy">
-              Create staff users here. Use one simple name for both display and sign-in, then ask them to sign in from the staff portal on their phone.
-            </p>
-          </div>
-        </div>
-        <ul className="portal-help-list">
-          <li>Use one short name staff can remember easily.</li>
-          <li>Keep department names simple, like Sales, Medical, Dental, or Delivery.</li>
-          <li>If someone should stop using the portal, press Deactivate instead of deleting them.</li>
-        </ul>
-      </div>
-
-      <div className="portal-card">
+      <div className="portal-card" ref={summaryRef}>
         <div className="portal-section-head">
           <div>
             <div className="portal-brand-kicker">Staff Access</div>
@@ -233,7 +271,6 @@ const AdminStaffPage = () => {
           </div>
           {message && <div className="portal-badge status">{message}</div>}
           <div className="portal-submit-bar">
-            <div className="portal-submit-note">When the details are ready, press this button once.</div>
             <button className="portal-button primary portal-save-button" type="submit">Create Staff User</button>
           </div>
         </form>
@@ -333,16 +370,16 @@ const AdminStaffPage = () => {
             <h3 className="portal-empty-title">Loading summary...</h3>
             <p className="portal-empty-copy">Pulling attendance, reports, orders, visits, and activity for this staff member.</p>
           </div>
-        ) : staffSummary?.staff ? (
+        ) : summary.staff ? (
           <div className="portal-staff-report" style={{ marginTop: '1rem' }}>
             <div className="portal-staff-report-head">
               <div>
-                <h3 className="portal-record-title" style={{ fontSize: '1.35rem' }}>{staffSummary.staff.name || staffSummary.staff.username}</h3>
+                <h3 className="portal-record-title" style={{ fontSize: '1.35rem' }}>{summary.staff.name || summary.staff.username}</h3>
                 <div className="portal-record-meta">
-                  <span>{staffSummary.staff.email}</span>
-                  <span>{staffSummary.staff.phone || 'No phone'}</span>
-                  <span>{staffSummary.staff.department || 'No department'}</span>
-                  <span className="portal-badge status">{staffSummary.staff.isActive ? 'active' : 'inactive'}</span>
+                  <span>{summary.staff.email}</span>
+                  <span>{summary.staff.phone || 'No phone'}</span>
+                  <span>{summary.staff.department || 'No department'}</span>
+                  <span className="portal-badge status">{summary.staff.isActive ? 'active' : 'inactive'}</span>
                 </div>
               </div>
               <div className="portal-staff-summary-actions">
@@ -355,12 +392,12 @@ const AdminStaffPage = () => {
 
             <div className="portal-staff-summary-grid">
               {[
-                ['Attendance', summaryDate ? staffSummary.metrics.filteredAttendanceCount : staffSummary.metrics.attendanceCount],
-                ['Reports', summaryDate ? staffSummary.metrics.filteredReportsCount : staffSummary.metrics.reportsCount],
-                ['Orders', summaryDate ? staffSummary.metrics.filteredOrdersCount : staffSummary.metrics.ordersCount],
-                ['Visits', summaryDate ? staffSummary.metrics.filteredVisitsCount : staffSummary.metrics.visitsCount],
-                ['Clients', summaryDate ? staffSummary.metrics.filteredClientsCount : staffSummary.metrics.clientsCount],
-                ['Unread Notifications', staffSummary.metrics.unreadNotifications],
+                ['Attendance', summaryDate ? summary.metrics.filteredAttendanceCount : summary.metrics.attendanceCount],
+                ['Reports', summaryDate ? summary.metrics.filteredReportsCount : summary.metrics.reportsCount],
+                ['Orders', summaryDate ? summary.metrics.filteredOrdersCount : summary.metrics.ordersCount],
+                ['Visits', summaryDate ? summary.metrics.filteredVisitsCount : summary.metrics.visitsCount],
+                ['Clients', summaryDate ? summary.metrics.filteredClientsCount : summary.metrics.clientsCount],
+                ['Unread Notifications', summary.metrics.unreadNotifications],
               ].map(([label, value]) => (
                 <div className="portal-stat light" key={label}>
                   <div className="portal-stat-value">{value}</div>
@@ -384,15 +421,15 @@ const AdminStaffPage = () => {
               <div className="portal-staff-report-block">
                 <div className="portal-section-head portal-mini-head">
                   <div className="portal-brand-kicker">Attendance Log</div>
-                  {staffSummary.records.attendance.length > DETAIL_PREVIEW_COUNT && (
+                  {summary.records.attendance.length > DETAIL_PREVIEW_COUNT && (
                     <button className="portal-inline-button ghost" type="button" onClick={() => toggleSection('attendance')}>
-                      {expandedSections.attendance ? 'Show Less' : `Show All (${staffSummary.records.attendance.length})`}
+                      {expandedSections.attendance ? 'Show Less' : `Show All (${summary.records.attendance.length})`}
                     </button>
                   )}
                 </div>
                 <div className="portal-record-list">
-                  {staffSummary.records.attendance.length ? (
-                    getVisibleRecords('attendance', staffSummary.records.attendance).map((entry) => (
+                  {summary.records.attendance.length ? (
+                    getVisibleRecords('attendance', summary.records.attendance).map((entry) => (
                       <div className="portal-compact-row" key={entry._id}>
                         <div className="portal-compact-row-main">
                           <strong>{formatPortalDate(entry.date)}</strong>
@@ -418,15 +455,15 @@ const AdminStaffPage = () => {
               <div className="portal-staff-report-block">
                 <div className="portal-section-head portal-mini-head">
                   <div className="portal-brand-kicker">Daily Reports</div>
-                  {staffSummary.records.reports.length > DETAIL_PREVIEW_COUNT && (
+                  {summary.records.reports.length > DETAIL_PREVIEW_COUNT && (
                     <button className="portal-inline-button ghost" type="button" onClick={() => toggleSection('reports')}>
-                      {expandedSections.reports ? 'Show Less' : `Show All (${staffSummary.records.reports.length})`}
+                      {expandedSections.reports ? 'Show Less' : `Show All (${summary.records.reports.length})`}
                     </button>
                   )}
                 </div>
                 <div className="portal-record-list">
-                  {staffSummary.records.reports.length ? (
-                    getVisibleRecords('reports', staffSummary.records.reports).map((entry) => (
+                  {summary.records.reports.length ? (
+                    getVisibleRecords('reports', summary.records.reports).map((entry) => (
                       <div className="portal-compact-row" key={entry._id}>
                         <div className="portal-compact-row-main">
                           <strong>{formatPortalDate(entry.date)}</strong>
@@ -449,15 +486,15 @@ const AdminStaffPage = () => {
               <div className="portal-staff-report-block">
                 <div className="portal-section-head portal-mini-head">
                   <div className="portal-brand-kicker">Visits</div>
-                  {staffSummary.records.visits.length > DETAIL_PREVIEW_COUNT && (
+                  {summary.records.visits.length > DETAIL_PREVIEW_COUNT && (
                     <button className="portal-inline-button ghost" type="button" onClick={() => toggleSection('visits')}>
-                      {expandedSections.visits ? 'Show Less' : `Show All (${staffSummary.records.visits.length})`}
+                      {expandedSections.visits ? 'Show Less' : `Show All (${summary.records.visits.length})`}
                     </button>
                   )}
                 </div>
                 <div className="portal-record-list">
-                  {staffSummary.records.visits.length ? (
-                    getVisibleRecords('visits', staffSummary.records.visits).map((entry) => (
+                  {summary.records.visits.length ? (
+                    getVisibleRecords('visits', summary.records.visits).map((entry) => (
                       <div className="portal-compact-row" key={entry._id}>
                         <div className="portal-compact-row-main">
                           <strong>
@@ -483,14 +520,14 @@ const AdminStaffPage = () => {
               <div className="portal-staff-report-block">
                 <div className="portal-section-head portal-mini-head">
                   <div className="portal-brand-kicker">Client List</div>
-                  {staffSummary.records.clients.length > DETAIL_PREVIEW_COUNT && (
+                  {summary.records.clients.length > DETAIL_PREVIEW_COUNT && (
                     <button className="portal-inline-button ghost" type="button" onClick={() => toggleSection('clients')}>
-                      {expandedSections.clients ? 'Show Less' : `Show All (${staffSummary.records.clients.length})`}
+                      {expandedSections.clients ? 'Show Less' : `Show All (${summary.records.clients.length})`}
                     </button>
                   )}
                 </div>
                 <div className="portal-record-list">
-                  {staffSummary.records.clients.length ? (
+                  {summary.records.clients.length ? (
                     <>
                       <div className="portal-inline-list compact">
                         {visibleClients.map((entry) => (
@@ -509,7 +546,7 @@ const AdminStaffPage = () => {
                         ))}
                       </div>
                       {selectedClient && (
-                        <div className="portal-record-card">
+                        <div className="portal-record-card" ref={selectedClientRef}>
                           <h3 className="portal-record-title">{selectedClient.name}</h3>
                           {renderDetailGrid([
                             ['Created', formatPortalDateTime(selectedClient.createdAt)],
@@ -548,15 +585,15 @@ const AdminStaffPage = () => {
               <div className="portal-staff-report-block">
                 <div className="portal-section-head portal-mini-head">
                   <div className="portal-brand-kicker">Recent Activity</div>
-                  {(staffSummary.recentActivity || []).length > DETAIL_PREVIEW_COUNT && (
+                  {summary.recentActivity.length > DETAIL_PREVIEW_COUNT && (
                     <button className="portal-inline-button ghost" type="button" onClick={() => toggleSection('activity')}>
-                      {expandedSections.activity ? 'Show Less' : `Show All (${staffSummary.recentActivity.length})`}
+                      {expandedSections.activity ? 'Show Less' : `Show All (${summary.recentActivity.length})`}
                     </button>
                   )}
                 </div>
                 <div className="portal-inline-list compact">
-                  {(staffSummary.recentActivity || []).length ? (
-                    getVisibleRecords('activity', staffSummary.recentActivity || []).map((entry) => (
+                  {summary.recentActivity.length ? (
+                    getVisibleRecords('activity', summary.recentActivity).map((entry) => (
                       <div className="portal-compact-row" key={entry._id}>
                         <div className="portal-compact-row-main">
                           <strong>{formatActivityLabel(entry.action)}</strong>

@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { portalApi } from '../../services/portalApi';
-import { formatPortalDateTime } from '../../utils/portalDate';
+import PortalMessageThread from './PortalMessageThread';
 import './PortalShell.css';
 
 const attachmentLabel = (attachment) => attachment?.name || attachment?.url?.split('/').pop() || 'Attachment';
+const getThreadMessages = (thread) => (Array.isArray(thread?.messages) ? thread.messages : []);
 
 const PortalChatWidget = ({ role = 'sales_staff' }) => {
   const isAdmin = role === 'admin';
@@ -19,10 +20,17 @@ const PortalChatWidget = ({ role = 'sales_staff' }) => {
   const [loading, setLoading] = useState(false);
   const [sending, setSending] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [preferMobileThreadList, setPreferMobileThreadList] = useState(() =>
+    typeof window !== 'undefined' ? window.innerWidth <= 640 : false
+  );
 
   useEffect(() => {
     if (typeof window === 'undefined') return undefined;
-    const handleResize = () => setIsMobile(window.innerWidth <= 640);
+    const handleResize = () => {
+      const nextIsMobile = window.innerWidth <= 640;
+      setIsMobile(nextIsMobile);
+      if (!nextIsMobile) setPreferMobileThreadList(false);
+    };
     handleResize();
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
@@ -46,7 +54,7 @@ const PortalChatWidget = ({ role = 'sales_staff' }) => {
             ? {
                 ...current,
                 unreadAdminCount: 0,
-                messages: current.messages.map((entry) =>
+                messages: getThreadMessages(current).map((entry) =>
                   entry.senderRole === 'admin' ? { ...entry, readByStaff: true } : entry
                 ),
               }
@@ -66,7 +74,7 @@ const PortalChatWidget = ({ role = 'sales_staff' }) => {
       const response = await portalApi.get('/admin-portal/messages', 'admin');
       const nextThreads = response.data.threads || [];
       setThreads(nextThreads);
-      if (!selectedStaffId && nextThreads[0]?.staffUser?._id) {
+      if (!selectedStaffId && nextThreads[0]?.staffUser?._id && !(isMobile && preferMobileThreadList)) {
         setSelectedStaffId(nextThreads[0].staffUser._id);
       }
     } catch (err) {
@@ -74,7 +82,7 @@ const PortalChatWidget = ({ role = 'sales_staff' }) => {
     } finally {
       setLoading(false);
     }
-  }, [selectedStaffId]);
+  }, [isMobile, preferMobileThreadList, selectedStaffId]);
 
   const loadAdminThread = useCallback(async (staffId, markRead = false) => {
     if (!staffId) return;
@@ -92,7 +100,7 @@ const PortalChatWidget = ({ role = 'sales_staff' }) => {
           current
             ? {
                 ...current,
-                messages: current.messages.map((entry) =>
+                messages: getThreadMessages(current).map((entry) =>
                   entry.senderRole === 'sales_staff' ? { ...entry, readByAdmin: true } : entry
                 ),
               }
@@ -131,7 +139,7 @@ const PortalChatWidget = ({ role = 'sales_staff' }) => {
 
   const orderedMessages = useMemo(
     () =>
-      [...(thread?.messages || [])].sort(
+      [...getThreadMessages(thread)].sort(
         (left, right) => new Date(left.createdAt).getTime() - new Date(right.createdAt).getTime()
       ),
     [thread]
@@ -154,10 +162,23 @@ const PortalChatWidget = ({ role = 'sales_staff' }) => {
     return current?.staffUser?.name || current?.staffUser?.username || 'Staff';
   }, [isAdmin, selectedStaffId, threads]);
 
-  const showAdminThreadOnMobile = isAdmin && isMobile && Boolean(selectedStaffId);
+  const showAdminThreadOnMobile = isAdmin && isMobile && Boolean(selectedStaffId) && !preferMobileThreadList;
 
   const removeAttachment = (url) => {
     setAttachments((current) => current.filter((entry) => entry.url !== url));
+  };
+
+  const openAdminThread = (staffId) => {
+    setSelectedStaffId(staffId);
+    setPreferMobileThreadList(false);
+    setMessage('');
+  };
+
+  const returnToAdminThreadList = () => {
+    setSelectedStaffId('');
+    setThread(null);
+    setMessage('');
+    setPreferMobileThreadList(true);
   };
 
   const handleFiles = async (event) => {
@@ -232,7 +253,7 @@ const PortalChatWidget = ({ role = 'sales_staff' }) => {
             </div>
             <div className="portal-chat-head-actions">
               {showAdminThreadOnMobile ? (
-                <button type="button" className="portal-inline-button ghost" onClick={() => setSelectedStaffId('')}>
+                <button type="button" className="portal-inline-button ghost" onClick={returnToAdminThreadList}>
                   Back
                 </button>
               ) : null}
@@ -264,7 +285,7 @@ const PortalChatWidget = ({ role = 'sales_staff' }) => {
                         key={entry.staffUser?._id}
                         type="button"
                         className={`portal-thread-button${selectedStaffId === entry.staffUser?._id ? ' is-selected' : ''}${isMobile ? ' mobile' : ''}`}
-                        onClick={() => setSelectedStaffId(entry.staffUser?._id || '')}
+                        onClick={() => openAdminThread(entry.staffUser?._id || '')}
                       >
                         <div className="portal-thread-title-row">
                           <strong>{entry.staffUser?.name || entry.staffUser?.username || 'Staff'}</strong>
@@ -286,28 +307,11 @@ const PortalChatWidget = ({ role = 'sales_staff' }) => {
                   {loading ? (
                     <div className="portal-empty-state"><h3 className="portal-empty-title">Loading...</h3></div>
                   ) : orderedMessages.length ? (
-                    <div className="portal-message-stack">
-                      {orderedMessages.map((entry) => (
-                        <div key={entry._id} className={`portal-message-row ${entry.senderRole === 'admin' ? 'self' : 'office'}`}>
-                          <div className="portal-message-bubble">
-                            <div className="portal-message-meta">
-                              <strong>{entry.senderRole === 'admin' ? 'Admin' : entry.sender?.name || entry.sender?.username || 'Staff'}</strong>
-                              <span>{formatPortalDateTime(entry.createdAt)}</span>
-                            </div>
-                            {entry.text ? <p className="portal-message-copy">{entry.text}</p> : null}
-                            {entry.attachments?.length ? (
-                              <div className="portal-attachment-list">
-                                {entry.attachments.map((attachment) => (
-                                  <a key={`${entry._id}-${attachment.url}`} className="portal-attachment-chip" href={attachment.url} target="_blank" rel="noreferrer">
-                                    {attachmentLabel(attachment)}
-                                  </a>
-                                ))}
-                              </div>
-                            ) : null}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
+                    <PortalMessageThread
+                      messages={orderedMessages}
+                      selfRole="admin"
+                      resolveSenderLabel={(entry) => (entry.senderRole === 'admin' ? 'Admin' : entry.sender?.name || entry.sender?.username || 'Staff')}
+                    />
                   ) : (
                     <div className="portal-empty-state">
                       <h3 className="portal-empty-title">No messages yet</h3>
@@ -322,7 +326,7 @@ const PortalChatWidget = ({ role = 'sales_staff' }) => {
                   <div className="portal-inline-actions compact">
                     <label className="portal-inline-button secondary portal-file-label">
                       {uploading ? 'Uploading...' : 'Attach'}
-                      <input type="file" multiple accept="image/*,.pdf,.doc,.docx,.xls,.xlsx" onChange={handleFiles} hidden />
+                      <input type="file" multiple onChange={handleFiles} hidden />
                     </label>
                     <button type="button" className="portal-inline-button ghost" onClick={() => { setDraft(''); setAttachments([]); }}>
                       Clear
@@ -349,28 +353,11 @@ const PortalChatWidget = ({ role = 'sales_staff' }) => {
                 {loading ? (
                   <div className="portal-empty-state"><h3 className="portal-empty-title">Loading...</h3></div>
                 ) : orderedMessages.length ? (
-                  <div className="portal-message-stack">
-                    {orderedMessages.map((entry) => (
-                      <div key={entry._id} className={`portal-message-row ${entry.senderRole === 'sales_staff' ? 'self' : 'office'}`}>
-                        <div className="portal-message-bubble">
-                          <div className="portal-message-meta">
-                            <strong>{entry.senderRole === 'sales_staff' ? 'You' : 'Office'}</strong>
-                            <span>{formatPortalDateTime(entry.createdAt)}</span>
-                          </div>
-                          {entry.text ? <p className="portal-message-copy">{entry.text}</p> : null}
-                          {entry.attachments?.length ? (
-                            <div className="portal-attachment-list">
-                              {entry.attachments.map((attachment) => (
-                                <a key={`${entry._id}-${attachment.url}`} className="portal-attachment-chip" href={attachment.url} target="_blank" rel="noreferrer">
-                                  {attachmentLabel(attachment)}
-                                </a>
-                              ))}
-                            </div>
-                          ) : null}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+                  <PortalMessageThread
+                    messages={orderedMessages}
+                    selfRole="sales_staff"
+                    resolveSenderLabel={(entry) => (entry.senderRole === 'sales_staff' ? 'You' : 'Office')}
+                  />
                 ) : (
                   <div className="portal-empty-state">
                     <h3 className="portal-empty-title">No messages yet</h3>
@@ -385,7 +372,7 @@ const PortalChatWidget = ({ role = 'sales_staff' }) => {
                 <div className="portal-inline-actions compact">
                   <label className="portal-inline-button secondary portal-file-label">
                     {uploading ? 'Uploading...' : 'Attach'}
-                    <input type="file" multiple accept="image/*,.pdf,.doc,.docx,.xls,.xlsx" onChange={handleFiles} hidden />
+                    <input type="file" multiple onChange={handleFiles} hidden />
                   </label>
                   <button type="button" className="portal-inline-button ghost" onClick={() => { setDraft(''); setAttachments([]); }}>
                     Clear

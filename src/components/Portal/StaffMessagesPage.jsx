@@ -1,11 +1,12 @@
 import { useEffect, useMemo, useState } from 'react';
 import { portalApi } from '../../services/portalApi';
-import { formatPortalDateTime } from '../../utils/portalDate';
+import PortalMessageThread from './PortalMessageThread';
 import './PortalShell.css';
 
 const draftKey = 'staff-draft:messages';
 
 const attachmentLabel = (attachment) => attachment?.name || attachment?.url?.split('/').pop() || 'Attachment';
+const getThreadMessages = (thread) => (Array.isArray(thread?.messages) ? thread.messages : []);
 
 const StaffMessagesPage = () => {
   const [thread, setThread] = useState(null);
@@ -31,7 +32,7 @@ const StaffMessagesPage = () => {
             ? {
                 ...current,
                 unreadAdminCount: 0,
-                messages: current.messages.map((entry) =>
+                messages: getThreadMessages(current).map((entry) =>
                   entry.senderRole === 'admin' ? { ...entry, readByStaff: true } : entry
                 ),
               }
@@ -50,7 +51,8 @@ const StaffMessagesPage = () => {
   }, []);
 
   useEffect(() => {
-    const raw = localStorage.getItem(draftKey);
+    if (typeof window === 'undefined') return;
+    const raw = window.localStorage.getItem(draftKey);
     if (!raw) return;
     try {
       const parsed = JSON.parse(raw);
@@ -62,12 +64,13 @@ const StaffMessagesPage = () => {
   }, []);
 
   useEffect(() => {
-    localStorage.setItem(draftKey, JSON.stringify({ text: draft, attachments }));
+    if (typeof window === 'undefined') return;
+    window.localStorage.setItem(draftKey, JSON.stringify({ text: draft, attachments }));
   }, [attachments, draft]);
 
   const orderedMessages = useMemo(
     () =>
-      [...(thread?.messages || [])].sort(
+      [...getThreadMessages(thread)].sort(
         (left, right) => new Date(left.createdAt).getTime() - new Date(right.createdAt).getTime()
       ),
     [thread]
@@ -122,7 +125,9 @@ const StaffMessagesPage = () => {
       setThread(response.data.thread);
       setDraft('');
       setAttachments([]);
-      localStorage.removeItem(draftKey);
+      if (typeof window !== 'undefined') {
+        window.localStorage.removeItem(draftKey);
+      }
       setMessage('Message sent to the office.');
     } catch (err) {
       setMessage(err.message);
@@ -155,18 +160,6 @@ const StaffMessagesPage = () => {
         </div>
       </div>
 
-      <div className="portal-card portal-help-card">
-        <div className="portal-section-head">
-          <div>
-            <div className="portal-brand-kicker">How to use this</div>
-            <h2 className="portal-section-title" style={{ fontSize: '1.45rem' }}>Keep field communication in one place</h2>
-            <p className="portal-section-copy">
-              Use this page for updates that need office attention. You can attach photos, PDFs, and supporting files before pressing send.
-            </p>
-          </div>
-        </div>
-      </div>
-
       <div className="portal-card">
         <div className="portal-section-head">
           <div>
@@ -187,37 +180,11 @@ const StaffMessagesPage = () => {
                 <h3 className="portal-empty-title">Loading messages...</h3>
               </div>
             ) : orderedMessages.length ? (
-              <div className="portal-message-stack">
-                {orderedMessages.map((entry) => (
-                  <div
-                    key={entry._id}
-                    className={`portal-message-row ${entry.senderRole === 'sales_staff' ? 'self' : 'office'}`}
-                  >
-                    <div className="portal-message-bubble">
-                      <div className="portal-message-meta">
-                        <strong>{entry.senderRole === 'sales_staff' ? 'You' : 'Office'}</strong>
-                        <span>{formatPortalDateTime(entry.createdAt)}</span>
-                      </div>
-                      {entry.text && <p className="portal-message-copy">{entry.text}</p>}
-                      {entry.attachments?.length ? (
-                        <div className="portal-attachment-list">
-                          {entry.attachments.map((attachment) => (
-                            <a
-                              key={`${entry._id}-${attachment.url}`}
-                              className="portal-attachment-chip"
-                              href={attachment.url}
-                              target="_blank"
-                              rel="noreferrer"
-                            >
-                              {attachmentLabel(attachment)}
-                            </a>
-                          ))}
-                        </div>
-                      ) : null}
-                    </div>
-                  </div>
-                ))}
-              </div>
+                <PortalMessageThread
+                  messages={orderedMessages}
+                  selfRole="sales_staff"
+                  resolveSenderLabel={(entry) => (entry.senderRole === 'sales_staff' ? 'You' : 'Office')}
+                />
             ) : (
               <div className="portal-empty-state">
                 <h3 className="portal-empty-title">No messages yet</h3>
@@ -240,9 +207,19 @@ const StaffMessagesPage = () => {
             <div className="portal-inline-actions">
               <label className="portal-inline-button secondary portal-file-label">
                 {uploading ? 'Uploading...' : 'Attach Files'}
-                <input type="file" multiple accept="image/*,.pdf,.doc,.docx,.xls,.xlsx" onChange={handleFiles} hidden />
+                <input type="file" multiple onChange={handleFiles} hidden />
               </label>
-              <button className="portal-inline-button ghost" type="button" onClick={() => { setDraft(''); setAttachments([]); localStorage.removeItem(draftKey); }}>
+              <button
+                className="portal-inline-button ghost"
+                type="button"
+                onClick={() => {
+                  setDraft('');
+                  setAttachments([]);
+                  if (typeof window !== 'undefined') {
+                    window.localStorage.removeItem(draftKey);
+                  }
+                }}
+              >
                 Clear Draft
               </button>
             </div>
@@ -250,14 +227,18 @@ const StaffMessagesPage = () => {
             {attachments.length ? (
               <div className="portal-attachment-list editor">
                 {attachments.map((attachment) => (
-                  <button
-                    key={attachment.url}
-                    type="button"
-                    className="portal-attachment-chip removable"
-                    onClick={() => removeAttachment(attachment.url)}
-                  >
-                    {attachmentLabel(attachment)} ×
-                  </button>
+                  <div key={attachment.url} className="portal-inline-actions" style={{ gap: '0.5rem' }}>
+                    <a className="portal-attachment-chip" href={attachment.url} target="_blank" rel="noreferrer">
+                      {attachmentLabel(attachment)}
+                    </a>
+                    <button
+                      type="button"
+                      className="portal-attachment-chip removable"
+                      onClick={() => removeAttachment(attachment.url)}
+                    >
+                      Remove ×
+                    </button>
+                  </div>
                 ))}
               </div>
             ) : null}

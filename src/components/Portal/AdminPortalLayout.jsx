@@ -21,6 +21,7 @@ const linkGroups = [
   {
     section: 'Website Control',
     items: [
+      { to: '/admin/website', label: 'Website', icon: '◫' },
       { to: '/admin/catalog', label: 'Catalog', icon: '◫' },
       { to: '/admin/catalog/categories', label: 'Categories', icon: '□' },
       { to: '/admin/catalog/products', label: 'Products', icon: '◇' },
@@ -40,11 +41,37 @@ const mobileQuickLinks = [
   { to: '/admin/account', label: 'Account', icon: '⚙' },
 ];
 
+const getNavBreadcrumb = (pathname) => {
+  let best = null;
+  for (const group of linkGroups) {
+    for (const item of group.items) {
+      if (pathname === item.to || pathname.startsWith(item.to + '/')) {
+        if (!best || item.to.length > best.item.to.length) {
+          best = { group, item };
+        }
+      }
+    }
+  }
+  return best ? { section: best.group.section, label: best.item.label } : null;
+};
+
+const getInitials = (name) =>
+  String(name || 'Admin')
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean)
+    .map((word) => word[0])
+    .slice(0, 2)
+    .join('')
+    .toUpperCase() || 'AD';
+
 const AdminPortalLayout = () => {
   const { admin, logout } = useContext(AdminContext);
   const location = useLocation();
   const [navOpen, setNavOpen] = useState(false);
   const adminDisplayName = admin?.name || admin?.username || 'Admin';
+  const initials = useMemo(() => getInitials(adminDisplayName), [adminDisplayName]);
+  const breadcrumb = useMemo(() => getNavBreadcrumb(location.pathname), [location.pathname]);
   const todayLabel = useMemo(
     () =>
       new Intl.DateTimeFormat('en-GB', {
@@ -68,7 +95,10 @@ const AdminPortalLayout = () => {
           <span className="portal-admin-date">{todayLabel}</span>
         </div>
         <div className="portal-topbar-meta portal-admin-topbar-meta">
-          <span className="portal-chip admin-user-chip">{adminDisplayName}</span>
+          <span className="portal-chip admin-user-chip">
+            <span className="admin-avatar" aria-hidden="true">{initials}</span>
+            {adminDisplayName}
+          </span>
           <button className="portal-inline-button ghost" type="button" onClick={logout}>
             Sign Out
           </button>
@@ -111,6 +141,13 @@ const AdminPortalLayout = () => {
           </div>
         </aside>
         <main className="portal-admin-main">
+          {breadcrumb && (
+            <nav className="portal-admin-breadcrumb" aria-label="breadcrumb">
+              <span>{breadcrumb.section}</span>
+              <span className="portal-admin-breadcrumb-sep" aria-hidden="true">›</span>
+              <span className="portal-admin-breadcrumb-page">{breadcrumb.label}</span>
+            </nav>
+          )}
           <Outlet />
         </main>
       </div>

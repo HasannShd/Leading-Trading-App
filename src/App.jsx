@@ -42,6 +42,7 @@ const AdminOrderDetails = lazy(() => import('./components/Admin/AdminOrderDetail
 const AdminAccount = lazy(() => import('./components/Admin/AdminAccount'));
 const AdminPortalLayout = lazy(() => import('./components/Portal/AdminPortalLayout'));
 const AdminDashboardPage = lazy(() => import('./components/Portal/AdminDashboardPage'));
+const AdminWebsitePage = lazy(() => import('./components/Portal/AdminWebsitePage'));
 const AdminMessagesPage = lazy(() => import('./components/Portal/AdminMessagesPage'));
 const StaffLayout = lazy(() => import('./components/Portal/StaffLayout'));
 const StaffLogin = lazy(() => import('./components/Portal/StaffLogin'));
@@ -53,6 +54,7 @@ const StaffMessagesPage = lazy(() => import('./components/Portal/StaffMessagesPa
 const StaffAccount = lazy(() => import('./components/Portal/StaffAccount'));
 const StaffResourcePage = lazy(() => import('./components/Portal/StaffResourcePage'));
 const StaffOrdersPage = lazy(() => import('./components/Portal/StaffOrdersPage'));
+const StaffOrderHistoryPage = lazy(() => import('./components/Portal/StaffOrderHistoryPage'));
 const AdminStaffPage = lazy(() => import('./components/Portal/AdminStaffPage'));
 const AdminResourcePage = lazy(() => import('./components/Portal/AdminResourcePage'));
 
@@ -128,6 +130,7 @@ const AppShell = () => {
               <Route path="attendance" element={<StaffAttendance />} />
               <Route path="reports" element={<StaffResourcePage config={staffModuleConfigs.reports} />} />
               <Route path="orders" element={<StaffOrdersPage />} />
+              <Route path="order-history" element={<StaffOrderHistoryPage />} />
               <Route path="clients" element={<StaffResourcePage config={staffModuleConfigs.clients} />} />
               <Route path="visits" element={<StaffResourcePage config={staffModuleConfigs.visits} />} />
               <Route path="messages" element={<StaffMessagesPage />} />
@@ -140,6 +143,7 @@ const AppShell = () => {
             <Route path="/admin" element={<ProtectedAdminRoute element={<AdminPortalLayout />} />}>
               <Route index element={<Navigate to="/admin/dashboard" replace />} />
               <Route path="dashboard" element={<AdminDashboardPage />} />
+              <Route path="website" element={<AdminWebsitePage />} />
               <Route path="catalog" element={<Navigate to="/admin/catalog/products" replace />} />
               <Route path="catalog/categories" element={<AdminCategories />} />
               <Route path="catalog/products" element={<AdminProducts />} />
@@ -180,19 +184,27 @@ const ScrollToTop = () => {
   return null;
 };
 
+const RoutedApp = () => {
+  const location = useLocation();
+
+  return (
+    <AppErrorBoundary resetKey={location.pathname}>
+      <ScrollToTop />
+      <AuthProvider>
+        <AdminProvider>
+          <StaffProvider>
+            <AppShell />
+          </StaffProvider>
+        </AdminProvider>
+      </AuthProvider>
+    </AppErrorBoundary>
+  );
+};
+
 export default function App() {
   return (
     <Router>
-      <AppErrorBoundary>
-        <ScrollToTop />
-        <AuthProvider>
-          <AdminProvider>
-            <StaffProvider>
-              <AppShell />
-            </StaffProvider>
-          </AdminProvider>
-        </AuthProvider>
-      </AppErrorBoundary>
+      <RoutedApp />
     </Router>
   );
 }

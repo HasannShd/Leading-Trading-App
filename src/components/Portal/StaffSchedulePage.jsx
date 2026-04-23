@@ -39,17 +39,6 @@ const StaffSchedulePage = () => {
           </div>
         </div>
       </div>
-      <div className="portal-card portal-help-card">
-        <div className="portal-section-head">
-          <div>
-            <div className="portal-brand-kicker">Simple Steps</div>
-            <h2 className="portal-section-title" style={{ fontSize: '1.4rem' }}>How to use your schedule</h2>
-            <p className="portal-section-copy">
-              Check the date, time, and location, then press the matching status button. Use <strong>Start Now</strong> when you are on the way or at the visit, and use <strong>Mark Complete</strong> once the task is done.
-            </p>
-          </div>
-        </div>
-      </div>
       {message && <div className="portal-badge status">{message}</div>}
       <div className="portal-record-list">
         {schedules.length ? (
