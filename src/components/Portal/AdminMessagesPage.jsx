@@ -26,6 +26,7 @@ const AdminMessagesPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const threadRequestIdRef = useRef(0);
   const threadPanelRef = useRef(null);
+  const selectionInitializedRef = useRef(false);
 
   useEffect(() => {
     if (typeof window === 'undefined') return undefined;
@@ -46,18 +47,21 @@ const AdminMessagesPage = () => {
       const nextThreads = threadsResponse.data.threads || [];
       setStaff(nextStaff);
       setThreads(nextThreads);
-      const requestedStaffId = searchParams.get('staffId') || '';
-      if (requestedStaffId && nextStaff.some((entry) => entry._id === requestedStaffId)) {
-        setSelectedStaffId(requestedStaffId);
-      } else if (!selectedStaffId && !isMobile) {
-        setSelectedStaffId(nextThreads[0]?.staffUser?._id || nextStaff[0]?._id || '');
+      if (!selectionInitializedRef.current) {
+        const requestedStaffId = searchParams.get('staffId') || '';
+        if (requestedStaffId && nextStaff.some((entry) => entry._id === requestedStaffId)) {
+          setSelectedStaffId(requestedStaffId);
+        } else if (!isMobile) {
+          setSelectedStaffId(nextThreads[0]?.staffUser?._id || nextStaff[0]?._id || '');
+        }
+        selectionInitializedRef.current = true;
       }
     } catch (err) {
       setMessage(err.message);
     } finally {
       setLoading(false);
     }
-  }, [isMobile, searchParams, selectedStaffId]);
+  }, [isMobile, searchParams]);
 
   const loadThread = useCallback(async (staffId, markRead = true) => {
     if (!staffId) {
@@ -108,6 +112,7 @@ const AdminMessagesPage = () => {
   useEffect(() => {
     if (selectedStaffId) {
       setSearchParams((current) => {
+        if (current.get('staffId') === selectedStaffId) return current;
         const next = new URLSearchParams(current);
         next.set('staffId', selectedStaffId);
         return next;
@@ -117,6 +122,7 @@ const AdminMessagesPage = () => {
     }
     setThread(null);
     setSearchParams((current) => {
+      if (!current.has('staffId')) return current;
       const next = new URLSearchParams(current);
       next.delete('staffId');
       return next;
@@ -124,9 +130,9 @@ const AdminMessagesPage = () => {
   }, [loadThread, selectedStaffId, setSearchParams]);
 
   useEffect(() => {
-    if (!selectedStaffId || !threadPanelRef.current) return;
+    if (!isMobile || !selectedStaffId || !threadPanelRef.current) return;
     threadPanelRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }, [selectedStaffId]);
+  }, [isMobile, selectedStaffId]);
 
   const threadSummaryByStaff = useMemo(
     () => new Map(threads.map((entry) => [entry.staffUser?._id, entry])),
@@ -211,7 +217,6 @@ const AdminMessagesPage = () => {
       setDraft('');
       setAttachments([]);
       await loadLists();
-      setSelectedStaffId(selectedStaffId);
       setMessage('Message sent to staff.');
     } catch (err) {
       setMessage(err.message);

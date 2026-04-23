@@ -234,6 +234,192 @@ const AdminResourcePage = ({ config }) => {
       )}
     </div>
   );
+
+  const renderReportDetails = (record) => (
+    <div className="portal-record-card portal-report-detail-card portal-inline-detail-card" ref={selectedRecordRef}>
+      <div className="portal-report-detail-hero">
+        <div>
+          <div className="portal-brand-kicker">Daily Report</div>
+          <h3 className="portal-record-title">{record.user?.name || record.user?.username || 'Daily Report'}</h3>
+        </div>
+        <div className="portal-inline-actions tight">
+          <span className="portal-badge status">{record.date ? formatPortalDate(record.date) : 'No date'}</span>
+          <span className="portal-badge status">{record.followUpNeeded ? 'Follow-up needed' : 'No follow-up'}</span>
+        </div>
+      </div>
+      <div className="portal-detail-grid compact">
+        <div className="portal-detail-item">
+          <span className="portal-detail-label">Report date</span>
+          <span className="portal-detail-value">{record.date ? formatPortalDate(record.date) : '-'}</span>
+        </div>
+        <div className="portal-detail-item">
+          <span className="portal-detail-label">Submitted</span>
+          <span className="portal-detail-value">{record.createdAt ? formatPortalDateTime(record.createdAt) : '-'}</span>
+        </div>
+      </div>
+      <div className="portal-note-block highlight">
+        <div className="portal-detail-label">Summary</div>
+        <div className="portal-record-copy">{record.summary || '-'}</div>
+      </div>
+      {record.notes && (
+        <div className="portal-note-block">
+          <div className="portal-detail-label">Notes</div>
+          <div className="portal-record-copy">{record.notes}</div>
+        </div>
+      )}
+      {!!record.visits?.length && (
+        <div className="portal-note-block">
+          <div className="portal-detail-label">Visits Mentioned</div>
+          <div className="portal-record-copy">
+            {record.visits.map((visit) => `${visit.clientName || 'Client'}: ${visit.outcome || '-'}`).join(' | ')}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+
+  const renderOrderDetails = (record) => (
+    <div className="portal-record-card portal-inline-detail-card" ref={selectedRecordRef}>
+      <h3 className="portal-record-title">{getOrderFacilityName(record)}</h3>
+      <div className="portal-record-meta">
+        <span>{record.createdAt ? formatPortalDateTime(record.createdAt) : '-'}</span>
+        <span>{record.requestedForDate ? formatPortalDate(record.requestedForDate) : '-'}</span>
+        <span>{prettyStatus(record.status)}</span>
+        <span>{record.urgency || '-'}</span>
+      </div>
+      <div className="portal-detail-grid">
+        <div className="portal-detail-item">
+          <span className="portal-detail-label">Facility</span>
+          <span className="portal-detail-value">{getOrderFacilityName(record)}</span>
+        </div>
+        <div className="portal-detail-item">
+          <span className="portal-detail-label">Contact</span>
+          <span className="portal-detail-value">{record.contactPerson || '-'}</span>
+        </div>
+        <div className="portal-detail-item">
+          <span className="portal-detail-label">Requested for</span>
+          <span className="portal-detail-value">{record.requestedForDate ? formatPortalDate(record.requestedForDate) : '-'}</span>
+        </div>
+        <div className="portal-detail-item">
+          <span className="portal-detail-label">Order timing</span>
+          <span className="portal-detail-value">{record.orderTiming === 'tomorrow' ? 'Order for tomorrow' : 'Order for today'}</span>
+        </div>
+        <div className="portal-detail-item">
+          <span className="portal-detail-label">VAT</span>
+          <span className="portal-detail-value">{record.vatApplicable ? record.vatAmount ?? 'Applicable' : 'Not applied'}</span>
+        </div>
+      </div>
+      <div className="portal-note-block">
+        <div className="portal-detail-label">Items</div>
+        <div className="portal-record-copy">{(record.items || []).map((item) => formatOrderItem(item)).join(' | ') || '-'}</div>
+      </div>
+      {record.deliveryNote && (
+        <div className="portal-note-block">
+          <div className="portal-detail-label">Delivery Note</div>
+          <div className="portal-record-copy">{record.deliveryNote}</div>
+        </div>
+      )}
+      {record.notes && (
+        <div className="portal-note-block">
+          <div className="portal-detail-label">Notes</div>
+          <div className="portal-record-copy">{record.notes}</div>
+        </div>
+      )}
+      {record.attachments?.length ? (
+        <div className="portal-note-block">
+          <div className="portal-detail-label">Attachments</div>
+          <div className="portal-attachment-list">
+            {record.attachments.map((attachment, index) => (
+              <a key={`${record._id}-${attachment.url || index}`} className="portal-attachment-chip" href={attachment.url} target="_blank" rel="noreferrer">
+                {attachment.name || attachment.url?.split('/').pop() || `Attachment ${index + 1}`}
+              </a>
+            ))}
+          </div>
+        </div>
+      ) : null}
+      {config.statusPatch && record.status && (
+        <div className="portal-inline-actions" style={{ marginTop: '0.5rem' }}>
+          <div className="portal-badge status" style={{ textTransform: 'capitalize' }}>Current: {prettyStatus(record.status)}</div>
+          <select value={statusDrafts[record._id] || record.status} onChange={(e) => setStatusDrafts((current) => ({ ...current, [record._id]: e.target.value }))}>
+            {statusOptions.map((value) => (
+              <option key={value} value={value}>{prettyStatus(value)}</option>
+            ))}
+          </select>
+          <button className="portal-inline-button secondary" type="button" onClick={() => handleStatusUpdate(record)}>Update</button>
+        </div>
+      )}
+    </div>
+  );
+
+  const renderClientDetails = (record) => (
+    <div className="portal-record-card portal-inline-detail-card" ref={selectedRecordRef}>
+      <h3 className="portal-record-title">{record.name || 'Client'}</h3>
+      <div className="portal-detail-grid">
+        {[
+          ['Assigned Staff', record.assignedTo?.name || record.assignedTo?.username || '-'],
+          ['Created By', record.createdBy?.name || record.createdBy?.username || '-'],
+          ['Type', record.companyType || '-'],
+          ['Department', record.department || '-'],
+          ['Contact', record.contactPerson || '-'],
+          ['Phone', record.phone || '-'],
+          ['Email', record.email || '-'],
+          ['Location', record.location || '-'],
+          ['Created', record.createdAt ? formatPortalDateTime(record.createdAt) : '-'],
+          ['Updated', record.updatedAt ? formatPortalDateTime(record.updatedAt) : '-'],
+        ].map(([label, value]) => (
+          <div className="portal-detail-item" key={`${record._id}-${label}`}>
+            <span className="portal-detail-label">{label}</span>
+            <span className="portal-detail-value">{value}</span>
+          </div>
+        ))}
+      </div>
+      {record.address && (
+        <div className="portal-note-block">
+          <div className="portal-detail-label">Address</div>
+          <div className="portal-record-copy">{record.address}</div>
+        </div>
+      )}
+      {record.notes && (
+        <div className="portal-note-block">
+          <div className="portal-detail-label">Notes</div>
+          <div className="portal-record-copy">{record.notes}</div>
+        </div>
+      )}
+    </div>
+  );
+
+  const renderVisitDetails = (record) => (
+    <div className="portal-record-card portal-inline-detail-card" ref={selectedRecordRef}>
+      <h3 className="portal-record-title">{record.client?.name || record.clientName || 'Visit'}</h3>
+      <div className="portal-detail-grid">
+        {[
+          ['Visit date', record.visitDate ? formatPortalDate(record.visitDate) : '-'],
+          ['Visit time', record.visitTime || '-'],
+          ['Logged', record.createdAt ? formatPortalDateTime(record.createdAt) : '-'],
+          ['Met person', record.metPerson || '-'],
+          ['Location', record.location || '-'],
+          ['Purpose', record.purpose || '-'],
+        ].map(([label, value]) => (
+          <div className="portal-detail-item" key={`${record._id}-${label}`}>
+            <span className="portal-detail-label">{label}</span>
+            <span className="portal-detail-value">{value}</span>
+          </div>
+        ))}
+      </div>
+      {record.discussionSummary && (
+        <div className="portal-note-block">
+          <div className="portal-detail-label">Discussion</div>
+          <div className="portal-record-copy">{record.discussionSummary}</div>
+        </div>
+      )}
+      {record.outcome && (
+        <div className="portal-note-block">
+          <div className="portal-detail-label">Outcome</div>
+          <div className="portal-record-copy">{record.outcome}</div>
+        </div>
+      )}
+    </div>
+  );
   const pendingStatuses = new Set(['submitted', 'pending', 'under_review', 'reviewed', 'partial', 'overdue']);
   const pendingCount = records.filter((record) => pendingStatuses.has(record.status)).length;
   const assignedPeople = new Set(records.map((record) => record.user?._id).filter(Boolean)).size;
@@ -373,11 +559,10 @@ const AdminResourcePage = ({ config }) => {
         <div className="portal-record-list" style={{ marginTop: '1rem' }}>
           {records.length ? (
             isReportsPage ? (
-              <>
-                <div className="portal-inline-list compact">
-                  {records.map((record) => (
+              <div className="portal-inline-list compact">
+                {records.map((record) => (
+                  <div className="portal-inline-record-wrap" key={record._id}>
                     <button
-                      key={record._id}
                       type="button"
                       className={`portal-record-card portal-record-card-button${selectedReport?._id === record._id ? ' is-selected' : ''}`}
                       onClick={() => setSelectedRecordId((current) => (current === record._id ? '' : record._id))}
@@ -388,43 +573,15 @@ const AdminResourcePage = ({ config }) => {
                         <span>{record.createdAt ? formatPortalDateTime(record.createdAt) : '-'}</span>
                       </div>
                     </button>
-                  ))}
-                </div>
-                {selectedReport && (
-                  <div className="portal-record-card" ref={selectedRecordRef}>
-                    <h3 className="portal-record-title">{selectedReport.user?.name || selectedReport.user?.username || 'Daily Report'}</h3>
-                    <div className="portal-record-meta">
-                      <span>{selectedReport.date ? formatPortalDate(selectedReport.date) : '-'}</span>
-                      <span>{selectedReport.createdAt ? formatPortalDateTime(selectedReport.createdAt) : '-'}</span>
-                      <span>Follow up: {selectedReport.followUpNeeded ? 'Yes' : 'No'}</span>
-                    </div>
-                    <div className="portal-note-block">
-                      <div className="portal-detail-label">Summary</div>
-                      <div className="portal-record-copy">{selectedReport.summary || '-'}</div>
-                    </div>
-                    {selectedReport.notes && (
-                      <div className="portal-note-block">
-                        <div className="portal-detail-label">Notes</div>
-                        <div className="portal-record-copy">{selectedReport.notes}</div>
-                      </div>
-                    )}
-                    {!!selectedReport.visits?.length && (
-                      <div className="portal-note-block">
-                        <div className="portal-detail-label">Visits Mentioned</div>
-                        <div className="portal-record-copy">
-                          {selectedReport.visits.map((visit) => `${visit.clientName || 'Client'}: ${visit.outcome || '-'}`).join(' | ')}
-                        </div>
-                      </div>
-                    )}
+                    {selectedReport?._id === record._id && renderReportDetails(record)}
                   </div>
-                )}
-              </>
+                ))}
+              </div>
             ) : isOrdersPage ? (
-              <>
-                <div className="portal-inline-list compact">
-                  {records.map((record) => (
+              <div className="portal-inline-list compact">
+                {records.map((record) => (
+                  <div className="portal-inline-record-wrap" key={record._id}>
                     <button
-                      key={record._id}
                       type="button"
                       className={`portal-record-card portal-record-card-button${selectedReport?._id === record._id ? ' is-selected' : ''}`}
                       onClick={() => setSelectedRecordId((current) => (current === record._id ? '' : record._id))}
@@ -436,104 +593,15 @@ const AdminResourcePage = ({ config }) => {
                         {record.status && <span className="portal-badge status">{prettyStatus(record.status)}</span>}
                       </div>
                     </button>
-                  ))}
-                </div>
-                {selectedReport && (
-                  <div className="portal-record-card" ref={selectedRecordRef}>
-                    <h3 className="portal-record-title">{getOrderFacilityName(selectedReport)}</h3>
-                    <div className="portal-record-meta">
-                      <span>{selectedReport.createdAt ? formatPortalDateTime(selectedReport.createdAt) : '-'}</span>
-                      <span>{selectedReport.requestedForDate ? formatPortalDate(selectedReport.requestedForDate) : '-'}</span>
-                      <span>{prettyStatus(selectedReport.status)}</span>
-                      <span>{selectedReport.urgency || '-'}</span>
-                    </div>
-                    <div className="portal-detail-grid">
-                      <div className="portal-detail-item">
-                        <span className="portal-detail-label">Facility</span>
-                        <span className="portal-detail-value">{getOrderFacilityName(selectedReport)}</span>
-                      </div>
-                      <div className="portal-detail-item">
-                        <span className="portal-detail-label">Contact</span>
-                        <span className="portal-detail-value">{selectedReport.contactPerson || '-'}</span>
-                      </div>
-                      <div className="portal-detail-item">
-                        <span className="portal-detail-label">Requested for</span>
-                        <span className="portal-detail-value">{selectedReport.requestedForDate ? formatPortalDate(selectedReport.requestedForDate) : '-'}</span>
-                      </div>
-                      <div className="portal-detail-item">
-                        <span className="portal-detail-label">Order timing</span>
-                        <span className="portal-detail-value">{selectedReport.orderTiming === 'tomorrow' ? 'Order for tomorrow' : 'Order for today'}</span>
-                      </div>
-                      <div className="portal-detail-item">
-                        <span className="portal-detail-label">VAT</span>
-                        <span className="portal-detail-value">
-                          {selectedReport.vatApplicable ? selectedReport.vatAmount ?? 'Applicable' : 'Not applied'}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="portal-note-block">
-                      <div className="portal-detail-label">Items</div>
-                      <div className="portal-record-copy">
-                        {(selectedReport.items || []).map((item) => formatOrderItem(item)).join(' | ') || '-'}
-                      </div>
-                    </div>
-                    {selectedReport.deliveryNote && (
-                      <div className="portal-note-block">
-                        <div className="portal-detail-label">Delivery Note</div>
-                        <div className="portal-record-copy">{selectedReport.deliveryNote}</div>
-                      </div>
-                    )}
-                    {selectedReport.notes && (
-                      <div className="portal-note-block">
-                        <div className="portal-detail-label">Notes</div>
-                        <div className="portal-record-copy">{selectedReport.notes}</div>
-                      </div>
-                    )}
-                    {selectedReport.attachments?.length ? (
-                      <div className="portal-note-block">
-                        <div className="portal-detail-label">Attachments</div>
-                        <div className="portal-attachment-list">
-                          {selectedReport.attachments.map((attachment, index) => (
-                            <a
-                              key={`${selectedReport._id}-${attachment.url || index}`}
-                              className="portal-attachment-chip"
-                              href={attachment.url}
-                              target="_blank"
-                              rel="noreferrer"
-                            >
-                              {attachment.name || attachment.url?.split('/').pop() || `Attachment ${index + 1}`}
-                            </a>
-                          ))}
-                        </div>
-                      </div>
-                    ) : null}
-                    {config.statusPatch && selectedReport.status && (
-                      <div className="portal-inline-actions" style={{ marginTop: '0.5rem' }}>
-                        <div className="portal-badge status" style={{ textTransform: 'capitalize' }}>
-                          Current: {prettyStatus(selectedReport.status)}
-                        </div>
-                        <select
-                          value={statusDrafts[selectedReport._id] || selectedReport.status}
-                          onChange={(e) => setStatusDrafts((current) => ({ ...current, [selectedReport._id]: e.target.value }))}
-                        >
-                          {statusOptions.map((value) => (
-                            <option key={value} value={value}>{prettyStatus(value)}</option>
-                          ))}
-                        </select>
-                        <button className="portal-inline-button secondary" type="button" onClick={() => handleStatusUpdate(selectedReport)}>
-                          Update
-                        </button>
-                      </div>
-                    )}
+                    {selectedReport?._id === record._id && renderOrderDetails(record)}
                   </div>
-                )}
-              </>
+                ))}
+              </div>
             ) : isClientsPage ? (
-              <>
-                <div className="portal-inline-list compact">
-                  {records.map((record) => (
+              <div className="portal-inline-list compact">
+                {records.map((record) => (
+                  <div className="portal-inline-record-wrap" key={record._id}>
                     <button
-                      key={record._id}
                       type="button"
                       className={`portal-record-card portal-record-card-button${selectedReport?._id === record._id ? ' is-selected' : ''}`}
                       onClick={() => setSelectedRecordId((current) => (current === record._id ? '' : record._id))}
@@ -545,74 +613,15 @@ const AdminResourcePage = ({ config }) => {
                         <span>{record.updatedAt ? formatPortalDateTime(record.updatedAt) : '-'}</span>
                       </div>
                     </button>
-                  ))}
-                </div>
-                {selectedReport && (
-                  <div className="portal-record-card" ref={selectedRecordRef}>
-                    <h3 className="portal-record-title">{selectedReport.name || 'Client'}</h3>
-                    <div className="portal-detail-grid">
-                      <div className="portal-detail-item">
-                        <span className="portal-detail-label">Assigned Staff</span>
-                        <span className="portal-detail-value">{selectedReport.assignedTo?.name || selectedReport.assignedTo?.username || '-'}</span>
-                      </div>
-                      <div className="portal-detail-item">
-                        <span className="portal-detail-label">Created By</span>
-                        <span className="portal-detail-value">{selectedReport.createdBy?.name || selectedReport.createdBy?.username || '-'}</span>
-                      </div>
-                      <div className="portal-detail-item">
-                        <span className="portal-detail-label">Type</span>
-                        <span className="portal-detail-value">{selectedReport.companyType || '-'}</span>
-                      </div>
-                      <div className="portal-detail-item">
-                        <span className="portal-detail-label">Department</span>
-                        <span className="portal-detail-value">{selectedReport.department || '-'}</span>
-                      </div>
-                      <div className="portal-detail-item">
-                        <span className="portal-detail-label">Contact</span>
-                        <span className="portal-detail-value">{selectedReport.contactPerson || '-'}</span>
-                      </div>
-                      <div className="portal-detail-item">
-                        <span className="portal-detail-label">Phone</span>
-                        <span className="portal-detail-value">{selectedReport.phone || '-'}</span>
-                      </div>
-                      <div className="portal-detail-item">
-                        <span className="portal-detail-label">Email</span>
-                        <span className="portal-detail-value">{selectedReport.email || '-'}</span>
-                      </div>
-                      <div className="portal-detail-item">
-                        <span className="portal-detail-label">Location</span>
-                        <span className="portal-detail-value">{selectedReport.location || '-'}</span>
-                      </div>
-                      <div className="portal-detail-item">
-                        <span className="portal-detail-label">Created</span>
-                        <span className="portal-detail-value">{selectedReport.createdAt ? formatPortalDateTime(selectedReport.createdAt) : '-'}</span>
-                      </div>
-                      <div className="portal-detail-item">
-                        <span className="portal-detail-label">Updated</span>
-                        <span className="portal-detail-value">{selectedReport.updatedAt ? formatPortalDateTime(selectedReport.updatedAt) : '-'}</span>
-                      </div>
-                    </div>
-                    {selectedReport.address && (
-                      <div className="portal-note-block">
-                        <div className="portal-detail-label">Address</div>
-                        <div className="portal-record-copy">{selectedReport.address}</div>
-                      </div>
-                    )}
-                    {selectedReport.notes && (
-                      <div className="portal-note-block">
-                        <div className="portal-detail-label">Notes</div>
-                        <div className="portal-record-copy">{selectedReport.notes}</div>
-                      </div>
-                    )}
+                    {selectedReport?._id === record._id && renderClientDetails(record)}
                   </div>
-                )}
-              </>
+                ))}
+              </div>
             ) : isVisitsPage ? (
-              <>
-                <div className="portal-inline-list compact">
-                  {records.map((record) => (
+              <div className="portal-inline-list compact">
+                {records.map((record) => (
+                  <div className="portal-inline-record-wrap" key={record._id}>
                     <button
-                      key={record._id}
                       type="button"
                       className={`portal-record-card portal-record-card-button${selectedReport?._id === record._id ? ' is-selected' : ''}`}
                       onClick={() => setSelectedRecordId((current) => (current === record._id ? '' : record._id))}
@@ -624,52 +633,10 @@ const AdminResourcePage = ({ config }) => {
                         <span>{record.location || 'No location'}</span>
                       </div>
                     </button>
-                  ))}
-                </div>
-                {selectedReport && (
-                  <div className="portal-record-card" ref={selectedRecordRef}>
-                    <h3 className="portal-record-title">{selectedReport.client?.name || selectedReport.clientName || 'Visit'}</h3>
-                    <div className="portal-detail-grid">
-                      <div className="portal-detail-item">
-                        <span className="portal-detail-label">Visit date</span>
-                        <span className="portal-detail-value">{selectedReport.visitDate ? formatPortalDate(selectedReport.visitDate) : '-'}</span>
-                      </div>
-                      <div className="portal-detail-item">
-                        <span className="portal-detail-label">Visit time</span>
-                        <span className="portal-detail-value">{selectedReport.visitTime || '-'}</span>
-                      </div>
-                      <div className="portal-detail-item">
-                        <span className="portal-detail-label">Logged</span>
-                        <span className="portal-detail-value">{selectedReport.createdAt ? formatPortalDateTime(selectedReport.createdAt) : '-'}</span>
-                      </div>
-                      <div className="portal-detail-item">
-                        <span className="portal-detail-label">Met person</span>
-                        <span className="portal-detail-value">{selectedReport.metPerson || '-'}</span>
-                      </div>
-                      <div className="portal-detail-item">
-                        <span className="portal-detail-label">Location</span>
-                        <span className="portal-detail-value">{selectedReport.location || '-'}</span>
-                      </div>
-                      <div className="portal-detail-item">
-                        <span className="portal-detail-label">Purpose</span>
-                        <span className="portal-detail-value">{selectedReport.purpose || '-'}</span>
-                      </div>
-                    </div>
-                    {selectedReport.discussionSummary && (
-                      <div className="portal-note-block">
-                        <div className="portal-detail-label">Discussion</div>
-                        <div className="portal-record-copy">{selectedReport.discussionSummary}</div>
-                      </div>
-                    )}
-                    {selectedReport.outcome && (
-                      <div className="portal-note-block">
-                        <div className="portal-detail-label">Outcome</div>
-                        <div className="portal-record-copy">{selectedReport.outcome}</div>
-                      </div>
-                    )}
+                    {selectedReport?._id === record._id && renderVisitDetails(record)}
                   </div>
-                )}
-              </>
+                ))}
+              </div>
             ) : (
               records.map((record) => (isAttendancePage ? renderAttendanceRecord(record) : renderDefaultRecord(record)))
             )
