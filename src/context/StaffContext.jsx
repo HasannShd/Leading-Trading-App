@@ -14,8 +14,12 @@ export const StaffProvider = ({ children }) => {
 
   const fetchMe = async () => {
     const requestId = ++sessionRequestIdRef.current;
-    getStoredToken('sales_staff');
     setError(null);
+    if (!getStoredToken('sales_staff')) {
+      setStaff(null);
+      setLoading(false);
+      return;
+    }
     try {
       const response = await authFetch('/auth/me', { scope: 'sales_staff' });
       const data = await response.json();
