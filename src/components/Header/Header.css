@@ -206,19 +206,6 @@
   box-shadow: 0 30px 56px rgba(7, 17, 31, 0.26);
   z-index: 90;
   backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  /* Subtle entrance animation */
-  animation: dropdown-enter 0.18s cubic-bezier(0.22, 1, 0.36, 1) both;
-  transform-origin: top left;
-}
-
-@keyframes dropdown-enter {
-  from { opacity: 0; transform: translateY(-6px) scale(0.97); }
-  to   { opacity: 1; transform: translateY(0) scale(1); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .nav-dropdown-menu { animation: none; }
 }
 
 .nav-dropdown-group {

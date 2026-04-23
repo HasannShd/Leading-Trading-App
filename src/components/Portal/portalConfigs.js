@@ -1,4 +1,31 @@
-import { parseLineItems } from '../../utils/orderItems';
+const parseQuantity = (value) => {
+  const normalized = String(value || '').trim();
+  if (!normalized) return 1;
+
+  const directNumber = Number(normalized);
+  if (Number.isFinite(directNumber) && directNumber > 0) return directNumber;
+
+  const numericMatch = normalized.match(/-?\d+(?:\.\d+)?/);
+  if (!numericMatch) return 1;
+
+  const parsedNumber = Number(numericMatch[0]);
+  return Number.isFinite(parsedNumber) && parsedNumber > 0 ? parsedNumber : 1;
+};
+
+export const parseLineItems = (value) =>
+  String(value || '')
+    .split('\n')
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .map((line) => {
+      const [productName = '', quantity = '1', price = ''] = line.split('|').map((part) => part.trim());
+      return {
+        productName,
+        quantity: parseQuantity(quantity),
+        ...(price !== '' ? { price: Number(price) || 0 } : {}),
+      };
+    })
+    .filter((item) => item.productName);
 
 export const staffModuleConfigs = {
   reports: {
@@ -33,7 +60,7 @@ export const staffModuleConfigs = {
         label: 'Items',
         type: 'textarea',
         required: true,
-        placeholder: 'One line per item: Product Name | Quantity | UOM | Price. Example: Ultrasound Gel | 7 | pcs | 2.500',
+        placeholder: 'One line per item: Product Name | Quantity | Price',
       },
       {
         name: 'urgency',
@@ -70,7 +97,6 @@ export const staffModuleConfigs = {
     description: 'Log every visit with outcomes and next steps so field activity is always recorded.',
     endpoint: '/staff-portal/visits',
     fields: [
-      { name: 'client', label: 'Saved Client', type: 'select', source: 'clients' },
       { name: 'clientName', label: 'Client Name', placeholder: 'Leave blank if not applicable' },
       { name: 'visitDate', label: 'Visit Date', type: 'date', required: true },
       { name: 'visitTime', label: 'Visit Time', type: 'time', placeholder: 'Optional' },
@@ -86,7 +112,7 @@ export const staffModuleConfigs = {
 export const adminModuleConfigs = {
   attendance: { title: 'Attendance Logs', endpoint: '/admin-portal/attendance', supportsDate: true, supportsUser: true },
   reports: { title: 'Daily Reports', endpoint: '/admin-portal/reports', supportsDate: true, supportsUser: true },
-  orders: { title: 'Sales Orders', endpoint: '/admin-portal/orders', statusPatch: '/admin-portal/orders', supportsStatus: true, supportsUser: true, supportsDate: true, supportsSearch: true, statusOptions: ['submitted', 'reviewed', 'emailed', 'confirmed', 'delivered', 'cancelled'] },
+  orders: { title: 'Sales Orders', endpoint: '/admin-portal/orders', statusPatch: '/admin-portal/orders', supportsStatus: true, supportsUser: true, statusOptions: ['submitted', 'reviewed', 'emailed', 'confirmed', 'delivered', 'cancelled'] },
   clients: { title: 'Clients', endpoint: '/admin-portal/clients', supportsUser: true },
   visits: { title: 'Visit Logs', endpoint: '/admin-portal/visits', supportsUser: true },
   notifications: { title: 'Notifications', endpoint: '/admin-portal/notifications' },

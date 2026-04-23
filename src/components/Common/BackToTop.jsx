@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import './BackToTop.css';
 
-const BackToTop = ({ className = '' }) => {
+const BackToTop = () => {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -16,7 +16,7 @@ const BackToTop = ({ className = '' }) => {
 
   return (
     <button
-      className={`back-to-top${className ? ` ${className}` : ''}${visible ? ' back-to-top--visible' : ''}`}
+      className={`back-to-top${visible ? ' back-to-top--visible' : ''}`}
       onClick={handleClick}
       aria-label="Back to top"
       type="button"

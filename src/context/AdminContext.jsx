@@ -90,10 +90,8 @@ export const AdminProvider = ({ children }) => {
     const expiry = getTokenExpiryMs(token);
     if (!expiry) return undefined;
     const timeout = window.setTimeout(() => {
-      resetAdminSession(location.pathname !== adminLoginPath);
-      if (location.pathname !== adminLoginPath) {
-        setError('Your admin session expired. Please sign in again.');
-      }
+      resetAdminSession();
+      setError('Your admin session expired. Please sign in again.');
     }, Math.max(expiry - Date.now(), 0));
     return () => window.clearTimeout(timeout);
   }, [admin, location.pathname, resetAdminSession]);
@@ -127,12 +125,12 @@ export const AdminProvider = ({ children }) => {
         return false;
       }
 
-      applyAdminSession(data.token, data.user);
-      storePasswordCredential({
+      await storePasswordCredential({
         identifier: username,
         password,
         name: data.user.name || data.user.username || username,
-      }).catch(() => {});
+      });
+      applyAdminSession(data.token, data.user);
       if (!data.user.mfaEnabled) {
         setError('MFA is recommended for this admin account. You can set it up from the Account page.');
       }

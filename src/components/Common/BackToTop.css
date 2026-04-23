@@ -42,12 +42,6 @@
   transform: scale(0.94);
 }
 
-.back-to-top.admin-back-to-top {
-  right: 5.25rem;
-  bottom: 1.15rem;
-  z-index: 95;
-}
-
 /* Keep above portal bottom nav on mobile */
 @media (max-width: 700px) {
   .back-to-top {
@@ -55,14 +49,6 @@
     right: 16px;
     width: 44px;
     height: 44px;
-  }
-
-  .back-to-top.admin-back-to-top {
-    left: 16px;
-    right: auto;
-    bottom: calc(5.45rem + env(safe-area-inset-bottom, 0px));
-    width: 42px;
-    height: 42px;
   }
 }
 

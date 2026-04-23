@@ -1,53 +1,29 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { portalApi } from '../../services/portalApi';
 import { authFetch, API_URL } from '../../services/authFetch';
-import { formatOrderItem } from '../../utils/orderItems';
 import { formatPortalDate, formatPortalDateTime } from '../../utils/portalDate';
 import './PortalShell.css';
 
 const AdminResourcePage = ({ config }) => {
-  const configKey = config.endpoint.split('/').pop();
-  const isAttendancePage = (config.exportKey || configKey) === 'attendance';
-  const isReportsPage = (config.exportKey || configKey) === 'reports';
-  const isOrdersPage = (config.exportKey || configKey) === 'orders';
-  const isClientsPage = (config.exportKey || configKey) === 'clients';
-  const isVisitsPage = (config.exportKey || configKey) === 'visits';
-  const todayInputValue = () => {
-    const date = new Date();
-    date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
-    return date.toISOString().slice(0, 10);
-  };
   const [records, setRecords] = useState([]);
   const [message, setMessage] = useState('');
   const [statusDrafts, setStatusDrafts] = useState({});
   const [staff, setStaff] = useState([]);
-  const [filters, setFilters] = useState(() => ({ user: '', status: '', date: isOrdersPage ? todayInputValue() : '', search: '' }));
+  const [filters, setFilters] = useState({ user: '', status: '', date: '' });
   const [staffSummary, setStaffSummary] = useState(null);
   const [selectedRecordId, setSelectedRecordId] = useState('');
-  const selectedRecordRef = useRef(null);
   const [searchParams] = useSearchParams();
   const focusedRecordId = searchParams.get('focus') || '';
-  const statusOptions = config.statusOptions || [];
-  const prettyStatus = (value) => String(value || '-').replace(/_/g, ' ');
-  const getOrderFacilityName = (record) =>
-    record.companyName || record.client?.name || 'Facility not set';
-  const getOrderListDateLabel = (record) => {
-    if (record.requestedForDate) return `Requested ${formatPortalDate(record.requestedForDate)}`;
-    if (record.submittedAt) return `Submitted ${formatPortalDate(record.submittedAt)}`;
-    if (record.createdAt) return `Submitted ${formatPortalDate(record.createdAt)}`;
-    return 'Date not set';
-  };
 
   const buildQuery = useCallback(() => {
     const params = new URLSearchParams();
     if (config.supportsUser && filters.user) params.set('user', filters.user);
     if (config.supportsStatus && filters.status) params.set('status', filters.status);
     if (config.supportsDate && filters.date) params.set('date', filters.date);
-    if (config.supportsSearch && filters.search.trim()) params.set('search', filters.search.trim());
     const query = params.toString();
     return query ? `${config.endpoint}?${query}` : config.endpoint;
-  }, [config.endpoint, config.supportsDate, config.supportsSearch, config.supportsStatus, config.supportsUser, filters.date, filters.search, filters.status, filters.user]);
+  }, [config.endpoint, config.supportsDate, config.supportsStatus, config.supportsUser, filters.date, filters.status, filters.user]);
 
   const load = useCallback(() =>
     portalApi
@@ -69,12 +45,8 @@ const AdminResourcePage = ({ config }) => {
   }, [load]);
 
   useEffect(() => {
-    setFilters({ user: '', status: '', date: isOrdersPage ? todayInputValue() : '', search: '' });
-  }, [config.endpoint, isOrdersPage]);
-
-  useEffect(() => {
     setSelectedRecordId('');
-  }, [config.endpoint, filters.user, filters.status, filters.date, filters.search]);
+  }, [config.endpoint, filters.user, filters.status, filters.date]);
 
   useEffect(() => {
     if (!focusedRecordId) return;
@@ -82,11 +54,6 @@ const AdminResourcePage = ({ config }) => {
       setSelectedRecordId(focusedRecordId);
     }
   }, [focusedRecordId, records]);
-
-  useEffect(() => {
-    if (!selectedRecordId || !selectedRecordRef.current) return;
-    selectedRecordRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }, [selectedRecordId]);
 
   useEffect(() => {
     if (!filters.user) {
@@ -126,10 +93,16 @@ const AdminResourcePage = ({ config }) => {
     }
   };
 
+  const configKey = config.endpoint.split('/').pop();
+  const isAttendancePage = (config.exportKey || configKey) === 'attendance';
+  const isReportsPage = (config.exportKey || configKey) === 'reports';
+  const isOrdersPage = (config.exportKey || configKey) === 'orders';
+  const isClientsPage = (config.exportKey || configKey) === 'clients';
+  const isVisitsPage = (config.exportKey || configKey) === 'visits';
+
   const recordTitle = (record) =>
     record.title ||
     record.name ||
-    record.companyName ||
     record.customerName ||
     record.clientName ||
     record.action ||
@@ -158,37 +131,35 @@ const AdminResourcePage = ({ config }) => {
   const renderAttendanceRecord = (record) => {
     const attendanceStatus = record.checkInTime && record.checkOutTime ? 'Complete day' : record.checkInTime ? 'Checked in only' : 'No check-in';
     return (
-      <div className="portal-record-card portal-attendance-record-card" key={record._id}>
-        <div className="portal-attendance-record-head">
-          <div className="portal-attendance-record-identity">
-            <strong>{record.user?.name || record.user?.username || 'Staff'}</strong>
-            <span>{record.date ? formatPortalDate(record.date) : 'No date'}</span>
-          </div>
-          <span className="portal-badge status">{attendanceStatus}</span>
+      <div className="portal-record-card" key={record._id}>
+        <div className="portal-staff-report-row">
+          <strong>{record.user?.name || record.user?.username || 'Staff'}</strong>
+          <span>{record.date ? formatPortalDate(record.date) : 'No date'}</span>
         </div>
-        <div className="portal-record-meta portal-attendance-record-meta">
+        <div className="portal-record-meta">
+          <span className="portal-badge status">{attendanceStatus}</span>
           <span>Logged: {record.createdAt ? formatPortalDateTime(record.createdAt) : '-'}</span>
           <span>Total worked: {record.totalWorkedMinutes || 0} min</span>
         </div>
-        <div className="portal-attendance-detail-grid">
-          <div className="portal-detail-item compact">
-            <span className="portal-detail-label">Check in</span>
-            <span className="portal-detail-value">{record.checkInTime ? formatPortalDateTime(record.checkInTime) : 'Not recorded'}</span>
+        <div className="portal-staff-report-list">
+          <div className="portal-staff-report-row">
+            <strong>Check in</strong>
+            <span>{record.checkInTime ? formatPortalDateTime(record.checkInTime) : 'Not recorded'}</span>
           </div>
-          <div className="portal-detail-item compact">
-            <span className="portal-detail-label">Check out</span>
-            <span className="portal-detail-value">{record.checkOutTime ? formatPortalDateTime(record.checkOutTime) : 'Not recorded'}</span>
+          <div className="portal-staff-report-row">
+            <strong>Check out</strong>
+            <span>{record.checkOutTime ? formatPortalDateTime(record.checkOutTime) : 'Not recorded'}</span>
           </div>
-          <div className="portal-detail-item compact">
-            <span className="portal-detail-label">Day start mileage</span>
-            <span className="portal-detail-value">
+          <div className="portal-staff-report-row">
+            <strong>Day start mileage</strong>
+            <span>
               {record.mileageWeekStart ?? '-'}
               {record.mileageWeekStartAt ? ` • entered ${formatPortalDateTime(record.mileageWeekStartAt)}` : ''}
             </span>
           </div>
-          <div className="portal-detail-item compact">
-            <span className="portal-detail-label">Day end mileage</span>
-            <span className="portal-detail-value">
+          <div className="portal-staff-report-row">
+            <strong>Day end mileage</strong>
+            <span>
               {record.mileageWeekEnd ?? '-'}
               {record.mileageWeekEndAt ? ` • entered ${formatPortalDateTime(record.mileageWeekEndAt)}` : ''}
             </span>
@@ -234,192 +205,6 @@ const AdminResourcePage = ({ config }) => {
       )}
     </div>
   );
-
-  const renderReportDetails = (record) => (
-    <div className="portal-record-card portal-report-detail-card portal-inline-detail-card" ref={selectedRecordRef}>
-      <div className="portal-report-detail-hero">
-        <div>
-          <div className="portal-brand-kicker">Daily Report</div>
-          <h3 className="portal-record-title">{record.user?.name || record.user?.username || 'Daily Report'}</h3>
-        </div>
-        <div className="portal-inline-actions tight">
-          <span className="portal-badge status">{record.date ? formatPortalDate(record.date) : 'No date'}</span>
-          <span className="portal-badge status">{record.followUpNeeded ? 'Follow-up needed' : 'No follow-up'}</span>
-        </div>
-      </div>
-      <div className="portal-detail-grid compact">
-        <div className="portal-detail-item">
-          <span className="portal-detail-label">Report date</span>
-          <span className="portal-detail-value">{record.date ? formatPortalDate(record.date) : '-'}</span>
-        </div>
-        <div className="portal-detail-item">
-          <span className="portal-detail-label">Submitted</span>
-          <span className="portal-detail-value">{record.createdAt ? formatPortalDateTime(record.createdAt) : '-'}</span>
-        </div>
-      </div>
-      <div className="portal-note-block highlight">
-        <div className="portal-detail-label">Summary</div>
-        <div className="portal-record-copy">{record.summary || '-'}</div>
-      </div>
-      {record.notes && (
-        <div className="portal-note-block">
-          <div className="portal-detail-label">Notes</div>
-          <div className="portal-record-copy">{record.notes}</div>
-        </div>
-      )}
-      {!!record.visits?.length && (
-        <div className="portal-note-block">
-          <div className="portal-detail-label">Visits Mentioned</div>
-          <div className="portal-record-copy">
-            {record.visits.map((visit) => `${visit.clientName || 'Client'}: ${visit.outcome || '-'}`).join(' | ')}
-          </div>
-        </div>
-      )}
-    </div>
-  );
-
-  const renderOrderDetails = (record) => (
-    <div className="portal-record-card portal-inline-detail-card" ref={selectedRecordRef}>
-      <h3 className="portal-record-title">{getOrderFacilityName(record)}</h3>
-      <div className="portal-record-meta">
-        <span>{record.createdAt ? formatPortalDateTime(record.createdAt) : '-'}</span>
-        <span>{record.requestedForDate ? formatPortalDate(record.requestedForDate) : '-'}</span>
-        <span>{prettyStatus(record.status)}</span>
-        <span>{record.urgency || '-'}</span>
-      </div>
-      <div className="portal-detail-grid">
-        <div className="portal-detail-item">
-          <span className="portal-detail-label">Facility</span>
-          <span className="portal-detail-value">{getOrderFacilityName(record)}</span>
-        </div>
-        <div className="portal-detail-item">
-          <span className="portal-detail-label">Contact</span>
-          <span className="portal-detail-value">{record.contactPerson || '-'}</span>
-        </div>
-        <div className="portal-detail-item">
-          <span className="portal-detail-label">Requested for</span>
-          <span className="portal-detail-value">{record.requestedForDate ? formatPortalDate(record.requestedForDate) : '-'}</span>
-        </div>
-        <div className="portal-detail-item">
-          <span className="portal-detail-label">Order timing</span>
-          <span className="portal-detail-value">{record.orderTiming === 'tomorrow' ? 'Order for tomorrow' : 'Order for today'}</span>
-        </div>
-        <div className="portal-detail-item">
-          <span className="portal-detail-label">VAT</span>
-          <span className="portal-detail-value">{record.vatApplicable ? record.vatAmount ?? 'Applicable' : 'Not applied'}</span>
-        </div>
-      </div>
-      <div className="portal-note-block">
-        <div className="portal-detail-label">Items</div>
-        <div className="portal-record-copy">{(record.items || []).map((item) => formatOrderItem(item)).join(' | ') || '-'}</div>
-      </div>
-      {record.deliveryNote && (
-        <div className="portal-note-block">
-          <div className="portal-detail-label">Delivery Note</div>
-          <div className="portal-record-copy">{record.deliveryNote}</div>
-        </div>
-      )}
-      {record.notes && (
-        <div className="portal-note-block">
-          <div className="portal-detail-label">Notes</div>
-          <div className="portal-record-copy">{record.notes}</div>
-        </div>
-      )}
-      {record.attachments?.length ? (
-        <div className="portal-note-block">
-          <div className="portal-detail-label">Attachments</div>
-          <div className="portal-attachment-list">
-            {record.attachments.map((attachment, index) => (
-              <a key={`${record._id}-${attachment.url || index}`} className="portal-attachment-chip" href={attachment.url} target="_blank" rel="noreferrer">
-                {attachment.name || attachment.url?.split('/').pop() || `Attachment ${index + 1}`}
-              </a>
-            ))}
-          </div>
-        </div>
-      ) : null}
-      {config.statusPatch && record.status && (
-        <div className="portal-inline-actions" style={{ marginTop: '0.5rem' }}>
-          <div className="portal-badge status" style={{ textTransform: 'capitalize' }}>Current: {prettyStatus(record.status)}</div>
-          <select value={statusDrafts[record._id] || record.status} onChange={(e) => setStatusDrafts((current) => ({ ...current, [record._id]: e.target.value }))}>
-            {statusOptions.map((value) => (
-              <option key={value} value={value}>{prettyStatus(value)}</option>
-            ))}
-          </select>
-          <button className="portal-inline-button secondary" type="button" onClick={() => handleStatusUpdate(record)}>Update</button>
-        </div>
-      )}
-    </div>
-  );
-
-  const renderClientDetails = (record) => (
-    <div className="portal-record-card portal-inline-detail-card" ref={selectedRecordRef}>
-      <h3 className="portal-record-title">{record.name || 'Client'}</h3>
-      <div className="portal-detail-grid">
-        {[
-          ['Assigned Staff', record.assignedTo?.name || record.assignedTo?.username || '-'],
-          ['Created By', record.createdBy?.name || record.createdBy?.username || '-'],
-          ['Type', record.companyType || '-'],
-          ['Department', record.department || '-'],
-          ['Contact', record.contactPerson || '-'],
-          ['Phone', record.phone || '-'],
-          ['Email', record.email || '-'],
-          ['Location', record.location || '-'],
-          ['Created', record.createdAt ? formatPortalDateTime(record.createdAt) : '-'],
-          ['Updated', record.updatedAt ? formatPortalDateTime(record.updatedAt) : '-'],
-        ].map(([label, value]) => (
-          <div className="portal-detail-item" key={`${record._id}-${label}`}>
-            <span className="portal-detail-label">{label}</span>
-            <span className="portal-detail-value">{value}</span>
-          </div>
-        ))}
-      </div>
-      {record.address && (
-        <div className="portal-note-block">
-          <div className="portal-detail-label">Address</div>
-          <div className="portal-record-copy">{record.address}</div>
-        </div>
-      )}
-      {record.notes && (
-        <div className="portal-note-block">
-          <div className="portal-detail-label">Notes</div>
-          <div className="portal-record-copy">{record.notes}</div>
-        </div>
-      )}
-    </div>
-  );
-
-  const renderVisitDetails = (record) => (
-    <div className="portal-record-card portal-inline-detail-card" ref={selectedRecordRef}>
-      <h3 className="portal-record-title">{record.client?.name || record.clientName || 'Visit'}</h3>
-      <div className="portal-detail-grid">
-        {[
-          ['Visit date', record.visitDate ? formatPortalDate(record.visitDate) : '-'],
-          ['Visit time', record.visitTime || '-'],
-          ['Logged', record.createdAt ? formatPortalDateTime(record.createdAt) : '-'],
-          ['Met person', record.metPerson || '-'],
-          ['Location', record.location || '-'],
-          ['Purpose', record.purpose || '-'],
-        ].map(([label, value]) => (
-          <div className="portal-detail-item" key={`${record._id}-${label}`}>
-            <span className="portal-detail-label">{label}</span>
-            <span className="portal-detail-value">{value}</span>
-          </div>
-        ))}
-      </div>
-      {record.discussionSummary && (
-        <div className="portal-note-block">
-          <div className="portal-detail-label">Discussion</div>
-          <div className="portal-record-copy">{record.discussionSummary}</div>
-        </div>
-      )}
-      {record.outcome && (
-        <div className="portal-note-block">
-          <div className="portal-detail-label">Outcome</div>
-          <div className="portal-record-copy">{record.outcome}</div>
-        </div>
-      )}
-    </div>
-  );
   const pendingStatuses = new Set(['submitted', 'pending', 'under_review', 'reviewed', 'partial', 'overdue']);
   const pendingCount = records.filter((record) => pendingStatuses.has(record.status)).length;
   const assignedPeople = new Set(records.map((record) => record.user?._id).filter(Boolean)).size;
@@ -431,17 +216,48 @@ const AdminResourcePage = ({ config }) => {
   return (
     <div className="portal-admin-page">
       <section className="portal-page">
-      <div className={`portal-card${isAttendancePage ? ' portal-resource-card compact' : ''}`}>
+      <div className="portal-card portal-help-card">
+        <div className="portal-section-head">
+          <div>
+            <div className="portal-brand-kicker">How To Use This Page</div>
+            <h2 className="portal-section-title" style={{ fontSize: '1.45rem' }}>Simple admin view</h2>
+            <p className="portal-section-copy">
+              Use the filters first, then review the latest entries below. If nothing is showing yet, it usually means staff have not submitted anything in this section yet.
+            </p>
+          </div>
+        </div>
+        <ul className="portal-help-list">
+          <li>Use `All staff` to see everything, or choose one person to focus on.</li>
+          {config.supportsStatus && <li>Use the status filter to find pending work faster.</li>}
+          {config.supportsDate && <li>Use the date filter to review one day at a time.</li>}
+          {config.statusPatch && <li>You can update statuses directly from the cards below.</li>}
+        </ul>
+      </div>
+
+      <div className="portal-card">
         <div className="portal-section-head">
           <div>
             <div className="portal-brand-kicker">Admin View</div>
             <h1 className="portal-section-title" style={{ fontSize: '1.8rem' }}>{config.title}</h1>
+            <p className="portal-section-copy">
+              {isAttendancePage
+                ? 'Review check-in, check-out, daily mileage, and worked time clearly for each staff member. Use the filters to inspect one staff member or one working day.'
+                : isReportsPage
+                  ? 'Review daily reports only. Click one report to open its full details and notes.'
+                  : isOrdersPage
+                    ? 'Review sales orders only. Select a staff member if needed, then click an order to open its full details.'
+                    : isClientsPage
+                      ? 'Review client records only. Keep the staff filter if needed, then click a client to open the full client details.'
+                      : isVisitsPage
+                        ? 'Review visit records only. Keep the staff filter if needed, then click a visit to open its full details.'
+                : 'Review entries below, use the filters to narrow the list, and update statuses from the cards when needed.'}
+            </p>
           </div>
           {['attendance', 'reports', 'orders', 'visits'].includes(config.exportKey || configKey) && (
             <button className="portal-inline-button ghost" type="button" onClick={handleExport}>Export CSV</button>
           )}
         </div>
-        <div className={`portal-grid stats portal-module-stats${isAttendancePage ? ' compact' : ''}`} style={{ marginTop: '1rem' }}>
+        <div className="portal-grid stats portal-module-stats" style={{ marginTop: '1rem' }}>
           <div className="portal-stat light">
             <div className="portal-stat-value">{records.length}</div>
             <div className="portal-stat-label">Visible records</div>
@@ -455,8 +271,8 @@ const AdminResourcePage = ({ config }) => {
             <div className="portal-stat-label">Staff shown</div>
           </div>
         </div>
-        {(config.supportsUser || config.supportsStatus || config.supportsDate || config.supportsSearch) && (
-          <div className={`portal-filter-bar${isAttendancePage ? ' compact' : ''}`}>
+        {(config.supportsUser || config.supportsStatus || config.supportsDate) && (
+          <div className="portal-filter-bar">
             {config.supportsUser && (
               <select value={filters.user} onChange={(e) => setFilters((current) => ({ ...current, user: e.target.value }))}>
                 <option value="">All staff</option>
@@ -470,24 +286,15 @@ const AdminResourcePage = ({ config }) => {
             {config.supportsStatus && (
               <select value={filters.status} onChange={(e) => setFilters((current) => ({ ...current, status: e.target.value }))}>
                 <option value="">All statuses</option>
-                {statusOptions.map((value) => (
+                {(config.statusOptions || []).map((value) => (
                   <option key={value} value={value}>
-                    {prettyStatus(value)}
+                    {value}
                   </option>
                 ))}
               </select>
             )}
             {config.supportsDate && (
               <input type="date" value={filters.date} onChange={(e) => setFilters((current) => ({ ...current, date: e.target.value }))} />
-            )}
-            {config.supportsSearch && (
-              <input
-                type="search"
-                value={filters.search}
-                onChange={(e) => setFilters((current) => ({ ...current, search: e.target.value }))}
-                placeholder="Search client or facility"
-                aria-label="Search client or facility"
-              />
             )}
           </div>
         )}
@@ -526,12 +333,12 @@ const AdminResourcePage = ({ config }) => {
                 </div>
               )}
               <div className="portal-stat light">
-                <div className="portal-stat-value">{isOrdersPage ? staffSummary.metrics.ordersCount : filters.date ? staffSummary.metrics.filteredOrdersCount : staffSummary.metrics.ordersCount}</div>
-                <div className="portal-stat-label">{isOrdersPage ? 'Total orders' : filters.date ? 'Orders on selected date' : 'Orders'}</div>
+                <div className="portal-stat-value">{filters.date ? staffSummary.metrics.filteredOrdersCount : staffSummary.metrics.ordersCount}</div>
+                <div className="portal-stat-label">{filters.date ? 'Orders on selected date' : 'Orders'}</div>
               </div>
               <div className="portal-stat light">
-                <div className="portal-stat-value">{isOrdersPage ? staffSummary.metrics.clientsCount : filters.date ? staffSummary.metrics.filteredClientsCount : staffSummary.metrics.clientsCount}</div>
-                <div className="portal-stat-label">{isOrdersPage ? 'Total clients' : filters.date ? 'Clients added on selected date' : 'Clients'}</div>
+                <div className="portal-stat-value">{filters.date ? staffSummary.metrics.filteredClientsCount : staffSummary.metrics.clientsCount}</div>
+                <div className="portal-stat-label">{filters.date ? 'Clients added on selected date' : 'Clients'}</div>
               </div>
             </div>
             {isReportsPage && (
@@ -553,16 +360,36 @@ const AdminResourcePage = ({ config }) => {
                 </div>
               </div>
             )}
+            {isOrdersPage && (
+              <div className="portal-staff-report-block" style={{ marginTop: '0.5rem' }}>
+                <div className="portal-brand-kicker">Latest Order</div>
+                <div className="portal-staff-report-list">
+                  <div className="portal-staff-report-row">
+                    <strong>Client</strong>
+                    <span>{staffSummary.latest.order?.customerName || staffSummary.latest.order?.companyName || 'No order yet'}</span>
+                  </div>
+                  <div className="portal-staff-report-row">
+                    <strong>Submitted</strong>
+                    <span>{staffSummary.latest.order?.createdAt ? formatPortalDateTime(staffSummary.latest.order.createdAt) : 'No order yet'}</span>
+                  </div>
+                  <div className="portal-staff-report-row">
+                    <strong>Status</strong>
+                    <span>{staffSummary.latest.order?.status || 'No order yet'}</span>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         )}
         {message && <div className="portal-badge status" style={{ marginTop: '1rem' }}>{message}</div>}
         <div className="portal-record-list" style={{ marginTop: '1rem' }}>
           {records.length ? (
             isReportsPage ? (
-              <div className="portal-inline-list compact">
-                {records.map((record) => (
-                  <div className="portal-inline-record-wrap" key={record._id}>
+              <>
+                <div className="portal-inline-list compact">
+                  {records.map((record) => (
                     <button
+                      key={record._id}
                       type="button"
                       className={`portal-record-card portal-record-card-button${selectedReport?._id === record._id ? ' is-selected' : ''}`}
                       onClick={() => setSelectedRecordId((current) => (current === record._id ? '' : record._id))}
@@ -573,35 +400,115 @@ const AdminResourcePage = ({ config }) => {
                         <span>{record.createdAt ? formatPortalDateTime(record.createdAt) : '-'}</span>
                       </div>
                     </button>
-                    {selectedReport?._id === record._id && renderReportDetails(record)}
+                  ))}
+                </div>
+                {selectedReport && (
+                  <div className="portal-record-card">
+                    <h3 className="portal-record-title">{selectedReport.user?.name || selectedReport.user?.username || 'Daily Report'}</h3>
+                    <div className="portal-record-meta">
+                      <span>{selectedReport.date ? formatPortalDate(selectedReport.date) : '-'}</span>
+                      <span>{selectedReport.createdAt ? formatPortalDateTime(selectedReport.createdAt) : '-'}</span>
+                      <span>Follow up: {selectedReport.followUpNeeded ? 'Yes' : 'No'}</span>
+                    </div>
+                    <div className="portal-note-block">
+                      <div className="portal-detail-label">Summary</div>
+                      <div className="portal-record-copy">{selectedReport.summary || '-'}</div>
+                    </div>
+                    {selectedReport.notes && (
+                      <div className="portal-note-block">
+                        <div className="portal-detail-label">Notes</div>
+                        <div className="portal-record-copy">{selectedReport.notes}</div>
+                      </div>
+                    )}
+                    {!!selectedReport.visits?.length && (
+                      <div className="portal-note-block">
+                        <div className="portal-detail-label">Visits Mentioned</div>
+                        <div className="portal-record-copy">
+                          {selectedReport.visits.map((visit) => `${visit.clientName || 'Client'}: ${visit.outcome || '-'}`).join(' | ')}
+                        </div>
+                      </div>
+                    )}
                   </div>
-                ))}
-              </div>
+                )}
+              </>
             ) : isOrdersPage ? (
-              <div className="portal-inline-list compact">
-                {records.map((record) => (
-                  <div className="portal-inline-record-wrap" key={record._id}>
+              <>
+                <div className="portal-inline-list compact">
+                  {records.map((record) => (
                     <button
+                      key={record._id}
                       type="button"
                       className={`portal-record-card portal-record-card-button${selectedReport?._id === record._id ? ' is-selected' : ''}`}
                       onClick={() => setSelectedRecordId((current) => (current === record._id ? '' : record._id))}
                     >
-                      <h3 className="portal-record-title">{getOrderFacilityName(record)}</h3>
+                      <h3 className="portal-record-title">{record.customerName || record.companyName || 'Order'}</h3>
                       <div className="portal-record-meta">
-                        <span>{getOrderListDateLabel(record)}</span>
-                        {record.orderTiming === 'tomorrow' ? <span>Order for tomorrow</span> : null}
-                        {record.status && <span className="portal-badge status">{prettyStatus(record.status)}</span>}
+                        <span>{record.createdAt ? formatPortalDateTime(record.createdAt) : '-'}</span>
+                        {record.status && <span className="portal-badge status">{record.status}</span>}
                       </div>
                     </button>
-                    {selectedReport?._id === record._id && renderOrderDetails(record)}
+                  ))}
+                </div>
+                {selectedReport && (
+                  <div className="portal-record-card">
+                    <h3 className="portal-record-title">{selectedReport.customerName || selectedReport.companyName || 'Order'}</h3>
+                    <div className="portal-record-meta">
+                      <span>{selectedReport.createdAt ? formatPortalDateTime(selectedReport.createdAt) : '-'}</span>
+                      <span>{selectedReport.status || '-'}</span>
+                      <span>{selectedReport.urgency || '-'}</span>
+                    </div>
+                    <div className="portal-detail-grid">
+                      <div className="portal-detail-item">
+                        <span className="portal-detail-label">Client</span>
+                        <span className="portal-detail-value">{selectedReport.client?.name || '-'}</span>
+                      </div>
+                      <div className="portal-detail-item">
+                        <span className="portal-detail-label">Contact</span>
+                        <span className="portal-detail-value">{selectedReport.contactPerson || '-'}</span>
+                      </div>
+                    </div>
+                    <div className="portal-note-block">
+                      <div className="portal-detail-label">Items</div>
+                      <div className="portal-record-copy">
+                        {(selectedReport.items || []).map((item) => `${item.productName} x${item.quantity}${item.price ? ` @ ${item.price}` : ''}`).join(' | ') || '-'}
+                      </div>
+                    </div>
+                    {selectedReport.deliveryNote && (
+                      <div className="portal-note-block">
+                        <div className="portal-detail-label">Delivery Note</div>
+                        <div className="portal-record-copy">{selectedReport.deliveryNote}</div>
+                      </div>
+                    )}
+                    {selectedReport.notes && (
+                      <div className="portal-note-block">
+                        <div className="portal-detail-label">Notes</div>
+                        <div className="portal-record-copy">{selectedReport.notes}</div>
+                      </div>
+                    )}
+                    {config.statusPatch && selectedReport.status && (
+                      <div className="portal-inline-actions" style={{ marginTop: '0.5rem' }}>
+                        <select
+                          value={statusDrafts[selectedReport._id] || selectedReport.status}
+                          onChange={(e) => setStatusDrafts((current) => ({ ...current, [selectedReport._id]: e.target.value }))}
+                        >
+                          {(config.statusOptions || []).map((value) => (
+                            <option key={value} value={value}>{value}</option>
+                          ))}
+                        </select>
+                        <button className="portal-inline-button secondary" type="button" onClick={() => handleStatusUpdate(selectedReport)}>
+                          Update
+                        </button>
+                      </div>
+                    )}
                   </div>
-                ))}
-              </div>
+                )}
+              </>
             ) : isClientsPage ? (
-              <div className="portal-inline-list compact">
-                {records.map((record) => (
-                  <div className="portal-inline-record-wrap" key={record._id}>
+              <>
+                <div className="portal-inline-list compact">
+                  {records.map((record) => (
                     <button
+                      key={record._id}
                       type="button"
                       className={`portal-record-card portal-record-card-button${selectedReport?._id === record._id ? ' is-selected' : ''}`}
                       onClick={() => setSelectedRecordId((current) => (current === record._id ? '' : record._id))}
@@ -613,15 +520,74 @@ const AdminResourcePage = ({ config }) => {
                         <span>{record.updatedAt ? formatPortalDateTime(record.updatedAt) : '-'}</span>
                       </div>
                     </button>
-                    {selectedReport?._id === record._id && renderClientDetails(record)}
+                  ))}
+                </div>
+                {selectedReport && (
+                  <div className="portal-record-card">
+                    <h3 className="portal-record-title">{selectedReport.name || 'Client'}</h3>
+                    <div className="portal-detail-grid">
+                      <div className="portal-detail-item">
+                        <span className="portal-detail-label">Assigned Staff</span>
+                        <span className="portal-detail-value">{selectedReport.assignedTo?.name || selectedReport.assignedTo?.username || '-'}</span>
+                      </div>
+                      <div className="portal-detail-item">
+                        <span className="portal-detail-label">Created By</span>
+                        <span className="portal-detail-value">{selectedReport.createdBy?.name || selectedReport.createdBy?.username || '-'}</span>
+                      </div>
+                      <div className="portal-detail-item">
+                        <span className="portal-detail-label">Type</span>
+                        <span className="portal-detail-value">{selectedReport.companyType || '-'}</span>
+                      </div>
+                      <div className="portal-detail-item">
+                        <span className="portal-detail-label">Department</span>
+                        <span className="portal-detail-value">{selectedReport.department || '-'}</span>
+                      </div>
+                      <div className="portal-detail-item">
+                        <span className="portal-detail-label">Contact</span>
+                        <span className="portal-detail-value">{selectedReport.contactPerson || '-'}</span>
+                      </div>
+                      <div className="portal-detail-item">
+                        <span className="portal-detail-label">Phone</span>
+                        <span className="portal-detail-value">{selectedReport.phone || '-'}</span>
+                      </div>
+                      <div className="portal-detail-item">
+                        <span className="portal-detail-label">Email</span>
+                        <span className="portal-detail-value">{selectedReport.email || '-'}</span>
+                      </div>
+                      <div className="portal-detail-item">
+                        <span className="portal-detail-label">Location</span>
+                        <span className="portal-detail-value">{selectedReport.location || '-'}</span>
+                      </div>
+                      <div className="portal-detail-item">
+                        <span className="portal-detail-label">Created</span>
+                        <span className="portal-detail-value">{selectedReport.createdAt ? formatPortalDateTime(selectedReport.createdAt) : '-'}</span>
+                      </div>
+                      <div className="portal-detail-item">
+                        <span className="portal-detail-label">Updated</span>
+                        <span className="portal-detail-value">{selectedReport.updatedAt ? formatPortalDateTime(selectedReport.updatedAt) : '-'}</span>
+                      </div>
+                    </div>
+                    {selectedReport.address && (
+                      <div className="portal-note-block">
+                        <div className="portal-detail-label">Address</div>
+                        <div className="portal-record-copy">{selectedReport.address}</div>
+                      </div>
+                    )}
+                    {selectedReport.notes && (
+                      <div className="portal-note-block">
+                        <div className="portal-detail-label">Notes</div>
+                        <div className="portal-record-copy">{selectedReport.notes}</div>
+                      </div>
+                    )}
                   </div>
-                ))}
-              </div>
+                )}
+              </>
             ) : isVisitsPage ? (
-              <div className="portal-inline-list compact">
-                {records.map((record) => (
-                  <div className="portal-inline-record-wrap" key={record._id}>
+              <>
+                <div className="portal-inline-list compact">
+                  {records.map((record) => (
                     <button
+                      key={record._id}
                       type="button"
                       className={`portal-record-card portal-record-card-button${selectedReport?._id === record._id ? ' is-selected' : ''}`}
                       onClick={() => setSelectedRecordId((current) => (current === record._id ? '' : record._id))}
@@ -633,10 +599,52 @@ const AdminResourcePage = ({ config }) => {
                         <span>{record.location || 'No location'}</span>
                       </div>
                     </button>
-                    {selectedReport?._id === record._id && renderVisitDetails(record)}
+                  ))}
+                </div>
+                {selectedReport && (
+                  <div className="portal-record-card">
+                    <h3 className="portal-record-title">{selectedReport.client?.name || selectedReport.clientName || 'Visit'}</h3>
+                    <div className="portal-detail-grid">
+                      <div className="portal-detail-item">
+                        <span className="portal-detail-label">Visit date</span>
+                        <span className="portal-detail-value">{selectedReport.visitDate ? formatPortalDate(selectedReport.visitDate) : '-'}</span>
+                      </div>
+                      <div className="portal-detail-item">
+                        <span className="portal-detail-label">Visit time</span>
+                        <span className="portal-detail-value">{selectedReport.visitTime || '-'}</span>
+                      </div>
+                      <div className="portal-detail-item">
+                        <span className="portal-detail-label">Logged</span>
+                        <span className="portal-detail-value">{selectedReport.createdAt ? formatPortalDateTime(selectedReport.createdAt) : '-'}</span>
+                      </div>
+                      <div className="portal-detail-item">
+                        <span className="portal-detail-label">Met person</span>
+                        <span className="portal-detail-value">{selectedReport.metPerson || '-'}</span>
+                      </div>
+                      <div className="portal-detail-item">
+                        <span className="portal-detail-label">Location</span>
+                        <span className="portal-detail-value">{selectedReport.location || '-'}</span>
+                      </div>
+                      <div className="portal-detail-item">
+                        <span className="portal-detail-label">Purpose</span>
+                        <span className="portal-detail-value">{selectedReport.purpose || '-'}</span>
+                      </div>
+                    </div>
+                    {selectedReport.discussionSummary && (
+                      <div className="portal-note-block">
+                        <div className="portal-detail-label">Discussion</div>
+                        <div className="portal-record-copy">{selectedReport.discussionSummary}</div>
+                      </div>
+                    )}
+                    {selectedReport.outcome && (
+                      <div className="portal-note-block">
+                        <div className="portal-detail-label">Outcome</div>
+                        <div className="portal-record-copy">{selectedReport.outcome}</div>
+                      </div>
+                    )}
                   </div>
-                ))}
-              </div>
+                )}
+              </>
             ) : (
               records.map((record) => (isAttendancePage ? renderAttendanceRecord(record) : renderDefaultRecord(record)))
             )

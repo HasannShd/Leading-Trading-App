@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { getStoredToken } from '../../services/authFetch';
 import './PortalShell.css';
 
 const isStandaloneMode = () =>
@@ -13,7 +12,7 @@ const StaffInstallPage = () => {
   useEffect(() => {
     if (!isStandaloneMode()) return;
 
-    const hasStaffSession = Boolean(getStoredToken('sales_staff'));
+    const hasStaffSession = Boolean(localStorage.getItem('staffToken'));
     navigate(hasStaffSession ? '/staff/dashboard' : '/staff/login', { replace: true });
   }, [navigate]);
 

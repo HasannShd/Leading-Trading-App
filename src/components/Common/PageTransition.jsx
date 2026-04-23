@@ -8,38 +8,23 @@ import './PageTransition.css';
  */
 export default function PageTransition() {
   const overlayRef = useRef(null);
-  const frameRef = useRef(0);
   const location = useLocation();
 
   useEffect(() => {
     const overlay = overlayRef.current;
     if (!overlay) return;
 
-    try {
-      overlay.classList.remove('page-transition--reveal');
-      cancelAnimationFrame(frameRef.current);
-      frameRef.current = window.requestAnimationFrame(() => {
-        if (!overlayRef.current?.isConnected) return;
-        void overlayRef.current.offsetHeight;
-        overlayRef.current.classList.add('page-transition--reveal');
-      });
-    } catch (error) {
-      console.error('Page transition animation failed', error);
-      return undefined;
-    }
+    // Remove any lingering class first, then force reflow so the animation replays
+    overlay.classList.remove('page-transition--reveal');
+    // eslint-disable-next-line no-unused-expressions
+    overlay.offsetHeight; // reflow
+    overlay.classList.add('page-transition--reveal');
 
     const id = setTimeout(() => {
-      try {
-        overlayRef.current?.classList.remove('page-transition--reveal');
-      } catch (error) {
-        console.error('Page transition cleanup failed', error);
-      }
+      overlay.classList.remove('page-transition--reveal');
     }, 700);
 
-    return () => {
-      clearTimeout(id);
-      cancelAnimationFrame(frameRef.current);
-    };
+    return () => clearTimeout(id);
   }, [location.pathname]);
 
   return (

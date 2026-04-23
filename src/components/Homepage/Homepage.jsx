@@ -203,7 +203,6 @@ const HomePage = () => {
     <main className="cinematic-home" ref={rootRef}>
       <section className="home-hero">
         <div className="home-hero__ambient" />
-        <div className="home-hero__depth" aria-hidden="true" data-hero-parallax="bg" />
         <div className="home-shell home-hero__grid">
           <div className="home-hero__copy animate-stagger" data-stagger-step="120ms">
             <span className="home-eyebrow animate-on-scroll">Leading Trading Est. | Bahrain</span>

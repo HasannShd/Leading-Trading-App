@@ -112,6 +112,7 @@ const StaffAttendance = () => {
         </div>
         {status && <div className="portal-message-banner success" style={{ marginTop: '1rem' }}>{status}</div>}
         <div className="portal-submit-bar" style={{ marginTop: '1rem' }}>
+          <div className="portal-submit-note">Step 1: press the correct button once for today.</div>
           <div className="portal-actions portal-actions-two">
             <button className="portal-button primary portal-save-button" onClick={() => submit('/staff-portal/attendance/check-in')} disabled={busy || !!todayRecord?.checkInTime}>
               {busy ? 'Working...' : 'Check In Now'}
@@ -123,11 +124,14 @@ const StaffAttendance = () => {
         </div>
       </div>
 
-      <div className="portal-card">
+      <div className="portal-card portal-help-card">
         <div className="portal-section-head">
           <div>
             <div className="portal-brand-kicker">Daily Mileage</div>
-            <h2 className="portal-section-title" style={{ fontSize: '1.45rem' }}>Save daily mileage</h2>
+            <h2 className="portal-section-title" style={{ fontSize: '1.45rem' }}>Step 2: Save daily mileage</h2>
+            <p className="portal-section-copy">
+              Use <strong>day start km</strong> when the work day begins and <strong>day end km</strong> when the work day finishes.
+            </p>
           </div>
         </div>
         <div className="portal-form-grid two" style={{ marginTop: '1rem' }}>
@@ -145,6 +149,7 @@ const StaffAttendance = () => {
           <textarea value={mileageNote} onChange={(e) => setMileageNote(e.target.value)} placeholder="Optional note for office records" />
         </div>
         <div className="portal-submit-bar" style={{ marginTop: '1rem' }}>
+          <div className="portal-submit-note">Use this for the current day so office can see your start and end mileage clearly.</div>
           <button className="portal-button secondary portal-save-button" type="button" onClick={saveMileage} disabled={busy}>
             {busy ? 'Saving...' : 'Save Daily Mileage'}
           </button>

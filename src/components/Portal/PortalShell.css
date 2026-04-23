@@ -327,10 +327,6 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
-.portal-order-actions {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-
 .portal-soft-actions {
   gap: 0.9rem;
 }
@@ -509,11 +505,6 @@
   gap: 0.55rem;
 }
 
-.portal-inline-record-wrap {
-  display: grid;
-  gap: 0.5rem;
-}
-
 .portal-record-card {
   border: 1px solid rgba(13, 26, 43, 0.08);
   background: white;
@@ -521,90 +512,6 @@
   padding: 1rem;
   display: grid;
   gap: 0.55rem;
-}
-
-.portal-resource-card.compact {
-  padding: 0.95rem;
-}
-
-.portal-module-stats.compact {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.6rem;
-}
-
-.portal-module-stats.compact .portal-stat {
-  min-height: 0;
-  padding: 0.75rem 0.8rem;
-  border-radius: 1rem;
-}
-
-.portal-module-stats.compact .portal-stat-value {
-  font-size: 1.45rem;
-}
-
-.portal-filter-bar.compact {
-  padding: 0.7rem;
-  gap: 0.55rem;
-}
-
-.portal-filter-bar.compact select,
-.portal-filter-bar.compact input {
-  min-height: 2.65rem;
-  padding: 0.68rem 0.82rem;
-}
-
-.portal-attendance-record-card {
-  gap: 0.5rem;
-  padding: 0.85rem;
-}
-
-.portal-attendance-record-head {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 0.75rem;
-  flex-wrap: wrap;
-}
-
-.portal-attendance-record-identity {
-  display: grid;
-  gap: 0.18rem;
-}
-
-.portal-attendance-record-identity strong {
-  color: var(--navy-900);
-  font-size: 1rem;
-}
-
-.portal-attendance-record-identity span {
-  color: var(--navy-600);
-  font-size: 0.84rem;
-}
-
-.portal-attendance-record-meta {
-  gap: 0.35rem;
-  font-size: 0.8rem;
-}
-
-.portal-attendance-detail-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.55rem;
-}
-
-.portal-detail-item.compact {
-  gap: 0.14rem;
-  padding: 0.62rem 0.72rem;
-  border-radius: 0.85rem;
-}
-
-.portal-detail-item.compact .portal-detail-label {
-  font-size: 0.68rem;
-}
-
-.portal-detail-item.compact .portal-detail-value {
-  font-size: 0.84rem;
-  line-height: 1.35;
 }
 
 .portal-compact-row {
@@ -646,48 +553,9 @@
   background: linear-gradient(180deg, rgba(255, 251, 245, 0.98), rgba(247, 240, 229, 0.96));
 }
 
-.portal-inline-detail-card {
-  margin-left: 0.65rem;
-  border-left: 3px solid rgba(183, 132, 66, 0.45);
-  background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(248, 245, 238, 0.9)),
-    radial-gradient(circle at top right, rgba(183, 132, 66, 0.12), transparent 28rem);
-  box-shadow: 0 20px 42px rgba(12, 24, 42, 0.08);
-}
-
-.portal-report-detail-card {
-  padding: 1.05rem;
-}
-
-.portal-report-detail-hero {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 0.85rem;
-  flex-wrap: wrap;
-  padding: 0.9rem;
-  border-radius: 1rem;
-  color: #ffffff;
-  background:
-    linear-gradient(135deg, rgba(14, 37, 63, 0.96), rgba(26, 75, 111, 0.92)),
-    radial-gradient(circle at top right, rgba(183, 132, 66, 0.34), transparent 18rem);
-}
-
-.portal-report-detail-hero .portal-brand-kicker,
-.portal-report-detail-hero .portal-record-title {
-  color: #ffffff;
-}
-
-.portal-note-block.highlight {
-  background: linear-gradient(180deg, rgba(255, 251, 244, 0.96), rgba(255, 255, 255, 0.92));
-  border-color: rgba(183, 132, 66, 0.2);
-}
-
 .portal-record-copy {
   color: var(--navy-700);
   line-height: 1.55;
-  overflow-wrap: anywhere;
-  word-break: break-word;
 }
 
 .portal-detail-grid {
@@ -717,8 +585,6 @@
   color: var(--navy-900);
   font-weight: 600;
   line-height: 1.35;
-  overflow-wrap: anywhere;
-  word-break: break-word;
 }
 
 .portal-note-block {
@@ -1054,27 +920,6 @@
   gap: 0.8rem;
 }
 
-.portal-message-date-break {
-  display: flex;
-  justify-content: center;
-  margin: 0.15rem 0 0.1rem;
-}
-
-.portal-message-date-break span {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 1.9rem;
-  padding: 0.3rem 0.8rem;
-  border-radius: 999px;
-  background: rgba(21, 49, 79, 0.08);
-  border: 1px solid rgba(13, 26, 43, 0.08);
-  color: var(--navy-700);
-  font-size: 0.74rem;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-}
-
 .portal-message-row {
   display: flex;
 }
@@ -1141,7 +986,6 @@
   align-items: center;
   justify-content: center;
   min-height: 2.4rem;
-  max-width: 100%;
   padding: 0.55rem 0.9rem;
   border-radius: 999px;
   border: 1px solid rgba(13, 26, 43, 0.08);
@@ -1150,8 +994,6 @@
   text-decoration: none;
   font-size: 0.86rem;
   font-weight: 600;
-  overflow-wrap: anywhere;
-  word-break: break-word;
 }
 
 .portal-message-row.self .portal-attachment-chip {
@@ -1498,10 +1340,6 @@
   display: grid;
   grid-template-columns: minmax(0, 1.3fr) minmax(18rem, 0.9fr);
   gap: 1rem;
-}
-
-.portal-admin-lower-grid.focus-only {
-  grid-template-columns: minmax(0, 1fr);
 }
 
 .portal-admin-activity-panel,
@@ -1911,12 +1749,12 @@
     gap: 0.7rem;
   }
 
-  .portal-admin-sidebar {
-    order: 0;
-  }
-
   .portal-admin-main {
     order: 1;
+  }
+
+  .portal-admin-sidebar {
+    order: 2;
   }
 
   .portal-admin-sidebar:not(.open) {
@@ -1972,7 +1810,7 @@
     bottom: calc(0.55rem + env(safe-area-inset-bottom, 0px));
     z-index: 45;
     display: grid;
-    grid-template-columns: repeat(6, minmax(0, 1fr));
+    grid-template-columns: repeat(5, minmax(0, 1fr));
     gap: 0.35rem;
     padding: 0.35rem;
     border-radius: 1rem;
@@ -1991,7 +1829,7 @@
     padding: 0.35rem 0.12rem;
     border-radius: 0.7rem;
     text-decoration: none;
-    font-size: 0.54rem;
+    font-size: 0.58rem;
     font-weight: 700;
     line-height: 1;
     text-align: center;
@@ -2029,15 +1867,6 @@
     box-shadow: 0 12px 28px rgba(12, 24, 42, 0.05);
   }
 
-  .portal-inline-detail-card {
-    margin-left: 0;
-    border-left-width: 2px;
-  }
-
-  .portal-report-detail-hero {
-    padding: 0.75rem;
-  }
-
   .portal-section-title {
     font-size: clamp(0.98rem, 5vw, 1.18rem);
   }
@@ -2062,7 +1891,6 @@
   .portal-grid.stats,
   .portal-actions,
   .portal-actions-two,
-  .portal-order-actions,
   .portal-quick-links,
   .portal-staff-summary-grid,
   .portal-staff-summary-grid.compact,
@@ -2102,28 +1930,6 @@
     line-height: 1.05;
   }
 
-  .portal-inline-actions {
-    align-items: stretch;
-  }
-
-  .portal-inline-actions > select,
-  .portal-inline-actions > input,
-  .portal-inline-actions > textarea,
-  .portal-inline-actions > button {
-    flex: 1 1 100%;
-    min-width: 0;
-  }
-
-  .portal-inline-actions > .portal-badge {
-    width: fit-content;
-    max-width: 100%;
-  }
-
-  .portal-attachment-chip {
-    justify-content: flex-start;
-    text-align: left;
-  }
-
   .portal-quick-link {
     border-radius: 0.72rem;
   }
@@ -2132,11 +1938,6 @@
     display: grid;
     grid-template-columns: 1fr;
     gap: 0.45rem;
-  }
-
-  .portal-module-stats.compact,
-  .portal-attendance-detail-grid {
-    grid-template-columns: 1fr;
   }
 
   .portal-filter-bar select,
@@ -2656,312 +2457,5 @@
   .portal-page .portal-compact-row,
   .portal-page .portal-admin-snapshot-card {
     animation: none;
-  }
-}
-
-
-/* ═══════════════════════════════════════════════
-   VISUAL ENHANCEMENTS
-   Additive overrides only — no existing layout
-   properties are removed.
-   ═══════════════════════════════════════════════ */
-
-/* — Admin sidebar: position context for accent bar — */
-.portal-admin-link {
-  position: relative;
-  overflow: hidden;
-}
-
-/* Replace flat dark active with accent-tinted pill + left accent bar */
-.portal-admin-link.active {
-  color: var(--navy-800);
-  background: linear-gradient(135deg, rgba(168, 119, 68, 0.1), rgba(168, 119, 68, 0.05));
-  border-color: rgba(168, 119, 68, 0.22);
-}
-
-.portal-admin-link.active::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 3px;
-  height: 54%;
-  border-radius: 0 999px 999px 0;
-  background: linear-gradient(180deg, var(--accent), var(--accent-strong));
-}
-
-/* Restore dark navy on mobile where links are icon-grid centred */
-@media (max-width: 640px) {
-  .portal-admin-link.active {
-    color: white;
-    background: var(--navy-800);
-    border-color: rgba(13, 26, 43, 0.08);
-  }
-
-  .portal-admin-link.active::before {
-    display: none;
-  }
-}
-
-/* — Admin nav section: gold separator line — */
-.portal-admin-nav-section {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-}
-
-.portal-admin-nav-section::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: linear-gradient(90deg, rgba(168, 119, 68, 0.26), transparent);
-}
-
-/* — "Live" status pill: animated green pulse dot — */
-.portal-admin-status-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.42rem;
-}
-
-.portal-admin-status-pill::before {
-  content: '';
-  flex-shrink: 0;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #2db870;
-  box-shadow: 0 0 0 2px rgba(45, 184, 112, 0.24);
-  animation: ve-status-pulse 2.4s ease-in-out infinite;
-}
-
-@keyframes ve-status-pulse {
-  0%, 100% { box-shadow: 0 0 0 2px rgba(45, 184, 112, 0.24); }
-  50%       { box-shadow: 0 0 0 5px rgba(45, 184, 112, 0.08); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .portal-admin-status-pill::before { animation: none; }
-}
-
-/* — Dashboard hero snapshot cards: semantic colour top-stripe — */
-.portal-admin-snapshot-card:nth-child(1) { box-shadow: inset 0 2px 0 rgba(45, 184, 112, 0.55); }
-.portal-admin-snapshot-card:nth-child(2) { box-shadow: inset 0 2px 0 rgba(255, 168, 0, 0.50); }
-.portal-admin-snapshot-card:nth-child(3) { box-shadow: inset 0 2px 0 rgba(255, 100, 80, 0.50); }
-.portal-admin-snapshot-card:nth-child(4) { box-shadow: inset 0 2px 0 rgba(120, 160, 255, 0.55); }
-
-/* — Light stat cards: accent top-stripe + hover lift — */
-.portal-stat.light {
-  box-shadow: inset 0 2px 0 rgba(168, 119, 68, 0.28);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-@media (pointer: fine) {
-  .portal-stat.light:hover {
-    transform: translateY(-2px);
-    box-shadow: inset 0 2px 0 rgba(168, 119, 68, 0.42),
-                0 18px 36px rgba(12, 24, 42, 0.07);
-  }
-}
-
-/* — Admin module cards: inset top-accent on hover — */
-.portal-admin-module-card {
-  transition: transform 0.22s cubic-bezier(0.23, 1, 0.32, 1),
-              box-shadow 0.22s ease,
-              border-color 0.22s ease;
-}
-
-@media (pointer: fine) {
-  .portal-admin-module-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 22px 44px rgba(12, 24, 42, 0.1),
-                inset 0 2px 0 var(--accent);
-    border-color: rgba(183, 132, 66, 0.2);
-  }
-
-  .portal-admin-module-card:hover .portal-admin-module-icon {
-    background: rgba(183, 132, 66, 0.12);
-    color: #875625;
-  }
-}
-
-/* — Semantic badge colour variants — */
-.portal-badge.success { background: rgba(34, 154, 86, 0.1);   color: #1a7744; }
-.portal-badge.warning { background: rgba(240, 165, 0, 0.12);  color: #9a6600; }
-.portal-badge.danger  { background: rgba(220, 53, 69, 0.1);   color: #b02030; }
-.portal-badge.info    { background: rgba(14, 120, 200, 0.1);  color: #0a5fa0; }
-
-/* — Tables: zebra rows + left-bar row hover — */
-.portal-table tbody tr:nth-child(even) td {
-  background: rgba(19, 48, 78, 0.025);
-}
-
-.portal-table tbody tr {
-  transition: background 0.14s ease;
-}
-
-@media (pointer: fine) {
-  .portal-table tbody tr:hover td {
-    background: rgba(168, 119, 68, 0.04);
-  }
-
-  .portal-table tbody tr:hover td:first-child {
-    box-shadow: inset 3px 0 0 rgba(168, 119, 68, 0.55);
-  }
-}
-
-/* — Admin topbar user chip: accent ring — */
-.admin-user-chip {
-  display: inline-flex !important;
-  align-items: center;
-  gap: 0.5rem;
-  font-weight: 700 !important;
-  box-shadow: 0 0 0 2px rgba(168, 119, 68, 0.38) !important;
-}
-
-/* Avatar initials ring (rendered by AdminPortalLayout) */
-.admin-avatar {
-  flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 1.55rem;
-  height: 1.55rem;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--accent), var(--accent-strong));
-  color: #ffffff;
-  font-size: 0.58rem;
-  font-weight: 800;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-
-/* — Portal record cards: hover lift — */
-.portal-record-card {
-  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
-}
-
-@media (pointer: fine) {
-  .portal-record-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 18px 38px rgba(12, 24, 42, 0.09);
-    border-color: rgba(168, 119, 68, 0.14);
-  }
-}
-
-/* — Compact rows: hover highlight — */
-.portal-compact-row {
-  transition: background 0.16s ease, box-shadow 0.16s ease;
-}
-
-@media (pointer: fine) {
-  .portal-compact-row:hover {
-    background: rgba(255, 255, 255, 0.98);
-    box-shadow: 0 8px 22px rgba(12, 24, 42, 0.07);
-  }
-}
-
-/* — Staff nav active: extra depth shadow — */
-.portal-staff-link.active {
-  box-shadow: 0 14px 28px rgba(24, 50, 81, 0.22),
-              inset 0 1px 0 rgba(255, 255, 255, 0.1);
-}
-
-/* — Mobile bottom nav: active top-indicator + position context — */
-.portal-mobile-bottom-link {
-  position: relative;
-  transition: transform 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
-}
-
-.portal-mobile-bottom-link.active {
-  box-shadow: 0 6px 16px rgba(24, 50, 81, 0.2);
-}
-
-.portal-mobile-bottom-link.active::after {
-  content: '';
-  position: absolute;
-  top: 4px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 14px;
-  height: 2px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.65);
-}
-
-/* — Admin breadcrumb trail (rendered by AdminPortalLayout) — */
-.portal-admin-breadcrumb {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-  margin-bottom: 0.75rem;
-  padding: 0.46rem 0.88rem;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.82);
-  border: 1px solid rgba(13, 26, 43, 0.07);
-  box-shadow: 0 4px 12px rgba(12, 24, 42, 0.05);
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--navy-600);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-}
-
-.portal-admin-breadcrumb-sep {
-  color: rgba(13, 26, 43, 0.25);
-  font-size: 0.7rem;
-  line-height: 1;
-}
-
-.portal-admin-breadcrumb-page {
-  color: var(--navy-800);
-  font-weight: 700;
-}
-
-@media (max-width: 640px) {
-  .portal-admin-breadcrumb {
-    font-size: 0.72rem;
-    padding: 0.36rem 0.65rem;
-    margin-bottom: 0.5rem;
-  }
-}
-
-/* ═══════════════════════════════════════════════
-   ADMIN SIDEBAR — ANIMATED COLLAPSE
-   Replaces the instant display:none with a
-   grid-template-rows 0fr→1fr transition on mobile.
-   Uses !important only where needed to override
-   the earlier :not(.open) { display: none } rule.
-   ═══════════════════════════════════════════════ */
-@media (max-width: 640px) {
-  /* Give the sidebar a transition at all times */
-  .portal-admin-sidebar {
-    transition: grid-template-rows 0.3s cubic-bezier(0.23, 1, 0.32, 1),
-                opacity 0.22s ease;
-  }
-
-  /* Collapsed state — override the existing display:none with an animated collapse */
-  .portal-admin-sidebar:not(.open) {
-    display: grid !important;
-    grid-template-rows: 0fr;
-    overflow: hidden;
-    opacity: 0;
-    pointer-events: none;
-  }
-
-  /* Expanded state */
-  .portal-admin-sidebar.open {
-    display: grid;
-    grid-template-rows: 1fr;
-    overflow: visible;
-    opacity: 1;
-    pointer-events: auto;
-  }
-
-  /* Direct child must allow shrinking to zero */
-  .portal-admin-sidebar > * {
-    min-height: 0;
-    overflow: hidden;
   }
 }

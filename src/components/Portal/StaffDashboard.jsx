@@ -2,19 +2,12 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { portalApi } from '../../services/portalApi';
 import { formatPortalDateTime, formatPortalPrettyDate } from '../../utils/portalDate';
-import { useCountUp } from '../../hooks/useCountUp';
 import './PortalShell.css';
-
-const AnimatedCount = ({ value }) => {
-  const ref = useCountUp(value, { duration: 1.2 });
-  return <div className="portal-stat-value" ref={ref}>{value}</div>;
-};
 
 const quickLinks = [
   { to: '/staff/attendance', label: 'Check In / Out' },
   { to: '/staff/reports', label: 'Submit Report' },
   { to: '/staff/orders', label: 'Submit Order' },
-  { to: '/staff/order-history', label: 'My Orders' },
   { to: '/staff/visits', label: 'Log Visit' },
   { to: '/staff/clients', label: 'Open Clients' },
 ];
@@ -53,15 +46,15 @@ const StaffDashboard = () => {
             </div>
           </div>
           <div className="portal-stat">
-            <AnimatedCount value={data.quickStats.recentOrders} />
+            <div className="portal-stat-value">{data.quickStats.recentOrders}</div>
             <div className="portal-stat-label">Recent orders</div>
           </div>
           <div className="portal-stat">
-            <AnimatedCount value={data.quickStats.unreadNotifications} />
+            <div className="portal-stat-value">{data.quickStats.unreadNotifications}</div>
             <div className="portal-stat-label">Unread notifications</div>
           </div>
           <div className="portal-stat">
-            <AnimatedCount value={data.recentActivity.length} />
+            <div className="portal-stat-value">{data.recentActivity.length}</div>
             <div className="portal-stat-label">Recent activity items</div>
           </div>
         </div>
@@ -70,7 +63,7 @@ const StaffDashboard = () => {
             {data.attendanceStatus?.checkedOut ? 'Attendance Complete' : data.attendanceStatus?.checkedIn ? 'Open Check Out' : 'Open Check In'}
           </Link>
           <Link className="portal-button ghost" to="/staff/orders">
-            New Order
+            Open Orders
           </Link>
         </div>
       </div>

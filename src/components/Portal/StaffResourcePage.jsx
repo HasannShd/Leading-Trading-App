@@ -33,7 +33,6 @@ const StaffResourcePage = ({ config }) => {
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState('');
   const [statusDrafts, setStatusDrafts] = useState({});
-  const [clients, setClients] = useState([]);
 
   const load = useCallback(() => {
     setLoading(true);
@@ -48,33 +47,11 @@ const StaffResourcePage = ({ config }) => {
     load();
   }, [load]);
 
-  useEffect(() => {
-    if (!config.fields.some((field) => field.source === 'clients')) {
-      setClients([]);
-      return;
-    }
-
-    portalApi
-      .get('/staff-portal/clients', 'sales_staff')
-      .then((response) => setClients(response.data.clients || []))
-      .catch(() => setClients([]));
-  }, [config.fields]);
-
   const fieldMap = useMemo(() => config.fields, [config.fields]);
   const singularTitle = config.title.replace(/s$/, '') || 'Record';
   const draftKey = `staff-draft:${config.endpoint}`;
 
-  const handleChange = (name, value) =>
-    setValues((current) => {
-      const nextValues = { ...current, [name]: value };
-      if (name === 'client') {
-        const selectedClient = clients.find((entry) => entry._id === value);
-        if (selectedClient) {
-          nextValues.clientName = selectedClient.name || current.clientName || '';
-        }
-      }
-      return nextValues;
-    });
+  const handleChange = (name, value) => setValues((current) => ({ ...current, [name]: value }));
 
   useEffect(() => {
     const raw = localStorage.getItem(draftKey);
@@ -154,7 +131,6 @@ const StaffResourcePage = ({ config }) => {
     record.title ||
     record.name ||
     record.customerName ||
-    record.client?.name ||
     record.clientName ||
     record.productName ||
     record.issueType ||
@@ -192,6 +168,18 @@ const StaffResourcePage = ({ config }) => {
         </div>
       </div>
 
+      <div className="portal-card portal-help-card">
+        <div className="portal-section-head">
+          <div>
+            <div className="portal-brand-kicker">Easy Use</div>
+            <h2 className="portal-section-title" style={{ fontSize: '1.4rem' }}>Simple steps</h2>
+            <p className="portal-section-copy">
+              1. Fill the boxes. 2. Check the details. 3. Press the big save button at the bottom. After saving, your entry will appear below in the history list.
+            </p>
+          </div>
+        </div>
+      </div>
+
       <div className="portal-card">
         <div className="portal-section-head">
           <div>
@@ -211,10 +199,7 @@ const StaffResourcePage = ({ config }) => {
                   <textarea value={values[field.name] || ''} onChange={(e) => handleChange(field.name, e.target.value)} placeholder={field.placeholder} />
                 ) : field.type === 'select' ? (
                   <select value={String(values[field.name] ?? '')} onChange={(e) => handleChange(field.name, e.target.value === 'true' ? true : e.target.value === 'false' ? false : e.target.value)}>
-                    {(field.source === 'clients'
-                      ? [{ value: '', label: 'Pick saved client' }, ...clients.map((client) => ({ value: client._id, label: client.name }))]
-                      : field.options || []
-                    ).map((option) => (
+                    {field.options?.map((option) => (
                       <option key={String(option.value)} value={String(option.value)}>
                         {option.label}
                       </option>
@@ -222,7 +207,7 @@ const StaffResourcePage = ({ config }) => {
                   </select>
                 ) : field.type === 'file' ? (
                   <div className="portal-file-row">
-                    <input type="file" onChange={(e) => handleFile(field.name, e.target.files?.[0])} />
+                    <input type="file" accept="image/*,.pdf" onChange={(e) => handleFile(field.name, e.target.files?.[0])} />
                     {values[field.name] && <span className="portal-badge">Uploaded</span>}
                   </div>
                 ) : (
@@ -238,6 +223,7 @@ const StaffResourcePage = ({ config }) => {
           </div>
           {message && <div className="portal-message-banner success">{message}</div>}
           <div className="portal-submit-bar">
+            <div className="portal-submit-note">Only the required fields need to be filled. If something is not applicable, leave it blank and save.</div>
             <div className="portal-actions-two">
               <button className="portal-button ghost portal-save-button portal-save-button-ghost" type="button" onClick={clearDraft} disabled={busy}>
                 Clear Draft

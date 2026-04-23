@@ -52,37 +52,6 @@ export const formatPortalDateTime = (value) => {
   }).format(date);
 };
 
-export const formatPortalTime = (value) => {
-  if (!value) return '-';
-  const date = normalizePortalValue(value);
-  if (Number.isNaN(date.getTime())) return '-';
-  return new Intl.DateTimeFormat('en-GB', {
-    timeZone: PORTAL_TIME_ZONE,
-    hour: 'numeric',
-    minute: '2-digit',
-  }).format(date);
-};
-
-export const formatPortalChatDateLabel = (value, reference = new Date()) => {
-  const date = normalizePortalValue(value);
-  if (Number.isNaN(date.getTime())) return '-';
-
-  const targetKey = getPortalDateKey(date);
-  const todayKey = getPortalDateKey(reference);
-  if (targetKey === todayKey) return 'Today';
-
-  const yesterday = new Date(normalizePortalValue(reference));
-  yesterday.setUTCDate(yesterday.getUTCDate() - 1);
-  if (targetKey === getPortalDateKey(yesterday)) return 'Yesterday';
-
-  return new Intl.DateTimeFormat('en-GB', {
-    timeZone: PORTAL_TIME_ZONE,
-    day: 'numeric',
-    month: 'short',
-    year: 'numeric',
-  }).format(date);
-};
-
 export const formatPortalPrettyDate = (value = new Date()) =>
   new Intl.DateTimeFormat('en-GB', {
     timeZone: PORTAL_TIME_ZONE,

@@ -11,12 +11,6 @@ class AppErrorBoundary extends Component {
     return { hasError: true };
   }
 
-  componentDidUpdate(prevProps) {
-    if (this.state.hasError && prevProps.resetKey !== this.props.resetKey) {
-      this.setState({ hasError: false });
-    }
-  }
-
   componentDidCatch(error, errorInfo) {
     console.error('Unhandled frontend error', error, errorInfo);
   }
