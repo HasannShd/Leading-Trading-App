@@ -49,6 +49,12 @@ export const AdminProvider = ({ children }) => {
   }, [admin, adminLoginPath, loading, location.pathname, navigate]);
 
   const verifyAdmin = useCallback(async () => {
+    if (!getStoredToken('admin')) {
+      resetAdminSession(false);
+      setLoading(false);
+      return;
+    }
+
     try {
       const response = await authFetch('/auth/me', { scope: 'admin' });
       if (response.ok) {

@@ -18,7 +18,7 @@ const StaffLogin = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const ok = await login(identifier, password);
-    if (ok) navigate('/staff/dashboard', { replace: true });
+    if (ok) window.location.replace('/staff/dashboard');
   };
 
   return (
