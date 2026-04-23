@@ -127,12 +127,12 @@ export const AdminProvider = ({ children }) => {
         return false;
       }
 
-      await storePasswordCredential({
+      applyAdminSession(data.token, data.user);
+      storePasswordCredential({
         identifier: username,
         password,
         name: data.user.name || data.user.username || username,
-      });
-      applyAdminSession(data.token, data.user);
+      }).catch(() => {});
       if (!data.user.mfaEnabled) {
         setError('MFA is recommended for this admin account. You can set it up from the Account page.');
       }
