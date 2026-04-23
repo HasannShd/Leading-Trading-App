@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from 'react';
+import { createContext, useEffect, useRef, useState } from 'react';
 import { portalApi } from '../services/portalApi';
 import { authFetch, getStoredToken } from '../services/authFetch';
 import { getTokenExpiryMs, isTokenExpired } from '../utils/sessionToken';
@@ -10,13 +10,16 @@ export const StaffProvider = ({ children }) => {
   const [staff, setStaff] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const sessionRequestIdRef = useRef(0);
 
   const fetchMe = async () => {
+    const requestId = ++sessionRequestIdRef.current;
     getStoredToken('sales_staff');
     setError(null);
     try {
       const response = await authFetch('/auth/me', { scope: 'sales_staff' });
       const data = await response.json();
+      if (requestId !== sessionRequestIdRef.current) return;
       if (!response.ok || data.user?.role !== 'sales_staff') {
         localStorage.removeItem('staffToken');
         setStaff(null);
@@ -24,13 +27,16 @@ export const StaffProvider = ({ children }) => {
       }
       setStaff(data.user);
     } catch (err) {
+      if (requestId !== sessionRequestIdRef.current) return;
       if (localStorage.getItem('staffToken')) {
         setError('Could not verify the staff session. Check the connection and try again.');
       } else {
         setStaff(null);
       }
     } finally {
-      setLoading(false);
+      if (requestId === sessionRequestIdRef.current) {
+        setLoading(false);
+      }
     }
   };
 
@@ -62,6 +68,7 @@ export const StaffProvider = ({ children }) => {
   }, [staff]);
 
   const login = async (identifier, password) => {
+    sessionRequestIdRef.current += 1;
     setLoading(true);
     setError(null);
     localStorage.removeItem('staffToken');
