@@ -6,8 +6,23 @@ import { storePasswordCredential } from '../utils/credentialStore';
 
 export const AdminContext = createContext();
 
+const ADMIN_TOKEN_KEY = 'adminToken';
+const ADMIN_PROFILE_KEY = 'adminProfile';
+const ADMIN_TRUSTED_DEVICE_KEY = 'adminTrustedDeviceToken';
+
+const readStoredAdmin = () => {
+  try {
+    const token = getStoredToken('admin');
+    const profile = JSON.parse(localStorage.getItem(ADMIN_PROFILE_KEY) || 'null');
+    if (token && profile?.role === 'admin') return profile;
+  } catch (error) {
+    localStorage.removeItem(ADMIN_PROFILE_KEY);
+  }
+  return null;
+};
+
 export const AdminProvider = ({ children }) => {
-  const [admin, setAdmin] = useState(null);
+  const [admin, setAdmin] = useState(() => readStoredAdmin());
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [mfaChallenge, setMfaChallenge] = useState(null);
@@ -19,7 +34,10 @@ export const AdminProvider = ({ children }) => {
 
   const applyAdminSession = (token, user) => {
     if (token) {
-      localStorage.setItem('adminToken', token);
+      localStorage.setItem(ADMIN_TOKEN_KEY, token);
+    }
+    if (user?.role === 'admin') {
+      localStorage.setItem(ADMIN_PROFILE_KEY, JSON.stringify(user));
     }
     setAdmin(user || null);
     setMfaChallenge(null);
@@ -27,8 +45,9 @@ export const AdminProvider = ({ children }) => {
   };
 
   const resetAdminSession = useCallback((shouldRedirect = true) => {
-    localStorage.removeItem('adminToken');
-    localStorage.removeItem('adminTrustedDeviceToken');
+    localStorage.removeItem(ADMIN_TOKEN_KEY);
+    localStorage.removeItem(ADMIN_PROFILE_KEY);
+    localStorage.removeItem(ADMIN_TRUSTED_DEVICE_KEY);
     setAdmin(null);
     setError(null);
     if (shouldRedirect && isAdminRoute && location.pathname !== adminLoginPath) {
@@ -61,15 +80,15 @@ export const AdminProvider = ({ children }) => {
         const data = await response.json();
         if (data.user.role === 'admin') {
           applyAdminSession(null, data.user);
-        } else {
+        } else if (!admin && !getStoredToken('admin')) {
           resetAdminSession(false);
         }
-      } else {
+      } else if (!admin && !getStoredToken('admin')) {
         resetAdminSession(false);
       }
     } catch (err) {
       console.error('Auth verification failed:', err);
-      if (localStorage.getItem('adminToken')) {
+      if (localStorage.getItem(ADMIN_TOKEN_KEY)) {
         setError('Could not verify the admin session. Check the connection and try again.');
       } else {
         resetAdminSession(false);
@@ -77,7 +96,7 @@ export const AdminProvider = ({ children }) => {
     } finally {
       setLoading(false);
     }
-  }, [resetAdminSession]);
+  }, [admin, resetAdminSession]);
 
   useEffect(() => {
     if (isAdminRoute) {
@@ -109,7 +128,7 @@ export const AdminProvider = ({ children }) => {
     setLoading(true);
     setError(null);
     try {
-      const trustedDeviceToken = localStorage.getItem('adminTrustedDeviceToken') || '';
+      const trustedDeviceToken = localStorage.getItem(ADMIN_TRUSTED_DEVICE_KEY) || '';
       const response = await authFetch('/auth/sign-in', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -134,11 +153,11 @@ export const AdminProvider = ({ children }) => {
         return false;
       }
 
-      await storePasswordCredential({
+      storePasswordCredential({
         identifier: username,
         password,
         name: data.user.name || data.user.username || username,
-      });
+      }).catch(() => {});
       applyAdminSession(data.token, data.user);
       if (!data.user.mfaEnabled) {
         setError('MFA is recommended for this admin account. You can set it up from the Account page.');
@@ -168,10 +187,10 @@ export const AdminProvider = ({ children }) => {
         return false;
       }
       if (data.token) {
-        localStorage.setItem('adminToken', data.token);
+        localStorage.setItem(ADMIN_TOKEN_KEY, data.token);
       }
       if (data.trustedDeviceToken) {
-        localStorage.setItem('adminTrustedDeviceToken', data.trustedDeviceToken);
+        localStorage.setItem(ADMIN_TRUSTED_DEVICE_KEY, data.trustedDeviceToken);
       }
       applyAdminSession(data.token, data.user);
       return true;

@@ -9,7 +9,6 @@ export const StaffContext = createContext();
 const STAFF_TOKEN_KEY = 'staffToken';
 const STAFF_PROFILE_KEY = 'staffProfile';
 const STAFF_LOGIN_AT_KEY = 'staffLoginAt';
-const LOGIN_VERIFY_GRACE_MS = 30000;
 
 const readStoredStaff = () => {
   try {
@@ -46,8 +45,9 @@ export const StaffProvider = ({ children }) => {
       const data = await response.json();
       if (requestId !== sessionRequestIdRef.current) return;
       if (!response.ok || data.user?.role !== 'sales_staff') {
-        const loginAt = Number(localStorage.getItem(STAFF_LOGIN_AT_KEY) || 0);
-        if (staffRef.current && Date.now() - loginAt < LOGIN_VERIFY_GRACE_MS) {
+        if (staffRef.current && getStoredToken('sales_staff')) {
+          localStorage.removeItem(STAFF_LOGIN_AT_KEY);
+          setError(null);
           return;
         }
         localStorage.removeItem(STAFF_TOKEN_KEY);
