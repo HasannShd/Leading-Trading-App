@@ -86,7 +86,7 @@ export const staffModuleConfigs = {
 export const adminModuleConfigs = {
   attendance: { title: 'Attendance Logs', endpoint: '/admin-portal/attendance', supportsDate: true, supportsUser: true },
   reports: { title: 'Daily Reports', endpoint: '/admin-portal/reports', supportsDate: true, supportsUser: true },
-  orders: { title: 'Sales Orders', endpoint: '/admin-portal/orders', statusPatch: '/admin-portal/orders', supportsStatus: true, supportsUser: true, statusOptions: ['submitted', 'reviewed', 'emailed', 'confirmed', 'delivered', 'cancelled'] },
+  orders: { title: 'Sales Orders', endpoint: '/admin-portal/orders', statusPatch: '/admin-portal/orders', supportsStatus: true, supportsUser: true, supportsDate: true, supportsSearch: true, statusOptions: ['submitted', 'reviewed', 'emailed', 'confirmed', 'delivered', 'cancelled'] },
   clients: { title: 'Clients', endpoint: '/admin-portal/clients', supportsUser: true },
   visits: { title: 'Visit Logs', endpoint: '/admin-portal/visits', supportsUser: true },
   notifications: { title: 'Notifications', endpoint: '/admin-portal/notifications' },

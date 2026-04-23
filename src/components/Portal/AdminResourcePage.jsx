@@ -7,11 +7,22 @@ import { formatPortalDate, formatPortalDateTime } from '../../utils/portalDate';
 import './PortalShell.css';
 
 const AdminResourcePage = ({ config }) => {
+  const configKey = config.endpoint.split('/').pop();
+  const isAttendancePage = (config.exportKey || configKey) === 'attendance';
+  const isReportsPage = (config.exportKey || configKey) === 'reports';
+  const isOrdersPage = (config.exportKey || configKey) === 'orders';
+  const isClientsPage = (config.exportKey || configKey) === 'clients';
+  const isVisitsPage = (config.exportKey || configKey) === 'visits';
+  const todayInputValue = () => {
+    const date = new Date();
+    date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
+    return date.toISOString().slice(0, 10);
+  };
   const [records, setRecords] = useState([]);
   const [message, setMessage] = useState('');
   const [statusDrafts, setStatusDrafts] = useState({});
   const [staff, setStaff] = useState([]);
-  const [filters, setFilters] = useState({ user: '', status: '', date: '' });
+  const [filters, setFilters] = useState(() => ({ user: '', status: '', date: isOrdersPage ? todayInputValue() : '', search: '' }));
   const [staffSummary, setStaffSummary] = useState(null);
   const [selectedRecordId, setSelectedRecordId] = useState('');
   const selectedRecordRef = useRef(null);
@@ -33,9 +44,10 @@ const AdminResourcePage = ({ config }) => {
     if (config.supportsUser && filters.user) params.set('user', filters.user);
     if (config.supportsStatus && filters.status) params.set('status', filters.status);
     if (config.supportsDate && filters.date) params.set('date', filters.date);
+    if (config.supportsSearch && filters.search.trim()) params.set('search', filters.search.trim());
     const query = params.toString();
     return query ? `${config.endpoint}?${query}` : config.endpoint;
-  }, [config.endpoint, config.supportsDate, config.supportsStatus, config.supportsUser, filters.date, filters.status, filters.user]);
+  }, [config.endpoint, config.supportsDate, config.supportsSearch, config.supportsStatus, config.supportsUser, filters.date, filters.search, filters.status, filters.user]);
 
   const load = useCallback(() =>
     portalApi
@@ -57,8 +69,12 @@ const AdminResourcePage = ({ config }) => {
   }, [load]);
 
   useEffect(() => {
+    setFilters({ user: '', status: '', date: isOrdersPage ? todayInputValue() : '', search: '' });
+  }, [config.endpoint, isOrdersPage]);
+
+  useEffect(() => {
     setSelectedRecordId('');
-  }, [config.endpoint, filters.user, filters.status, filters.date]);
+  }, [config.endpoint, filters.user, filters.status, filters.date, filters.search]);
 
   useEffect(() => {
     if (!focusedRecordId) return;
@@ -109,13 +125,6 @@ const AdminResourcePage = ({ config }) => {
       setMessage('Export failed.');
     }
   };
-
-  const configKey = config.endpoint.split('/').pop();
-  const isAttendancePage = (config.exportKey || configKey) === 'attendance';
-  const isReportsPage = (config.exportKey || configKey) === 'reports';
-  const isOrdersPage = (config.exportKey || configKey) === 'orders';
-  const isClientsPage = (config.exportKey || configKey) === 'clients';
-  const isVisitsPage = (config.exportKey || configKey) === 'visits';
 
   const recordTitle = (record) =>
     record.title ||
@@ -260,7 +269,7 @@ const AdminResourcePage = ({ config }) => {
             <div className="portal-stat-label">Staff shown</div>
           </div>
         </div>
-        {(config.supportsUser || config.supportsStatus || config.supportsDate) && (
+        {(config.supportsUser || config.supportsStatus || config.supportsDate || config.supportsSearch) && (
           <div className={`portal-filter-bar${isAttendancePage ? ' compact' : ''}`}>
             {config.supportsUser && (
               <select value={filters.user} onChange={(e) => setFilters((current) => ({ ...current, user: e.target.value }))}>
@@ -284,6 +293,15 @@ const AdminResourcePage = ({ config }) => {
             )}
             {config.supportsDate && (
               <input type="date" value={filters.date} onChange={(e) => setFilters((current) => ({ ...current, date: e.target.value }))} />
+            )}
+            {config.supportsSearch && (
+              <input
+                type="search"
+                value={filters.search}
+                onChange={(e) => setFilters((current) => ({ ...current, search: e.target.value }))}
+                placeholder="Search client or facility"
+                aria-label="Search client or facility"
+              />
             )}
           </div>
         )}
@@ -322,12 +340,12 @@ const AdminResourcePage = ({ config }) => {
                 </div>
               )}
               <div className="portal-stat light">
-                <div className="portal-stat-value">{filters.date ? staffSummary.metrics.filteredOrdersCount : staffSummary.metrics.ordersCount}</div>
-                <div className="portal-stat-label">{filters.date ? 'Orders on selected date' : 'Orders'}</div>
+                <div className="portal-stat-value">{isOrdersPage ? staffSummary.metrics.ordersCount : filters.date ? staffSummary.metrics.filteredOrdersCount : staffSummary.metrics.ordersCount}</div>
+                <div className="portal-stat-label">{isOrdersPage ? 'Total orders' : filters.date ? 'Orders on selected date' : 'Orders'}</div>
               </div>
               <div className="portal-stat light">
-                <div className="portal-stat-value">{filters.date ? staffSummary.metrics.filteredClientsCount : staffSummary.metrics.clientsCount}</div>
-                <div className="portal-stat-label">{filters.date ? 'Clients added on selected date' : 'Clients'}</div>
+                <div className="portal-stat-value">{isOrdersPage ? staffSummary.metrics.clientsCount : filters.date ? staffSummary.metrics.filteredClientsCount : staffSummary.metrics.clientsCount}</div>
+                <div className="portal-stat-label">{isOrdersPage ? 'Total clients' : filters.date ? 'Clients added on selected date' : 'Clients'}</div>
               </div>
             </div>
             {isReportsPage && (
@@ -345,25 +363,6 @@ const AdminResourcePage = ({ config }) => {
                   <div className="portal-staff-report-row">
                     <strong>Summary</strong>
                     <span>{staffSummary.latest.report?.summary || 'No report yet'}</span>
-                  </div>
-                </div>
-              </div>
-            )}
-            {isOrdersPage && (
-              <div className="portal-staff-report-block" style={{ marginTop: '0.5rem' }}>
-                <div className="portal-brand-kicker">Latest Order</div>
-                  <div className="portal-staff-report-list">
-                  <div className="portal-staff-report-row">
-                    <strong>Client</strong>
-                    <span>{getOrderFacilityName(staffSummary.latest.order || {}) || 'No order yet'}</span>
-                  </div>
-                  <div className="portal-staff-report-row">
-                    <strong>Submitted</strong>
-                    <span>{staffSummary.latest.order?.createdAt ? formatPortalDateTime(staffSummary.latest.order.createdAt) : 'No order yet'}</span>
-                  </div>
-                  <div className="portal-staff-report-row">
-                    <strong>Status</strong>
-                    <span>{staffSummary.latest.order?.status || 'No order yet'}</span>
                   </div>
                 </div>
               </div>
