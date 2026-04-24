@@ -53,7 +53,6 @@ const AdminMessagesPage = () => {
           initialStaffIdRef.current = '';
           return requestedStaffId;
         }
-        if (!isMobile) return nextThreads[0]?.staffUser?._id || nextStaff[0]?._id || '';
         return '';
       });
     } catch (err) {
@@ -61,7 +60,7 @@ const AdminMessagesPage = () => {
     } finally {
       setLoading(false);
     }
-  }, [isMobile]);
+  }, []);
 
   const loadThread = useCallback(async (staffId, markRead = true) => {
     if (!staffId) {
@@ -70,6 +69,7 @@ const AdminMessagesPage = () => {
     }
     const requestId = ++threadRequestIdRef.current;
     setThreadLoading(true);
+    setThread(null);
     try {
       const response = await portalApi.get(`/admin-portal/messages/${staffId}`, 'admin');
       const nextThread = response.data.thread;
@@ -135,6 +135,12 @@ const AdminMessagesPage = () => {
     () => new Map(threads.map((entry) => [entry.staffUser?._id, entry])),
     [threads]
   );
+
+  const selectedStaff = useMemo(
+    () => staff.find((member) => member._id === selectedStaffId) || null,
+    [selectedStaffId, staff]
+  );
+  const activeThreadStaff = selectedStaff || thread?.staffUser || null;
 
   const filteredStaff = useMemo(() => {
     const term = String(search || '').trim().toLowerCase();
@@ -214,7 +220,6 @@ const AdminMessagesPage = () => {
       setDraft('');
       setAttachments([]);
       await loadLists();
-      setSelectedStaffId(selectedStaffId);
       setMessage('Message sent to staff.');
     } catch (err) {
       setMessage(err.message);
@@ -301,13 +306,13 @@ const AdminMessagesPage = () => {
               <div>
                 <div className="portal-brand-kicker">Saved thread</div>
                 <h2 className="portal-section-title" style={{ fontSize: '1.35rem' }}>
-                  {thread?.staffUser?.name || thread?.staffUser?.username || 'Select a staff member'}
+                  {activeThreadStaff?.name || activeThreadStaff?.username || 'Select a staff member'}
                 </h2>
-                {thread?.staffUser ? (
+                {activeThreadStaff ? (
                   <p className="portal-section-copy">
-                    {thread.staffUser.email}
-                    {thread.staffUser.phone ? ` • ${thread.staffUser.phone}` : ''}
-                    {thread.staffUser.department ? ` • ${thread.staffUser.department}` : ''}
+                    {activeThreadStaff.email}
+                    {activeThreadStaff.phone ? ` • ${activeThreadStaff.phone}` : ''}
+                    {activeThreadStaff.department ? ` • ${activeThreadStaff.department}` : ''}
                   </p>
                 ) : null}
               </div>
