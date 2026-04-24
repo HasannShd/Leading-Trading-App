@@ -561,463 +561,463 @@ const AdminProducts = () => {
 
       <div className="admin-surface-grid">
         <div className="admin-side-stack">
-      <div className="admin-category-section admin-categories-list">
-        <div className="admin-category-header">
-          <h2>Categories</h2>
-          <p>Pick a category folder to create products inside it.</p>
-        </div>
-        <div className="admin-category-grid">
-          <button
-            type="button"
-            className={`admin-category-tile${selectedCategoryId ? '' : ' active'}`}
-            onClick={() => {
-              setSelectedCategoryId('');
-              if (!editingId) {
-                setFormData(prev => ({ ...prev, categorySlug: '' }));
-              }
-            }}
-          >
-            <span className="admin-category-icon">🗂️</span>
-            <span className="admin-category-name">All Categories</span>
-          </button>
-          {leafCategories.map(cat => (
-            <button
-              key={cat._id}
-              type="button"
-              className={`admin-category-tile${selectedCategoryId === cat._id ? ' active' : ''}`}
-              onClick={() => {
-                handleCategorySelect(cat._id);
-              }}
-            >
-              <span className="admin-category-icon">📁</span>
-              <span className="admin-category-name">{cat.name}</span>
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {showForm && (
-        <div className="admin-form-container">
-          <div className="admin-panel-heading">
-            <div>
-              <h2>{editingId ? 'Edit Product' : 'Add New Product'}</h2>
-              <p>Keep names and pricing clear, then add specs and variants only where they help the buyer understand the product.</p>
+          <div className="admin-category-section admin-categories-list">
+            <div className="admin-category-header">
+              <h2>Categories</h2>
+              <p>Pick a category folder to create products inside it.</p>
+            </div>
+            <div className="admin-category-grid">
+              <button
+                type="button"
+                className={`admin-category-tile${selectedCategoryId ? '' : ' active'}`}
+                onClick={() => {
+                  setSelectedCategoryId('');
+                  if (!editingId) {
+                    setFormData(prev => ({ ...prev, categorySlug: '' }));
+                  }
+                }}
+              >
+                <span className="admin-category-icon">🗂️</span>
+                <span className="admin-category-name">All Categories</span>
+              </button>
+              {leafCategories.map(cat => (
+                <button
+                  key={cat._id}
+                  type="button"
+                  className={`admin-category-tile${selectedCategoryId === cat._id ? ' active' : ''}`}
+                  onClick={() => {
+                    handleCategorySelect(cat._id);
+                  }}
+                >
+                  <span className="admin-category-icon">📁</span>
+                  <span className="admin-category-name">{cat.name}</span>
+                </button>
+              ))}
             </div>
           </div>
-          <form onSubmit={handleSubmit} className="admin-form">
-            <div className="admin-form-group">
-              <label>Product Name *</label>
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleInputChange}
-                placeholder="e.g., Surgical Gloves"
-                required
-              />
-            </div>
 
-            <div className="admin-form-group full-width">
-              <label>Category *</label>
-              <select
-                name="categorySlug"
-                value={formData.categorySlug}
-                onChange={(e) => handleCategorySelect(e.target.value)}
-                required
-              >
-                <option value="">Select a category</option>
-                {ungroupedLeafCategories.map((cat) => (
-                  <option key={cat._id} value={cat._id}>
-                    {cat.name}
-                  </option>
-                ))}
-                {groupedLeafCategories.map((group) => (
-                  <optgroup key={group.parent._id} label={group.parent.name}>
-                    {group.children.map((cat) => (
+          <div className="admin-products-list admin-categories-list">
+            <div className="admin-panel-heading">
+              <div>
+                <h2>All Products ({visibleProducts.length})</h2>
+                <p>Review the filtered catalog, fix missing media or descriptions, and open items for editing when details need cleanup.</p>
+              </div>
+              <div className="admin-summary-pills">
+                <span className="admin-summary-pill"><strong>{activeProducts}</strong> active</span>
+                <span className="admin-summary-pill"><strong>{featuredProducts}</strong> featured</span>
+                <span className="admin-summary-pill"><strong>{withImages}</strong> with images</span>
+              </div>
+            </div>
+            <div className="admin-products-toolbar">
+              <label htmlFor="admin-product-search">Search products</label>
+              <div className="admin-search-control">
+                <span className="admin-search-icon" aria-hidden="true">⌕</span>
+                <input
+                  id="admin-product-search"
+                  type="text"
+                  placeholder="Search by name, brand, or SKU"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+                {searchTerm && (
+                  <button
+                    type="button"
+                    className="admin-search-clear"
+                    onClick={() => setSearchTerm('')}
+                  >
+                    Clear
+                  </button>
+                )}
+              </div>
+            </div>
+            
+            {loading && !showForm && <p className="loading">Loading...</p>}
+
+            {products.length === 0 && !loading ? (
+              <p className="empty-message">No products found. Create one to get started!</p>
+            ) : (
+              <div className="products-table-wrapper">
+                <table className="admin-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Category</th>
+                      <th>Brand</th>
+                      <th>SKU</th>
+                      <th>Image</th>
+                      <th>Desc?</th>
+                      <th>Featured</th>
+                      <th>Status</th>
+                      <th>Created</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {visibleProducts.map(product => (
+                      <tr key={product._id}>
+                        <td className="col-name" data-label="Name">{product.name}</td>
+                        <td className="col-category" data-label="Category">{product.categorySlug?.name || '-'}</td>
+                        <td className="col-brand" data-label="Brand">{product.brand || '-'}</td>
+                        <td className="col-sku" data-label="SKU">{product.sku || '-'}</td>
+                        <td className="col-image-flag" data-label="Image">
+                          {hasProductImage(product) ? 'Yes' : 'No'}
+                        </td>
+                        <td className="col-desc-flag" data-label="Desc?">{product.description?.trim() ? 'Yes' : 'No'}</td>
+                        <td data-label="Featured">{product.featured ? 'Yes' : 'No'}</td>
+                        <td className="col-status" data-label="Status">
+                          <span className={`status-badge ${product.isActive ? 'active' : 'inactive'}`}>
+                            {product.isActive ? '✓ Active' : '○ Inactive'}
+                          </span>
+                        </td>
+                        <td className="col-date" data-label="Created">
+                          {formatDate(product.createdAt)}
+                        </td>
+                        <td className="col-actions" data-label="Actions">
+                          <button
+                            className="btn-edit"
+                            onClick={() => handleEdit(product)}
+                            disabled={loading}
+                          >
+                            ✏️ Edit
+                          </button>
+                          <button
+                            className="btn-delete"
+                            onClick={() => handleDelete(product._id)}
+                            disabled={loading}
+                          >
+                            🗑️ Delete
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+        </div>
+
+        <aside className="admin-side-stack admin-products-editor-rail">
+          {showForm ? (
+            <div className="admin-form-container admin-products-editor-panel">
+              <div className="admin-panel-heading">
+                <div>
+                  <h2>{editingId ? 'Edit Product' : 'Add New Product'}</h2>
+                  <p>Keep names and pricing clear, then add specs and variants only where they help the buyer understand the product.</p>
+                </div>
+              </div>
+              <form onSubmit={handleSubmit} className="admin-form">
+                <div className="admin-form-group">
+                  <label>Product Name *</label>
+                  <input
+                    type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    placeholder="e.g., Surgical Gloves"
+                    required
+                  />
+                </div>
+
+                <div className="admin-form-group full-width">
+                  <label>Category *</label>
+                  <select
+                    name="categorySlug"
+                    value={formData.categorySlug}
+                    onChange={(e) => handleCategorySelect(e.target.value)}
+                    required
+                  >
+                    <option value="">Select a category</option>
+                    {ungroupedLeafCategories.map((cat) => (
                       <option key={cat._id} value={cat._id}>
                         {cat.name}
                       </option>
                     ))}
-                  </optgroup>
-                ))}
-              </select>
-              <div className="admin-category-selected">
-                {categories.find(cat => cat._id === formData.categorySlug)?.parent?.name
-                  ? `${categories.find(cat => cat._id === formData.categorySlug)?.parent?.name} → ${categories.find(cat => cat._id === formData.categorySlug)?.name}`
-                  : (categories.find(cat => cat._id === formData.categorySlug)?.name || 'Choose a category to place this product correctly.')}
-              </div>
-            </div>
-
-            <div className="admin-form-group">
-              <label>Brand</label>
-              <input
-                type="text"
-                name="brand"
-                value={formData.brand}
-                onChange={handleInputChange}
-                placeholder="e.g., MedStar"
-              />
-            </div>
-
-            <div className="admin-form-group">
-              <label>Base Price (BHD)</label>
-              <input
-                type="number"
-                name="basePrice"
-                value={formData.basePrice}
-                onChange={handleInputChange}
-                placeholder="e.g., 1.250"
-                step="0.001"
-              />
-            </div>
-
-            <div className="admin-form-group">
-              <label>SKU</label>
-              <input
-                type="text"
-                name="sku"
-                value={formData.sku}
-                onChange={handleInputChange}
-                placeholder="e.g., SKU-12345"
-              />
-            </div>
-
-            <div className="admin-form-group">
-              <label>Image URL</label>
-              <input
-                type="text"
-                name="image"
-                value={formData.image}
-                onChange={handleInputChange}
-                placeholder="e.g., /Categories/gloves.webp"
-              />
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleImageUpload}
-              />
-            </div>
-
-            <div className="admin-form-group">
-              <label>Gallery Images</label>
-              <input
-                type="file"
-                accept="image/*"
-                multiple
-                onChange={handleGalleryUpload}
-              />
-              {formData.images?.length > 0 && (
-                <div className="admin-image-grid">
-                  {formData.images.map(img => (
-                    <div className="admin-image-thumb" key={img}>
-                      <img src={img} alt="Gallery" />
-                      <button
-                        type="button"
-                        className="admin-image-remove"
-                        onClick={() => removeGalleryImage(img)}
-                      >
-                        ✕
-                      </button>
-                    </div>
-                  ))}
+                    {groupedLeafCategories.map((group) => (
+                      <optgroup key={group.parent._id} label={group.parent.name}>
+                        {group.children.map((cat) => (
+                          <option key={cat._id} value={cat._id}>
+                            {cat.name}
+                          </option>
+                        ))}
+                      </optgroup>
+                    ))}
+                  </select>
+                  <div className="admin-category-selected">
+                    {categories.find(cat => cat._id === formData.categorySlug)?.parent?.name
+                      ? `${categories.find(cat => cat._id === formData.categorySlug)?.parent?.name} → ${categories.find(cat => cat._id === formData.categorySlug)?.name}`
+                      : (categories.find(cat => cat._id === formData.categorySlug)?.name || 'Choose a category to place this product correctly.')}
+                  </div>
                 </div>
-              )}
-            </div>
 
-            <div className="admin-form-group full-width">
-              <div className="admin-section-header">
-                <label>Description</label>
-                <button type="button" className="admin-btn-secondary" onClick={handleAutoDescription}>
-                  Auto-generate
-                </button>
-              </div>
-              <textarea
-                name="description"
-                value={formData.description}
-                onChange={handleInputChange}
-                placeholder="Product description..."
-                rows="4"
-              />
-            </div>
+                <div className="admin-form-group">
+                  <label>Brand</label>
+                  <input
+                    type="text"
+                    name="brand"
+                    value={formData.brand}
+                    onChange={handleInputChange}
+                    placeholder="e.g., MedStar"
+                  />
+                </div>
 
-            <div className="admin-form-group full-width">
-              <div className="admin-section-header">
-                <label>Specifications</label>
-                <button type="button" className="admin-btn-secondary" onClick={addSpec}>
-                  + Add Spec
-                </button>
-              </div>
-              <div className="admin-inline-grid">
-                {specs.map((spec, index) => (
-                  <div key={`spec-${index}`} className="admin-inline-row">
-                    <input
-                      type="text"
-                      placeholder="Label"
-                      value={spec.label || ''}
-                      onChange={(e) => updateSpec(index, 'label', e.target.value)}
-                    />
-                    <input
-                      type="text"
-                      placeholder="Value"
-                      value={spec.value || ''}
-                      onChange={(e) => updateSpec(index, 'value', e.target.value)}
-                    />
-                    <button type="button" className="btn-delete" onClick={() => removeSpec(index)}>
-                      Remove
+                <div className="admin-form-group">
+                  <label>Base Price (BHD)</label>
+                  <input
+                    type="number"
+                    name="basePrice"
+                    value={formData.basePrice}
+                    onChange={handleInputChange}
+                    placeholder="e.g., 1.250"
+                    step="0.001"
+                  />
+                </div>
+
+                <div className="admin-form-group">
+                  <label>SKU</label>
+                  <input
+                    type="text"
+                    name="sku"
+                    value={formData.sku}
+                    onChange={handleInputChange}
+                    placeholder="e.g., SKU-12345"
+                  />
+                </div>
+
+                <div className="admin-form-group">
+                  <label>Image URL</label>
+                  <input
+                    type="text"
+                    name="image"
+                    value={formData.image}
+                    onChange={handleInputChange}
+                    placeholder="e.g., /Categories/gloves.webp"
+                  />
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                  />
+                </div>
+
+                <div className="admin-form-group">
+                  <label>Gallery Images</label>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    onChange={handleGalleryUpload}
+                  />
+                  {formData.images?.length > 0 && (
+                    <div className="admin-image-grid">
+                      {formData.images.map(img => (
+                        <div className="admin-image-thumb" key={img}>
+                          <img src={img} alt="Gallery" />
+                          <button
+                            type="button"
+                            className="admin-image-remove"
+                            onClick={() => removeGalleryImage(img)}
+                          >
+                            ✕
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                <div className="admin-form-group full-width">
+                  <div className="admin-section-header">
+                    <label>Description</label>
+                    <button type="button" className="admin-btn-secondary" onClick={handleAutoDescription}>
+                      Auto-generate
                     </button>
                   </div>
-                ))}
-              </div>
-            </div>
+                  <textarea
+                    name="description"
+                    value={formData.description}
+                    onChange={handleInputChange}
+                    placeholder="Product description..."
+                    rows="4"
+                  />
+                </div>
 
-            <div className="admin-form-group full-width">
-              <div className="admin-section-header">
-                <label>Variants</label>
-                <button type="button" className="admin-btn-secondary" onClick={addVariant}>
-                  + Add Variant
-                </button>
-              </div>
-              <p className="admin-helper-text">Variants are types. Add sizes/colors under each type. Size price overrides the variant/base price when set.</p>
-              {variants.map((variant, index) => (
-                <div key={`variant-${index}`} className="admin-variant-card">
-                  <div className="admin-inline-row">
-                    <input
-                      type="text"
-                      placeholder="Type (e.g., Adult / Kids)"
-                      value={variant.type || ''}
-                      onChange={(e) => updateVariant(index, 'type', e.target.value)}
-                    />
-                    <input
-                      type="text"
-                      placeholder="Type image URL"
-                      value={variant.image || ''}
-                      onChange={(e) => updateVariant(index, 'image', e.target.value)}
-                    />
-                    <input
-                      type="number"
-                      placeholder="Price (BHD)"
-                      value={variant.price ?? ''}
-                      step="0.001"
-                      onChange={(e) => updateVariant(index, 'price', e.target.value)}
-                    />
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={(e) => {
-                        handleVariantImageUpload(index, e.target.files?.[0]);
-                        e.target.value = '';
-                      }}
-                    />
+                <div className="admin-form-group full-width">
+                  <div className="admin-section-header">
+                    <label>Specifications</label>
+                    <button type="button" className="admin-btn-secondary" onClick={addSpec}>
+                      + Add Spec
+                    </button>
                   </div>
-                  <div className="admin-variant-sizes">
-                    <div className="admin-variant-sizes-header">
-                      <span>Sizes</span>
-                      <button
-                        type="button"
-                        className="admin-btn-secondary"
-                        onClick={() => addVariantSize(index)}
-                      >
-                        + Add Size
-                      </button>
-                    </div>
-                    {(variant.sizes || []).map((entry, sizeIndex) => (
-                      <div key={`variant-${index}-size-${sizeIndex}`} className="admin-inline-row">
+                  <div className="admin-inline-grid">
+                    {specs.map((spec, index) => (
+                      <div key={`spec-${index}`} className="admin-inline-row">
                         <input
                           type="text"
-                          placeholder="Size"
-                          value={entry.size || ''}
-                          onChange={(e) => updateVariantSize(index, sizeIndex, 'size', e.target.value)}
+                          placeholder="Label"
+                          value={spec.label || ''}
+                          onChange={(e) => updateSpec(index, 'label', e.target.value)}
                         />
                         <input
                           type="text"
-                          placeholder="Inches"
-                          value={entry.inches || ''}
-                          onChange={(e) => updateVariantSize(index, sizeIndex, 'inches', e.target.value)}
+                          placeholder="Value"
+                          value={spec.value || ''}
+                          onChange={(e) => updateSpec(index, 'value', e.target.value)}
                         />
-                        <input
-                          type="text"
-                          placeholder="Color"
-                          value={entry.color || ''}
-                          onChange={(e) => updateVariantSize(index, sizeIndex, 'color', e.target.value)}
-                        />
-                        <input
-                          type="number"
-                          placeholder="Size Price (BHD)"
-                          value={entry.price ?? ''}
-                          step="0.001"
-                          onChange={(e) => updateVariantSize(index, sizeIndex, 'price', e.target.value)}
-                        />
-                        <label className="admin-inline-checkbox">
-                          <input
-                            type="checkbox"
-                            checked={entry.outOfStock === true}
-                            onChange={(e) => updateVariantSize(index, sizeIndex, 'outOfStock', e.target.checked)}
-                          />
-                          Out of stock
-                        </label>
-                        <button
-                          type="button"
-                          className="btn-delete"
-                          onClick={() => removeVariantSize(index, sizeIndex)}
-                        >
+                        <button type="button" className="btn-delete" onClick={() => removeSpec(index)}>
                           Remove
                         </button>
                       </div>
                     ))}
                   </div>
-                  <div className="admin-inline-row">
-                    <label className="admin-inline-checkbox">
-                      <input
-                        type="checkbox"
-                        checked={variant.isActive !== false}
-                        onChange={(e) => updateVariant(index, 'isActive', e.target.checked)}
-                      />
-                      Active
-                    </label>
+                </div>
+
+                <div className="admin-form-group full-width">
+                  <div className="admin-section-header">
+                    <label>Variants</label>
+                    <button type="button" className="admin-btn-secondary" onClick={addVariant}>
+                      + Add Variant
+                    </button>
                   </div>
-                  <button type="button" className="btn-delete" onClick={() => removeVariant(index)}>
-                    Remove Variant
+                  <p className="admin-helper-text">Variants are types. Add sizes/colors under each type. Size price overrides the variant/base price when set.</p>
+                  {variants.map((variant, index) => (
+                    <div key={`variant-${index}`} className="admin-variant-card">
+                      <div className="admin-inline-row">
+                        <input
+                          type="text"
+                          placeholder="Type (e.g., Adult / Kids)"
+                          value={variant.type || ''}
+                          onChange={(e) => updateVariant(index, 'type', e.target.value)}
+                        />
+                        <input
+                          type="text"
+                          placeholder="Type image URL"
+                          value={variant.image || ''}
+                          onChange={(e) => updateVariant(index, 'image', e.target.value)}
+                        />
+                        <input
+                          type="number"
+                          placeholder="Price (BHD)"
+                          value={variant.price ?? ''}
+                          step="0.001"
+                          onChange={(e) => updateVariant(index, 'price', e.target.value)}
+                        />
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => {
+                            handleVariantImageUpload(index, e.target.files?.[0]);
+                            e.target.value = '';
+                          }}
+                        />
+                      </div>
+                      <div className="admin-variant-sizes">
+                        <div className="admin-variant-sizes-header">
+                          <span>Sizes</span>
+                          <button
+                            type="button"
+                            className="admin-btn-secondary"
+                            onClick={() => addVariantSize(index)}
+                          >
+                            + Add Size
+                          </button>
+                        </div>
+                        {(variant.sizes || []).map((entry, sizeIndex) => (
+                          <div key={`variant-${index}-size-${sizeIndex}`} className="admin-inline-row">
+                            <input
+                              type="text"
+                              placeholder="Size"
+                              value={entry.size || ''}
+                              onChange={(e) => updateVariantSize(index, sizeIndex, 'size', e.target.value)}
+                            />
+                            <input
+                              type="text"
+                              placeholder="Inches"
+                              value={entry.inches || ''}
+                              onChange={(e) => updateVariantSize(index, sizeIndex, 'inches', e.target.value)}
+                            />
+                            <input
+                              type="text"
+                              placeholder="Color"
+                              value={entry.color || ''}
+                              onChange={(e) => updateVariantSize(index, sizeIndex, 'color', e.target.value)}
+                            />
+                            <input
+                              type="number"
+                              placeholder="Size Price (BHD)"
+                              value={entry.price ?? ''}
+                              step="0.001"
+                              onChange={(e) => updateVariantSize(index, sizeIndex, 'price', e.target.value)}
+                            />
+                            <label className="admin-inline-checkbox">
+                              <input
+                                type="checkbox"
+                                checked={entry.outOfStock === true}
+                                onChange={(e) => updateVariantSize(index, sizeIndex, 'outOfStock', e.target.checked)}
+                              />
+                              Out of stock
+                            </label>
+                            <button
+                              type="button"
+                              className="btn-delete"
+                              onClick={() => removeVariantSize(index, sizeIndex)}
+                            >
+                              Remove
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                      <div className="admin-inline-row">
+                        <label className="admin-inline-checkbox">
+                          <input
+                            type="checkbox"
+                            checked={variant.isActive !== false}
+                            onChange={(e) => updateVariant(index, 'isActive', e.target.checked)}
+                          />
+                          Active
+                        </label>
+                      </div>
+                      <button type="button" className="btn-delete" onClick={() => removeVariant(index)}>
+                        Remove Variant
+                      </button>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="admin-form-group checkbox">
+                  <input
+                    type="checkbox"
+                    id="isActive"
+                    name="isActive"
+                    checked={formData.isActive}
+                    onChange={handleInputChange}
+                  />
+                  <label htmlFor="isActive">Active (visible to customers)</label>
+                </div>
+
+                <div className="admin-form-group checkbox">
+                  <input
+                    type="checkbox"
+                    id="featured"
+                    name="featured"
+                    checked={formData.featured}
+                    onChange={handleInputChange}
+                  />
+                  <label htmlFor="featured">Featured on Shop</label>
+                </div>
+
+                <div className="admin-form-actions">
+                  <button type="submit" className="admin-btn-primary" disabled={loading}>
+                    {loading ? 'Saving...' : editingId ? 'Update Product' : 'Create Product'}
+                  </button>
+                  <button type="button" className="admin-btn-secondary" onClick={handleCancel}>
+                    Cancel
                   </button>
                 </div>
-              ))}
+              </form>
             </div>
+          ) : null}
 
-            <div className="admin-form-group checkbox">
-              <input
-                type="checkbox"
-                id="isActive"
-                name="isActive"
-                checked={formData.isActive}
-                onChange={handleInputChange}
-              />
-              <label htmlFor="isActive">Active (visible to customers)</label>
-            </div>
-
-            <div className="admin-form-group checkbox">
-              <input
-                type="checkbox"
-                id="featured"
-                name="featured"
-                checked={formData.featured}
-                onChange={handleInputChange}
-              />
-              <label htmlFor="featured">Featured on Shop</label>
-            </div>
-
-            <div className="admin-form-actions">
-              <button type="submit" className="admin-btn-primary" disabled={loading}>
-                {loading ? 'Saving...' : editingId ? 'Update Product' : 'Create Product'}
-              </button>
-              <button type="button" className="admin-btn-secondary" onClick={handleCancel}>
-                Cancel
-              </button>
-            </div>
-          </form>
-        </div>
-      )}
-
-      <div className="admin-products-list admin-categories-list">
-        <div className="admin-panel-heading">
-          <div>
-            <h2>All Products ({visibleProducts.length})</h2>
-            <p>Review the filtered catalog, fix missing media or descriptions, and open items for editing when details need cleanup.</p>
-          </div>
-          <div className="admin-summary-pills">
-            <span className="admin-summary-pill"><strong>{activeProducts}</strong> active</span>
-            <span className="admin-summary-pill"><strong>{featuredProducts}</strong> featured</span>
-            <span className="admin-summary-pill"><strong>{withImages}</strong> with images</span>
-          </div>
-        </div>
-        <div className="admin-products-toolbar">
-          <label htmlFor="admin-product-search">Search products</label>
-          <div className="admin-search-control">
-            <span className="admin-search-icon" aria-hidden="true">⌕</span>
-            <input
-              id="admin-product-search"
-              type="text"
-              placeholder="Search by name, brand, or SKU"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-            {searchTerm && (
-              <button
-                type="button"
-                className="admin-search-clear"
-                onClick={() => setSearchTerm('')}
-              >
-                Clear
-              </button>
-            )}
-          </div>
-        </div>
-        
-        {loading && !showForm && <p className="loading">Loading...</p>}
-
-        {products.length === 0 && !loading ? (
-          <p className="empty-message">No products found. Create one to get started!</p>
-        ) : (
-          <div className="products-table-wrapper">
-            <table className="admin-table">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Category</th>
-                  <th>Brand</th>
-                  <th>SKU</th>
-                  <th>Image</th>
-                  <th>Desc?</th>
-                  <th>Featured</th>
-                  <th>Status</th>
-                  <th>Created</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {visibleProducts.map(product => (
-                  <tr key={product._id}>
-                    <td className="col-name" data-label="Name">{product.name}</td>
-                    <td className="col-category" data-label="Category">{product.categorySlug?.name || '-'}</td>
-                    <td className="col-brand" data-label="Brand">{product.brand || '-'}</td>
-                    <td className="col-sku" data-label="SKU">{product.sku || '-'}</td>
-                    <td className="col-image-flag" data-label="Image">
-                      {hasProductImage(product) ? 'Yes' : 'No'}
-                    </td>
-                    <td className="col-desc-flag" data-label="Desc?">{product.description?.trim() ? 'Yes' : 'No'}</td>
-                    <td data-label="Featured">{product.featured ? 'Yes' : 'No'}</td>
-                    <td className="col-status" data-label="Status">
-                      <span className={`status-badge ${product.isActive ? 'active' : 'inactive'}`}>
-                        {product.isActive ? '✓ Active' : '○ Inactive'}
-                      </span>
-                    </td>
-                    <td className="col-date" data-label="Created">
-                      {formatDate(product.createdAt)}
-                    </td>
-                    <td className="col-actions" data-label="Actions">
-                      <button
-                        className="btn-edit"
-                        onClick={() => handleEdit(product)}
-                        disabled={loading}
-                      >
-                        ✏️ Edit
-                      </button>
-                      <button
-                        className="btn-delete"
-                        onClick={() => handleDelete(product._id)}
-                        disabled={loading}
-                      >
-                        🗑️ Delete
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </div>
-        </div>
-
-        <aside className="admin-side-stack">
           <div className="admin-note-card">
             <h3>Product Maintenance Tips</h3>
             <ul>
