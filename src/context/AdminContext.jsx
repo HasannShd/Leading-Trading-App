@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { authFetch, getStoredToken } from '../services/authFetch';
 import { getTokenExpiryMs } from '../utils/sessionToken';
 import { storePasswordCredential } from '../utils/credentialStore';
+import { getTrustedDeviceToken, setTrustedDeviceToken } from '../utils/trustedDevice';
 
 export const AdminContext = createContext();
 
@@ -26,9 +27,11 @@ export const AdminProvider = ({ children }) => {
     setError(null);
   };
 
-  const resetAdminSession = useCallback((shouldRedirect = true) => {
+  const resetAdminSession = useCallback((shouldRedirect = true, clearTrustedDevice = false) => {
     localStorage.removeItem('adminToken');
-    localStorage.removeItem('adminTrustedDeviceToken');
+    if (clearTrustedDevice) {
+      setTrustedDeviceToken('admin', '');
+    }
     setAdmin(null);
     setError(null);
     if (shouldRedirect && isAdminRoute && location.pathname !== adminLoginPath) {
@@ -61,7 +64,7 @@ export const AdminProvider = ({ children }) => {
         }
       } else {
         resetAdminSession(false);
-        if (token && response.status === 401) {
+        if ((token || getTrustedDeviceToken('admin')) && response.status === 401) {
           setError('Your admin session expired. Please sign in again.');
         }
       }
@@ -102,7 +105,7 @@ export const AdminProvider = ({ children }) => {
     setLoading(true);
     setError(null);
     try {
-      const trustedDeviceToken = localStorage.getItem('adminTrustedDeviceToken') || '';
+      const trustedDeviceToken = getTrustedDeviceToken('admin');
       const response = await authFetch('/auth/sign-in', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -128,6 +131,9 @@ export const AdminProvider = ({ children }) => {
       }
 
       applyAdminSession(data.token, data.user);
+      if (data.trustedDeviceToken) {
+        setTrustedDeviceToken('admin', data.trustedDeviceToken);
+      }
       storePasswordCredential({
         identifier: username,
         password,
@@ -164,7 +170,7 @@ export const AdminProvider = ({ children }) => {
         localStorage.setItem('adminToken', data.token);
       }
       if (data.trustedDeviceToken) {
-        localStorage.setItem('adminTrustedDeviceToken', data.trustedDeviceToken);
+        setTrustedDeviceToken('admin', data.trustedDeviceToken);
       }
       applyAdminSession(data.token, data.user);
       return true;

@@ -1,6 +1,7 @@
 import { createContext, useState, useEffect } from 'react';
 import { authFetch } from '../services/authFetch';
 import { storePasswordCredential } from '../utils/credentialStore';
+import { getTrustedDeviceToken, setTrustedDeviceToken } from '../utils/trustedDevice';
 
 export const AuthContext = createContext();
 
@@ -11,7 +12,8 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-    if (token) {
+    const trustedDeviceToken = getTrustedDeviceToken('user');
+    if (token || trustedDeviceToken) {
       fetchMe(token);
     } else {
       setLoading(false);
@@ -19,7 +21,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const fetchMe = async (token = localStorage.getItem('token')) => {
-    if (!token) {
+    if (!token && !getTrustedDeviceToken('user')) {
       setUser(null);
       setLoading(false);
       return;
@@ -32,6 +34,9 @@ export const AuthProvider = ({ children }) => {
       } else {
         setUser(null);
         localStorage.removeItem('token');
+        if (response.status === 401) {
+          setTrustedDeviceToken('user', '');
+        }
       }
     } catch (err) {
       setUser(null);
@@ -45,11 +50,12 @@ export const AuthProvider = ({ children }) => {
     setLoading(true);
     setError(null);
     try {
+      const trustedDeviceToken = getTrustedDeviceToken('user');
       const response = await authFetch('/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         scope: 'user',
-        body: JSON.stringify({ identifier, password }),
+        body: JSON.stringify({ identifier, password, trustedDeviceToken }),
       });
       const data = await response.json();
       if (!response.ok) {
@@ -57,6 +63,9 @@ export const AuthProvider = ({ children }) => {
         return false;
       }
       localStorage.setItem('token', data.token);
+      if (data.trustedDeviceToken) {
+        setTrustedDeviceToken('user', data.trustedDeviceToken);
+      }
       await storePasswordCredential({
         identifier,
         password,
@@ -88,6 +97,9 @@ export const AuthProvider = ({ children }) => {
         return false;
       }
       localStorage.setItem('token', data.token);
+      if (data.trustedDeviceToken) {
+        setTrustedDeviceToken('user', data.trustedDeviceToken);
+      }
       await fetchMe(data.token);
       return true;
     } catch (err) {

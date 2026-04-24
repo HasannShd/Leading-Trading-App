@@ -4,6 +4,7 @@ import { portalApi } from '../services/portalApi';
 import { authFetch, getStoredToken } from '../services/authFetch';
 import { getTokenExpiryMs } from '../utils/sessionToken';
 import { storePasswordCredential } from '../utils/credentialStore';
+import { getTrustedDeviceToken, setTrustedDeviceToken } from '../utils/trustedDevice';
 
 export const StaffContext = createContext();
 
@@ -14,8 +15,11 @@ export const StaffProvider = ({ children }) => {
   const location = useLocation();
   const isStaffRoute = location.pathname.startsWith('/staff');
 
-  const clearStaffSession = useCallback((message = '') => {
+  const clearStaffSession = useCallback((message = '', clearTrustedDevice = false) => {
     localStorage.removeItem('staffToken');
+    if (clearTrustedDevice) {
+      setTrustedDeviceToken('sales_staff', '');
+    }
     setStaff(null);
     setError(message);
   }, []);
@@ -26,7 +30,7 @@ export const StaffProvider = ({ children }) => {
       const response = await authFetch('/auth/me', { scope: 'sales_staff' });
       const data = await response.json();
       if (!response.ok || data.user?.role !== 'sales_staff') {
-        clearStaffSession(token && response.status === 401 ? 'Your session expired. Please sign in again.' : '');
+        clearStaffSession((token || getTrustedDeviceToken('sales_staff')) && response.status === 401 ? 'Your session expired. Please sign in again.' : '');
         return;
       }
       setStaff(data.user);
@@ -66,11 +70,12 @@ export const StaffProvider = ({ children }) => {
     setLoading(true);
     setError(null);
     try {
+      const trustedDeviceToken = getTrustedDeviceToken('sales_staff');
       const response = await authFetch('/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         scope: 'sales_staff',
-        body: JSON.stringify({ identifier, password }),
+        body: JSON.stringify({ identifier, password, trustedDeviceToken }),
       });
       const data = await response.json();
       if (!response.ok) throw new Error(data.err || 'Login failed');
@@ -80,6 +85,9 @@ export const StaffProvider = ({ children }) => {
       }
 
       localStorage.setItem('staffToken', data.token);
+      if (data.trustedDeviceToken) {
+        setTrustedDeviceToken('sales_staff', data.trustedDeviceToken);
+      }
       setStaff(data.user);
       setLoading(false);
       storePasswordCredential({
