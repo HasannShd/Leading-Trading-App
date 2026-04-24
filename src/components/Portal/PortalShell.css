@@ -641,6 +641,26 @@
   background: linear-gradient(180deg, rgba(255, 251, 245, 0.98), rgba(247, 240, 229, 0.96));
 }
 
+.staff-order-history-workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 0.92fr) minmax(340px, 0.58fr);
+  gap: 1rem;
+  align-items: start;
+}
+
+.staff-order-history-list {
+  max-height: min(68vh, 780px);
+  overflow-y: auto;
+  padding-right: 0.15rem;
+  scrollbar-width: thin;
+}
+
+.staff-order-history-detail {
+  position: sticky;
+  top: 150px;
+  align-self: start;
+}
+
 .portal-record-copy {
   color: var(--navy-700);
   line-height: 1.55;
@@ -1973,8 +1993,23 @@
   .portal-admin-sidebar,
   .portal-grid,
   .portal-record-list,
-  .portal-inline-list {
+  .portal-inline-list,
+  .staff-order-history-workspace {
     gap: 0.6rem;
+  }
+
+  .staff-order-history-workspace {
+    grid-template-columns: 1fr;
+  }
+
+  .staff-order-history-list {
+    max-height: none;
+    overflow: visible;
+    padding-right: 0;
+  }
+
+  .staff-order-history-detail {
+    position: static;
   }
 
   .portal-card,

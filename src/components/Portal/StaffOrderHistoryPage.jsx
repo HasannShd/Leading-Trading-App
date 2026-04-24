@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { portalApi } from '../../services/portalApi';
 import { formatOrderItem } from '../../utils/orderItems';
@@ -10,7 +10,6 @@ const getFacilityName = (order) => order.companyName || order.client?.name || 'F
 
 const StaffOrderHistoryPage = () => {
   const location = useLocation();
-  const selectedOrderRef = useRef(null);
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState('');
@@ -76,11 +75,6 @@ const StaffOrderHistoryPage = () => {
     setSelectedOrderId((current) => (current === selectedOrder._id ? current : selectedOrder._id));
   }, [selectedOrder]);
 
-  useEffect(() => {
-    if (!selectedOrder || !selectedOrderRef.current) return;
-    selectedOrderRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }, [selectedOrder]);
-
   return (
     <section className="portal-page">
       <div className="portal-card dark">
@@ -141,8 +135,8 @@ const StaffOrderHistoryPage = () => {
           {loading ? (
             <div className="portal-record-card">Loading...</div>
           ) : filteredOrders.length ? (
-            <>
-              <div className="portal-inline-list compact">
+            <div className="staff-order-history-workspace">
+              <div className="portal-inline-list compact staff-order-history-list">
                 {filteredOrders.map((order) => (
                   <button
                     key={order._id}
@@ -161,7 +155,7 @@ const StaffOrderHistoryPage = () => {
               </div>
 
               {selectedOrder ? (
-                <div className="portal-record-card" ref={selectedOrderRef}>
+                <div className="portal-record-card staff-order-history-detail">
                   <h3 className="portal-record-title">{getFacilityName(selectedOrder)}</h3>
                   <div className="portal-record-meta">
                     <span className="portal-badge status">{selectedOrder.status}</span>
@@ -219,7 +213,7 @@ const StaffOrderHistoryPage = () => {
                   )}
                 </div>
               ) : null}
-            </>
+            </div>
           ) : (
             <div className="portal-empty-state">
               <h3 className="portal-empty-title">No matching orders</h3>
