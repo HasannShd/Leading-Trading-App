@@ -2989,3 +2989,193 @@
     overflow: hidden;
   }
 }
+
+/* Admin tablet/mobile layout
+   The admin shell becomes unusably narrow before the 640px phone breakpoint
+   because the desktop sidebar still occupies 280px. Collapse it earlier. */
+@media (max-width: 920px) {
+  .portal-shell.admin-shell {
+    padding-bottom: calc(5.25rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  .portal-admin-topbar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.7rem;
+    width: min(100% - 1rem, 46rem);
+    margin-top: 0.55rem;
+    padding: 0.78rem;
+    border-radius: 1.15rem;
+  }
+
+  .portal-admin-topbar-meta {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    align-items: center;
+    width: 100%;
+  }
+
+  .portal-admin-topbar .portal-mobile-menu-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .portal-admin-topbar .portal-inline-button.ghost {
+    min-height: 2.35rem;
+    padding: 0.4rem 0.7rem;
+  }
+
+  .portal-admin-app-shell {
+    grid-template-columns: 1fr;
+    width: min(100% - 1rem, 46rem);
+    gap: 0.75rem;
+  }
+
+  .portal-admin-main,
+  .portal-admin-sidebar,
+  .portal-admin-sidebar-card {
+    min-width: 0;
+  }
+
+  .portal-admin-main {
+    order: 1;
+  }
+
+  .portal-admin-sidebar {
+    order: 2;
+    transition: grid-template-rows 0.3s cubic-bezier(0.23, 1, 0.32, 1),
+                opacity 0.22s ease;
+  }
+
+  .portal-admin-sidebar:not(.open) {
+    display: grid !important;
+    grid-template-rows: 0fr;
+    overflow: hidden;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .portal-admin-sidebar.open {
+    display: grid;
+    grid-template-rows: 1fr;
+    overflow: visible;
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .portal-admin-sidebar > * {
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .portal-admin-sidebar-card {
+    position: static;
+    padding: 0.82rem;
+    border-radius: 1rem;
+  }
+
+  .portal-admin-sidebar-header {
+    margin-bottom: 0.6rem;
+  }
+
+  .portal-admin-nav-copy,
+  .portal-admin-status-pill,
+  .portal-admin-nav-section {
+    display: none;
+  }
+
+  .portal-admin-nav {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.45rem;
+    margin-top: 0;
+  }
+
+  .portal-admin-link {
+    display: grid;
+    justify-items: center;
+    align-content: center;
+    min-height: 3.15rem;
+    padding: 0.48rem 0.35rem;
+    border-radius: 0.9rem;
+    text-align: center;
+    font-size: 0.72rem;
+    line-height: 1.08;
+  }
+
+  .portal-admin-link-icon {
+    width: auto;
+    font-size: 0.78rem;
+  }
+
+  .portal-admin-link.active {
+    color: #ffffff;
+    background: linear-gradient(135deg, #183251, #264c73);
+    border-color: rgba(13, 26, 43, 0.08);
+  }
+
+  .portal-admin-link.active::before {
+    display: none;
+  }
+
+  .admin-mobile-bottom-nav {
+    position: fixed;
+    left: 0.65rem;
+    right: 0.65rem;
+    bottom: calc(0.65rem + env(safe-area-inset-bottom, 0px));
+    z-index: 45;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 0.35rem;
+    padding: 0.35rem;
+    border-radius: 1rem;
+    background: rgba(248, 245, 238, 0.94);
+    border: 1px solid rgba(13, 26, 43, 0.08);
+    box-shadow: 0 14px 28px rgba(12, 24, 42, 0.1);
+    backdrop-filter: blur(18px);
+  }
+
+  .admin-mobile-bottom-nav .portal-mobile-bottom-link {
+    display: grid;
+    justify-items: center;
+    align-content: center;
+    gap: 0.12rem;
+    min-height: 2.45rem;
+    padding: 0.35rem 0.12rem;
+    border-radius: 0.7rem;
+    text-decoration: none;
+    font-size: 0.6rem;
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    color: var(--navy-700);
+    background: rgba(255, 255, 255, 0.82);
+    border: 1px solid rgba(13, 26, 43, 0.06);
+  }
+
+  .admin-mobile-bottom-nav .portal-mobile-bottom-link.active {
+    color: #ffffff;
+    background: linear-gradient(135deg, #183251, #264c73);
+  }
+
+  .admin-mobile-bottom-nav .portal-mobile-bottom-icon {
+    width: auto;
+    font-size: 0.66rem;
+  }
+
+  .portal-admin-dashboard {
+    gap: 0.8rem;
+  }
+}
+
+@media (max-width: 520px) {
+  .portal-admin-snapshot-grid,
+  .portal-admin-module-grid,
+  .portal-admin-lower-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .portal-admin-hero-pills {
+    display: none;
+  }
+}
