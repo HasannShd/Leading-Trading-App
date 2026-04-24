@@ -42,6 +42,22 @@
   transform: scale(0.94);
 }
 
+.back-to-top--admin {
+  bottom: 92px;
+  right: 24px;
+  z-index: 260;
+  background: linear-gradient(135deg, #17345a 0%, #0b1d34 100%);
+  border-color: rgba(255, 255, 255, 0.18);
+  box-shadow: 0 16px 34px rgba(12, 24, 42, 0.22), 0 2px 8px rgba(7, 17, 31, 0.14);
+}
+
+@media (pointer: fine) {
+  .back-to-top--admin:hover {
+    background: linear-gradient(135deg, #214d7a 0%, #102944 100%);
+    box-shadow: 0 20px 40px rgba(12, 24, 42, 0.3), 0 2px 8px rgba(7, 17, 31, 0.18);
+  }
+}
+
 /* Keep above portal bottom nav on mobile */
 @media (max-width: 700px) {
   .back-to-top {
@@ -49,6 +65,11 @@
     right: 16px;
     width: 44px;
     height: 44px;
+  }
+
+  .back-to-top--admin {
+    bottom: calc(4.95rem + env(safe-area-inset-bottom, 0px));
+    right: 1rem;
   }
 }
 

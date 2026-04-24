@@ -169,7 +169,7 @@ const AppShell = () => {
       {showAdminChat ? <PortalChatWidget role="admin" /> : null}
       {showStaffChat ? <PortalChatWidget role="sales_staff" /> : null}
       {!isPortalRoute && <Footer />}
-      {!isPortalRoute && <BackToTop />}
+      {(!isPortalRoute || isAdminRoute) && <BackToTop variant={isAdminRoute ? 'admin' : 'default'} />}
     </div>
   );
 };
