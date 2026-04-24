@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { portalApi } from '../../services/portalApi';
 import { authFetch, API_URL } from '../../services/authFetch';
@@ -25,7 +25,6 @@ const AdminResourcePage = ({ config }) => {
   const [filters, setFilters] = useState(() => ({ user: '', status: '', date: isOrdersPage ? todayInputValue() : '', search: '' }));
   const [staffSummary, setStaffSummary] = useState(null);
   const [selectedRecordId, setSelectedRecordId] = useState('');
-  const selectedRecordRef = useRef(null);
   const [searchParams] = useSearchParams();
   const focusedRecordId = searchParams.get('focus') || '';
   const statusOptions = config.statusOptions || [];
@@ -82,11 +81,6 @@ const AdminResourcePage = ({ config }) => {
       setSelectedRecordId(focusedRecordId);
     }
   }, [focusedRecordId, records]);
-
-  useEffect(() => {
-    if (!selectedRecordId || !selectedRecordRef.current) return;
-    selectedRecordRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }, [selectedRecordId]);
 
   useEffect(() => {
     if (!filters.user) {
@@ -373,8 +367,8 @@ const AdminResourcePage = ({ config }) => {
         <div className="portal-record-list" style={{ marginTop: '1rem' }}>
           {records.length ? (
             isReportsPage ? (
-              <>
-                <div className="portal-inline-list compact">
+              <div className="portal-split-detail-workspace">
+                <div className="portal-inline-list compact portal-split-detail-list">
                   {records.map((record) => (
                     <button
                       key={record._id}
@@ -391,7 +385,7 @@ const AdminResourcePage = ({ config }) => {
                   ))}
                 </div>
                 {selectedReport && (
-                  <div className="portal-record-card" ref={selectedRecordRef}>
+                  <div className="portal-record-card portal-split-detail-panel">
                     <h3 className="portal-record-title">{selectedReport.user?.name || selectedReport.user?.username || 'Daily Report'}</h3>
                     <div className="portal-record-meta">
                       <span>{selectedReport.date ? formatPortalDate(selectedReport.date) : '-'}</span>
@@ -418,10 +412,10 @@ const AdminResourcePage = ({ config }) => {
                     )}
                   </div>
                 )}
-              </>
+              </div>
             ) : isOrdersPage ? (
-              <>
-                <div className="portal-inline-list compact">
+              <div className="portal-split-detail-workspace">
+                <div className="portal-inline-list compact portal-split-detail-list">
                   {records.map((record) => (
                     <button
                       key={record._id}
@@ -439,7 +433,7 @@ const AdminResourcePage = ({ config }) => {
                   ))}
                 </div>
                 {selectedReport && (
-                  <div className="portal-record-card" ref={selectedRecordRef}>
+                  <div className="portal-record-card portal-split-detail-panel">
                     <h3 className="portal-record-title">{getOrderFacilityName(selectedReport)}</h3>
                     <div className="portal-record-meta">
                       <span>{selectedReport.createdAt ? formatPortalDateTime(selectedReport.createdAt) : '-'}</span>
@@ -527,10 +521,10 @@ const AdminResourcePage = ({ config }) => {
                     )}
                   </div>
                 )}
-              </>
+              </div>
             ) : isClientsPage ? (
-              <>
-                <div className="portal-inline-list compact">
+              <div className="portal-split-detail-workspace">
+                <div className="portal-inline-list compact portal-split-detail-list">
                   {records.map((record) => (
                     <button
                       key={record._id}
@@ -548,7 +542,7 @@ const AdminResourcePage = ({ config }) => {
                   ))}
                 </div>
                 {selectedReport && (
-                  <div className="portal-record-card" ref={selectedRecordRef}>
+                  <div className="portal-record-card portal-split-detail-panel">
                     <h3 className="portal-record-title">{selectedReport.name || 'Client'}</h3>
                     <div className="portal-detail-grid">
                       <div className="portal-detail-item">
@@ -606,10 +600,10 @@ const AdminResourcePage = ({ config }) => {
                     )}
                   </div>
                 )}
-              </>
+              </div>
             ) : isVisitsPage ? (
-              <>
-                <div className="portal-inline-list compact">
+              <div className="portal-split-detail-workspace">
+                <div className="portal-inline-list compact portal-split-detail-list">
                   {records.map((record) => (
                     <button
                       key={record._id}
@@ -627,7 +621,7 @@ const AdminResourcePage = ({ config }) => {
                   ))}
                 </div>
                 {selectedReport && (
-                  <div className="portal-record-card" ref={selectedRecordRef}>
+                  <div className="portal-record-card portal-split-detail-panel">
                     <h3 className="portal-record-title">{selectedReport.client?.name || selectedReport.clientName || 'Visit'}</h3>
                     <div className="portal-detail-grid">
                       <div className="portal-detail-item">
@@ -669,7 +663,7 @@ const AdminResourcePage = ({ config }) => {
                     )}
                   </div>
                 )}
-              </>
+              </div>
             ) : (
               records.map((record) => (isAttendancePage ? renderAttendanceRecord(record) : renderDefaultRecord(record)))
             )

@@ -42,17 +42,11 @@ const StaffOrdersPage = () => {
   const [message, setMessage] = useState('');
   const [orderAttachments, setOrderAttachments] = useState([]);
   const draftKey = 'staff-draft:orders-workspace';
-  const orderFormRef = useRef(null);
   const customerNameInputRef = useRef(null);
 
-  const jumpToOrderForm = (focusField = false) => {
+  const focusCustomerField = () => {
     window.requestAnimationFrame(() => {
-      orderFormRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      if (focusField) {
-        window.requestAnimationFrame(() => {
-          customerNameInputRef.current?.focus();
-        });
-      }
+      customerNameInputRef.current?.focus();
     });
   };
 
@@ -129,7 +123,7 @@ const StaffOrdersPage = () => {
       contactPerson: selectedClient.contactPerson || '',
       customerName: selectedClient.contactPerson || selectedClient.name || '',
     }));
-    jumpToOrderForm(true);
+    focusCustomerField();
   }, [selectedClient]);
 
   const updateClientForm = (field, value) =>
@@ -157,7 +151,7 @@ const StaffOrdersPage = () => {
       setClientForm(blankClient);
       setShowClientForm(false);
       setMessage('Client created and selected for the order.');
-      jumpToOrderForm(true);
+      focusCustomerField();
     } catch (err) {
       setMessage(err.message);
     } finally {
@@ -363,7 +357,7 @@ const StaffOrdersPage = () => {
           )}
         </div>
 
-        <div className="portal-card" ref={orderFormRef}>
+        <div className="portal-card">
           <div className="portal-section-head">
             <div>
               <div className="portal-brand-kicker">New Order</div>

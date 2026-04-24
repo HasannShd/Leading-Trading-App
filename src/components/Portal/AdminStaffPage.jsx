@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { portalApi } from '../../services/portalApi';
 import { authFetch } from '../../services/authFetch';
 import { formatPortalDate, formatPortalDateTime } from '../../utils/portalDate';
@@ -73,8 +73,6 @@ const AdminStaffPage = () => {
   const [staffSummary, setStaffSummary] = useState(null);
   const [summaryLoading, setSummaryLoading] = useState(false);
   const [selectedClientId, setSelectedClientId] = useState('');
-  const summaryRef = useRef(null);
-  const selectedClientRef = useRef(null);
   const [expandedSections, setExpandedSections] = useState({
     attendance: false,
     reports: false,
@@ -142,16 +140,6 @@ const AdminStaffPage = () => {
       .catch((err) => setMessage(err.message))
       .finally(() => setSummaryLoading(false));
   }, [selectedStaffId, summaryDate]);
-
-  useEffect(() => {
-    if (!selectedStaffId || !summaryRef.current) return;
-    summaryRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }, [selectedStaffId]);
-
-  useEffect(() => {
-    if (!selectedClient || !selectedClientRef.current) return;
-    selectedClientRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }, [selectedClient]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -229,7 +217,7 @@ const AdminStaffPage = () => {
   return (
     <div className="portal-admin-page">
       <section className="portal-page">
-      <div className="portal-card" ref={summaryRef}>
+      <div className="portal-card">
         <div className="portal-section-head">
           <div>
             <div className="portal-brand-kicker">Staff Access</div>
@@ -276,6 +264,7 @@ const AdminStaffPage = () => {
         </form>
       </div>
 
+      <div className="portal-split-detail-workspace portal-admin-staff-workspace">
       <div className="portal-card">
         <div className="portal-section-head">
           <div>
@@ -331,7 +320,7 @@ const AdminStaffPage = () => {
         </div>
       </div>
 
-      <div className="portal-card">
+      <div className="portal-card portal-split-detail-panel">
         <div className="portal-section-head">
           <div>
             <div className="portal-brand-kicker">Staff Summary</div>
@@ -546,7 +535,7 @@ const AdminStaffPage = () => {
                         ))}
                       </div>
                       {selectedClient && (
-                        <div className="portal-record-card" ref={selectedClientRef}>
+                        <div className="portal-record-card portal-split-detail-panel">
                           <h3 className="portal-record-title">{selectedClient.name}</h3>
                           {renderDetailGrid([
                             ['Created', formatPortalDateTime(selectedClient.createdAt)],
@@ -619,6 +608,7 @@ const AdminStaffPage = () => {
             <p className="portal-empty-copy">Choose one staff user above to view a full wrapped summary and export their report.</p>
           </div>
         )}
+      </div>
       </div>
       </section>
     </div>

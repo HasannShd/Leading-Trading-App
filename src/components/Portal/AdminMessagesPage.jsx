@@ -25,7 +25,6 @@ const AdminMessagesPage = () => {
   const [uploading, setUploading] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const threadRequestIdRef = useRef(0);
-  const threadPanelRef = useRef(null);
 
   useEffect(() => {
     if (typeof window === 'undefined') return undefined;
@@ -122,11 +121,6 @@ const AdminMessagesPage = () => {
       return next;
     }, { replace: true });
   }, [loadThread, selectedStaffId, setSearchParams]);
-
-  useEffect(() => {
-    if (!selectedStaffId || !threadPanelRef.current) return;
-    threadPanelRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }, [selectedStaffId]);
 
   const threadSummaryByStaff = useMemo(
     () => new Map(threads.map((entry) => [entry.staffUser?._id, entry])),
@@ -293,7 +287,7 @@ const AdminMessagesPage = () => {
             </div>
           </div>
 
-          <div className="portal-thread-panel" ref={threadPanelRef} style={{ display: !showMobileThread && isMobile ? 'none' : undefined }}>
+          <div className="portal-thread-panel" style={{ display: !showMobileThread && isMobile ? 'none' : undefined }}>
             <div className="portal-section-head">
               <div>
                 <div className="portal-brand-kicker">Saved thread</div>
