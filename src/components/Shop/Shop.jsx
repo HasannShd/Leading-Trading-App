@@ -9,6 +9,33 @@ import { buildCategoryTree } from '../../utils/categoryTree';
 import { useScrollReveal } from '../../hooks/useScrollReveal';
 import './Shop.css';
 
+const PRODUCT_PAGE_SIZE = 12;
+const SHOP_CACHE_TTL_MS = 5 * 60 * 1000;
+const memoryCache = {
+  categories: null,
+  products: new Map(),
+};
+
+const getSessionCache = (key) => {
+  if (typeof window === 'undefined') return null;
+  try {
+    const cached = JSON.parse(window.sessionStorage.getItem(key) || 'null');
+    if (!cached || Date.now() - cached.savedAt > SHOP_CACHE_TTL_MS) return null;
+    return cached.value;
+  } catch (error) {
+    return null;
+  }
+};
+
+const setSessionCache = (key, value) => {
+  if (typeof window === 'undefined') return;
+  try {
+    window.sessionStorage.setItem(key, JSON.stringify({ savedAt: Date.now(), value }));
+  } catch (error) {
+    // Ignore storage limits/private mode.
+  }
+};
+
 const getProductPrice = (product) => {
   const firstVariantPrice = Number(product.variants?.[0]?.price);
   const basePrice = Number(product.basePrice || 0);
@@ -37,44 +64,62 @@ const Shop = () => {
   useScrollReveal(rootRef);
 
   const fetchCategories = useCallback(async () => {
+    const cacheKey = `${API_URL}:shop-categories`;
+    const cached = memoryCache.categories || getSessionCache(cacheKey);
+    if (cached) {
+      memoryCache.categories = cached;
+      setCategories(cached);
+      return;
+    }
+
     try {
       const response = await fetch(`${API_URL}/categories`);
       const data = await response.json();
-      setCategories(Array.isArray(data) ? data : []);
+      const nextCategories = Array.isArray(data) ? data : [];
+      memoryCache.categories = nextCategories;
+      setSessionCache(cacheKey, nextCategories);
+      setCategories(nextCategories);
     } catch (err) {
       console.error('Failed to load categories:', err);
     }
   }, [API_URL]);
 
   const fetchProducts = useCallback(async () => {
+    const params = new URLSearchParams({ page, limit: PRODUCT_PAGE_SIZE });
+    if (searchQuery) params.set('search', searchQuery);
+    if (category) params.set('category', category);
+    const cacheKey = `${API_URL}:shop-products:${params.toString()}`;
+    const cached = memoryCache.products.get(cacheKey) || getSessionCache(cacheKey);
+    if (cached) {
+      memoryCache.products.set(cacheKey, cached);
+      setProducts(cached.items);
+      setTotal(cached.total);
+      setError('');
+      setLoading(false);
+      return;
+    }
+
     setLoading(true);
     setError('');
     setBrokenImages({});
     try {
-      const params = new URLSearchParams({ page, limit: 12 });
-      if (searchQuery) params.set('search', searchQuery);
-      if (category) params.set('category', category);
       const response = await fetch(`${API_URL}/products?${params.toString()}`);
       const data = await response.json();
       const items = Array.isArray(data) ? data : (data.items || []);
-      let next = [...items];
-
-      if (sort === 'price') {
-        next.sort((a, b) => getProductPrice(a) - getProductPrice(b));
-      } else if (sort === 'name') {
-        next.sort((a, b) => a.name.localeCompare(b.name));
-      } else if (sort === 'featured') {
-        next.sort((a, b) => Number(b.featured === true) - Number(a.featured === true));
-      }
-
-      setProducts(next);
-      setTotal(Array.isArray(data) ? data.length : (data.total || 0));
+      const nextPayload = {
+        items,
+        total: Array.isArray(data) ? data.length : (data.total || 0),
+      };
+      memoryCache.products.set(cacheKey, nextPayload);
+      setSessionCache(cacheKey, nextPayload);
+      setProducts(nextPayload.items);
+      setTotal(nextPayload.total);
     } catch (err) {
       setError('We could not load the product catalog right now.');
     } finally {
       setLoading(false);
     }
-  }, [API_URL, page, searchQuery, category, sort]);
+  }, [API_URL, page, searchQuery, category]);
 
   useEffect(() => {
     fetchCategories();
@@ -100,7 +145,7 @@ const Shop = () => {
     setSearchQuery(q.trim());
   };
 
-  const totalPages = Math.max(1, Math.ceil(total / 12));
+  const totalPages = Math.max(1, Math.ceil(total / PRODUCT_PAGE_SIZE));
 
   // 3D tilt — only fires on pointer:fine (desktop); CSS handles the transform
   const handleTiltMove = useCallback((e) => {
@@ -123,6 +168,18 @@ const Shop = () => {
   );
 
   const categoryTree = useMemo(() => buildCategoryTree(categories), [categories]);
+  const sortedProducts = useMemo(() => {
+    const next = [...products];
+    if (sort === 'price') {
+      next.sort((a, b) => getProductPrice(a) - getProductPrice(b));
+    } else if (sort === 'name') {
+      next.sort((a, b) => String(a.name || '').localeCompare(String(b.name || '')));
+    } else if (sort === 'featured') {
+      next.sort((a, b) => Number(b.featured === true) - Number(a.featured === true));
+    }
+    return next;
+  }, [products, sort]);
+  const showInitialLoading = loading && products.length === 0;
 
   return (
     <main>
@@ -202,7 +259,7 @@ const Shop = () => {
           </form>
 
           <div className="shop-toolbar-meta animate-on-scroll">
-            <span>{products.length} shown on this page</span>
+            <span>{loading ? 'Updating catalog...' : `${sortedProducts.length} shown on this page`}</span>
             {(searchQuery || category) && (
               <button
                 className="btn"
@@ -220,7 +277,7 @@ const Shop = () => {
           </div>
         </section>
 
-        {loading ? (
+        {showInitialLoading ? (
           <SkeletonGrid count={12} />
         ) : error ? (
           <StatePanel
@@ -230,7 +287,7 @@ const Shop = () => {
             variant="error"
             action={<button className="btn primary" onClick={fetchProducts}>Try Again</button>}
           />
-        ) : products.length === 0 ? (
+        ) : sortedProducts.length === 0 ? (
           <StatePanel
             eyebrow="No Results"
             title="No products found"
@@ -238,7 +295,7 @@ const Shop = () => {
           />
         ) : (
           <div className="shop-grid animate-stagger" data-stagger-step="90ms">
-            {products.map((product) => {
+            {sortedProducts.map((product) => {
               const productImage = product.image || product.images?.[0] || '';
               const price = getProductPrice(product);
               const imageFailed = brokenImages[product._id] === true;
