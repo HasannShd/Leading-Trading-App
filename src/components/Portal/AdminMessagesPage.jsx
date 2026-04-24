@@ -25,6 +25,7 @@ const AdminMessagesPage = () => {
   const [uploading, setUploading] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const threadRequestIdRef = useRef(0);
+  const initialStaffIdRef = useRef(searchParams.get('staffId') || '');
 
   useEffect(() => {
     if (typeof window === 'undefined') return undefined;
@@ -45,18 +46,22 @@ const AdminMessagesPage = () => {
       const nextThreads = threadsResponse.data.threads || [];
       setStaff(nextStaff);
       setThreads(nextThreads);
-      const requestedStaffId = searchParams.get('staffId') || '';
-      if (requestedStaffId && nextStaff.some((entry) => entry._id === requestedStaffId)) {
-        setSelectedStaffId(requestedStaffId);
-      } else if (!selectedStaffId && !isMobile) {
-        setSelectedStaffId(nextThreads[0]?.staffUser?._id || nextStaff[0]?._id || '');
-      }
+      setSelectedStaffId((current) => {
+        if (current && nextStaff.some((entry) => entry._id === current)) return current;
+        const requestedStaffId = initialStaffIdRef.current;
+        if (requestedStaffId && nextStaff.some((entry) => entry._id === requestedStaffId)) {
+          initialStaffIdRef.current = '';
+          return requestedStaffId;
+        }
+        if (!isMobile) return nextThreads[0]?.staffUser?._id || nextStaff[0]?._id || '';
+        return '';
+      });
     } catch (err) {
       setMessage(err.message);
     } finally {
       setLoading(false);
     }
-  }, [isMobile, searchParams, selectedStaffId]);
+  }, [isMobile]);
 
   const loadThread = useCallback(async (staffId, markRead = true) => {
     if (!staffId) {
@@ -94,9 +99,13 @@ const AdminMessagesPage = () => {
         }
       }
     } catch (err) {
-      setMessage(err.message);
+      if (requestId === threadRequestIdRef.current) {
+        setMessage(err.message);
+      }
     } finally {
-      setThreadLoading(false);
+      if (requestId === threadRequestIdRef.current) {
+        setThreadLoading(false);
+      }
     }
   }, []);
 
