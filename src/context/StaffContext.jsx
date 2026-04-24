@@ -1,4 +1,5 @@
 import { createContext, useCallback, useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { portalApi } from '../services/portalApi';
 import { authFetch, getStoredToken } from '../services/authFetch';
 import { getTokenExpiryMs } from '../utils/sessionToken';
@@ -10,6 +11,8 @@ export const StaffProvider = ({ children }) => {
   const [staff, setStaff] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const location = useLocation();
+  const isStaffRoute = location.pathname.startsWith('/staff');
 
   const clearStaffSession = useCallback((message = '') => {
     localStorage.removeItem('staffToken');
@@ -36,8 +39,12 @@ export const StaffProvider = ({ children }) => {
   }, [clearStaffSession]);
 
   useEffect(() => {
-    fetchMe();
-  }, [fetchMe]);
+    if (isStaffRoute) {
+      fetchMe();
+    } else {
+      setLoading(false);
+    }
+  }, [fetchMe, isStaffRoute]);
 
   useEffect(() => {
     const token = getStoredToken('sales_staff');

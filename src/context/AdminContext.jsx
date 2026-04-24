@@ -74,8 +74,12 @@ export const AdminProvider = ({ children }) => {
   }, [resetAdminSession]);
 
   useEffect(() => {
-    verifyAdmin();
-  }, [verifyAdmin]);
+    if (isAdminRoute) {
+      verifyAdmin();
+    } else {
+      setLoading(false);
+    }
+  }, [isAdminRoute, verifyAdmin]);
 
   useEffect(() => {
     const token = getStoredToken('admin');
