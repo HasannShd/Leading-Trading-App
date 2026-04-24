@@ -49,6 +49,7 @@ export const AdminProvider = ({ children }) => {
   }, [admin, adminLoginPath, loading, location.pathname, navigate]);
 
   const verifyAdmin = useCallback(async () => {
+    const token = localStorage.getItem('adminToken');
     try {
       const response = await authFetch('/auth/me', { scope: 'admin' });
       if (response.ok) {
@@ -60,6 +61,9 @@ export const AdminProvider = ({ children }) => {
         }
       } else {
         resetAdminSession(false);
+        if (token && response.status === 401) {
+          setError('Your admin session expired. Please sign in again.');
+        }
       }
     } catch (err) {
       console.error('Auth verification failed:', err);
@@ -70,12 +74,7 @@ export const AdminProvider = ({ children }) => {
   }, [resetAdminSession]);
 
   useEffect(() => {
-    const token = localStorage.getItem('adminToken');
-    if (token) {
-      verifyAdmin();
-    } else {
-      setLoading(false);
-    }
+    verifyAdmin();
   }, [verifyAdmin]);
 
   useEffect(() => {

@@ -3,7 +3,7 @@
   "short_name": "LTE Staff",
   "description": "Leading Trading Est staff portal web app.",
   "id": "/staff/",
-  "start_url": "/staff/install",
+  "start_url": "/staff/dashboard",
   "scope": "/staff/",
   "display": "standalone",
   "background_color": "#0c1d32",

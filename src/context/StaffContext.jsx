@@ -19,16 +19,11 @@ export const StaffProvider = ({ children }) => {
 
   const fetchMe = useCallback(async () => {
     const token = localStorage.getItem('staffToken');
-    if (!token) {
-      setStaff(null);
-      setLoading(false);
-      return;
-    }
     try {
       const response = await authFetch('/auth/me', { scope: 'sales_staff' });
       const data = await response.json();
       if (!response.ok || data.user?.role !== 'sales_staff') {
-        clearStaffSession(response.status === 401 ? 'Your session expired. Please sign in again.' : '');
+        clearStaffSession(token && response.status === 401 ? 'Your session expired. Please sign in again.' : '');
         return;
       }
       setStaff(data.user);

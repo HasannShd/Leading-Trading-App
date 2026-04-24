@@ -12,6 +12,7 @@ export const authFetch = (path, options = {}) => {
   const token = getStoredToken(scope);
   return fetch(`${API_URL}${path}`, {
     ...rest,
+    credentials: 'include',
     headers: {
       ...scopeHeader(scope),
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
