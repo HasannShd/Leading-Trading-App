@@ -33,6 +33,10 @@ const StaffDashboard = () => {
   if (error) return <div className="portal-card">{error}</div>;
   if (!data) return <div className="portal-loading">Loading dashboard...</div>;
 
+  const attendanceStatus = data.attendanceStatus || {};
+  const quickStats = data.quickStats || {};
+  const recentActivity = Array.isArray(data.recentActivity) ? data.recentActivity : [];
+
   return (
     <section className="portal-page staff-dashboard-page">
       <div className="portal-card dark portal-staff-hero">
@@ -47,27 +51,27 @@ const StaffDashboard = () => {
         </div>
         <div className="portal-grid stats" style={{ marginTop: '1rem' }}>
           <div className="portal-stat">
-            <div className="portal-stat-value">{data.attendanceStatus?.checkedIn ? 'Checked In' : 'Not In'}</div>
+            <div className="portal-stat-value">{attendanceStatus.checkedIn ? 'Checked In' : 'Not In'}</div>
             <div className="portal-stat-label">
-              {data.attendanceStatus?.checkInTime ? formatPortalDateTime(data.attendanceStatus.checkInTime) : 'Attendance today'}
+              {attendanceStatus.checkInTime ? formatPortalDateTime(attendanceStatus.checkInTime) : 'Attendance today'}
             </div>
           </div>
           <div className="portal-stat">
-            <AnimatedCount value={data.quickStats.recentOrders} />
+            <AnimatedCount value={quickStats.recentOrders ?? 0} />
             <div className="portal-stat-label">Recent orders</div>
           </div>
           <div className="portal-stat">
-            <AnimatedCount value={data.quickStats.unreadNotifications} />
+            <AnimatedCount value={quickStats.unreadNotifications ?? 0} />
             <div className="portal-stat-label">Unread notifications</div>
           </div>
           <div className="portal-stat">
-            <AnimatedCount value={data.recentActivity.length} />
+            <AnimatedCount value={recentActivity.length} />
             <div className="portal-stat-label">Recent activity items</div>
           </div>
         </div>
         <div className="portal-actions" style={{ marginTop: '1rem' }}>
           <Link className="portal-button primary" to="/staff/attendance">
-            {data.attendanceStatus?.checkedOut ? 'Attendance Complete' : data.attendanceStatus?.checkedIn ? 'Open Check Out' : 'Open Check In'}
+            {attendanceStatus.checkedOut ? 'Attendance Complete' : attendanceStatus.checkedIn ? 'Open Check Out' : 'Open Check In'}
           </Link>
           <Link className="portal-button ghost" to="/staff/orders">
             New Order
@@ -103,8 +107,8 @@ const StaffDashboard = () => {
           </div>
         </div>
         <div className="portal-record-list" style={{ marginTop: '1rem' }}>
-          {data.recentActivity.length ? (
-            data.recentActivity.map((item) => (
+          {recentActivity.length ? (
+            recentActivity.map((item) => (
               <div className="portal-record-card" key={`${item.label}-${item.id}`}>
                 <h3 className="portal-record-title">{item.label}</h3>
                 <div className="portal-record-meta">

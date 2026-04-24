@@ -1,7 +1,7 @@
-import { createContext, useEffect, useState } from 'react';
+import { createContext, useCallback, useEffect, useState } from 'react';
 import { portalApi } from '../services/portalApi';
 import { authFetch, getStoredToken } from '../services/authFetch';
-import { getTokenExpiryMs, isTokenExpired } from '../utils/sessionToken';
+import { getTokenExpiryMs } from '../utils/sessionToken';
 import { storePasswordCredential } from '../utils/credentialStore';
 
 export const StaffContext = createContext();
@@ -11,7 +11,13 @@ export const StaffProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const fetchMe = async () => {
+  const clearStaffSession = useCallback((message = '') => {
+    localStorage.removeItem('staffToken');
+    setStaff(null);
+    setError(message);
+  }, []);
+
+  const fetchMe = useCallback(async () => {
     const token = localStorage.getItem('staffToken');
     if (!token) {
       setStaff(null);
@@ -22,42 +28,37 @@ export const StaffProvider = ({ children }) => {
       const response = await authFetch('/auth/me', { scope: 'sales_staff' });
       const data = await response.json();
       if (!response.ok || data.user?.role !== 'sales_staff') {
-        localStorage.removeItem('staffToken');
-        setStaff(null);
+        clearStaffSession(response.status === 401 ? 'Your session expired. Please sign in again.' : '');
         return;
       }
       setStaff(data.user);
+      setError(null);
     } catch (err) {
-      localStorage.removeItem('staffToken');
-      setStaff(null);
+      clearStaffSession('');
     } finally {
       setLoading(false);
     }
-  };
+  }, [clearStaffSession]);
 
   useEffect(() => {
     fetchMe();
-  }, []);
+  }, [fetchMe]);
 
   useEffect(() => {
     const token = getStoredToken('sales_staff');
     if (!token) return undefined;
-    if (isTokenExpired(token)) {
-      localStorage.removeItem('staffToken');
-      setStaff(null);
-      setLoading(false);
-      setError('Your session expired. Please sign in again.');
-      return undefined;
-    }
     const expiry = getTokenExpiryMs(token);
     if (!expiry) return undefined;
+    const delay = expiry - Date.now();
+    if (delay <= 0) {
+      fetchMe();
+      return undefined;
+    }
     const timeout = window.setTimeout(() => {
-      localStorage.removeItem('staffToken');
-      setStaff(null);
-      setError('Your session expired. Please sign in again.');
-    }, Math.max(expiry - Date.now(), 0));
+      fetchMe();
+    }, delay);
     return () => window.clearTimeout(timeout);
-  }, [staff]);
+  }, [fetchMe, staff]);
 
   const login = async (identifier, password) => {
     setLoading(true);
@@ -71,6 +72,10 @@ export const StaffProvider = ({ children }) => {
       });
       const data = await response.json();
       if (!response.ok) throw new Error(data.err || 'Login failed');
+      if (!data.token || data.user?.role !== 'sales_staff') {
+        clearStaffSession('');
+        throw new Error('Only staff accounts can access this area.');
+      }
 
       localStorage.setItem('staffToken', data.token);
       setStaff(data.user);
@@ -94,8 +99,7 @@ export const StaffProvider = ({ children }) => {
     } catch (err) {
       console.error('Logout failed', err);
     } finally {
-      localStorage.removeItem('staffToken');
-      setStaff(null);
+      clearStaffSession('');
     }
   };
 

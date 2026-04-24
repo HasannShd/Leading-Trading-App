@@ -1,7 +1,7 @@
 import { createContext, useState, useEffect, useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { authFetch, getStoredToken } from '../services/authFetch';
-import { getTokenExpiryMs, isTokenExpired } from '../utils/sessionToken';
+import { getTokenExpiryMs } from '../utils/sessionToken';
 import { storePasswordCredential } from '../utils/credentialStore';
 
 export const AdminContext = createContext();
@@ -81,20 +81,19 @@ export const AdminProvider = ({ children }) => {
   useEffect(() => {
     const token = getStoredToken('admin');
     if (!token) return undefined;
-    if (isTokenExpired(token)) {
-      resetAdminSession(false);
-      setLoading(false);
-      return undefined;
-    }
 
     const expiry = getTokenExpiryMs(token);
     if (!expiry) return undefined;
+    const delay = expiry - Date.now();
+    if (delay <= 0) {
+      verifyAdmin();
+      return undefined;
+    }
     const timeout = window.setTimeout(() => {
-      resetAdminSession();
-      setError('Your admin session expired. Please sign in again.');
-    }, Math.max(expiry - Date.now(), 0));
+      verifyAdmin();
+    }, delay);
     return () => window.clearTimeout(timeout);
-  }, [admin, location.pathname, resetAdminSession]);
+  }, [admin, location.pathname, resetAdminSession, verifyAdmin]);
 
   const login = async (username, password) => {
     setLoading(true);
