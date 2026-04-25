@@ -167,14 +167,26 @@
   margin-top: 12px;
 }
 
-.categories-table-wrapper {
+.categories-table-wrapper,
+.products-table-wrapper {
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .admin-table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 700px;
+  min-width: 720px;
+}
+
+/* Compact action buttons inside tables — never go full-width */
+.admin-table .btn-edit,
+.admin-table .btn-delete {
+  padding: 7px 11px;
+  font-size: 0.88rem;
+  border-radius: 12px;
+  white-space: nowrap;
+  width: auto;
 }
 
 .admin-table thead {
@@ -544,9 +556,14 @@
 
   .admin-add-btn,
   .admin-btn-primary,
-  .admin-btn-secondary,
-  .btn-edit,
-  .btn-delete {
+  .admin-btn-secondary {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* page-level edit/delete buttons (outside a table) go full width */
+  .admin-form-actions .btn-edit,
+  .admin-form-actions .btn-delete {
     width: 100%;
     justify-content: center;
   }
