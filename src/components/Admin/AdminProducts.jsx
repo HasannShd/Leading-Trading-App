@@ -697,9 +697,16 @@ const AdminProducts = () => {
           </div>
         </div>
 
-        <aside className="admin-side-stack admin-products-editor-rail">
+        <aside className={`admin-side-stack admin-products-editor-rail${showForm ? ' has-editor' : ''}`}>
           {showForm ? (
-            <div className="admin-form-container admin-products-editor-panel">
+            <>
+              <button
+                type="button"
+                className="admin-products-editor-backdrop"
+                aria-label="Close product editor"
+                onClick={handleCancel}
+              />
+              <div className="admin-form-container admin-products-editor-panel">
               <div className="admin-panel-heading">
                 <div>
                   <h2>{editingId ? 'Edit Product' : 'Add New Product'}</h2>
@@ -1015,10 +1022,11 @@ const AdminProducts = () => {
                   </button>
                 </div>
               </form>
-            </div>
+              </div>
+            </>
           ) : null}
 
-          <div className="admin-note-card">
+          <div className="admin-note-card admin-products-note-card">
             <h3>Product Maintenance Tips</h3>
             <ul>
               <li>Pick a category first so new products land in the right place.</li>
