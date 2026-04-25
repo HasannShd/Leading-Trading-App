@@ -186,7 +186,7 @@ const AdminLogin = () => {
                   onChange={(e) => setIdentifier(e.target.value)}
                   className="admin-form-input"
                   placeholder="Enter your admin email or username"
-                  autoComplete="username webauthn"
+                  autoComplete="username"
                   required
                 />
               </label>
