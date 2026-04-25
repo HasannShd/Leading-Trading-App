@@ -95,9 +95,10 @@ export const AdminProvider = ({ children }) => {
       verifyAdmin();
       return undefined;
     }
+    const safeDelay = Math.min(delay, 20 * 24 * 60 * 60 * 1000);
     const timeout = window.setTimeout(() => {
       verifyAdmin();
-    }, delay);
+    }, safeDelay);
     return () => window.clearTimeout(timeout);
   }, [admin, location.pathname, resetAdminSession, verifyAdmin]);
 

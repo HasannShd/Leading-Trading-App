@@ -60,9 +60,12 @@ export const StaffProvider = ({ children }) => {
       fetchMe();
       return undefined;
     }
+    // setTimeout delay is a signed 32-bit int; values above ~24.8 days fire immediately.
+    // Cap at 20 days so long-lived tokens (30d) don't cause an infinite refresh loop.
+    const safeDelay = Math.min(delay, 20 * 24 * 60 * 60 * 1000);
     const timeout = window.setTimeout(() => {
       fetchMe();
-    }, delay);
+    }, safeDelay);
     return () => window.clearTimeout(timeout);
   }, [fetchMe, staff]);
 

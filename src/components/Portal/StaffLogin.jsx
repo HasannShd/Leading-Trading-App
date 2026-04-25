@@ -43,7 +43,7 @@ const StaffLogin = () => {
           <form className="portal-form" onSubmit={handleSubmit}>
             <div className="portal-field">
               <label style={{ color: 'rgba(255,255,255,0.9)' }}>Username, email, or phone</label>
-              <input name="username" value={identifier} onChange={(e) => setIdentifier(e.target.value)} placeholder="Enter your username" autoComplete="username webauthn" />
+              <input name="username" value={identifier} onChange={(e) => setIdentifier(e.target.value)} placeholder="Enter your username" autoComplete="username" />
             </div>
             <div className="portal-field">
               <label style={{ color: 'rgba(255,255,255,0.9)' }}>Password</label>
