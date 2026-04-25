@@ -74,6 +74,7 @@ const Shop = () => {
 
     try {
       const response = await fetch(`${API_URL}/categories`);
+      if (!response.ok) return;
       const data = await response.json();
       const nextCategories = Array.isArray(data) ? data : [];
       memoryCache.categories = nextCategories;
