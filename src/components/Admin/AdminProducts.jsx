@@ -812,7 +812,7 @@ const AdminProducts = () => {
                   />
                 </div>
 
-                <div className="admin-form-group">
+                <div className="admin-form-group admin-media-field">
                   <label>Image URL</label>
                   <input
                     type="text"
@@ -821,21 +821,29 @@ const AdminProducts = () => {
                     onChange={handleInputChange}
                     placeholder="e.g., /Categories/gloves.webp"
                   />
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageUpload}
-                  />
+                  <label className="admin-upload-control">
+                    <span>Choose File</span>
+                    <small>{formData.image ? 'Main image set' : 'No file chosen'}</small>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageUpload}
+                    />
+                  </label>
                 </div>
 
-                <div className="admin-form-group">
+                <div className="admin-form-group admin-media-field">
                   <label>Gallery Images</label>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    multiple
-                    onChange={handleGalleryUpload}
-                  />
+                  <label className="admin-upload-control">
+                    <span>Choose Files</span>
+                    <small>{formData.images?.length ? `${formData.images.length} selected` : 'No files chosen'}</small>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      multiple
+                      onChange={handleGalleryUpload}
+                    />
+                  </label>
                   {formData.images?.length > 0 && (
                     <div className="admin-image-grid">
                       {formData.images.map(img => (
