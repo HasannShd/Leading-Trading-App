@@ -171,21 +171,6 @@
   table-layout: fixed;
 }
 
-.admin-products .admin-table th:nth-child(1),
-.admin-products .admin-table td:nth-child(1) {
-  width: 17%;
-}
-
-.admin-products .admin-table th:nth-child(2),
-.admin-products .admin-table td:nth-child(2) {
-  width: 13%;
-}
-
-.admin-products .admin-table th:nth-child(3),
-.admin-products .admin-table td:nth-child(3) {
-  width: 12%;
-}
-
 .admin-products .admin-table th:nth-child(4),
 .admin-products .admin-table td:nth-child(4),
 .admin-products .admin-table th:nth-child(5),
@@ -194,47 +179,61 @@
 .admin-products .admin-table td:nth-child(6),
 .admin-products .admin-table th:nth-child(7),
 .admin-products .admin-table td:nth-child(7) {
-  width: 7%;
+  display: none;
+}
+
+.admin-products .admin-table th:nth-child(1),
+.admin-products .admin-table td:nth-child(1) {
+  width: 22%;
+}
+
+.admin-products .admin-table th:nth-child(2),
+.admin-products .admin-table td:nth-child(2) {
+  width: 18%;
+}
+
+.admin-products .admin-table th:nth-child(3),
+.admin-products .admin-table td:nth-child(3) {
+  width: 18%;
 }
 
 .admin-products .admin-table th:nth-child(8),
 .admin-products .admin-table td:nth-child(8) {
-  width: 11%;
+  width: 16%;
 }
 
 .admin-products .admin-table th:nth-child(9),
 .admin-products .admin-table td:nth-child(9) {
-  width: 10%;
+  width: 14%;
 }
 
 .admin-products .admin-table th:nth-child(10),
 .admin-products .admin-table td:nth-child(10) {
-  width: 9%;
+  width: 12%;
 }
 
 .admin-products .admin-table .col-actions {
-  width: auto;
-  min-width: 0;
-  max-width: none;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 6px;
+  display: table-cell;
+  text-align: right;
   white-space: nowrap;
-  overflow: visible;
+  overflow: hidden;
 }
 
 .admin-products .admin-table .col-actions .btn-edit,
 .admin-products .admin-table .col-actions .btn-delete {
-  width: 34px;
-  height: 34px;
-  min-width: 34px;
+  width: 30px;
+  height: 30px;
+  min-width: 30px;
   padding: 0;
   display: inline-grid;
   place-items: center;
   overflow: hidden;
   font-size: 0;
   line-height: 1;
+}
+
+.admin-products .admin-table .col-actions .btn-edit + .btn-delete {
+  margin-left: 4px;
 }
 
 .admin-products .admin-table .col-actions .btn-edit::before,
