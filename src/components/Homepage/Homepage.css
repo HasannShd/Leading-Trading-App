@@ -1454,3 +1454,88 @@
     width: 100%;
   }
 }
+
+/* ── Editorial hero ─────────────────────────────────── */
+
+/* Replace the two-column grid with a full-width block */
+.home-hero__editorial {
+  width: 100%;
+}
+
+/* Update ambient gradient: vertical fade suits a text-only hero */
+.home-hero .home-hero__ambient {
+  background:
+    radial-gradient(circle at 12% 18%, rgba(198, 145, 89, 0.16), transparent 30%),
+    radial-gradient(circle at 84% 14%, rgba(198, 145, 89, 0.07), transparent 26%),
+    linear-gradient(180deg, rgba(4, 10, 18, 0.88) 0%, rgba(8, 18, 32, 0.72) 56%, rgba(10, 22, 40, 0) 100%);
+}
+
+/* Hero copy — vertical stack, tight spacing */
+.home-hero__editorial .home-hero__copy {
+  gap: 0;
+}
+
+/* Massive editorial headline */
+.home-hero__editorial .home-hero__copy h1 {
+  font-size: clamp(3.8rem, 9.2vw, 12.5rem);
+  max-width: none;
+  letter-spacing: -0.082em;
+  line-height: 0.84;
+  margin: 14px 0 0;
+}
+
+/* Thin gold rule + two-column layout below the headline */
+.home-hero__meta {
+  display: flex;
+  align-items: flex-start;
+  gap: 48px;
+  margin-top: 32px;
+  padding-top: 28px;
+  border-top: 1px solid rgba(248, 243, 235, 0.15);
+}
+
+.home-hero__meta > p {
+  flex: 1 1 auto;
+  margin: 0;
+  max-width: 56ch;
+}
+
+.home-hero__meta .home-hero__actions {
+  flex-shrink: 0;
+  align-self: center;
+}
+
+/* Trust pills */
+.home-hero__editorial .home-hero__notes {
+  margin-top: 30px;
+}
+
+/* Metrics row — slightly more prominent without image competing */
+.home-hero__editorial ~ .home-hero__metrics .hero-metric strong {
+  font-size: clamp(1.9rem, 3.6vw, 3.2rem);
+  letter-spacing: -0.04em;
+}
+
+@media (max-width: 900px) {
+  .home-hero__meta {
+    flex-direction: column;
+    gap: 22px;
+  }
+
+  .home-hero__meta .home-hero__actions {
+    align-self: flex-start;
+  }
+}
+
+@media (max-width: 760px) {
+  .home-hero__editorial .home-hero__copy h1 {
+    font-size: clamp(3.2rem, 10vw, 6rem);
+    letter-spacing: -0.06em;
+  }
+
+  .home-hero__meta {
+    margin-top: 24px;
+    padding-top: 22px;
+    gap: 18px;
+  }
+}

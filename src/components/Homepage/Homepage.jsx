@@ -204,35 +204,24 @@ const HomePage = () => {
       <section className="home-hero">
         <div className="home-hero__ambient" />
         <div className="home-hero__depth" aria-hidden="true" data-hero-parallax="bg" />
-        <div className="home-shell home-hero__grid">
+        <div className="home-shell home-hero__editorial">
           <div className="home-hero__copy animate-stagger" data-stagger-step="120ms">
             <span className="home-eyebrow animate-on-scroll">Leading Trading Est. | Bahrain</span>
             <h1 className="animate-on-scroll">Reliable medical and industrial supply with disciplined sourcing, quality assurance, and dependable local support.</h1>
-            <p className="animate-on-scroll">
-              Leading Trading Est. supports hospitals, clinics, practices, and operational teams across Bahrain with structured sourcing, established supplier relationships, and coordinated delivery execution.
-            </p>
-
-            <div className="home-hero__actions animate-on-scroll">
-              <Link className="home-btn home-btn--primary" to="/contact">Request a Quote</Link>
-              <Link className="home-btn home-btn--ghost" to="/categories">Explore Categories</Link>
+            <div className="home-hero__meta">
+              <p className="animate-on-scroll">
+                Leading Trading Est. supports hospitals, clinics, practices, and operational teams across Bahrain with structured sourcing, established supplier relationships, and coordinated delivery execution.
+              </p>
+              <div className="home-hero__actions animate-on-scroll">
+                <Link className="home-btn home-btn--primary" to="/contact">Request a Quote</Link>
+                <Link className="home-btn home-btn--ghost" to="/categories">Explore Categories</Link>
+              </div>
             </div>
-
             <div className="home-hero__notes animate-stagger" data-stagger-step="90ms">
               <span className="animate-on-scroll">NHRA-Approved</span>
               <span className="animate-on-scroll">Medical and industrial sourcing</span>
               <span className="animate-on-scroll">Dependable Bahrain-based support</span>
             </div>
-          </div>
-
-          <div className="home-hero__visual animate-on-scroll" data-hero-parallax="slow">
-            <div className="hero-orb" />
-            <div className="hero-visual__frame">
-              <img src={`${baseUrl}lp.jpg`} alt="Leading Trading Est operational environment" loading="eager" fetchPriority="high" decoding="async" />
-            </div>
-            <article className="hero-visual__panel" data-hero-parallax="fast">
-              <small>Operational confidence</small>
-              <strong>Supplier coordination, delivery planning, and account support aligned under one operating team.</strong>
-            </article>
           </div>
         </div>
 
