@@ -1457,85 +1457,98 @@
 
 /* ── Editorial hero ─────────────────────────────────── */
 
-/* Replace the two-column grid with a full-width block */
 .home-hero__editorial {
   width: 100%;
+  max-width: 900px;
 }
 
-/* Update ambient gradient: vertical fade suits a text-only hero */
+/* Refined ambient — subtle gold warmth, soft vertical fade */
 .home-hero .home-hero__ambient {
   background:
-    radial-gradient(circle at 12% 18%, rgba(198, 145, 89, 0.16), transparent 30%),
-    radial-gradient(circle at 84% 14%, rgba(198, 145, 89, 0.07), transparent 26%),
-    linear-gradient(180deg, rgba(4, 10, 18, 0.88) 0%, rgba(8, 18, 32, 0.72) 56%, rgba(10, 22, 40, 0) 100%);
+    radial-gradient(circle at 10% 22%, rgba(198, 145, 89, 0.13), transparent 32%),
+    radial-gradient(circle at 78% 10%, rgba(59, 103, 154, 0.1), transparent 28%),
+    linear-gradient(180deg, rgba(4, 10, 18, 0.9) 0%, rgba(8, 18, 32, 0.68) 52%, rgba(10, 22, 40, 0) 100%);
 }
 
-/* Hero copy — vertical stack, tight spacing */
+/* Tighten vertical rhythm */
 .home-hero__editorial .home-hero__copy {
   gap: 0;
 }
 
-/* Massive editorial headline */
+/* Refined headline — prominent but not overwhelming */
 .home-hero__editorial .home-hero__copy h1 {
-  font-size: clamp(3.8rem, 9.2vw, 12.5rem);
-  max-width: none;
-  letter-spacing: -0.082em;
-  line-height: 0.84;
+  font-size: clamp(2.6rem, 4.8vw, 6rem);
+  max-width: 18ch;
+  letter-spacing: -0.055em;
+  line-height: 1.0;
   margin: 14px 0 0;
+  text-shadow: 0 8px 28px rgba(4, 8, 18, 0.28);
 }
 
-/* Thin gold rule + two-column layout below the headline */
+/* Gold accent rule — narrower and more delicate */
 .home-hero__meta {
-  display: flex;
-  align-items: flex-start;
-  gap: 48px;
-  margin-top: 32px;
-  padding-top: 28px;
-  border-top: 1px solid rgba(248, 243, 235, 0.15);
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+  gap: 36px 52px;
+  align-items: center;
+  margin-top: 36px;
+  padding-top: 26px;
+  border-top: 1px solid rgba(198, 145, 89, 0.22);
 }
 
 .home-hero__meta > p {
-  flex: 1 1 auto;
   margin: 0;
-  max-width: 56ch;
+  max-width: 52ch;
+  font-size: 1.05rem;
+  line-height: 1.84;
+  color: rgba(239, 230, 217, 0.86);
 }
 
 .home-hero__meta .home-hero__actions {
-  flex-shrink: 0;
-  align-self: center;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.home-hero__meta .home-btn {
+  width: 100%;
+  justify-content: center;
 }
 
 /* Trust pills */
 .home-hero__editorial .home-hero__notes {
-  margin-top: 30px;
-}
-
-/* Metrics row — slightly more prominent without image competing */
-.home-hero__editorial ~ .home-hero__metrics .hero-metric strong {
-  font-size: clamp(1.9rem, 3.6vw, 3.2rem);
-  letter-spacing: -0.04em;
+  margin-top: 28px;
 }
 
 @media (max-width: 900px) {
+  .home-hero__editorial {
+    max-width: none;
+  }
+
   .home-hero__meta {
-    flex-direction: column;
-    gap: 22px;
+    grid-template-columns: 1fr;
+    gap: 20px;
   }
 
   .home-hero__meta .home-hero__actions {
-    align-self: flex-start;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .home-hero__meta .home-btn {
+    width: auto;
   }
 }
 
 @media (max-width: 760px) {
   .home-hero__editorial .home-hero__copy h1 {
-    font-size: clamp(3.2rem, 10vw, 6rem);
-    letter-spacing: -0.06em;
+    font-size: clamp(2.4rem, 8.5vw, 4rem);
+    letter-spacing: -0.045em;
   }
 
   .home-hero__meta {
-    margin-top: 24px;
-    padding-top: 22px;
-    gap: 18px;
+    margin-top: 26px;
+    padding-top: 20px;
   }
 }
