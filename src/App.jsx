@@ -1,7 +1,7 @@
 // src/App.jsx
 
 import './App.css';
-import { Suspense, lazy, useContext, useEffect } from 'react';
+import { Suspense, lazy, useContext, useLayoutEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import AppErrorBoundary from './components/AppErrorBoundary.jsx';
 import Header from './components/Header/Header.jsx';
@@ -17,6 +17,7 @@ import { StaffContext, StaffProvider } from './context/StaffContext';
 import ProtectedStaffRoute from './components/ProtectedStaffRoute';
 import { staffModuleConfigs, adminModuleConfigs } from './components/Portal/portalConfigs';
 import PortalChatWidget from './components/Portal/PortalChatWidget';
+import { getLenis } from './utils/lenis';
 import './components/Portal/PortalShell.css';
 
 const HomePage = lazy(() => import('./components/Homepage/Homepage'));
@@ -175,11 +176,36 @@ const AppShell = () => {
 };
 
 const ScrollToTop = () => {
-  const { pathname } = useLocation();
+  const { pathname, search } = useLocation();
 
-  useEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
-  }, [pathname]);
+  useLayoutEffect(() => {
+    const resetScroll = () => {
+      const lenis = getLenis();
+      lenis?.scrollTo?.(0, { immediate: true, force: true });
+
+      window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+
+      document
+        .querySelectorAll('.app-main, .portal-shell, .portal-content, .portal-admin-main')
+        .forEach((element) => {
+          element.scrollTop = 0;
+          element.scrollLeft = 0;
+        });
+    };
+
+    resetScroll();
+    const firstFrame = window.requestAnimationFrame(resetScroll);
+    const secondFrame = window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(resetScroll);
+    });
+
+    return () => {
+      window.cancelAnimationFrame(firstFrame);
+      window.cancelAnimationFrame(secondFrame);
+    };
+  }, [pathname, search]);
 
   return null;
 };
