@@ -1,6 +1,7 @@
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
 import { useContext, useEffect, useMemo, useState } from 'react';
 import { AdminContext } from '../../context/AdminContext';
+import { resetPageScroll, schedulePageScrollReset } from '../../utils/scrollReset';
 import './PortalShell.css';
 
 const linkGroups = [
@@ -84,6 +85,7 @@ const AdminPortalLayout = () => {
 
   useEffect(() => {
     setNavOpen(false);
+    return schedulePageScrollReset();
   }, [location.pathname]);
 
   return (
@@ -130,7 +132,12 @@ const AdminPortalLayout = () => {
                 <div className="portal-admin-nav-section">{group.section}</div>
                 <nav className="portal-admin-nav">
                   {group.items.map((link) => (
-                    <NavLink key={link.to} to={link.to} className={({ isActive }) => `portal-admin-link${isActive ? ' active' : ''}`}>
+                    <NavLink
+                      key={link.to}
+                      to={link.to}
+                      onClick={resetPageScroll}
+                      className={({ isActive }) => `portal-admin-link${isActive ? ' active' : ''}`}
+                    >
                       <span className="portal-admin-link-icon" aria-hidden="true">{link.icon}</span>
                       <span>{link.label}</span>
                     </NavLink>
@@ -156,6 +163,7 @@ const AdminPortalLayout = () => {
           <NavLink
             key={item.to}
             to={item.to}
+            onClick={resetPageScroll}
             className={({ isActive }) => `portal-mobile-bottom-link${isActive || location.pathname.startsWith(item.to) ? ' active' : ''}`}
           >
             <span className="portal-mobile-bottom-icon" aria-hidden="true">{item.icon}</span>

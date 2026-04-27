@@ -17,7 +17,7 @@ import { StaffContext, StaffProvider } from './context/StaffContext';
 import ProtectedStaffRoute from './components/ProtectedStaffRoute';
 import { staffModuleConfigs, adminModuleConfigs } from './components/Portal/portalConfigs';
 import PortalChatWidget from './components/Portal/PortalChatWidget';
-import { getLenis } from './utils/lenis';
+import { schedulePageScrollReset } from './utils/scrollReset';
 import './components/Portal/PortalShell.css';
 
 const HomePage = lazy(() => import('./components/Homepage/Homepage'));
@@ -179,32 +179,11 @@ const ScrollToTop = () => {
   const { pathname, search } = useLocation();
 
   useLayoutEffect(() => {
-    const resetScroll = () => {
-      const lenis = getLenis();
-      lenis?.scrollTo?.(0, { immediate: true, force: true });
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual';
+    }
 
-      window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
-      document.documentElement.scrollTop = 0;
-      document.body.scrollTop = 0;
-
-      document
-        .querySelectorAll('.app-main, .portal-shell, .portal-content, .portal-admin-main')
-        .forEach((element) => {
-          element.scrollTop = 0;
-          element.scrollLeft = 0;
-        });
-    };
-
-    resetScroll();
-    const firstFrame = window.requestAnimationFrame(resetScroll);
-    const secondFrame = window.requestAnimationFrame(() => {
-      window.requestAnimationFrame(resetScroll);
-    });
-
-    return () => {
-      window.cancelAnimationFrame(firstFrame);
-      window.cancelAnimationFrame(secondFrame);
-    };
+    return schedulePageScrollReset();
   }, [pathname, search]);
 
   return null;

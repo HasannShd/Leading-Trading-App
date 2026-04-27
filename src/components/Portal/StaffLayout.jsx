@@ -1,7 +1,8 @@
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
-import { useContext, useMemo, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import { StaffContext } from '../../context/StaffContext';
 import { formatPortalPrettyDate } from '../../utils/portalDate';
+import { resetPageScroll, schedulePageScrollReset } from '../../utils/scrollReset';
 import './PortalShell.css';
 
 const navItems = [
@@ -31,6 +32,11 @@ const StaffLayout = () => {
   );
 
   const closeMenu = () => setMobileMenuOpen(false);
+
+  useEffect(() => {
+    setMobileMenuOpen(false);
+    return schedulePageScrollReset();
+  }, [location.pathname]);
 
   return (
     <div className="portal-shell staff-shell">
@@ -62,7 +68,10 @@ const StaffLayout = () => {
               <NavLink
                 key={item.to}
                 to={item.to}
-                onClick={closeMenu}
+                onClick={() => {
+                  closeMenu();
+                  resetPageScroll();
+                }}
                 className={({ isActive }) => `portal-staff-link${isActive || location.pathname.startsWith(item.to) ? ' active' : ''}`}
               >
                 {item.label}
@@ -79,6 +88,7 @@ const StaffLayout = () => {
           <NavLink
             key={item.to}
             to={item.to}
+            onClick={resetPageScroll}
             className={({ isActive }) => `portal-mobile-bottom-link${isActive || location.pathname.startsWith(item.to) ? ' active' : ''}`}
           >
             {item.label}
