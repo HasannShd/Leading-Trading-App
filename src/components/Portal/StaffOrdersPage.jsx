@@ -101,13 +101,17 @@ const StaffOrdersPage = () => {
 
   const filteredClients = useMemo(() => {
     const query = clientQuery.trim().toLowerCase();
-    if (!query) return clients;
+    if (!query) {
+      return selectedClientId
+        ? clients.filter((client) => client._id === selectedClientId)
+        : [];
+    }
     return clients.filter((client) =>
       [client.name, client.contactPerson, client.phone, client.email, client.location]
         .filter(Boolean)
         .some((value) => String(value).toLowerCase().includes(query))
     );
-  }, [clients, clientQuery]);
+  }, [clients, clientQuery, selectedClientId]);
 
   const selectedClient = useMemo(
     () => clients.find((client) => client._id === (selectedClientId || orderForm.client)),
@@ -311,8 +315,12 @@ const StaffOrdersPage = () => {
               ))
             ) : (
               <div className="portal-empty-state">
-                <h3 className="portal-empty-title">No matching clients</h3>
-                <p className="portal-empty-copy">Create a new client below if this customer is not already in your list.</p>
+                <h3 className="portal-empty-title">{clientQuery.trim() ? 'No matching clients' : 'Search to choose a client'}</h3>
+                <p className="portal-empty-copy">
+                  {clientQuery.trim()
+                    ? 'Create a new client below if this customer is not already in your list.'
+                    : 'Type a facility, contact, phone, or location to find the client without loading the full list.'}
+                </p>
               </div>
             )}
           </div>

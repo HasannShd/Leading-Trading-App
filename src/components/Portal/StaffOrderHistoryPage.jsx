@@ -44,7 +44,8 @@ const StaffOrderHistoryPage = () => {
     const query = orderQuery.trim().toLowerCase();
     const nextOrders = orders.filter((order) => {
       const matchesStatus = statusFilter === 'all' || order.status === statusFilter;
-      const matchesDate = !dateFilter || (order.requestedForDate || order.createdAt?.slice?.(0, 10)) === dateFilter;
+      const createdDate = order.createdAt?.slice?.(0, 10) || '';
+      const matchesDate = !dateFilter || order.requestedForDate === dateFilter || createdDate === dateFilter;
       if (!matchesStatus || !matchesDate) return false;
       if (!query) return true;
       return [
@@ -66,14 +67,16 @@ const StaffOrderHistoryPage = () => {
   }, [dateFilter, orderQuery, orders, sortOrder, statusFilter]);
 
   const selectedOrder = useMemo(
-    () => filteredOrders.find((order) => order._id === selectedOrderId) || filteredOrders[0] || null,
+    () => filteredOrders.find((order) => order._id === selectedOrderId) || null,
     [filteredOrders, selectedOrderId]
   );
 
   useEffect(() => {
-    if (!selectedOrder) return;
-    setSelectedOrderId((current) => (current === selectedOrder._id ? current : selectedOrder._id));
-  }, [selectedOrder]);
+    if (!selectedOrderId) return;
+    if (!filteredOrders.some((order) => order._id === selectedOrderId)) {
+      setSelectedOrderId('');
+    }
+  }, [filteredOrders, selectedOrderId]);
 
   return (
     <section className="portal-page">
@@ -129,6 +132,11 @@ const StaffOrderHistoryPage = () => {
             <option value="newest">Newest requested date</option>
             <option value="oldest">Oldest requested date</option>
           </select>
+          {dateFilter ? (
+            <button className="portal-inline-button ghost" type="button" onClick={() => setDateFilter('')}>
+              Clear date
+            </button>
+          ) : null}
         </div>
 
         <div className="portal-record-list" style={{ marginTop: '1rem' }}>
