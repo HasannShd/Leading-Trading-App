@@ -14,13 +14,15 @@ const normalizePortalValue = (value) => {
 };
 
 const buildParts = (value = new Date(), options = {}) => {
+  const date = normalizePortalValue(value);
+  const safeDate = Number.isNaN(date.getTime()) ? new Date() : date;
   const parts = new Intl.DateTimeFormat('en-CA', {
     timeZone: PORTAL_TIME_ZONE,
     year: 'numeric',
     month: '2-digit',
     day: '2-digit',
     ...options,
-  }).formatToParts(value);
+  }).formatToParts(safeDate);
 
   return Object.fromEntries(parts.filter((part) => part.type !== 'literal').map((part) => [part.type, part.value]));
 };

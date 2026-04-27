@@ -237,8 +237,8 @@
 .col-actions {
   display: flex;
   gap: 8px;
-  flex-wrap: wrap;
-  align-items: flex-start;
+  flex-wrap: nowrap;
+  align-items: center;
 }
 
 .btn-edit {

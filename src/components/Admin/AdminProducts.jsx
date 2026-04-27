@@ -14,6 +14,7 @@ const AdminProducts = () => {
   const [showForm, setShowForm] = useState(false);
   const [selectedCategoryId, setSelectedCategoryId] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
+  const [adminPage, setAdminPage] = useState(1);
   const [specs, setSpecs] = useState([]);
   const [variants, setVariants] = useState([]);
   const [formData, setFormData] = useState({
@@ -83,6 +84,19 @@ const AdminProducts = () => {
     fetchProducts();
     fetchCategories();
   }, [fetchProducts, fetchCategories]);
+
+  useEffect(() => {
+    setAdminPage(1);
+  }, [searchTerm, selectedCategoryId]);
+
+  useEffect(() => {
+    if (showForm) {
+      document.body.style.overflowY = 'hidden';
+    } else {
+      document.body.style.overflowY = '';
+    }
+    return () => { document.body.style.overflowY = ''; };
+  }, [showForm]);
 
   const formatDate = (value) => {
     if (!value) return '-';
@@ -491,6 +505,8 @@ const AdminProducts = () => {
     setError(null);
   };
 
+  const ADMIN_PAGE_SIZE = 20;
+
   const visibleProducts = products
     .filter(product => !selectedCategoryId || product.categorySlug?._id === selectedCategoryId || product.categorySlug === selectedCategoryId)
     .filter(product => {
@@ -503,6 +519,10 @@ const AdminProducts = () => {
       ].join(' ').toLowerCase();
       return haystack.includes(needle);
     });
+
+  const totalAdminPages = Math.max(1, Math.ceil(visibleProducts.length / ADMIN_PAGE_SIZE));
+  const pagedProducts = visibleProducts.slice((adminPage - 1) * ADMIN_PAGE_SIZE, adminPage * ADMIN_PAGE_SIZE);
+
   const activeProducts = products.filter((product) => product.isActive !== false).length;
   const featuredProducts = products.filter((product) => product.featured).length;
   const withImages = products.filter((product) => hasProductImage(product)).length;
@@ -653,7 +673,7 @@ const AdminProducts = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {visibleProducts.map(product => (
+                    {pagedProducts.map(product => (
                       <tr key={product._id}>
                         <td className="col-name" data-label="Name">{product.name}</td>
                         <td className="col-category" data-label="Category">{product.categorySlug?.name || '-'}</td>
@@ -694,6 +714,13 @@ const AdminProducts = () => {
                 </table>
               </div>
             )}
+            {totalAdminPages > 1 && (
+              <div className="admin-products-pagination">
+                <button className="admin-btn-secondary" disabled={adminPage === 1} onClick={() => setAdminPage(p => p - 1)}>← Prev</button>
+                <span>Page {adminPage} of {totalAdminPages}</span>
+                <button className="admin-btn-secondary" disabled={adminPage === totalAdminPages} onClick={() => setAdminPage(p => p + 1)}>Next →</button>
+              </div>
+            )}
           </div>
         </div>
 
@@ -710,7 +737,6 @@ const AdminProducts = () => {
               <div className="admin-panel-heading">
                 <div>
                   <h2>{editingId ? 'Edit Product' : 'Add New Product'}</h2>
-                  <p>Keep names and pricing clear, then add specs and variants only where they help the buyer understand the product.</p>
                 </div>
               </div>
               <form onSubmit={handleSubmit} className="admin-form">
@@ -750,11 +776,6 @@ const AdminProducts = () => {
                       </optgroup>
                     ))}
                   </select>
-                  <div className="admin-category-selected">
-                    {categories.find(cat => cat._id === formData.categorySlug)?.parent?.name
-                      ? `${categories.find(cat => cat._id === formData.categorySlug)?.parent?.name} → ${categories.find(cat => cat._id === formData.categorySlug)?.name}`
-                      : (categories.find(cat => cat._id === formData.categorySlug)?.name || 'Choose a category to place this product correctly.')}
-                  </div>
                 </div>
 
                 <div className="admin-form-group">
@@ -845,7 +866,7 @@ const AdminProducts = () => {
                     value={formData.description}
                     onChange={handleInputChange}
                     placeholder="Product description..."
-                    rows="4"
+                    rows="2"
                   />
                 </div>
 

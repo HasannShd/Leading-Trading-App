@@ -440,6 +440,27 @@
 }
 
 @media (max-width: 700px) {
+  .product-details-shell {
+    width: min(100% - 20px, 1240px);
+    gap: 16px;
+  }
+
+  .product-details,
+  .product-related {
+    padding: 16px;
+    border-radius: 20px;
+  }
+
+  .product-media img,
+  .product-media-empty {
+    height: auto;
+    min-height: 260px;
+  }
+
+  .product-info h1 {
+    font-size: clamp(1.8rem, 10vw, 2.5rem);
+  }
+
   .product-price-row,
   .product-actions,
   .product-related-header {

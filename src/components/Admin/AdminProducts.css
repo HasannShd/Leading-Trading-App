@@ -121,6 +121,8 @@
   width: min(32rem, calc(100vw - 2rem));
   max-height: none;
   overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
   margin: 0;
   background: linear-gradient(180deg, #ffffff 0%, #f8f4ec 100%);
   box-shadow: 0 28px 70px rgba(12, 24, 42, 0.24);
@@ -132,6 +134,120 @@
     bottom: 1.5rem;
     right: max(1.5rem, calc((100vw - 1360px) / 2 + 1.5rem));
   }
+}
+
+/* ── Compact products table ── */
+.admin-products .admin-table td {
+  padding: 8px 10px;
+  vertical-align: middle;
+}
+
+.admin-products .admin-table th {
+  padding: 8px 10px;
+}
+
+.admin-products .admin-table .col-name {
+  max-width: 140px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.admin-products .admin-table .col-category,
+.admin-products .admin-table .col-brand {
+  max-width: 110px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.admin-products .admin-table .col-actions {
+  white-space: nowrap;
+  width: 1px;
+}
+
+.admin-products-pagination {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 0 0;
+  font-size: 0.92rem;
+  color: #5d7289;
+}
+
+.admin-products-pagination .admin-btn-secondary {
+  padding: 8px 14px;
+  font-size: 0.88rem;
+}
+
+/* ── Compact editor panel ── */
+.admin-products-editor-panel.admin-form-container {
+  padding: 16px;
+}
+
+.admin-products-editor-panel .admin-panel-heading {
+  margin-bottom: 8px;
+}
+
+.admin-products-editor-panel .admin-panel-heading p {
+  display: none;
+}
+
+.admin-products-editor-panel .admin-panel-heading h2 {
+  font-size: 1.05rem;
+  margin: 0;
+}
+
+.admin-products-editor-panel .admin-form {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.admin-products-editor-panel .admin-form-group {
+  gap: 3px;
+}
+
+.admin-products-editor-panel .admin-form-group label {
+  font-size: 0.84rem;
+}
+
+.admin-products-editor-panel .admin-form-group input:not([type="file"]):not([type="checkbox"]),
+.admin-products-editor-panel .admin-form-group select {
+  padding: 7px 9px;
+  font-size: 0.9rem;
+  border-radius: 10px;
+}
+
+.admin-products-editor-panel .admin-form-group textarea {
+  padding: 7px 9px;
+  font-size: 0.9rem;
+  border-radius: 10px;
+  min-height: 52px;
+  rows: 2;
+}
+
+.admin-products-editor-panel .admin-category-selected {
+  display: none;
+}
+
+.admin-products-editor-panel .admin-helper-text {
+  font-size: 0.8rem;
+  margin: 0;
+}
+
+.admin-products-editor-panel .admin-variant-card {
+  padding: 10px;
+}
+
+.admin-products-editor-panel .admin-form-actions {
+  margin-top: 4px;
+  gap: 8px;
+}
+
+.admin-products-editor-panel .admin-btn-primary,
+.admin-products-editor-panel .admin-btn-secondary {
+  padding: 9px 16px;
+  font-size: 0.9rem;
 }
 
 @media (max-width: 640px) {
@@ -152,8 +268,13 @@
   .admin-products-editor-panel {
     top: 0.5rem;
     right: 0.5rem;
+    left: 0.5rem;
     bottom: 0.5rem;
-    width: calc(100vw - 1rem);
+    width: auto;
     border-radius: 20px;
+  }
+
+  .admin-products-editor-panel .admin-form {
+    grid-template-columns: 1fr;
   }
 }

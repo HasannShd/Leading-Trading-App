@@ -30,14 +30,17 @@ const ProductDetails = () => {
   const [notice, setNotice] = useState(null);
   const rootRef = useRef(null);
 
-  useScrollReveal(rootRef);
+  useScrollReveal(rootRef, Boolean(product) && !loading);
 
   const fetchProduct = useCallback(async () => {
     setLoading(true);
     setNotice(null);
     try {
       const response = await fetch(`${API_URL}/products/${id}`);
-      const data = await response.json();
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok || !data?._id) {
+        throw new Error(data?.message || 'Product could not be loaded.');
+      }
       setProduct(data);
 
       const variants = data?.variants || [];

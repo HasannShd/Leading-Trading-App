@@ -5,6 +5,7 @@ import './PortalShell.css';
 
 const attachmentLabel = (attachment) => attachment?.name || attachment?.url?.split('/').pop() || 'Attachment';
 const getThreadMessages = (thread) => (Array.isArray(thread?.messages) ? thread.messages : []);
+const hasStaffUser = (entry) => Boolean(entry?.staffUser?._id);
 
 const PortalChatWidget = ({ role = 'sales_staff' }) => {
   const isAdmin = role === 'admin';
@@ -72,28 +73,32 @@ const PortalChatWidget = ({ role = 'sales_staff' }) => {
     setLoading(true);
     try {
       const response = await portalApi.get('/admin-portal/messages', 'admin');
-      const nextThreads = response.data.threads || [];
+      const nextThreads = (response.data.threads || []).filter(hasStaffUser);
       setThreads(nextThreads);
-      if (!selectedStaffId && nextThreads[0]?.staffUser?._id && !(isMobile && preferMobileThreadList)) {
-        setSelectedStaffId(nextThreads[0].staffUser._id);
-      }
+      setSelectedStaffId((currentStaffId) => {
+        if (currentStaffId && nextThreads.some((entry) => entry.staffUser._id === currentStaffId)) {
+          return currentStaffId;
+        }
+        if (isMobile && preferMobileThreadList) return '';
+        return nextThreads[0]?.staffUser?._id || '';
+      });
     } catch (err) {
       setMessage(err.message);
     } finally {
       setLoading(false);
     }
-  }, [isMobile, preferMobileThreadList, selectedStaffId]);
+  }, [isMobile, preferMobileThreadList]);
 
   const loadAdminThread = useCallback(async (staffId, markRead = false) => {
     if (!staffId) return;
     setLoading(true);
     try {
       const response = await portalApi.get(`/admin-portal/messages/${staffId}`, 'admin');
-      const nextThread = response.data.thread;
-      setThread(nextThread);
+      const nextThread = response.data.thread || { messages: [] };
+      setThread({ ...nextThread, messages: getThreadMessages(nextThread) });
       if (
         markRead &&
-        (nextThread.messages || []).some((entry) => entry.senderRole === 'sales_staff' && !entry.readByAdmin)
+        getThreadMessages(nextThread).some((entry) => entry?.senderRole === 'sales_staff' && !entry.readByAdmin)
       ) {
         await portalApi.patch(`/admin-portal/messages/${staffId}/read`, {}, 'admin');
         setThread((current) =>
@@ -148,8 +153,9 @@ const PortalChatWidget = ({ role = 'sales_staff' }) => {
   const visibleThreads = useMemo(() => {
     if (!isAdmin) return [];
     const term = String(search || '').trim().toLowerCase();
-    if (!term) return threads;
-    return threads.filter((entry) =>
+    const validThreads = threads.filter(hasStaffUser);
+    if (!term) return validThreads;
+    return validThreads.filter((entry) =>
       [entry.staffUser?.name, entry.staffUser?.username, entry.staffUser?.email, entry.staffUser?.phone]
         .filter(Boolean)
         .some((value) => String(value).toLowerCase().includes(term))
@@ -169,6 +175,7 @@ const PortalChatWidget = ({ role = 'sales_staff' }) => {
   };
 
   const openAdminThread = (staffId) => {
+    if (!staffId) return;
     setSelectedStaffId(staffId);
     setPreferMobileThreadList(false);
     setMessage('');

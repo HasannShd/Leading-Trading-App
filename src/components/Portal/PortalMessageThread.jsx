@@ -4,11 +4,20 @@ import './PortalShell.css';
 
 const attachmentLabel = (attachment) => attachment?.name || attachment?.url?.split('/').pop() || 'Attachment';
 
+const normalizeMessages = (messages) =>
+  (Array.isArray(messages) ? messages : [])
+    .filter((entry) => entry && typeof entry === 'object')
+    .map((entry, index) => ({
+      ...entry,
+      _threadKey: entry._id || `${entry.senderRole || 'message'}-${entry.createdAt || 'no-date'}-${index}`,
+      attachments: Array.isArray(entry.attachments) ? entry.attachments.filter(Boolean) : [],
+    }));
+
 const buildTimeline = (messages) => {
   const timeline = [];
   let previousDateKey = '';
 
-  messages.forEach((entry) => {
+  normalizeMessages(messages).forEach((entry) => {
     const nextDateKey = getPortalDateKey(entry.createdAt);
     if (nextDateKey !== previousDateKey) {
       timeline.push({
@@ -21,7 +30,7 @@ const buildTimeline = (messages) => {
 
     timeline.push({
       type: 'message',
-      key: entry._id,
+      key: entry._threadKey,
       entry,
     });
   });
@@ -44,14 +53,14 @@ const PortalMessageThread = ({ messages = [], selfRole, resolveSenderLabel }) =>
         }
 
         const entry = item.entry;
-        const isSelf = entry.senderRole === selfRole;
+        const isSelf = entry?.senderRole === selfRole;
 
         return (
           <Fragment key={item.key}>
             <div className={`portal-message-row ${isSelf ? 'self' : 'office'}`}>
               <div className="portal-message-bubble">
                 <div className="portal-message-meta">
-                  <strong>{resolveSenderLabel(entry)}</strong>
+                  <strong>{resolveSenderLabel?.(entry) || 'User'}</strong>
                   <span>{formatPortalTime(entry.createdAt)}</span>
                 </div>
                 {entry.text ? <p className="portal-message-copy">{entry.text}</p> : null}
