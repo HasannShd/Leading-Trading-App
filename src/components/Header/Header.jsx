@@ -202,7 +202,11 @@ const Header = () => {
                     All Categories
                   </Link>
                 )}
-                {categoryTree.map((parent) => (
+                {categoryTree.map((parent) => {
+                  const visibleChildren = (parent.children || []).slice(0, 3);
+                  const hiddenChildren = Math.max((parent.children || []).length - visibleChildren.length, 0);
+
+                  return (
                   <div key={parent._id} className="nav-dropdown-group">
                     <Link
                       to={`/categories/${parent.slug || parent._id}`}
@@ -214,7 +218,7 @@ const Header = () => {
                     >
                       {parent.name}
                     </Link>
-                    {parent.children?.map((child) => (
+                    {visibleChildren.map((child) => (
                       <Link
                         key={child._id}
                         to={`/categories/${child.slug || child._id}`}
@@ -227,8 +231,21 @@ const Header = () => {
                         {child.name}
                       </Link>
                     ))}
+                    {hiddenChildren > 0 && (
+                      <Link
+                        to={`/categories/${parent.slug || parent._id}`}
+                        className="nav-dropdown-more"
+                        onClick={() => {
+                          setDropdown(false);
+                          setMobileNav(false);
+                        }}
+                      >
+                        +{hiddenChildren} more
+                      </Link>
+                    )}
                   </div>
-                ))}
+                  );
+                })}
               </div>
             )}
           </div>
