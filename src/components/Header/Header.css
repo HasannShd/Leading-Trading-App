@@ -196,11 +196,11 @@
   position: absolute;
   top: calc(100% + 2px);
   left: 50%;
-  width: min(720px, calc(100vw - 32px));
-  max-height: min(520px, calc(100vh - 110px));
+  width: min(520px, calc(100vw - 32px));
+  max-height: min(500px, calc(100vh - 110px));
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
+  grid-template-columns: 1fr;
+  gap: 8px;
   padding: 12px;
   overflow-y: auto;
   overscroll-behavior: contain;
@@ -243,13 +243,18 @@
 
 .nav-dropdown-group {
   display: grid;
-  gap: 6px;
+  gap: 8px;
   align-content: start;
   min-width: 0;
   padding: 10px;
   border-radius: 14px;
   background: rgba(255, 255, 255, 0.045);
   border: 1px solid rgba(255, 255, 255, 0.065);
+}
+
+.nav-dropdown-group.expanded {
+  background: rgba(198, 145, 89, 0.08);
+  border-color: rgba(198, 145, 89, 0.18);
 }
 
 .nav-dropdown-item {
@@ -261,6 +266,7 @@
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-family: inherit;
 }
 
 .nav .nav-dropdown-menu .nav-dropdown-item,
@@ -269,7 +275,6 @@
 }
 
 .nav-dropdown-item-all {
-  grid-column: 1 / -1;
   font-weight: 700;
   color: #f8f3eb;
   background: rgba(168, 119, 68, 0.16);
@@ -279,8 +284,8 @@
 
 /* Parent category — clearly a section label */
 .nav-dropdown-item-parent {
-  padding: 4px 4px 2px;
-  font-size: 0.72rem;
+  padding: 8px 10px;
+  font-size: 0.78rem;
   font-weight: 800;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -288,6 +293,55 @@
   border-radius: 8px;
   white-space: normal;
   line-height: 1.25;
+}
+
+.nav-category-expander {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border: 0;
+  cursor: pointer;
+  text-align: left;
+  appearance: none;
+}
+
+.nav-category-expander span {
+  min-width: 0;
+}
+
+.nav-category-expander small {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  color: #d9b47f;
+  background: rgba(198, 145, 89, 0.13);
+  border: 1px solid rgba(198, 145, 89, 0.16);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.nav-category-expander small::after {
+  content: '⌄';
+  font-size: 0.85rem;
+  line-height: 1;
+  transform: translateY(-1px);
+}
+
+.nav-dropdown-group.expanded .nav-category-expander small::after {
+  transform: rotate(180deg) translateY(1px);
+}
+
+.nav-subcategory-panel {
+  display: grid;
+  gap: 6px;
+  padding: 2px 0 0;
 }
 
 .nav-dropdown-item-parent:hover {
