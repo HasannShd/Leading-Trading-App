@@ -169,9 +169,29 @@ const CategoryDetails = () => {
               </div>
             </section>
 
+            {category.children?.length ? (
+              <section className="category-details-subcategories">
+                <div className="category-details-subcategories-head animate-stagger" data-stagger-step="110ms">
+                  <h2 className="animate-on-scroll">Subcategories inside {category.name}</h2>
+                  <p className="animate-on-scroll">Open a subcategory to narrow the catalog further, or keep scrolling to review products across the full group.</p>
+                </div>
+                <div className="category-details-subcategories-grid animate-stagger" data-stagger-step="90ms">
+                  {category.children.map((child) => (
+                    <Link key={child._id} to={`/categories/${child.slug || child._id}`} className="category-details-subcategory-card animate-on-scroll">
+                      <span>Subcategory</span>
+                      <strong>{child.name}</strong>
+                      <p>{child.description?.trim() || 'Open this subcategory to review the dedicated product set.'}</p>
+                    </Link>
+                  ))}
+                </div>
+              </section>
+            ) : null}
+
             <div className="category-details-products-header animate-stagger" data-stagger-step="110ms">
               <div className="animate-on-scroll">
-                <h2 className="category-details-products-title">Products in this category</h2>
+                <h2 className="category-details-products-title">
+                  {category.children?.length ? 'Products across this main category' : 'Products in this category'}
+                </h2>
                 <p className="category-details-products-copy">
                   Filter by name, brand, description, or SKU to narrow the relevant products quickly.
                 </p>

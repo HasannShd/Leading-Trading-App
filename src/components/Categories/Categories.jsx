@@ -44,7 +44,11 @@ const Categories = () => {
     return s
       ? tree.filter((parent) =>
           parent.name.toLowerCase().includes(s) ||
-          (parent.description || '').toLowerCase().includes(s)
+          (parent.description || '').toLowerCase().includes(s) ||
+          parent.children.some((child) =>
+            child.name.toLowerCase().includes(s) ||
+            (child.description || '').toLowerCase().includes(s)
+          )
         )
       : tree;
   }, [deferredQuery, categories]);
@@ -172,6 +176,14 @@ const Categories = () => {
                         <p className="categories-card-desc">
                           {c.description?.trim() || 'Browse the products available inside this main category.'}
                         </p>
+                        {c.children?.length ? (
+                          <div className="categories-card-children">
+                            {c.children.slice(0, 4).map((child) => (
+                              <span key={child._id}>{child.name}</span>
+                            ))}
+                            {c.children.length > 4 ? <strong>+{c.children.length - 4} more</strong> : null}
+                          </div>
+                        ) : null}
                       </div>
                     </Card>
                   </Link>
