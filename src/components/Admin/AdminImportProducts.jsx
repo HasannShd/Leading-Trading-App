@@ -66,12 +66,17 @@ const AdminImportProducts = () => {
   const [columns, setColumns] = useState([]);
   const [rows, setRows] = useState([]);
   const [nameCol, setNameCol] = useState('');
+  const [productIdCol, setProductIdCol] = useState('');
   const [categoryCol, setCategoryCol] = useState('');
   const [categorySlugCol, setCategorySlugCol] = useState('');
   const [brandCol, setBrandCol] = useState('');
+  const [skuCol, setSkuCol] = useState('');
   const [imageCol, setImageCol] = useState('');
   const [priceCol, setPriceCol] = useState('');
   const [descriptionCol, setDescriptionCol] = useState('');
+  const [featuredCol, setFeaturedCol] = useState('');
+  const [activeCol, setActiveCol] = useState('');
+  const [reviewActionCol, setReviewActionCol] = useState('');
   const [useHeadings, setUseHeadings] = useState(true);
   const [createMissing, setCreateMissing] = useState(false);
   const [error, setError] = useState('');
@@ -129,12 +134,17 @@ const AdminImportProducts = () => {
     setRows([]);
     setColumns([]);
     setNameCol('');
+    setProductIdCol('');
     setCategoryCol('');
     setCategorySlugCol('');
     setBrandCol('');
+    setSkuCol('');
     setImageCol('');
     setPriceCol('');
     setDescriptionCol('');
+    setFeaturedCol('');
+    setActiveCol('');
+    setReviewActionCol('');
 
     try {
       if (!file.name.toLowerCase().endsWith('.csv')) {
@@ -166,34 +176,67 @@ const AdminImportProducts = () => {
 
       const findByLabel = (needle) =>
         options.find(opt => opt.label.toLowerCase().includes(needle))?.value ?? '';
+      const findExactLabel = (...labels) =>
+        options.find(opt => labels.includes(opt.label.toLowerCase().trim()))?.value ?? '';
 
-      const defaultName = findByLabel('product') || findByLabel('name') || findByLabel('item') || '0';
+      const defaultName = findExactLabel('product', 'product name', 'name', 'item') || findByLabel('name') || findByLabel('item') || '0';
       const defaultCategory = findByLabel('category') || (maxCols > 1 ? '1' : '');
       setNameCol(defaultName);
+      setProductIdCol(findByLabel('productid') || findByLabel('product id') || '');
       setCategoryCol(defaultCategory);
       setCategorySlugCol(findByLabel('categoryslug') || findByLabel('category slug') || '');
       setBrandCol(findByLabel('brand') || '');
+      setSkuCol(findByLabel('sku') || '');
       setImageCol(findByLabel('image') || '');
       setPriceCol(findByLabel('price') || findByLabel('baseprice') || findByLabel('base price') || '');
       setDescriptionCol(findByLabel('description') || findByLabel('desc') || '');
+      setFeaturedCol(findByLabel('featured') || '');
+      setActiveCol(findByLabel('isactive') || findByLabel('is active') || findByLabel('status') || '');
+      setReviewActionCol(findByLabel('reviewaction') || findByLabel('review action') || '');
     } catch (err) {
       setError('Failed to read the file. Please upload a valid CSV file.');
     }
   };
 
+  const parseBoolean = (value) => {
+    if (typeof value === 'boolean') return value;
+    const normalized = String(value || '').trim().toLowerCase();
+    if (!normalized) return undefined;
+    if (['true', '1', 'yes', 'y', 'active', 'featured', 'on'].includes(normalized)) return true;
+    if (['false', '0', 'no', 'n', 'inactive', 'off'].includes(normalized)) return false;
+    return undefined;
+  };
+
+  const normalizeReviewAction = (value) => {
+    const normalized = String(value || '').trim().toLowerCase();
+    if (!normalized) return '';
+    if (['remove', 'delete', 'deactivate', 'archive', 'inactive'].includes(normalized)) return 'deactivate';
+    if (['add', 'new', 'create'].includes(normalized)) return 'add';
+    if (['update', 'edit', 'change'].includes(normalized)) return 'update';
+    if (['keep', 'leave', 'ok'].includes(normalized)) return 'keep';
+    if (['skip', 'ignore'].includes(normalized)) return 'skip';
+    return normalized;
+  };
+
   const parsedRows = useMemo(() => {
     if (nameCol === '') return [];
     const nameIndex = Number(nameCol);
+    const productIdIndex = productIdCol === '' ? null : Number(productIdCol);
     const categoryIndex = categoryCol === '' ? null : Number(categoryCol);
     const categorySlugIndex = categorySlugCol === '' ? null : Number(categorySlugCol);
     const brandIndex = brandCol === '' ? null : Number(brandCol);
+    const skuIndex = skuCol === '' ? null : Number(skuCol);
     const imageIndex = imageCol === '' ? null : Number(imageCol);
     const priceIndex = priceCol === '' ? null : Number(priceCol);
     const descriptionIndex = descriptionCol === '' ? null : Number(descriptionCol);
+    const featuredIndex = featuredCol === '' ? null : Number(featuredCol);
+    const activeIndex = activeCol === '' ? null : Number(activeCol);
+    const reviewActionIndex = reviewActionCol === '' ? null : Number(reviewActionCol);
     let currentCategoryId = '';
     let currentCategoryRaw = '';
 
     return rows.reduce((acc, row) => {
+      const productId = productIdIndex === null ? '' : String(row[productIdIndex] || '').trim();
       const name = String(row[nameIndex] || '').trim();
       const categoryRaw = categoryIndex === null ? '' : String(row[categoryIndex] || '').trim();
       const categorySlugRaw = categorySlugIndex === null ? '' : String(row[categorySlugIndex] || '').trim();
@@ -201,9 +244,13 @@ const AdminImportProducts = () => {
       const categoryIdDirect = categoryMap.get(normalize(categoryLookup)) || '';
       const categoryIdFromName = categoryMap.get(normalize(name)) || '';
       const brand = brandIndex === null ? '' : String(row[brandIndex] || '').trim();
+      const sku = skuIndex === null ? '' : String(row[skuIndex] || '').trim();
       const image = imageIndex === null ? '' : String(row[imageIndex] || '').trim();
       const basePrice = priceIndex === null ? '' : String(row[priceIndex] || '').trim();
       const description = descriptionIndex === null ? '' : String(row[descriptionIndex] || '').trim();
+      const featured = featuredIndex === null ? undefined : parseBoolean(row[featuredIndex]);
+      const isActive = activeIndex === null ? undefined : parseBoolean(row[activeIndex]);
+      const reviewAction = reviewActionIndex === null ? '' : normalizeReviewAction(row[reviewActionIndex]);
 
       if (!categoryRaw && useHeadings && categoryIdFromName) {
         currentCategoryId = categoryIdFromName;
@@ -216,23 +263,30 @@ const AdminImportProducts = () => {
       if (!name && !finalCategoryRaw) return acc;
 
       acc.push({
+        productId,
         name,
         categoryRaw: finalCategoryRaw,
         categoryId: finalCategoryId,
         brand,
+        sku,
         image,
         basePrice,
         description,
+        featured,
+        isActive,
+        reviewAction,
       });
       return acc;
     }, []);
-  }, [rows, nameCol, categoryCol, categorySlugCol, brandCol, imageCol, priceCol, descriptionCol, categoryMap, useHeadings]);
+  }, [rows, nameCol, productIdCol, categoryCol, categorySlugCol, brandCol, skuCol, imageCol, priceCol, descriptionCol, featuredCol, activeCol, reviewActionCol, categoryMap, useHeadings]);
   const deferredParsedRows = useDeferredValue(parsedRows);
 
   const matchedRows = parsedRows.filter(row => row.name && row.categoryId);
-  const unmatchedRows = parsedRows.filter(row => row.name && !row.categoryId);
-  const creatableRows = parsedRows.filter(row => row.name && row.categoryRaw);
-  const importReadyCount = createMissing ? creatableRows.length : matchedRows.length;
+  const unmatchedRows = parsedRows.filter(row => row.name && !row.categoryId && row.reviewAction !== 'skip');
+  const actionableRows = parsedRows.filter(row => row.name && row.reviewAction !== 'skip');
+  const importReadyCount = createMissing
+    ? actionableRows.filter(row => row.categoryId || row.categoryRaw).length
+    : actionableRows.filter(row => row.categoryId).length;
 
   const handleImport = async () => {
     setImporting(true);
@@ -272,21 +326,24 @@ const AdminImportProducts = () => {
       }
 
       const items = parsedRows
-        .filter(row => row.name)
+        .filter(row => row.name && row.reviewAction !== 'skip')
         .map(row => {
           const categoryId = row.categoryId || mergedCategoryMap.get(normalize(row.categoryRaw)) || '';
           return { ...row, categoryId };
         })
         .filter(row => row.categoryId)
         .map(row => ({
+          productId: row.productId || undefined,
           name: row.name,
           categorySlug: row.categoryId,
           brand: row.brand || undefined,
+          sku: row.sku || undefined,
           image: row.image || undefined,
           basePrice: row.basePrice || undefined,
           description: row.description || undefined,
-          featured: false,
-          isActive: true,
+          featured: row.featured,
+          isActive: row.reviewAction === 'deactivate' ? false : row.isActive,
+          reviewAction: row.reviewAction || undefined,
         }));
 
       if (!items.length) {
@@ -309,7 +366,7 @@ const AdminImportProducts = () => {
         setError(data.message || 'Import failed.');
         return;
       }
-      setStatus(`Imported ${data.inserted ?? items.length} products.`);
+      setStatus(`Processed ${data.attempted ?? items.length} rows. Added ${data.inserted ?? 0}, updated ${data.updated ?? 0}.`);
     } catch (err) {
       setError(err?.message || 'Import failed. Please try again.');
     } finally {
@@ -332,12 +389,12 @@ const AdminImportProducts = () => {
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = 'products-categories.xlsx';
+      link.download = 'products-review-sheet.xlsx';
       document.body.appendChild(link);
       link.click();
       link.remove();
       window.URL.revokeObjectURL(url);
-      setStatus('Downloaded current product list.');
+      setStatus('Downloaded review-ready product sheet.');
     } catch (err) {
       setError('Download failed. Please try again.');
     } finally {
@@ -355,7 +412,7 @@ const AdminImportProducts = () => {
             <div className="admin-surface-copy">
               <h1>Import products with a cleaner mapping workflow.</h1>
               <p>
-                Upload a spreadsheet, map the columns once, and review matched versus unmatched rows before importing into the visible catalog.
+                Download the live review sheet, edit it in Excel, export to CSV, then map the columns once before importing changes back into the visible catalog.
               </p>
             </div>
             {rows.length > 0 && (
@@ -396,8 +453,7 @@ const AdminImportProducts = () => {
             <label className="admin-import-label">Upload CSV</label>
             <input type="file" accept=".csv,text/csv" onChange={handleFile} />
             <p className="admin-import-help">
-              Upload a CSV export that includes a product name column and a category column.
-              Categories are matched to the existing categories in the website by name or slug.
+              Upload a CSV file with at least product name and category. Review-ready files can also include ProductId, SKU, Featured, IsActive, and ReviewAction.
             </p>
             <button
               className="admin-btn-secondary"
@@ -405,12 +461,21 @@ const AdminImportProducts = () => {
               onClick={handleDownload}
               disabled={downloading}
             >
-              {downloading ? 'Downloading...' : 'Download current list'}
+              {downloading ? 'Downloading...' : 'Download review sheet'}
             </button>
           </div>
 
           {rows.length > 0 && (
             <div className="admin-import-map">
+              <div className="admin-import-field">
+                <label>Product ID column (optional)</label>
+                <select value={productIdCol} onChange={(e) => setProductIdCol(e.target.value)}>
+                  <option value="">Select column</option>
+                  {columns.map(col => (
+                    <option key={`productid-${col.value}`} value={col.value}>{col.label}</option>
+                  ))}
+                </select>
+              </div>
               <div className="admin-import-field">
                 <label>Product name column</label>
                 <select value={nameCol} onChange={(e) => setNameCol(e.target.value)}>
@@ -448,6 +513,15 @@ const AdminImportProducts = () => {
                 </select>
               </div>
               <div className="admin-import-field">
+                <label>SKU column (optional)</label>
+                <select value={skuCol} onChange={(e) => setSkuCol(e.target.value)}>
+                  <option value="">Select column</option>
+                  {columns.map(col => (
+                    <option key={`sku-${col.value}`} value={col.value}>{col.label}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="admin-import-field">
                 <label>Image column (optional)</label>
                 <select value={imageCol} onChange={(e) => setImageCol(e.target.value)}>
                   <option value="">Select column</option>
@@ -471,6 +545,33 @@ const AdminImportProducts = () => {
                   <option value="">Select column</option>
                   {columns.map(col => (
                     <option key={`desc-${col.value}`} value={col.value}>{col.label}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="admin-import-field">
+                <label>Featured column (optional)</label>
+                <select value={featuredCol} onChange={(e) => setFeaturedCol(e.target.value)}>
+                  <option value="">Select column</option>
+                  {columns.map(col => (
+                    <option key={`featured-${col.value}`} value={col.value}>{col.label}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="admin-import-field">
+                <label>Active / status column (optional)</label>
+                <select value={activeCol} onChange={(e) => setActiveCol(e.target.value)}>
+                  <option value="">Select column</option>
+                  {columns.map(col => (
+                    <option key={`active-${col.value}`} value={col.value}>{col.label}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="admin-import-field">
+                <label>Review action column (optional)</label>
+                <select value={reviewActionCol} onChange={(e) => setReviewActionCol(e.target.value)}>
+                  <option value="">Select column</option>
+                  {columns.map(col => (
+                    <option key={`reviewaction-${col.value}`} value={col.value}>{col.label}</option>
                   ))}
                 </select>
               </div>
@@ -531,6 +632,8 @@ const AdminImportProducts = () => {
                       <th>Product</th>
                       <th>Category</th>
                       <th>Matched</th>
+                      <th>Action</th>
+                      <th>Active</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -539,6 +642,8 @@ const AdminImportProducts = () => {
                         <td>{row.name || '-'}</td>
                         <td>{row.categoryRaw || '-'}</td>
                         <td>{row.categoryId ? 'Yes' : 'No'}</td>
+                        <td>{row.reviewAction || 'keep'}</td>
+                        <td>{row.reviewAction === 'deactivate' ? 'No' : row.isActive === undefined ? '-' : row.isActive ? 'Yes' : 'No'}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -559,7 +664,8 @@ const AdminImportProducts = () => {
               <h3>Import Checklist</h3>
               <ul>
                 <li>Make sure the file has a reliable product name column and category column.</li>
-                <li>Check unmatched rows before importing so products do not disappear into the wrong category.</li>
+                <li>Use the downloaded review sheet if the team wants to mark keep, add, update, or remove decisions in Excel.</li>
+                <li>Rows marked remove or deactivate are turned inactive on import instead of being deleted.</li>
                 <li>Use “create missing categories” only when the file structure is already clean.</li>
               </ul>
             </div>
