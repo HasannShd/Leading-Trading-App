@@ -13,7 +13,6 @@ const Header = () => {
   // State
   const [categories, setCategories] = useState([]);
   const [dropdown, setDropdown] = useState(false);
-  const [expandedCategoryId, setExpandedCategoryId] = useState('');
   const [mobileNav, setMobileNav] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileViewport, setIsMobileViewport] = useState(
@@ -47,7 +46,6 @@ const Header = () => {
       if (navRef.current && !navRef.current.contains(e.target)) {
         setMobileNav(false);
         setDropdown(false);
-        setExpandedCategoryId('');
       }
     }
 
@@ -76,7 +74,6 @@ const Header = () => {
   useEffect(() => {
     setMobileNav(false);
     setDropdown(false);
-    setExpandedCategoryId('');
   }, [location.pathname]);
 
   useEffect(() => {
@@ -94,17 +91,13 @@ const Header = () => {
 
   const toggleMobileNav = () => {
     setMobileNav((open) => {
-      if (open) {
-        setDropdown(false);
-        setExpandedCategoryId('');
-      }
+      if (open) setDropdown(false);
       return !open;
     });
   };
 
   const closeMenus = () => {
     setDropdown(false);
-    setExpandedCategoryId('');
     setMobileNav(false);
   };
 
@@ -163,10 +156,7 @@ const Header = () => {
           <div
             className="nav-dropdown-wrapper"
             onMouseEnter={!isMobileViewport ? () => setDropdown(true) : undefined}
-            onMouseLeave={!isMobileViewport ? () => {
-              setDropdown(false);
-              setExpandedCategoryId('');
-            } : undefined}
+            onMouseLeave={!isMobileViewport ? () => setDropdown(false) : undefined}
           >
             {isMobileViewport ? (
               <button
@@ -176,10 +166,7 @@ const Header = () => {
                 aria-controls="mobile-categories-menu"
                 onClick={(e) => {
                   e.stopPropagation();
-                  setDropdown((d) => {
-                    if (d) setExpandedCategoryId('');
-                    return !d;
-                  });
+                  setDropdown((d) => !d);
                 }}
               >
                 Categories ▾
@@ -215,56 +202,25 @@ const Header = () => {
                   </Link>
                 )}
                 {categoryTree.map((parent) => {
-                  const children = parent.children || [];
-                  const isExpanded = expandedCategoryId === parent._id;
-
                   return (
-                  <div key={parent._id} className={`nav-dropdown-group${isExpanded ? ' expanded' : ''}`}>
-                    {children.length > 0 ? (
-                      <button
-                        type="button"
-                        className="nav-dropdown-item nav-dropdown-item-parent nav-category-expander"
-                        aria-expanded={isExpanded}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          setExpandedCategoryId((current) => (current === parent._id ? '' : parent._id));
-                        }}
-                      >
-                        <span>{parent.name}</span>
-                        <small>{isExpanded ? 'Hide' : `${children.length} sub`}</small>
-                      </button>
-                    ) : (
+                  <div key={parent._id} className="nav-dropdown-group">
+                    <Link
+                      to={`/categories/${parent.slug || parent._id}`}
+                      className="nav-dropdown-item nav-dropdown-item-parent"
+                      onClick={closeMenus}
+                    >
+                      {parent.name}
+                    </Link>
+                    {parent.children?.map((child) => (
                       <Link
-                        to={`/categories/${parent.slug || parent._id}`}
-                        className="nav-dropdown-item nav-dropdown-item-parent nav-category-expander"
+                        key={child._id}
+                        to={`/categories/${child.slug || child._id}`}
+                        className="nav-dropdown-item nav-dropdown-item-child"
                         onClick={closeMenus}
                       >
-                        <span>{parent.name}</span>
-                        <small>Open</small>
+                        {child.name}
                       </Link>
-                    )}
-                    {isExpanded && (
-                      <div className="nav-subcategory-panel">
-                        <Link
-                          to={`/categories/${parent.slug || parent._id}`}
-                          className="nav-dropdown-more"
-                          onClick={closeMenus}
-                        >
-                          View all in {parent.name}
-                        </Link>
-                        {children.map((child) => (
-                          <Link
-                            key={child._id}
-                            to={`/categories/${child.slug || child._id}`}
-                            className="nav-dropdown-item nav-dropdown-item-child"
-                            onClick={closeMenus}
-                          >
-                            {child.name}
-                          </Link>
-                        ))}
-                      </div>
-                    )}
+                    ))}
                   </div>
                   );
                 })}
