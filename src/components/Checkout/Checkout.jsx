@@ -2,9 +2,11 @@ import { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Checkout.css';
 import { authFetch, API_URL } from '../../services/authFetch';
+import { useLanguage } from '../../context/LanguageContext';
 
 const Checkout = () => {
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const [cart, setCart] = useState(null);
   const [paymentMethod, setPaymentMethod] = useState('cod');
   const [tapReady, setTapReady] = useState(false);
@@ -19,6 +21,7 @@ const Checkout = () => {
   });
   const [notes, setNotes] = useState('');
   const [loading, setLoading] = useState(false);
+  const [formNotice, setFormNotice] = useState('');
 
   const fetchCart = useCallback(async () => {
     const response = await authFetch('/cart', { scope: 'user' });
@@ -50,6 +53,7 @@ const Checkout = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setFormNotice('');
     setLoading(true);
     try {
       if (paymentMethod === 'tap') {
@@ -66,7 +70,7 @@ const Checkout = () => {
         });
         const tapData = await tapResponse.json();
         if (!tapResponse.ok) {
-          alert(tapData.message || 'Tap is not available');
+          setFormNotice(tapData.message || t('Tap is not available'));
           return;
         }
         return;
@@ -86,13 +90,13 @@ const Checkout = () => {
       });
       const data = await response.json();
       if (!response.ok) {
-        alert(data.message || 'Checkout failed');
+        setFormNotice(data.message || t('Checkout failed'));
         return;
       }
       navigate('/orders');
     } catch (err) {
       console.error(err);
-      alert('Checkout failed');
+      setFormNotice(t('Checkout failed'));
     } finally {
       setLoading(false);
     }
@@ -102,8 +106,8 @@ const Checkout = () => {
     return (
       <main>
         <section className="cart-section">
-          <h1>Checkout</h1>
-          <p className="shop-empty">Your cart is empty.</p>
+          <h1>{t('Checkout')}</h1>
+          <p className="shop-empty">{t('Your cart is empty.')}</p>
         </section>
       </main>
     );
@@ -112,12 +116,12 @@ const Checkout = () => {
   return (
     <main>
       <section className="checkout-section">
-        <h1>Checkout</h1>
+        <h1>{t('Checkout')}</h1>
         <div className="checkout-grid">
           <form className="checkout-form" onSubmit={handleSubmit}>
-            <h2>Shipping Details</h2>
+            <h2>{t('Shipping Details')}</h2>
             <label>
-              Full Name
+              {t('Full Name')}
               <input
                 type="text"
                 value={address.fullName}
@@ -126,7 +130,7 @@ const Checkout = () => {
               />
             </label>
             <label>
-              Phone
+              {t('Phone')}
               <input
                 type="tel"
                 value={address.phone}
@@ -135,7 +139,7 @@ const Checkout = () => {
               />
             </label>
             <label>
-              Address Line 1
+              {t('Address Line 1')}
               <input
                 type="text"
                 value={address.line1}
@@ -144,7 +148,7 @@ const Checkout = () => {
               />
             </label>
             <label>
-              Address Line 2
+              {t('Address Line 2')}
               <input
                 type="text"
                 value={address.line2}
@@ -152,7 +156,7 @@ const Checkout = () => {
               />
             </label>
             <label>
-              City
+              {t('City')}
               <input
                 type="text"
                 value={address.city}
@@ -160,7 +164,7 @@ const Checkout = () => {
               />
             </label>
             <label>
-              Country
+              {t('Country')}
               <input
                 type="text"
                 value={address.country}
@@ -168,7 +172,7 @@ const Checkout = () => {
               />
             </label>
             <label>
-              Postal Code
+              {t('Postal Code')}
               <input
                 type="text"
                 value={address.postalCode}
@@ -176,7 +180,7 @@ const Checkout = () => {
               />
             </label>
 
-            <h2>Payment</h2>
+            <h2>{t('Payment')}</h2>
             <div className="checkout-payment">
               <label>
                 <input
@@ -186,7 +190,7 @@ const Checkout = () => {
                   checked={paymentMethod === 'cod'}
                   onChange={() => setPaymentMethod('cod')}
                 />
-                Cash on Delivery
+                {t('Cash on Delivery')}
               </label>
               <label>
                 <input
@@ -196,7 +200,7 @@ const Checkout = () => {
                   checked={paymentMethod === 'bank'}
                   onChange={() => setPaymentMethod('bank')}
                 />
-                Bank Transfer
+                {t('Bank Transfer')}
               </label>
               <label className={!tapReady ? 'checkout-disabled' : ''}>
                 <input
@@ -207,31 +211,36 @@ const Checkout = () => {
                   onChange={() => setPaymentMethod('tap')}
                   disabled={!tapReady}
                 />
-                Tap Card Payment {tapReady ? '' : '(Unavailable)'}
+                {t('Tap Card Payment')} {tapReady ? '' : `(${t('Unavailable')})`}
               </label>
             </div>
             {paymentMethod === 'bank' && (
               <div className="checkout-note">
-                Bank transfer details will be shared after placing the order.
+                {t('Bank transfer details will be shared after placing the order.')}
               </div>
             )}
             {paymentMethod === 'tap' && !tapReady && (
               <div className="checkout-note">
-                Tap is not configured yet. Please use COD or Bank Transfer.
+                {t('Tap is not configured yet. Please use COD or Bank Transfer.')}
               </div>
             )}
             <label>
-              Notes
+              {t('Notes')}
               <textarea value={notes} onChange={(e) => setNotes(e.target.value)} />
             </label>
 
             <button className="btn primary" type="submit" disabled={loading}>
-              {loading ? 'Placing order...' : 'Place Order'}
+              {loading ? t('Placing order...') : t('Place Order')}
             </button>
+            {formNotice ? (
+              <div className="checkout-form-notice" role="alert">
+                {formNotice}
+              </div>
+            ) : null}
           </form>
 
           <div className="checkout-summary">
-            <h2>Order Summary</h2>
+            <h2>{t('Order Summary')}</h2>
             <div className="checkout-items">
               {cart.items.map(item => (
                 <div className="checkout-item" key={item._id}>
@@ -243,13 +252,13 @@ const Checkout = () => {
                         loading="lazy"
                       />
                     ) : (
-                      <div className="checkout-item-fallback">No image</div>
+                      <div className="checkout-item-fallback">{t('No image')}</div>
                     )}
                   </div>
                   <div className="checkout-item-info">
                     <div className="checkout-item-title">{item.name}</div>
                     {item.size && <div className="checkout-item-meta">{item.size}</div>}
-                    <div className="checkout-item-qty">Qty {item.quantity}</div>
+                    <div className="checkout-item-qty">{t('Qty')} {item.quantity}</div>
                   </div>
                   <div className="checkout-item-price">
                     {(Number(item.price) * Number(item.quantity || 0)).toFixed(3)} BHD
@@ -258,15 +267,15 @@ const Checkout = () => {
               ))}
             </div>
             <div className="checkout-summary-row">
-              <span>Subtotal</span>
+              <span>{t('Subtotal')}</span>
               <span>{subtotal.toFixed(3)} BHD</span>
             </div>
             <div className="checkout-summary-row">
-              <span>Shipping</span>
+              <span>{t('Shipping')}</span>
               <span>{shippingFee.toFixed(3)} BHD</span>
             </div>
             <div className="checkout-summary-row total">
-              <span>Total</span>
+              <span>{t('Total')}</span>
               <span>{(subtotal + shippingFee).toFixed(3)} BHD</span>
             </div>
           </div>

@@ -1552,3 +1552,123 @@
     padding-top: 20px;
   }
 }
+
+@media (max-width: 560px) {
+  .home-shell {
+    width: min(100% - 24px, var(--page-max));
+  }
+
+  .home-hero {
+    padding: 88px 0 34px;
+    min-height: auto;
+    align-content: start;
+  }
+
+  .home-hero__editorial {
+    width: min(100% - 24px, 520px);
+  }
+
+  .home-eyebrow {
+    gap: 8px;
+    max-width: 100%;
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    line-height: 1.45;
+  }
+
+  .home-eyebrow::before {
+    width: 22px;
+    flex: 0 0 22px;
+  }
+
+  .home-hero__editorial .home-hero__copy h1 {
+    max-width: 100%;
+    margin-top: 14px;
+    font-size: clamp(2rem, 9.2vw, 2.58rem);
+    line-height: 1.08;
+    letter-spacing: -0.018em;
+    overflow-wrap: anywhere;
+    text-wrap: balance;
+  }
+
+  .home-hero__meta {
+    margin-top: 20px;
+    padding-top: 18px;
+    gap: 16px;
+  }
+
+  .home-hero__meta > p {
+    max-width: 100%;
+    font-size: 0.93rem;
+    line-height: 1.62;
+  }
+
+  .home-hero__meta .home-hero__actions {
+    display: grid;
+    grid-template-columns: 1fr;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .home-hero__meta .home-btn,
+  .home-btn {
+    width: 100%;
+    min-height: 50px;
+    padding: 0 16px;
+    font-size: 0.94rem;
+  }
+
+  .home-hero__editorial .home-hero__notes {
+    margin-top: 16px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 7px;
+  }
+
+  .home-hero__notes span {
+    width: 100%;
+    min-height: 36px;
+    justify-content: center;
+    padding: 7px 10px;
+    font-size: 0.8rem;
+    text-align: center;
+  }
+
+  .home-hero__metrics {
+    margin-top: 16px;
+    gap: 8px;
+  }
+
+  .hero-metric {
+    padding: 14px;
+    border-radius: 16px;
+  }
+
+  .home-section {
+    padding-top: 60px;
+  }
+}
+
+@media (max-width: 390px) {
+  .home-shell,
+  .home-hero__editorial {
+    width: min(100% - 18px, var(--page-max));
+  }
+
+  .home-hero__editorial .home-hero__copy h1 {
+    font-size: clamp(1.74rem, 9.4vw, 2.2rem);
+    line-height: 1.1;
+  }
+
+  .home-hero__meta > p {
+    font-size: 0.9rem;
+  }
+
+  .home-eyebrow {
+    font-size: 0.58rem;
+  }
+
+  .home-hero__notes span {
+    font-size: 0.76rem;
+  }
+}

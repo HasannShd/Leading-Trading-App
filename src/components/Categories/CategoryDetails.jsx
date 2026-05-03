@@ -3,6 +3,8 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import Input from '../Common/Input';
 import StatePanel from '../Common/StatePanel';
 import SkeletonGrid from '../Common/SkeletonGrid';
+import Seo from '../Common/Seo';
+import { useLanguage } from '../../context/LanguageContext';
 import { normalizeImageSrc } from '../../utils/normalizeImageSrc';
 import { useScrollReveal } from '../../hooks/useScrollReveal';
 import { useCountUp } from '../../hooks/useCountUp';
@@ -25,10 +27,23 @@ const legacyCategorySlugMap = {
   'examination-disposable': 'examination-general-disposable',
 };
 
+const productDescription = (product, category, categoryName, t) => {
+  const description = product?.description?.trim();
+  if (description) return description;
+
+  const productCategory = product?.categorySlug?.name || category?.name;
+  if (productCategory) {
+    return `${t('Product details, variants, and quotation support for')} ${categoryName(productCategory)}.`;
+  }
+
+  return t('Contact LTE for specifications, availability, and quotation support for this catalog item.');
+};
+
 const CategoryDetails = () => {
   const { slug } = useParams();
   const navigate = useNavigate();
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+  const { t, categoryName, categoryDescription } = useLanguage();
   const [category, setCategory] = useState(null);
   const [products, setProducts] = useState([]);
   const [q, setQ] = useState('');
@@ -98,19 +113,53 @@ const CategoryDetails = () => {
       [p.name, p.description, p.brand, p.sku]
         .filter(Boolean)
         .some((field) => field.toLowerCase().includes(s))
-    );
+      );
   }, [products, deferredQuery]);
+  const searchSuggestions = useMemo(() => {
+    const term = q.trim().toLowerCase();
+    if (term.length < 2) return [];
+
+    const seen = new Set();
+    return products
+      .filter((product) =>
+        [product.name, product.description, product.brand, product.sku]
+          .filter(Boolean)
+          .some((field) => String(field).toLowerCase().includes(term))
+      )
+      .map((product) => ({
+        label: product.name,
+        meta: product.brand || product.sku || t('Product'),
+      }))
+      .filter((suggestion) => {
+        const key = String(suggestion.label || '').toLowerCase();
+        if (!key || seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      })
+      .slice(0, 6);
+  }, [products, q, t]);
+
+  const quoteHref = useMemo(() => {
+    if (!category?._id) return '/contact?source=category';
+    const params = new URLSearchParams({
+      source: 'category',
+      category: category._id,
+      categoryName: category.name || '',
+      pageUrl: typeof window !== 'undefined' ? `${window.location.origin}/categories/${category.slug || category._id}` : `/categories/${category.slug || category._id}`,
+    });
+    return `/contact?${params.toString()}`;
+  }, [category]);
 
   if (!loading && !category) {
     return (
       <main>
         <section className="category-details-shell">
           <StatePanel
-            eyebrow="Unavailable"
-            title="Category not available"
-            description={error || 'The category you requested could not be found.'}
+            eyebrow={t('Unavailable')}
+            title={t('Category not available')}
+            description={t(error || 'The category you requested could not be found.')}
             variant="error"
-            action={<Link className="btn primary" to="/categories">Browse All Categories</Link>}
+            action={<Link className="btn primary" to="/categories">{t('Browse All Categories')}</Link>}
           />
         </section>
       </main>
@@ -119,6 +168,20 @@ const CategoryDetails = () => {
 
   return (
     <main>
+      <Seo
+        title={
+          category?.name
+            ? `${categoryName(category.name)} Products | Leading Trading Est Bahrain`
+            : 'Category Products | Leading Trading Est Bahrain'
+        }
+        description={
+          category?.description?.trim()
+            ? categoryDescription(category.description.trim())
+            : `Browse ${category?.name ? categoryName(category.name) : 'category'} products from Leading Trading Est with quotation and sourcing support in Bahrain.`
+        }
+        canonicalPath={`/categories/${category?.slug || slug || ''}`}
+        image={category?.image || undefined}
+      />
       <section className="category-details-shell" ref={rootRef}>
         {loading ? (
           <>
@@ -142,45 +205,45 @@ const CategoryDetails = () => {
           <>
             <section className="category-details-hero">
               <div className="category-details-hero-copy animate-stagger" data-stagger-step="110ms">
-                <span className="category-details-eyebrow animate-on-scroll">Category Focus</span>
+                <span className="category-details-eyebrow animate-on-scroll">{t('Category Focus')}</span>
                 {category.parent ? (
                   <div className="category-details-breadcrumb animate-on-scroll">
-                    <Link to={`/categories/${category.parent.slug || category.parent._id}`}>{category.parent.name}</Link>
+                    <Link to={`/categories/${category.parent.slug || category.parent._id}`}>{categoryName(category.parent.name)}</Link>
                     <span className="category-details-breadcrumb-sep">›</span>
-                    <strong>{category.name}</strong>
+                    <strong>{categoryName(category.name)}</strong>
                   </div>
                 ) : null}
-                <h1 className="category-details-title animate-on-scroll">{category.name}</h1>
+                <h1 className="category-details-title animate-on-scroll">{categoryName(category.name)}</h1>
                 <p className="category-details-desc animate-on-scroll">
-                  {category.description?.trim() || 'Review the products listed in this category and contact our team for specification guidance, availability, and quotation support.'}
+                  {categoryDescription(category.description?.trim()) || t('Review the products listed in this category and contact our team for specification guidance, availability, and quotation support.')}
                 </p>
               </div>
 
               <div className="category-details-hero-meta animate-stagger" data-stagger-step="120ms">
                 <div className="category-details-meta-card animate-on-scroll">
                   <StatCount value={products.length} />
-                  <span>products currently listed</span>
+                  <span>{t('products currently listed')}</span>
                 </div>
                 <div className="category-details-meta-card animate-on-scroll">
                   <StatCount value={new Set(products.map((product) => product.brand).filter(Boolean)).size || 1} />
-                  <span>brands represented</span>
+                  <span>{t('brands represented')}</span>
                 </div>
-                <Link className="btn primary animate-on-scroll" to="/contact">Request sourcing support</Link>
+                <Link className="btn primary animate-on-scroll" to={quoteHref}>{t('Request sourcing support')}</Link>
               </div>
             </section>
 
             {category.children?.length ? (
               <section className="category-details-subcategories">
                 <div className="category-details-subcategories-head animate-stagger" data-stagger-step="110ms">
-                  <h2 className="animate-on-scroll">Subcategories inside {category.name}</h2>
-                  <p className="animate-on-scroll">Open a subcategory to narrow the catalog further, or keep scrolling to review products across the full group.</p>
+                  <h2 className="animate-on-scroll">{t('Subcategories inside')} {categoryName(category.name)}</h2>
+                  <p className="animate-on-scroll">{t('Open a subcategory to narrow the catalog further, or keep scrolling to review products across the full group.')}</p>
                 </div>
                 <div className="category-details-subcategories-grid animate-stagger" data-stagger-step="90ms">
                   {category.children.map((child) => (
                     <Link key={child._id} to={`/categories/${child.slug || child._id}`} className="category-details-subcategory-card animate-on-scroll">
-                      <span>Subcategory</span>
-                      <strong>{child.name}</strong>
-                      <p>{child.description?.trim() || 'Open this subcategory to review the dedicated product set.'}</p>
+                      <span>{t('Subcategory')}</span>
+                      <strong>{categoryName(child.name)}</strong>
+                      <p>{categoryDescription(child.description?.trim()) || t('Open this subcategory to review the dedicated product set.')}</p>
                     </Link>
                   ))}
                 </div>
@@ -190,34 +253,52 @@ const CategoryDetails = () => {
             <div className="category-details-products-header animate-stagger" data-stagger-step="110ms">
               <div className="animate-on-scroll">
                 <h2 className="category-details-products-title">
-                  {category.children?.length ? 'Products across this main category' : 'Products in this category'}
+                  {category.children?.length ? t('Products across this main category') : t('Products in this category')}
                 </h2>
                 <p className="category-details-products-copy">
-                  Filter by name, brand, description, or SKU to narrow the relevant products quickly.
+                  {t('Filter by name, brand, description, or SKU to narrow the relevant products quickly.')}
                 </p>
               </div>
               <div className="category-details-products-spacer" />
-              <Input
-                className="category-details-search animate-on-scroll"
-                placeholder="Search products in this category"
-                value={q}
-                onChange={(e) => setQ(e.target.value)}
-                disabled={products.length === 0}
-              />
+              <div className="category-details-search-wrap animate-on-scroll">
+                <Input
+                  className="category-details-search"
+                  placeholder={t('Search products in this category')}
+                  value={q}
+                  onChange={(e) => setQ(e.target.value)}
+                  disabled={products.length === 0}
+                  autoComplete="off"
+                  aria-label={t('Search products in this category')}
+                />
+                {searchSuggestions.length ? (
+                  <div className="category-details-search-suggestions">
+                    {searchSuggestions.map((suggestion) => (
+                      <button
+                        key={suggestion.label}
+                        type="button"
+                        onClick={() => setQ(suggestion.label)}
+                      >
+                        <span>{suggestion.label}</span>
+                        <small>{suggestion.meta}</small>
+                      </button>
+                    ))}
+                  </div>
+                ) : null}
+              </div>
             </div>
 
             {products.length === 0 ? (
               <StatePanel
-                eyebrow="Empty Category"
-                title="No products in this category yet"
-                description="This category is live, but the product catalog has not been populated yet."
+                eyebrow={t('Empty Category')}
+                title={t('No products in this category yet')}
+                description={t('This category is live, but the product catalog has not been populated yet.')}
               />
             ) : filteredProducts.length === 0 ? (
               <StatePanel
-                eyebrow="No Match"
-                title="No products match that search"
-                description={`Nothing in ${category.name} matched "${q.trim()}". Try a broader keyword.`}
-                action={<button className="btn" onClick={() => setQ('')}>Clear Search</button>}
+                eyebrow={t('No Match')}
+                title={t('No products match that search')}
+                description={`${t('Nothing in')} ${categoryName(category.name)} ${t('matched')} "${q.trim()}". ${t('Try a broader keyword.')}`}
+                action={<button className="btn" onClick={() => setQ('')}>{t('Clear Search')}</button>}
               />
             ) : (
               <ul className="category-details-products-list animate-stagger" data-stagger-step="100ms">
@@ -251,18 +332,18 @@ const CategoryDetails = () => {
                         <div className="category-details-product-copy">
                           <span>
                             {p.categorySlug?.parent?.name
-                              ? `${p.categorySlug.parent.name} / ${p.categorySlug?.name || ''}`
-                              : (p.brand || 'Catalog item')}
+                              ? `${categoryName(p.categorySlug.parent.name)} / ${categoryName(p.categorySlug?.name || '')}`
+                              : (p.brand || t('Catalog item'))}
                           </span>
                           <strong>{p.name}</strong>
-                          <p>{p.description?.trim() || 'Open the product to review specifications, available variants, and quotation options.'}</p>
+                          <p>{productDescription(p, category, categoryName, t)}</p>
                         </div>
 
                         <div className="category-details-product-footer">
                           <span className="category-details-product-price">
-                            {Number.isFinite(price) && price > 0 ? `${price.toFixed(3)} BHD` : 'Quote on request'}
+                            {Number.isFinite(price) && price > 0 ? `${price.toFixed(3)} BHD` : t('Quote on request')}
                           </span>
-                          <span className="category-details-product-cta">Open product</span>
+                          <span className="category-details-product-cta">{t('Open product')}</span>
                         </div>
                       </Link>
                     </li>

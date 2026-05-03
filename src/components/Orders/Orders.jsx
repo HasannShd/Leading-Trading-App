@@ -2,22 +2,26 @@ import { useEffect, useState, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './Orders.css';
 import { authFetch } from '../../services/authFetch';
+import { useLanguage } from '../../context/LanguageContext';
 
 const Orders = () => {
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [notice, setNotice] = useState('');
 
   const downloadInvoice = async (orderId, invoiceNumber) => {
+    setNotice('');
     try {
       const response = await authFetch(`/orders/${orderId}/invoice`, { scope: 'user' });
         if (!response.ok) {
           const data = await response.json().catch(() => ({}));
           if (response.status === 401) {
-            alert('Session expired. Please sign in again.');
+            setNotice(t('Session expired. Please sign in again.'));
             return;
           }
-          alert(data.message || 'Failed to download invoice');
+          setNotice(data.message || t('Failed to download invoice'));
           return;
         }
       const blob = await response.blob();
@@ -30,7 +34,7 @@ const Orders = () => {
       link.remove();
       window.URL.revokeObjectURL(url);
     } catch (err) {
-      alert('Failed to download invoice');
+      setNotice(t('Failed to download invoice'));
     }
   };
 
@@ -58,32 +62,35 @@ const Orders = () => {
   return (
     <main>
       <section className="orders-section">
-        <h1>My Orders</h1>
+        <h1>{t('My Orders')}</h1>
         {loading ? (
-          <p className="shop-empty">Loading orders...</p>
+          <p className="shop-empty">{t('Loading orders...')}</p>
         ) : orders.length === 0 ? (
-          <p className="shop-empty">No orders yet.</p>
+          <p className="shop-empty">{t('No orders yet.')}</p>
         ) : (
-          <div className="orders-list">
-            {orders.map(order => (
-              <div key={order._id} className="order-card">
-                <div>
-                  <h3>{order.invoiceNumber}</h3>
-                  <div className={`order-status ${order.status}`}>{order.status}</div>
-                  <p>Total: {Number(order.total).toFixed(3)} BHD</p>
+          <>
+            {notice ? <div className="orders-notice" role="alert">{notice}</div> : null}
+            <div className="orders-list">
+              {orders.map(order => (
+                <div key={order._id} className="order-card">
+                  <div>
+                    <h3>{order.invoiceNumber}</h3>
+                    <div className={`order-status ${order.status}`}>{order.status}</div>
+                    <p>{t('Total')}: {Number(order.total).toFixed(3)} BHD</p>
+                  </div>
+                  <div className="order-actions">
+                    <button
+                      className="btn"
+                      onClick={() => downloadInvoice(order._id, order.invoiceNumber)}
+                    >
+                      {t('Download Invoice')}
+                    </button>
+                    <Link className="btn" to="/shop">{t('Shop again')}</Link>
+                  </div>
                 </div>
-                <div className="order-actions">
-                  <button
-                    className="btn"
-                    onClick={() => downloadInvoice(order._id, order.invoiceNumber)}
-                  >
-                    Download Invoice
-                  </button>
-                  <Link className="btn" to="/shop">Shop again</Link>
-                </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          </>
         )}
       </section>
     </main>

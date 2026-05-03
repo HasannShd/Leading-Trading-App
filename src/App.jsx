@@ -12,6 +12,7 @@ import NotFoundPage from './components/NotFoundPage.jsx';
 import ProtectedAdminRoute from './components/ProtectedAdminRoute';
 import { AdminContext, AdminProvider } from './context/AdminContext';
 import { AuthProvider } from './context/AuthContext';
+import { LanguageProvider } from './context/LanguageContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import { StaffContext, StaffProvider } from './context/StaffContext';
 import ProtectedStaffRoute from './components/ProtectedStaffRoute';
@@ -73,7 +74,7 @@ const AppShell = () => {
   const showStaffChat = staff && location.pathname.startsWith('/staff') && location.pathname !== '/staff/login';
 
   return (
-    <div className={`app${isHeroPage ? ' hero-page' : ''}${isPortalRoute ? ' admin-app' : ''}`}>
+    <div className={`app${isHeroPage ? ' hero-page' : ''}${isPortalRoute ? ' admin-app' : ''}`} dir={isPortalRoute ? 'ltr' : undefined}>
       <PageTransition />
       {!isPortalRoute && <Header />}
       <main className="app-main">
@@ -209,7 +210,9 @@ const RoutedApp = () => {
 export default function App() {
   return (
     <Router>
-      <RoutedApp />
+      <LanguageProvider>
+        <RoutedApp />
+      </LanguageProvider>
     </Router>
   );
 }

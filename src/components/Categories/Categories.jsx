@@ -3,12 +3,15 @@ import { Link } from 'react-router-dom';
 import Card from '../Common/Card';
 import Input from '../Common/Input';
 import StatePanel from '../Common/StatePanel';
-import { buildCategoryTree } from '../../utils/categoryTree';
+import Seo from '../Common/Seo';
+import { useLanguage } from '../../context/LanguageContext';
+import { asCategoryArray, buildCategoryTree } from '../../utils/categoryTree';
 import { useScrollReveal } from '../../hooks/useScrollReveal';
 import './Categories.css';
 
 const Categories = () => {
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+  const { t, categoryName, categoryDescription } = useLanguage();
   const [categories, setCategories] = useState([]);
   const [q, setQ] = useState('');
   const [loading, setLoading] = useState(true);
@@ -23,7 +26,7 @@ const Categories = () => {
     try {
       const response = await fetch(`${API_URL}/categories`);
       const data = await response.json();
-      const nextCategories = Array.isArray(data) ? data : [];
+      const nextCategories = asCategoryArray(data);
       setCategories(nextCategories);
     } catch (err) {
       setError('We could not load the category catalog right now.');
@@ -44,44 +47,52 @@ const Categories = () => {
     return s
       ? tree.filter((parent) =>
           parent.name.toLowerCase().includes(s) ||
+          categoryName(parent.name).toLowerCase().includes(s) ||
           (parent.description || '').toLowerCase().includes(s) ||
+          (categoryDescription(parent.description || '') || '').toLowerCase().includes(s) ||
           parent.children.some((child) =>
             child.name.toLowerCase().includes(s) ||
+            categoryName(child.name).toLowerCase().includes(s) ||
             (child.description || '').toLowerCase().includes(s)
           )
         )
       : tree;
-  }, [deferredQuery, categories]);
+  }, [deferredQuery, categories, categoryName, categoryDescription]);
 
   const withDescriptions = categories.filter((category) => category.description?.trim()).length;
 
   return (
     <main>
+      <Seo
+        title="Medical, Dental & Industrial Supply Categories Bahrain | LTE"
+        description="Explore Leading Trading Est categories for medical equipment, laboratory, CSSD, surgical instruments, dental, disposables, and industrial safety sourcing in Bahrain."
+        canonicalPath="/categories"
+      />
       <section className="categories-shell" ref={rootRef}>
         <section className="categories-hero">
           <div className="categories-hero-copy animate-stagger" data-stagger-step="110ms">
-            <span className="categories-eyebrow animate-on-scroll">Our Categories</span>
-            <h1 className="categories-title animate-on-scroll">Browse LTE&apos;s medical, dental, and industrial categories.</h1>
+            <span className="categories-eyebrow animate-on-scroll">{t('Our Categories')}</span>
+            <h1 className="categories-title animate-on-scroll">{t('Browse LTE&apos;s medical, dental, and industrial categories.')}</h1>
             <p className="categories-subtitle animate-on-scroll">
-              Review the main groups first, then open the relevant category to find the right department or supply area faster.
+              {t('Review the main groups first, then open the relevant category to find the right department or supply area faster.')}
             </p>
           </div>
 
           <div className="categories-hero-tools animate-stagger" data-stagger-step="120ms">
             <Input
               className="categories-search animate-on-scroll"
-              placeholder="Search categories, departments, or supply types"
+              placeholder={t('Search categories, departments, or supply types')}
               value={q}
               onChange={(e) => setQ(e.target.value)}
             />
             <div className="categories-hero-stats animate-stagger" data-stagger-step="120ms">
               <div className="categories-stat animate-on-scroll">
                 <strong>{categories.length}</strong>
-                <span>active categories</span>
+                <span>{t('active categories')}</span>
               </div>
               <div className="categories-stat animate-on-scroll">
                 <strong>{withDescriptions}</strong>
-                <span>with descriptions</span>
+                <span>{t('with descriptions')}</span>
               </div>
             </div>
           </div>
@@ -89,51 +100,51 @@ const Categories = () => {
 
         {loading ? (
           <StatePanel
-            eyebrow="Loading"
-            title="Preparing the category catalog"
-            description="We’re pulling the current category structure and matching assets."
+            eyebrow={t('Loading')}
+            title={t('Preparing the category catalog')}
+            description={t('We’re pulling the current category structure and matching assets.')}
             variant="loading"
           />
         ) : error ? (
           <StatePanel
-            eyebrow="Unavailable"
-            title="Category catalog not available"
-            description={error}
+            eyebrow={t('Unavailable')}
+            title={t('Category catalog not available')}
+            description={t(error)}
             variant="error"
-            action={<button className="btn primary" onClick={fetchCategories}>Try Again</button>}
+            action={<button className="btn primary" onClick={fetchCategories}>{t('Try Again')}</button>}
           />
         ) : list.length === 0 ? (
           <StatePanel
-            eyebrow="No Match"
-            title="No categories match that search"
+            eyebrow={t('No Match')}
+            title={t('No categories match that search')}
             description={q.trim()
-              ? `Nothing matched "${q.trim()}". Try a broader term or browse the full catalog.`
-              : 'No categories are available yet.'}
-            action={q.trim() ? <button className="btn" onClick={() => setQ('')}>Clear Search</button> : null}
+              ? `${t('Nothing matched')} "${q.trim()}". ${t('Try a broader term or browse the full catalog.')}`
+              : t('No categories are available yet.')}
+            action={q.trim() ? <button className="btn" onClick={() => setQ('')}>{t('Clear Search')}</button> : null}
           />
         ) : (
           <>
             <section className="categories-guidance animate-stagger" data-stagger-step="100ms">
               <article className="categories-guidance-card animate-on-scroll">
-                <span>Structured browsing</span>
-                <strong>Start with the main operating group, then open the relevant category directly.</strong>
-                <p>The catalog now stays at the main-category level so visitors can move into the right department faster.</p>
+                <span>{t('Structured browsing')}</span>
+                <strong>{t('Start with the main operating group, then open the relevant category directly.')}</strong>
+                <p>{t('The catalog now stays at the main-category level so visitors can move into the right department faster.')}</p>
               </article>
               <article className="categories-guidance-card animate-on-scroll">
-                <span>Practical filtering</span>
-                <strong>Use the search bar to narrow by department, supply type, or procurement purpose.</strong>
-                <p>Searches look across the full category catalog, making it easier to locate the correct supply path.</p>
+                <span>{t('Practical filtering')}</span>
+                <strong>{t('Use the search bar to narrow by department, supply type, or procurement purpose.')}</strong>
+                <p>{t('Searches look across the full category catalog, making it easier to locate the correct supply path.')}</p>
               </article>
               <article className="categories-guidance-card animate-on-scroll">
-                <span>Quotation support</span>
-                <strong>Open a category to review its products, then contact LTE for sourcing guidance.</strong>
-                <p>When you need help choosing the right section, the team can guide the next step directly.</p>
+                <span>{t('Quotation support')}</span>
+                <strong>{t('Open a category to review its products, then contact LTE for sourcing guidance.')}</strong>
+                <p>{t('When you need help choosing the right section, the team can guide the next step directly.')}</p>
               </article>
             </section>
 
             <div className="categories-results-bar animate-on-scroll">
-              <span>{list.length} category{list.length === 1 ? '' : 'ies'} available</span>
-              <p>Select a main category to review the products available inside that operating group.</p>
+              <span>{list.length} {t('available')}</span>
+              <p>{t('Select a main category to review the products available inside that operating group.')}</p>
             </div>
 
             <div className="categories-grid animate-stagger" data-stagger-step="100ms">
@@ -148,7 +159,7 @@ const Categories = () => {
                     key={c._id}
                     to={`/categories/${c.slug || c._id}`}
                     className="categories-card-link animate-on-scroll"
-                    aria-label={`Open ${c.name}`}
+                    aria-label={`${t('Open')} ${categoryName(c.name)}`}
                   >
                     <Card className="categories-card">
                       <div className="categories-card-image" data-category={categoryKey}>
@@ -164,24 +175,24 @@ const Categories = () => {
                             loading="lazy"
                           />
                         ) : (
-                          <span>{c.name[0]}</span>
+                          <span>{categoryName(c.name)[0]}</span>
                         )}
                       </div>
                       <div className="categories-card-content">
                         <div className="categories-card-topline">
-                          <span>Main Category</span>
-                          <strong>Open</strong>
+                          <span>{t('Main Category')}</span>
+                          <strong>{t('Open')}</strong>
                         </div>
-                        <h3 className="categories-card-title">{c.name}</h3>
+                        <h3 className="categories-card-title">{categoryName(c.name)}</h3>
                         <p className="categories-card-desc">
-                          {c.description?.trim() || 'Browse the products available inside this main category.'}
+                          {categoryDescription(c.description?.trim()) || t('Browse the products available inside this main category.')}
                         </p>
                         {c.children?.length ? (
                           <div className="categories-card-children">
                             {c.children.slice(0, 4).map((child) => (
-                              <span key={child._id}>{child.name}</span>
+                              <span key={child._id}>{categoryName(child.name)}</span>
                             ))}
-                            {c.children.length > 4 ? <strong>+{c.children.length - 4} more</strong> : null}
+                            {c.children.length > 4 ? <strong>+{c.children.length - 4} {t('more')}</strong> : null}
                           </div>
                         ) : null}
                       </div>

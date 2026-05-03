@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import StatePanel from '../Common/StatePanel';
+import { useLanguage } from '../../context/LanguageContext';
 import './Careers.css';
 
 // Careers page with application form
 const Careers = () => {
+  const { t } = useLanguage();
   const [form, setForm] = useState({ name: '', email: '', phone: '', nationality: '', cv: null });
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState('');
@@ -36,13 +38,13 @@ const Careers = () => {
         body: data,
       });
       if (!response.ok) {
-        setError('Failed to submit application. Please try again.');
+        setError(t('Failed to submit application. Please try again.'));
         setSubmitting(false);
         return;
       }
       setSubmitted(true);
     } catch (err) {
-      setError('Failed to submit application. Please try again.');
+      setError(t('Failed to submit application. Please try again.'));
       setSubmitting(false);
     }
   };
@@ -51,10 +53,9 @@ const Careers = () => {
     <main>
       <section className="careers-hero">
         <div className="careers-hero-content">
-          <h1>Join Our Team</h1>
+          <h1>{t('Join Our Team')}</h1>
           <p>
-            We’re always looking for passionate people to help improve healthcare access.
-            Share your details and CV and we’ll get back to you.
+            {t('We’re always looking for passionate people to help improve healthcare access. Share your details and CV and we’ll get back to you.')}
           </p>
         </div>
       </section>
@@ -62,9 +63,9 @@ const Careers = () => {
       <section className="careers-section">
         {submitted ? (
           <StatePanel
-            eyebrow="Application Sent"
-            title="Application received"
-            description="Thank you for your application. Our team will contact you soon."
+            eyebrow={t('Application Sent')}
+            title={t('Application received')}
+            description={t('Thank you for your application. Our team will contact you soon.')}
             variant="success"
             className="careers-success"
           />
@@ -72,8 +73,8 @@ const Careers = () => {
           <form className="careers-form" onSubmit={handleSubmit}>
             {error ? (
               <StatePanel
-                eyebrow="Submission Error"
-                title="We couldn’t send your application"
+                eyebrow={t('Submission Error')}
+                title={t('We couldn’t send your application')}
                 description={error}
                 variant="error"
                 className="careers-feedback"
@@ -81,7 +82,7 @@ const Careers = () => {
             ) : null}
             <div className="careers-form-row">
               <label>
-                Name
+                {t('Name')}
                 <input
                   type="text"
                   name="name"
@@ -92,7 +93,7 @@ const Careers = () => {
                 />
               </label>
               <label>
-                Email
+                {t('Email')}
                 <input
                   type="email"
                   name="email"
@@ -104,7 +105,7 @@ const Careers = () => {
             </div>
             <div className="careers-form-row">
               <label>
-                Phone Number
+                {t('Phone Number')}
                 <input
                   type="tel"
                   name="phone"
@@ -115,7 +116,7 @@ const Careers = () => {
                 />
               </label>
               <label>
-                Nationality
+                {t('Nationality')}
                 <input
                   type="text"
                   name="nationality"
@@ -127,7 +128,7 @@ const Careers = () => {
               </label>
             </div>
             <label>
-              Upload CV
+              {t('Upload CV')}
               <div className="careers-file-input">
                 <input
                   id="careers-cv-upload"
@@ -139,15 +140,15 @@ const Careers = () => {
                   className="careers-file-native"
                 />
                 <label htmlFor="careers-cv-upload" className="careers-file-trigger">
-                  Choose File
+                  {t('Choose File')}
                 </label>
                 <span className="careers-file-name">
-                  {form.cv?.name || 'No file chosen'}
+                  {form.cv?.name || t('No file chosen')}
                 </span>
               </div>
             </label>
             <button type="submit" className="btn" disabled={submitting}>
-              {submitting ? 'Sending Application...' : 'Submit Application'}
+              {submitting ? t('Sending Application...') : t('Submit Application')}
             </button>
           </form>
         )}

@@ -81,6 +81,16 @@
   font-size: 0.95rem;
 }
 
+.checkout-form-notice {
+  background: rgba(153, 27, 27, 0.08);
+  border: 1px solid rgba(153, 27, 27, 0.16);
+  color: #7f1d1d;
+  padding: 12px 14px;
+  border-radius: 14px;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
 .checkout-disabled {
   opacity: 0.6;
 }

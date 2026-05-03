@@ -12,15 +12,26 @@ const websiteLinks = [
   { label: 'Account', to: '/admin/account', meta: 'Security + profile', icon: '⚙' },
 ];
 
-const getDownloadFilename = (response) => {
+const getDownloadFilename = (response, fallbackName = 'lte-full-export.xlsx') => {
   const header = response.headers.get('content-disposition') || '';
   const match = header.match(/filename="([^"]+)"/i);
-  return match?.[1] || 'lte-full-export.xlsx';
+  return match?.[1] || fallbackName;
+};
+
+const downloadBlobResponse = async (response, fallbackName) => {
+  const blob = await response.blob();
+  const url = window.URL.createObjectURL(blob);
+  const anchor = document.createElement('a');
+  anchor.href = url;
+  anchor.download = getDownloadFilename(response, fallbackName);
+  anchor.click();
+  window.URL.revokeObjectURL(url);
 };
 
 const AdminWebsitePage = () => {
   const [downloading, setDownloading] = useState(false);
   const [downloadingRecovery, setDownloadingRecovery] = useState(false);
+  const [downloadingBackup, setDownloadingBackup] = useState(false);
   const [status, setStatus] = useState('');
   const [error, setError] = useState('');
 
@@ -34,13 +45,7 @@ const AdminWebsitePage = () => {
         const data = await response.json().catch(() => ({}));
         throw new Error(data.message || data.err || 'Failed to generate full export.');
       }
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const anchor = document.createElement('a');
-      anchor.href = url;
-      anchor.download = getDownloadFilename(response);
-      anchor.click();
-      window.URL.revokeObjectURL(url);
+      await downloadBlobResponse(response, 'lte-full-export.xlsx');
       setStatus('Full export downloaded.');
     } catch (downloadError) {
       setError(downloadError.message || 'Failed to generate full export.');
@@ -59,18 +64,32 @@ const AdminWebsitePage = () => {
         const data = await response.json().catch(() => ({}));
         throw new Error(data.message || data.err || 'Failed to generate recovery export.');
       }
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const anchor = document.createElement('a');
-      anchor.href = url;
-      anchor.download = getDownloadFilename(response);
-      anchor.click();
-      window.URL.revokeObjectURL(url);
+      await downloadBlobResponse(response, 'lte-full-recovery-export.json');
       setStatus('Recovery export downloaded.');
     } catch (downloadError) {
       setError(downloadError.message || 'Failed to generate recovery export.');
     } finally {
       setDownloadingRecovery(false);
+    }
+  };
+
+  const downloadDatabaseBackup = async () => {
+    setDownloadingBackup(true);
+    setStatus('');
+    setError('');
+    try {
+      const response = await authFetch('/admin-portal/database-backup', { scope: 'admin' });
+      if (!response.ok) {
+        const data = await response.json().catch(() => ({}));
+        throw new Error(data.message || data.err || 'Failed to generate database backup.');
+      }
+      await downloadBlobResponse(response, 'lte-backup.tgz');
+      const encrypted = response.headers.get('x-backup-encrypted') === 'true';
+      setStatus(encrypted ? 'Encrypted database backup downloaded.' : 'Database backup downloaded.');
+    } catch (downloadError) {
+      setError(downloadError.message || 'Failed to generate database backup.');
+    } finally {
+      setDownloadingBackup(false);
     }
   };
 
@@ -104,6 +123,20 @@ const AdminWebsitePage = () => {
             </div>
             <button className="portal-inline-button secondary" type="button" onClick={downloadRecoveryExport} disabled={downloadingRecovery}>
               {downloadingRecovery ? 'Preparing archive...' : 'Download Recovery Archive'}
+            </button>
+          </div>
+        </div>
+        <div className="portal-card" style={{ marginTop: '1rem' }}>
+          <div className="portal-section-head">
+            <div>
+              <div className="portal-brand-kicker">Database Backup</div>
+              <h2 className="portal-section-title" style={{ fontSize: '1.45rem' }}>Download Mongo backup archive</h2>
+              <p className="portal-section-copy">
+                Use this if the automated Google Drive backup fails. The archive contains every database collection plus metadata and is verified before download.
+              </p>
+            </div>
+            <button className="portal-inline-button secondary" type="button" onClick={downloadDatabaseBackup} disabled={downloadingBackup}>
+              {downloadingBackup ? 'Preparing backup...' : 'Download DB Backup'}
             </button>
           </div>
         </div>

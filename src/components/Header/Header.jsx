@@ -1,13 +1,15 @@
 import { useState, useEffect, useRef, useContext, useCallback, useMemo } from 'react';
 import { NavLink, Link, useLocation } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
-import { buildCategoryTree } from '../../utils/categoryTree';
+import { useLanguage } from '../../context/LanguageContext';
+import { asCategoryArray, buildCategoryTree } from '../../utils/categoryTree';
 import './Header.css';
 
 // Header: Top navigation bar with dropdown for categories
 const Header = () => {
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
   const { user, logout } = useContext(AuthContext);
+  const { isArabic, t, categoryName, toggleLanguage } = useLanguage();
   const location = useLocation();
 
   // State
@@ -27,7 +29,7 @@ const Header = () => {
     try {
       const res = await fetch(`${API_URL}/categories`);
       const data = await res.json();
-      setCategories(data);
+      setCategories(asCategoryArray(data));
     } catch (err) {
       console.error('Failed to load categories:', err);
     }
@@ -109,8 +111,8 @@ const Header = () => {
             <img src={`${import.meta.env.BASE_URL}company-logo.png`} alt="Leading Trading Est" />
           </span>
           <span className="brand-copy">
-            <strong>Leading Trading Est</strong>
-            <span>Medical, dental & industrial supply</span>
+            <strong>{t('Leading Trading Est')}</strong>
+            <span>{t('Medical, dental & industrial supply')}</span>
           </span>
         </Link>
 
@@ -149,7 +151,7 @@ const Header = () => {
           className={`nav nav-relative${mobileNav ? ' nav-mobile-active' : ''}`}
         >
           <NavLink to="/" end onClick={() => setMobileNav(false)}>
-            Home
+            {t('Home')}
           </NavLink>
 
           {/* Categories Dropdown */}
@@ -169,14 +171,14 @@ const Header = () => {
                   setDropdown((d) => !d);
                 }}
               >
-                Categories ▾
+                {t('Categories')} ▾
               </button>
             ) : (
               <NavLink
                 to="/categories"
                 className="nav-dropdown-toggle"
               >
-                Categories ▾
+                {t('Categories')} ▾
               </NavLink>
             )}
 
@@ -190,7 +192,7 @@ const Header = () => {
                   className="nav-dropdown-item nav-dropdown-item-all"
                   onClick={closeMenus}
                 >
-                  Browse All Categories
+                  {t('Browse All Categories')}
                 </Link>
                 {isMobileViewport && (
                   <Link
@@ -198,7 +200,7 @@ const Header = () => {
                     className="nav-dropdown-item nav-dropdown-item-all"
                     onClick={closeMenus}
                   >
-                    All Categories
+                    {t('All Categories')}
                   </Link>
                 )}
                 {categoryTree.map((parent) => {
@@ -209,7 +211,7 @@ const Header = () => {
                       className="nav-dropdown-item nav-dropdown-item-parent"
                       onClick={closeMenus}
                     >
-                      {parent.name}
+                      {categoryName(parent.name)}
                     </Link>
                     {parent.children?.map((child) => (
                       <Link
@@ -218,7 +220,7 @@ const Header = () => {
                         className="nav-dropdown-item nav-dropdown-item-child"
                         onClick={closeMenus}
                       >
-                        {child.name}
+                        {categoryName(child.name)}
                       </Link>
                     ))}
                   </div>
@@ -229,46 +231,55 @@ const Header = () => {
           </div>
 
           <NavLink to="/shop" onClick={() => setMobileNav(false)}>
-            Products
+            {t('Products')}
           </NavLink>
 
           <NavLink to="/careers" onClick={() => setMobileNav(false)}>
-            Careers
+            {t('Careers')}
           </NavLink>
 
           <NavLink to="/contact" onClick={() => setMobileNav(false)}>
-            Contact
+            {t('Contact')}
           </NavLink>
 
           <NavLink to="/cart" onClick={() => setMobileNav(false)}>
-            Cart
+            {t('Cart')}
           </NavLink>
 
           {user && (
             <NavLink to="/orders" onClick={() => setMobileNav(false)}>
-              Orders
+              {t('Orders')}
             </NavLink>
           )}
+
+          <button
+            type="button"
+            className="language-toggle nav-language-toggle"
+            onClick={toggleLanguage}
+            aria-label={isArabic ? 'Switch language to English' : 'تغيير اللغة إلى العربية'}
+          >
+            {isArabic ? 'EN' : 'عربي'}
+          </button>
 
           {/* Mobile actions */}
           {mobileNav && (
             <div className="nav-mobile-actions">
-              <a className="btn" href="tel:+97339939582">Call</a>
+              <a className="btn" href="tel:+97339939582">{t('Call')}</a>
               <a
                 className="btn primary"
                 href="https://wa.me/97317210665"
                 target="_blank"
                 rel="noreferrer"
               >
-                WhatsApp
+                {t('WhatsApp')}
               </a>
               {user ? (
                 <>
-                  <Link className="btn" to="/orders">Orders</Link>
-                  <button className="btn" onClick={logout}>Logout</button>
+                  <Link className="btn" to="/orders">{t('Orders')}</Link>
+                  <button className="btn" onClick={logout}>{t('Logout')}</button>
                 </>
               ) : (
-                <Link className="btn" to="/sign-in">Sign In</Link>
+                <Link className="btn" to="/sign-in">{t('Sign In')}</Link>
               )}
             </div>
           )}
@@ -278,19 +289,27 @@ const Header = () => {
 
         {/* Desktop actions */}
         <div className="header-actions-desktop">
-          <a className="btn" href="tel:+97339939582">Call</a>
+          <button
+            type="button"
+            className="language-toggle"
+            onClick={toggleLanguage}
+            aria-label={isArabic ? 'Switch language to English' : 'تغيير اللغة إلى العربية'}
+          >
+            {isArabic ? 'EN' : 'عربي'}
+          </button>
+          <a className="btn" href="tel:+97339939582">{t('Call')}</a>
           <a
             className="btn primary"
             href="https://wa.me/97317210665"
             target="_blank"
             rel="noreferrer"
           >
-            WhatsApp
+            {t('WhatsApp')}
           </a>
           {user ? (
-            <button className="btn" onClick={logout}>Logout</button>
+            <button className="btn" onClick={logout}>{t('Logout')}</button>
           ) : (
-            <Link className="btn" to="/sign-in">Sign In</Link>
+            <Link className="btn" to="/sign-in">{t('Sign In')}</Link>
           )}
         </div>
       </div>

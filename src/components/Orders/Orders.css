@@ -35,6 +35,16 @@
   flex-wrap: wrap;
 }
 
+.orders-notice {
+  margin: 0 0 16px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: rgba(153, 27, 27, 0.08);
+  border: 1px solid rgba(153, 27, 27, 0.16);
+  color: #7f1d1d;
+  line-height: 1.5;
+}
+
 .order-card h3 {
   margin: 0 0 6px;
   color: var(--navy-900);

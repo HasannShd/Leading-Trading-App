@@ -4,8 +4,10 @@ import Input from '../Common/Input';
 import Card from '../Common/Card';
 import StatePanel from '../Common/StatePanel';
 import SkeletonGrid from '../Common/SkeletonGrid';
+import Seo from '../Common/Seo';
+import { useLanguage } from '../../context/LanguageContext';
 import { normalizeImageSrc } from '../../utils/normalizeImageSrc';
-import { buildCategoryTree } from '../../utils/categoryTree';
+import { asCategoryArray, buildCategoryTree, getCategoryId } from '../../utils/categoryTree';
 import { useScrollReveal } from '../../hooks/useScrollReveal';
 import './Shop.css';
 
@@ -15,6 +17,10 @@ const memoryCache = {
   categories: null,
   products: new Map(),
 };
+
+const asProductArray = (value) => (Array.isArray(value) ? value.filter(Boolean) : []);
+
+const getProductId = (product, index) => String(product?._id || product?.id || `catalog-item-${index}`);
 
 const getSessionCache = (key) => {
   if (typeof window === 'undefined') return null;
@@ -44,8 +50,21 @@ const getProductPrice = (product) => {
   return 0;
 };
 
+const suggestionText = (value) => String(value || '').trim();
+
+const productDescription = (product, t) => {
+  const description = product?.description?.trim();
+  if (description) return description;
+  const categoryLabel = product?.categorySlug?.name || product?.categorySlug?.parent?.name;
+  if (categoryLabel) {
+    return `${t('Product details, variants, and quotation support for')} ${categoryLabel}.`;
+  }
+  return t('Contact LTE for specifications, availability, and quotation support for this catalog item.');
+};
+
 const Shop = () => {
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+  const { t, categoryName } = useLanguage();
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [q, setQ] = useState('');
@@ -76,7 +95,7 @@ const Shop = () => {
       const response = await fetch(`${API_URL}/categories`);
       if (!response.ok) return;
       const data = await response.json();
-      const nextCategories = Array.isArray(data) ? data : [];
+      const nextCategories = asCategoryArray(data);
       memoryCache.categories = nextCategories;
       setSessionCache(cacheKey, nextCategories);
       setCategories(nextCategories);
@@ -106,7 +125,7 @@ const Shop = () => {
     try {
       const response = await fetch(`${API_URL}/products?${params.toString()}`);
       const data = await response.json();
-      const items = Array.isArray(data) ? data : (data.items || []);
+      const items = Array.isArray(data) ? data : asProductArray(data.items);
       const nextPayload = {
         items,
         total: Array.isArray(data) ? data.length : (data.total || 0),
@@ -169,8 +188,13 @@ const Shop = () => {
   );
 
   const categoryTree = useMemo(() => buildCategoryTree(categories), [categories]);
+  const flatCategories = useMemo(() => asCategoryArray(categories), [categories]);
+  const selectedCategory = useMemo(
+    () => flatCategories.find((item) => getCategoryId(item) === category),
+    [category, flatCategories]
+  );
   const sortedProducts = useMemo(() => {
-    const next = [...products];
+    const next = asProductArray(products);
     if (sort === 'price') {
       next.sort((a, b) => getProductPrice(a) - getProductPrice(b));
     } else if (sort === 'name') {
@@ -180,87 +204,179 @@ const Shop = () => {
     }
     return next;
   }, [products, sort]);
+  const searchSuggestions = useMemo(() => {
+    const term = q.trim().toLowerCase();
+    if (term.length < 2) return [];
+
+    const suggestions = [];
+    const seen = new Set();
+    const addSuggestion = (label, meta, value = label) => {
+      const cleanLabel = suggestionText(label);
+      const cleanValue = suggestionText(value);
+      if (!cleanLabel || !cleanValue) return;
+      const key = `${cleanLabel.toLowerCase()}|${meta}`;
+      if (seen.has(key)) return;
+      seen.add(key);
+      suggestions.push({ label: cleanLabel, meta, value: cleanValue });
+    };
+
+    flatCategories.forEach((item) => {
+      const label = categoryName(item.name);
+      if (label?.toLowerCase().includes(term) || item.name?.toLowerCase().includes(term)) {
+        addSuggestion(label, t('Category'), item.name);
+      }
+    });
+
+    products.forEach((product) => {
+      if (
+        [product.name, product.brand, product.sku, product.description]
+          .filter(Boolean)
+          .some((field) => String(field).toLowerCase().includes(term))
+      ) {
+        addSuggestion(product.name, product.brand || product.sku || t('Product'));
+      }
+    });
+
+    return suggestions.slice(0, 6);
+  }, [categoryName, flatCategories, products, q, t]);
   const showInitialLoading = loading && products.length === 0;
 
   return (
     <main>
+      <Seo
+        title="Product Catalog | Medical, Dental & Industrial Supplies Bahrain | LTE"
+        description="Browse Leading Trading Est products for Bahrain healthcare, dental, laboratory, CSSD, safety, and industrial procurement with quotation support."
+        canonicalPath="/shop"
+      />
       <section className="shop-shell" ref={rootRef}>
+        <nav className="shop-breadcrumb animate-on-scroll" aria-label="Breadcrumb">
+          <Link to="/">{t('Home')}</Link>
+          <span aria-hidden="true">›</span>
+          <strong>{t('Products')}</strong>
+          {selectedCategory?.name && (
+            <>
+              <span aria-hidden="true">›</span>
+              <strong>{categoryName(selectedCategory.name)}</strong>
+            </>
+          )}
+        </nav>
+
+        <Link className="shop-floating-quote" to="/contact?source=shop" aria-label={t('Request Quotation')}>
+          {t('Request Quote')}
+        </Link>
+
         <section className="shop-hero">
           <div className="shop-hero-copy animate-stagger" data-stagger-step="110ms">
-            <span className="shop-eyebrow animate-on-scroll">Product Catalog</span>
-            <h1 className="animate-on-scroll">A structured catalog for medical, dental, and industrial sourcing.</h1>
+            <span className="shop-eyebrow animate-on-scroll">{t('Product Catalog')}</span>
+            <h1 className="animate-on-scroll">{t('A structured catalog for medical, dental, and industrial sourcing.')}</h1>
             <p className="animate-on-scroll">
-              Review the active catalog, narrow by category, and move directly into product pages designed for quotations, repeat procurement, and operational decision-making.
+              {t('Review the active catalog, narrow by category, and move directly into product pages designed for quotations, repeat procurement, and operational decision-making.')}
             </p>
           </div>
 
           <div className="shop-hero-stats animate-stagger" data-stagger-step="120ms">
             <div className="shop-hero-stat animate-on-scroll">
               <strong>{total || products.length}</strong>
-              <span>products available</span>
+              <span>{t('products available')}</span>
             </div>
             <div className="shop-hero-stat animate-on-scroll">
               <strong>{categoryTree.length}</strong>
-              <span>main categories</span>
+              <span>{t('main categories')}</span>
             </div>
             <div className="shop-hero-stat animate-on-scroll">
               <strong>{featuredCount}</strong>
-              <span>featured selections</span>
+              <span>{t('featured selections')}</span>
             </div>
           </div>
         </section>
 
         <section className="shop-guidance animate-stagger" data-stagger-step="100ms">
           <article className="shop-guidance-card animate-on-scroll">
-            <span>Catalog approach</span>
-            <strong>Review products by category first when the requirement is operational rather than brand-specific.</strong>
-            <p>For most procurement teams, category-led browsing is the fastest way to move from requirement to shortlist.</p>
+            <span>{t('Catalog approach')}</span>
+            <strong>{t('Review products by category first when the requirement is operational rather than brand-specific.')}</strong>
+            <p>{t('For most procurement teams, category-led browsing is the fastest way to move from requirement to shortlist.')}</p>
           </article>
           <article className="shop-guidance-card animate-on-scroll">
-            <span>Quotation workflow</span>
-            <strong>Use the product pages to confirm specifications, variant structure, and quotation support.</strong>
-            <p>Where sizing, type selection, or documentation matters, the product detail page provides the clearer next step.</p>
+            <span>{t('Quotation workflow')}</span>
+            <strong>{t('Use the product pages to confirm specifications, variant structure, and quotation support.')}</strong>
+            <p>{t('Where sizing, type selection, or documentation matters, the product detail page provides the clearer next step.')}</p>
           </article>
           <article className="shop-guidance-card animate-on-scroll">
-            <span>Repeat procurement</span>
-            <strong>Built for recurring demand across healthcare, dental, safety, and facility support categories.</strong>
-            <p>The LTE catalog is organized to support both one-time sourcing needs and repeat account purchasing.</p>
+            <span>{t('Repeat procurement')}</span>
+            <strong>{t('Built for recurring demand across healthcare, dental, safety, and facility support categories.')}</strong>
+            <p>{t('The LTE catalog is organized to support both one-time sourcing needs and repeat account purchasing.')}</p>
           </article>
+        </section>
+
+        <section className="shop-trust-strip animate-stagger" data-stagger-step="80ms" aria-label="Trust and procurement support">
+          <div className="shop-trust-item animate-on-scroll">
+            <span>{t('Compliance support')}</span>
+            <strong>{t('Documentation and specification checks before quotation.')}</strong>
+          </div>
+          <div className="shop-trust-item animate-on-scroll">
+            <span>{t('Local response')}</span>
+            <strong>{t('Bahrain-based team for healthcare and industrial sourcing.')}</strong>
+          </div>
+          <div className="shop-trust-item animate-on-scroll">
+            <span>{t('Repeat buying')}</span>
+            <strong>{t('Catalog structure built for recurring procurement workflows.')}</strong>
+          </div>
         </section>
 
         <section className="shop-toolbar animate-stagger" data-stagger-step="100ms">
           <form onSubmit={handleSearch} className="shop-search">
-            <Input
-              className="animate-on-scroll"
-              placeholder="Search products by name, brand, or SKU"
-              value={q}
-              onChange={(e) => setQ(e.target.value)}
-            />
+            <div className="shop-search-field animate-on-scroll">
+              <Input
+                placeholder={t('Search products by name, brand, or SKU')}
+                value={q}
+                onChange={(e) => setQ(e.target.value)}
+                autoComplete="off"
+                aria-label={t('Search products by name, brand, or SKU')}
+              />
+              {searchSuggestions.length ? (
+                <div className="shop-search-suggestions">
+                  {searchSuggestions.map((suggestion) => (
+                    <button
+                      key={`${suggestion.meta}-${suggestion.label}`}
+                      type="button"
+                      onClick={() => {
+                        setQ(suggestion.value);
+                        setPage(1);
+                        setSearchQuery(suggestion.value);
+                      }}
+                    >
+                      <span>{suggestion.label}</span>
+                      <small>{suggestion.meta}</small>
+                    </button>
+                  ))}
+                </div>
+              ) : null}
+            </div>
             <select className="animate-on-scroll" value={category} onChange={(e) => { setCategory(e.target.value); setPage(1); }}>
-              <option value="">All Categories</option>
+              <option value="">{t('All Categories')}</option>
               {categoryTree.map((parent) => (
                 parent.children?.length ? (
-                  <optgroup key={parent._id} label={parent.name}>
-                    <option value={parent._id}>{parent.name} (All)</option>
+                  <optgroup key={parent._id} label={categoryName(parent.name)}>
+                    <option value={parent._id}>{categoryName(parent.name)} ({t('All Categories')})</option>
                     {parent.children.map((child) => (
-                      <option key={child._id} value={child._id}>{child.name}</option>
+                      <option key={child._id} value={child._id}>{categoryName(child.name)}</option>
                     ))}
                   </optgroup>
                 ) : (
-                  <option key={parent._id} value={parent._id}>{parent.name}</option>
+                  <option key={parent._id} value={parent._id}>{categoryName(parent.name)}</option>
                 )
               ))}
             </select>
             <select className="animate-on-scroll" value={sort} onChange={(e) => setSort(e.target.value)}>
-              <option value="featured">Sort: Featured</option>
-              <option value="name">Sort: Name</option>
-              <option value="price">Sort: Price</option>
+              <option value="featured">{t('Sort: Featured')}</option>
+              <option value="name">{t('Sort: Name')}</option>
+              <option value="price">{t('Sort: Price')}</option>
             </select>
-            <button className="btn primary animate-on-scroll" type="submit">Apply</button>
+            <button className="btn primary animate-on-scroll" type="submit">{t('Apply')}</button>
           </form>
 
           <div className="shop-toolbar-meta animate-on-scroll">
-            <span>{loading ? 'Updating catalog...' : `${sortedProducts.length} shown on this page`}</span>
+            <span>{loading ? t('Updating catalog...') : `${sortedProducts.length} ${t('shown on this page')}`}</span>
             {(searchQuery || category) && (
               <button
                 className="btn"
@@ -272,7 +388,7 @@ const Shop = () => {
                   setPage(1);
                 }}
               >
-                Reset Filters
+                {t('Reset Filters')}
               </button>
             )}
           </div>
@@ -282,59 +398,61 @@ const Shop = () => {
           <SkeletonGrid count={12} />
         ) : error ? (
           <StatePanel
-            eyebrow="Unavailable"
-            title="Product catalog unavailable"
-            description={error}
+            eyebrow={t('Unavailable')}
+            title={t('Product catalog unavailable')}
+            description={t(error)}
             variant="error"
-            action={<button className="btn primary" onClick={fetchProducts}>Try Again</button>}
+            action={<button className="btn primary" onClick={fetchProducts}>{t('Try Again')}</button>}
           />
         ) : sortedProducts.length === 0 ? (
           <StatePanel
-            eyebrow="No Results"
-            title="No products found"
-            description="The current filters returned no products. Broaden the search or reset filters."
+            eyebrow={t('No Results')}
+            title={t('No products found')}
+            description={t('The current filters returned no products. Broaden the search or reset filters.')}
           />
         ) : (
           <div className="shop-grid animate-stagger" data-stagger-step="90ms">
-            {sortedProducts.map((product) => {
+            {sortedProducts.map((product, index) => {
               const productImage = product.image || product.images?.[0] || '';
               const price = getProductPrice(product);
-              const imageFailed = brokenImages[product._id] === true;
+              const productId = getProductId(product, index);
+              const productName = product.name || 'Catalog product';
+              const imageFailed = brokenImages[productId] === true;
 
               return (
-                <Link key={product._id} to={`/product/${product._id}`} className="shop-card-link animate-on-scroll" onMouseMove={handleTiltMove} onMouseLeave={handleTiltReset}>
+                <Link key={productId} to={`/product/${productId}`} className="shop-card-link animate-on-scroll" onMouseMove={handleTiltMove} onMouseLeave={handleTiltReset}>
                   <Card className="shop-card">
                     <div className="shop-card-media">
                       {product.featured && (
-                        <span className="shop-card-badge">Featured</span>
+                        <span className="shop-card-badge">{t('Featured')}</span>
                       )}
                       {productImage && !imageFailed ? (
                         <img
                           src={normalizeImageSrc(productImage, { width: 480 })}
-                          alt={product.name}
+                          alt={productName}
                           loading="lazy"
                           decoding="async"
                           onError={() => {
-                            setBrokenImages((prev) => ({ ...prev, [product._id]: true }));
+                            setBrokenImages((prev) => ({ ...prev, [productId]: true }));
                           }}
                         />
                       ) : (
                         <div className="shop-card-placeholder">
-                          <span>{product.name?.[0] || 'P'}</span>
+                          <span>{productName[0] || 'P'}</span>
                         </div>
                       )}
                     </div>
                     <div className="shop-card-body">
                       <div className="shop-card-kicker">
-                        <span>{product.brand || 'Sourcing item'}</span>
+                        <span>{product.brand || t('Sourcing item')}</span>
                       </div>
-                      <h3>{product.name}</h3>
-                      <p>{product.description?.trim() || 'Open the product to review variants, specifications, and request options.'}</p>
+                      <h3>{productName}</h3>
+                      <p>{productDescription(product, t)}</p>
                       <div className="shop-card-footer">
                         <span className="shop-card-price">
-                          {price > 0 ? `${price.toFixed(3)} BHD` : 'Quote on request'}
+                          {price > 0 ? `${price.toFixed(3)} BHD` : t('Quote on request')}
                         </span>
-                        <span className="shop-card-cta">View details</span>
+                        <span className="shop-card-cta">{t('View details')}</span>
                       </div>
                     </div>
                   </Card>
@@ -346,9 +464,9 @@ const Shop = () => {
 
         {totalPages > 1 && (
           <div className="shop-pagination">
-            <button className="btn" disabled={page === 1} onClick={() => setPage((p) => p - 1)}>Prev</button>
-            <span>Page {page} of {totalPages}</span>
-            <button className="btn" disabled={page === totalPages} onClick={() => setPage((p) => p + 1)}>Next</button>
+            <button className="btn" disabled={page === 1} onClick={() => setPage((p) => p - 1)}>{t('Prev')}</button>
+            <span>{t('Page')} {page} {t('of')} {totalPages}</span>
+            <button className="btn" disabled={page === totalPages} onClick={() => setPage((p) => p + 1)}>{t('Next')}</button>
           </div>
         )}
       </section>

@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
+import Seo from '../Common/Seo';
+import { useLanguage } from '../../context/LanguageContext';
 import { normalizeImageSrc } from '../../utils/normalizeImageSrc';
 import { useHomepageScroll } from './useHomepageScroll';
 import './Homepage.css';
@@ -159,6 +161,7 @@ const clients = [
 const HomePage = () => {
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
   const baseUrl = import.meta.env.BASE_URL;
+  const { t, categoryName } = useLanguage();
   const rootRef = useRef(null);
   const [featuredProducts, setFeaturedProducts] = useState([]);
 
@@ -201,26 +204,31 @@ const HomePage = () => {
 
   return (
     <main className="cinematic-home" ref={rootRef}>
+      <Seo
+        title="Leading Trading Est | Medical & Industrial Supplies Bahrain"
+        description="Leading Trading Est supports Bahrain healthcare, dental, laboratory, safety, and industrial buyers with structured sourcing, supplier access, quotation support, and dependable delivery coordination."
+        canonicalPath="/"
+      />
       <section className="home-hero">
         <div className="home-hero__ambient" />
         <div className="home-hero__depth" aria-hidden="true" data-hero-parallax="bg" />
         <div className="home-shell home-hero__editorial">
           <div className="home-hero__copy animate-stagger" data-stagger-step="120ms">
-            <span className="home-eyebrow animate-on-scroll">Leading Trading Est. | Bahrain</span>
-            <h1 className="animate-on-scroll">Reliable medical and industrial supply with disciplined sourcing, quality assurance, and dependable local support.</h1>
+            <span className="home-eyebrow animate-on-scroll">{t('Leading Trading Est. | Bahrain')}</span>
+            <h1 className="animate-on-scroll">{t('Reliable medical and industrial supply with disciplined sourcing, quality assurance, and dependable local support.')}</h1>
             <div className="home-hero__meta">
               <p className="animate-on-scroll">
-                Leading Trading Est. supports hospitals, clinics, practices, and operational teams across Bahrain with structured sourcing, established supplier relationships, and coordinated delivery execution.
+                {t('Leading Trading Est. supports hospitals, clinics, practices, and operational teams across Bahrain with structured sourcing, established supplier relationships, and coordinated delivery execution.')}
               </p>
               <div className="home-hero__actions animate-on-scroll">
-                <Link className="home-btn home-btn--primary" to="/contact">Request a Quote</Link>
-                <Link className="home-btn home-btn--ghost" to="/categories">Explore Categories</Link>
+                <Link className="home-btn home-btn--primary" to="/contact?source=home">{t('Request a Quote')}</Link>
+                <Link className="home-btn home-btn--ghost" to="/categories">{t('Explore Categories')}</Link>
               </div>
             </div>
             <div className="home-hero__notes animate-stagger" data-stagger-step="90ms">
-              <span className="animate-on-scroll">NHRA-Approved</span>
-              <span className="animate-on-scroll">Medical and industrial sourcing</span>
-              <span className="animate-on-scroll">Dependable Bahrain-based support</span>
+              <span className="animate-on-scroll">{t('NHRA-Approved')}</span>
+              <span className="animate-on-scroll">{t('Medical and industrial sourcing')}</span>
+              <span className="animate-on-scroll">{t('Dependable Bahrain-based support')}</span>
             </div>
           </div>
         </div>
@@ -229,7 +237,7 @@ const HomePage = () => {
           {whyStats.slice(0, 3).map((item) => (
             <article className="hero-metric animate-on-scroll" key={item.label}>
               <strong>{item.value}</strong>
-              <span>{item.label}</span>
+              <span>{t(item.label)}</span>
             </article>
           ))}
         </div>
@@ -238,10 +246,10 @@ const HomePage = () => {
       <section className="home-section business-model">
         <div className="home-shell">
           <div className="section-heading animate-stagger" data-stagger-step="110ms">
-            <span className="home-eyebrow home-eyebrow--ink animate-on-scroll">How LTE creates value</span>
-            <h2 className="animate-on-scroll">Our business model combines supplier access, quality review, logistics planning, and customer follow-through.</h2>
+            <span className="home-eyebrow home-eyebrow--ink animate-on-scroll">{t('How LTE creates value')}</span>
+            <h2 className="animate-on-scroll">{t('Our business model combines supplier access, quality review, logistics planning, and customer follow-through.')}</h2>
             <p className="animate-on-scroll">
-              LTE is structured to support procurement decisions with better supplier visibility, clearer specification control, coordinated logistics, and responsive account management.
+              {t('LTE is structured to support procurement decisions with better supplier visibility, clearer specification control, coordinated logistics, and responsive account management.')}
             </p>
           </div>
 
@@ -249,9 +257,9 @@ const HomePage = () => {
             {valuePillars.map((pillar, index) => (
               <article className="pillar-card animate-on-scroll" key={pillar.title}>
                 <span className="pillar-card__index">{`0${index + 1}`}</span>
-                <h3>{pillar.title}</h3>
-                <p>{pillar.body}</p>
-                <strong>{pillar.detail}</strong>
+                <h3>{t(pillar.title)}</h3>
+                <p>{t(pillar.body)}</p>
+                <strong>{t(pillar.detail)}</strong>
               </article>
             ))}
           </div>
@@ -261,10 +269,10 @@ const HomePage = () => {
       <section className="home-section workflow-stage">
         <div className="home-shell workflow-stage__grid">
           <div className="workflow-stage__intro animate-stagger" data-stagger-step="110ms">
-            <span className="home-eyebrow home-eyebrow--ink animate-on-scroll">Workflow</span>
-            <h2 className="animate-on-scroll">A clear operating workflow supports every enquiry, quotation, procurement decision, and delivery commitment.</h2>
+            <span className="home-eyebrow home-eyebrow--ink animate-on-scroll">{t('Workflow')}</span>
+            <h2 className="animate-on-scroll">{t('A clear operating workflow supports every enquiry, quotation, procurement decision, and delivery commitment.')}</h2>
             <p className="animate-on-scroll">
-              Each requirement moves through review, sourcing, procurement alignment, logistics coordination, and delivery support so the customer receives a more dependable service path.
+              {t('Each requirement moves through review, sourcing, procurement alignment, logistics coordination, and delivery support so the customer receives a more dependable service path.')}
             </p>
             <div className="workflow-stage__line">
               <span className="workflow-stage__line-fill" />
@@ -276,8 +284,8 @@ const HomePage = () => {
               <article className="workflow-step animate-on-scroll" key={step.title}>
                 <span className="workflow-step__index">{`0${index + 1}`}</span>
                 <div>
-                  <h3>{step.title}</h3>
-                  <p>{step.body}</p>
+                  <h3>{t(step.title)}</h3>
+                  <p>{t(step.body)}</p>
                 </div>
               </article>
             ))}
@@ -288,10 +296,10 @@ const HomePage = () => {
       <section className="home-section sector-sequence">
         <div className="home-shell">
           <div className="section-heading animate-stagger" data-stagger-step="110ms">
-            <span className="home-eyebrow home-eyebrow--ink animate-on-scroll">Sector focus</span>
-            <h2 className="animate-on-scroll">One operating model supporting two sectors with different technical needs but the same requirement for dependable execution.</h2>
+            <span className="home-eyebrow home-eyebrow--ink animate-on-scroll">{t('Sector focus')}</span>
+            <h2 className="animate-on-scroll">{t('One operating model supporting two sectors with different technical needs but the same requirement for dependable execution.')}</h2>
             <p className="animate-on-scroll">
-              LTE serves medical and industrial buyers through the same standards of supplier assessment, quality review, logistics coordination, and local customer support.
+              {t('LTE serves medical and industrial buyers through the same standards of supplier assessment, quality review, logistics coordination, and local customer support.')}
             </p>
           </div>
 
@@ -303,12 +311,12 @@ const HomePage = () => {
                 key={sector.key}
               >
                 <div className="sector-shot__copy animate-on-scroll">
-                  <span className="home-eyebrow home-eyebrow--ink">{sector.eyebrow}</span>
-                  <h2>{sector.title}</h2>
-                  <p>{sector.body}</p>
+                  <span className="home-eyebrow home-eyebrow--ink">{t(sector.eyebrow)}</span>
+                  <h2>{t(sector.title)}</h2>
+                  <p>{t(sector.body)}</p>
                   <ul>
                     {sector.points.map((point) => (
-                      <li key={point}>{point}</li>
+                      <li key={point}>{t(point)}</li>
                     ))}
                   </ul>
                 </div>
@@ -316,9 +324,9 @@ const HomePage = () => {
                 <div className="sector-shot__visual animate-on-scroll" data-parallax={sector.key === 'medical' ? 'soft' : 'lift'}>
                   <div className="sector-shot__frame">
                     <div className="sector-shot__frame-copy">
-                      <span>{sector.eyebrow}</span>
-                      <strong>{sector.visualTitle}</strong>
-                      <p>{sector.visualBody}</p>
+                      <span>{t(sector.eyebrow)}</span>
+                      <strong>{t(sector.visualTitle)}</strong>
+                      <p>{t(sector.visualBody)}</p>
                     </div>
                     <div className="sector-shot__media">
                       <img src={`${baseUrl}${sector.image}`} alt={sector.eyebrow} loading="lazy" decoding="async" />
@@ -334,16 +342,16 @@ const HomePage = () => {
       <section className="home-section trust-stage">
         <div className="home-shell">
           <div className="section-heading animate-stagger" data-stagger-step="110ms">
-            <span className="home-eyebrow home-eyebrow--ink animate-on-scroll">Trusted brands and institutions</span>
-            <h2 className="animate-on-scroll">Our supplier network and institutional customer base reflect the standards we are expected to maintain.</h2>
+            <span className="home-eyebrow home-eyebrow--ink animate-on-scroll">{t('Trusted brands and institutions')}</span>
+            <h2 className="animate-on-scroll">{t('Our supplier network and institutional customer base reflect the standards we are expected to maintain.')}</h2>
             <p className="animate-on-scroll">
-              LTE works with selected manufacturers and supports institutions that require reliability, product quality, and professional service standards.
+              {t('LTE works with selected manufacturers and supports institutions that require reliability, product quality, and professional service standards.')}
             </p>
           </div>
 
           <div className="trust-stage__copy animate-on-scroll">
             <p>
-              Our relationships with established brands and respected institutions demonstrate the level of trust placed in our sourcing, coordination, and delivery performance.
+              {t('Our relationships with established brands and respected institutions demonstrate the level of trust placed in our sourcing, coordination, and delivery performance.')}
             </p>
           </div>
 
@@ -373,19 +381,19 @@ const HomePage = () => {
         <div className="home-shell">
           <div className="section-heading section-heading--inline animate-stagger" data-stagger-step="110ms">
             <div className="animate-stagger" data-stagger-step="110ms">
-              <span className="home-eyebrow home-eyebrow--ink animate-on-scroll">Core categories</span>
-              <h2 className="animate-on-scroll">Supply categories supporting clinical, dental, and industrial operations.</h2>
+              <span className="home-eyebrow home-eyebrow--ink animate-on-scroll">{t('Core categories')}</span>
+              <h2 className="animate-on-scroll">{t('Supply categories supporting clinical, dental, and industrial operations.')}</h2>
             </div>
-            <Link className="home-inline-link animate-on-scroll" to="/categories">Browse all categories</Link>
+            <Link className="home-inline-link animate-on-scroll" to="/categories">{t('Browse all categories')}</Link>
           </div>
 
           <div className="category-grid animate-stagger" data-stagger-step="100ms">
             {homepageCategories.map((category) => (
               <Link className="category-card animate-on-scroll" key={category.name} to={`/categories/${category.slug}`}>
-                <small>{category.label}</small>
-                <h3>{category.name}</h3>
-                <p>{category.description}</p>
-                <span>Explore category</span>
+                <small>{t(category.label)}</small>
+                <h3>{categoryName(category.name)}</h3>
+                <p>{t(category.description)}</p>
+                <span>{t('Explore category')}</span>
               </Link>
             ))}
           </div>
@@ -393,10 +401,10 @@ const HomePage = () => {
           {spotlightProducts.length > 0 ? (
             <div className="featured-showcase">
               <div className="featured-showcase__intro animate-stagger" data-stagger-step="110ms">
-                <span className="home-eyebrow home-eyebrow--ink animate-on-scroll">Selected product highlights</span>
-                <h3 className="animate-on-scroll">A focused look at representative products across the LTE catalog.</h3>
+                <span className="home-eyebrow home-eyebrow--ink animate-on-scroll">{t('Selected product highlights')}</span>
+                <h3 className="animate-on-scroll">{t('A focused look at representative products across the LTE catalog.')}</h3>
                 <p className="animate-on-scroll">
-                  These highlights give a clearer sense of the products, categories, and practical use cases LTE supports across medical, dental, and industrial operations.
+                  {t('These highlights give a clearer sense of the products, categories, and practical use cases LTE supports across medical, dental, and industrial operations.')}
                 </p>
               </div>
 
@@ -404,16 +412,16 @@ const HomePage = () => {
                 {leadProduct ? (
                   <Link className="featured-spotlight animate-on-scroll" to={`/product/${leadProduct._id}`}>
                     <div className="featured-spotlight__copy">
-                      <small>Product spotlight</small>
+                      <small>{t('Product spotlight')}</small>
                       <h3>{leadProduct.name}</h3>
                       <p>
                         {leadProduct.description?.trim() ||
-                          'Open the product page to review specifications, quotation support, and category context.'}
+                          t('Open the product page to review specifications, quotation support, and category context.')}
                       </p>
 
                       <div className="featured-spotlight__meta">
-                        <span>{leadProduct.brand || 'LTE catalog'}</span>
-                        <strong>{leadProduct.categorySlug?.name || 'Request quotation'}</strong>
+                        <span>{leadProduct.brand || t('LTE catalog')}</span>
+                        <strong>{leadProduct.categorySlug?.name ? categoryName(leadProduct.categorySlug.name) : t('Request quotation')}</strong>
                       </div>
                     </div>
 
@@ -439,13 +447,13 @@ const HomePage = () => {
                       </div>
 
                       <div className="featured-compact__copy">
-                        <small>{product.brand || 'LTE selection'}</small>
+                        <small>{product.brand || t('LTE selection')}</small>
                         <h4>{product.name}</h4>
                         <p>
                           {product.description?.trim() ||
-                            'Open the listing for product details, quotation handling, and category reference.'}
+                            t('Open the listing for product details, quotation handling, and category reference.')}
                         </p>
-                        <span>{product.categorySlug?.name || 'Open product'}</span>
+                        <span>{product.categorySlug?.name ? categoryName(product.categorySlug.name) : t('Open product')}</span>
                       </div>
                     </Link>
                   ))}
@@ -459,18 +467,18 @@ const HomePage = () => {
       <section className="home-section credibility-stage">
         <div className="home-shell credibility-stage__panel">
           <div className="credibility-stage__statement animate-stagger" data-stagger-step="110ms">
-            <span className="home-eyebrow animate-on-scroll">Why LTE</span>
-            <h2 className="animate-on-scroll">LTE is structured around accountable teams, disciplined sourcing, and support that stays clear from enquiry through delivery.</h2>
+            <span className="home-eyebrow animate-on-scroll">{t('Why LTE')}</span>
+            <h2 className="animate-on-scroll">{t('LTE is structured around accountable teams, disciplined sourcing, and support that stays clear from enquiry through delivery.')}</h2>
             <p className="animate-on-scroll">
-              Our operating model is designed for customers who need dependable communication, better commercial control, and a supply partner that can support repeat requirements without losing structure.
+              {t('Our operating model is designed for customers who need dependable communication, better commercial control, and a supply partner that can support repeat requirements without losing structure.')}
             </p>
           </div>
 
           <div className="credibility-stage__support animate-stagger" data-stagger-step="120ms">
             {credibilityPillars.map((pillar) => (
               <article className="credibility-support-card animate-on-scroll" key={pillar.title}>
-                <span>{pillar.title}</span>
-                <p>{pillar.body}</p>
+                <span>{t(pillar.title)}</span>
+                <p>{t(pillar.body)}</p>
               </article>
             ))}
           </div>
@@ -481,7 +489,7 @@ const HomePage = () => {
             {whyStats.map((item) => (
               <article className="credibility-stat animate-on-scroll" key={item.label}>
                 <strong>{item.value}</strong>
-                <span>{item.label}</span>
+                <span>{t(item.label)}</span>
               </article>
             ))}
           </div>
@@ -491,16 +499,16 @@ const HomePage = () => {
       <section className="home-section final-cta">
         <div className="home-shell final-cta__panel">
           <div className="animate-stagger" data-stagger-step="110ms">
-            <span className="home-eyebrow animate-on-scroll">Next step</span>
-            <h2 className="animate-on-scroll">Discuss your requirement with the LTE team responsible for sourcing, coordination, and delivery support.</h2>
+            <span className="home-eyebrow animate-on-scroll">{t('Next step')}</span>
+            <h2 className="animate-on-scroll">{t('Discuss your requirement with the LTE team responsible for sourcing, coordination, and delivery support.')}</h2>
             <p className="animate-on-scroll">
-              For quotations, category guidance, account support, or project enquiries, our team is available to provide a clear and practical next step.
+              {t('For quotations, category guidance, account support, or project enquiries, our team is available to provide a clear and practical next step.')}
             </p>
           </div>
 
           <div className="final-cta__actions animate-stagger" data-stagger-step="120ms">
-            <Link className="home-btn home-btn--primary animate-on-scroll" to="/contact">Request a Quote</Link>
-            <Link className="home-btn home-btn--ghost-light animate-on-scroll" to="/about">Learn More About LTE</Link>
+            <Link className="home-btn home-btn--primary animate-on-scroll" to="/contact?source=home">{t('Request a Quote')}</Link>
+            <Link className="home-btn home-btn--ghost-light animate-on-scroll" to="/about">{t('Learn More About LTE')}</Link>
           </div>
         </div>
       </section>

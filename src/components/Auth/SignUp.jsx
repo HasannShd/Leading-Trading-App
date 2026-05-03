@@ -1,10 +1,12 @@
 import { useContext, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
+import { useLanguage } from '../../context/LanguageContext';
 import './Auth.css';
 
 const SignUp = () => {
   const { register, error } = useContext(AuthContext);
+  const { t } = useLanguage();
   const [form, setForm] = useState({
     name: '',
     username: '',
@@ -37,11 +39,11 @@ const SignUp = () => {
   return (
     <div className="auth-container">
       <div className="auth-card">
-        <h1>Create Account</h1>
+        <h1>{t('Create Account')}</h1>
         {error && <div className="auth-error">{error}</div>}
         <form onSubmit={handleSubmit} className="auth-form">
           <label>
-            Full Name
+            {t('Full Name')}
             <input
               type="text"
               name="name"
@@ -51,19 +53,19 @@ const SignUp = () => {
             />
           </label>
           <label>
-            Username
+            {t('Username')}
             <input
               type="text"
               name="username"
               value={form.username}
               onChange={handleChange}
-              placeholder="Choose a username"
+              placeholder={t('Choose a username')}
               autoComplete="username"
               required
             />
           </label>
           <label>
-            Email
+            {t('Email')}
             <input
               type="email"
               name="email"
@@ -74,7 +76,7 @@ const SignUp = () => {
             />
           </label>
           <label>
-            Phone
+            {t('Phone')}
             <input
               type="tel"
               name="phone"
@@ -85,7 +87,7 @@ const SignUp = () => {
             />
           </label>
           <label>
-            Password
+            {t('Password')}
             <input
               type="password"
               name="password"
@@ -102,14 +104,14 @@ const SignUp = () => {
               checked={form.marketingOptIn}
               onChange={handleChange}
             />
-            Subscribe to updates and offers
+            {t('Subscribe to updates and offers')}
           </label>
           <button type="submit" className="btn primary" disabled={isLoading}>
-            {isLoading ? 'Creating account...' : 'Create Account'}
+            {isLoading ? t('Creating account...') : t('Create Account')}
           </button>
         </form>
         <p className="auth-switch">
-          Already have an account? <Link to="/sign-in">Sign in</Link>
+          {t('Already have an account?')} <Link to="/sign-in">{t('Sign in')}</Link>
         </p>
       </div>
     </div>

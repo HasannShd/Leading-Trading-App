@@ -78,6 +78,40 @@ select:focus-visible {
   padding-top: 0;
 }
 
+:root[dir='rtl'] {
+  font-family: 'Manrope', 'Segoe UI', Tahoma, Arial, sans-serif;
+}
+
+:root[dir='rtl'] body {
+  direction: rtl;
+}
+
+:root[dir='rtl'] .app:not(.admin-app) {
+  text-align: right;
+}
+
+:root[dir='rtl'] .brand,
+:root[dir='rtl'] .nav,
+:root[dir='rtl'] .header-actions-desktop,
+:root[dir='rtl'] .footer-title,
+:root[dir='rtl'] .shop-breadcrumb,
+:root[dir='rtl'] .product-breadcrumb,
+:root[dir='rtl'] .contact-form-title-row {
+  direction: rtl;
+}
+
+:root[dir='rtl'] .app:not(.admin-app) input,
+:root[dir='rtl'] .app:not(.admin-app) textarea,
+:root[dir='rtl'] .app:not(.admin-app) select {
+  text-align: right;
+}
+
+:root[dir='rtl'] .shop-card-cta::after,
+:root[dir='rtl'] .category-card span::after,
+:root[dir='rtl'] .home-inline-link::after {
+  transform: scaleX(-1);
+}
+
 .app-main {
   min-height: 0;
 }

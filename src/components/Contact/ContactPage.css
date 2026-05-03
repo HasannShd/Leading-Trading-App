@@ -58,6 +58,34 @@
   color: var(--ink);
 }
 
+.contact-quote-context {
+  display: grid;
+  gap: 5px;
+  margin-bottom: 18px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: rgba(168, 119, 68, 0.09);
+  border: 1px solid rgba(168, 119, 68, 0.18);
+}
+
+.contact-quote-context span {
+  color: #875625;
+  font-size: 0.76rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.contact-quote-context strong {
+  color: var(--navy-900);
+  font-size: 1.05rem;
+}
+
+.contact-quote-context small {
+  color: var(--muted);
+  font-weight: 700;
+}
+
 .contact-form input[type="text"],
 .contact-form input[type="email"],
 .contact-form input[type="tel"],
