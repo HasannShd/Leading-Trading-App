@@ -4,11 +4,12 @@ import AdminTopNav from './AdminTopNav';
 import { authFetch } from '../../services/authFetch';
 
 const LINKEDIN_URL = 'https://www.linkedin.com/company/leading-trading-est/';
+const INSTAGRAM_URL = 'https://www.instagram.com/leadingtradingest/';
 
 const emptyCampaign = {
   subject: 'Follow Leading Trading Est for product updates',
   previewText: 'Stay connected with LTE on Instagram and LinkedIn.',
-  instagramUrl: '',
+  instagramUrl: INSTAGRAM_URL,
   linkedinUrl: LINKEDIN_URL,
 };
 
@@ -91,6 +92,7 @@ const AdminMarketing = () => {
       setSmtpConfigured(Boolean(contactsData.smtpConfigured));
       setCampaign((prev) => ({
         ...prev,
+        instagramUrl: contactsData.defaultInstagramUrl || prev.instagramUrl || INSTAGRAM_URL,
         linkedinUrl: contactsData.defaultLinkedinUrl || prev.linkedinUrl || LINKEDIN_URL,
       }));
       setCampaigns(Array.isArray(campaignsData) ? campaignsData : []);
