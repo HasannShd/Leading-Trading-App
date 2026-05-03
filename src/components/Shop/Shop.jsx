@@ -1,11 +1,12 @@
 import { useDeferredValue, useEffect, useMemo, useState, useCallback, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import Input from '../Common/Input';
 import Card from '../Common/Card';
 import StatePanel from '../Common/StatePanel';
 import SkeletonGrid from '../Common/SkeletonGrid';
 import Seo from '../Common/Seo';
-import { buildBreadcrumbSchema, buildCollectionSchema } from '../../utils/seoSchemas';
+import { buildBreadcrumbSchema, buildCollectionSchema, buildFaqSchema } from '../../utils/seoSchemas';
+import { buildSeoFaqs, buildSeoKeywords } from '../../utils/searchSeo';
 import { useLanguage } from '../../context/LanguageContext';
 import { normalizeImageSrc } from '../../utils/normalizeImageSrc';
 import { asCategoryArray, buildCategoryTree, getCategoryId } from '../../utils/categoryTree';
@@ -66,13 +67,15 @@ const productDescription = (product, t) => {
 const Shop = () => {
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
   const { t, categoryName } = useLanguage();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const initialQuery = searchParams.get('q') || searchParams.get('search') || '';
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [q, setQ] = useState('');
+  const [q, setQ] = useState(initialQuery);
   const [category, setCategory] = useState('');
   const [sort, setSort] = useState('featured');
   const [page, setPage] = useState(1);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState(initialQuery.trim());
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -160,6 +163,20 @@ const Shop = () => {
     return () => clearTimeout(id);
   }, [deferredQuery, searchQuery]);
 
+  useEffect(() => {
+    const nextParams = new URLSearchParams(searchParams);
+    if (searchQuery) {
+      nextParams.set('q', searchQuery);
+    } else {
+      nextParams.delete('q');
+      nextParams.delete('search');
+    }
+
+    if (nextParams.toString() !== searchParams.toString()) {
+      setSearchParams(nextParams, { replace: true });
+    }
+  }, [searchParams, searchQuery, setSearchParams]);
+
   const handleSearch = (e) => {
     e.preventDefault();
     setPage(1);
@@ -194,6 +211,13 @@ const Shop = () => {
     () => flatCategories.find((item) => getCategoryId(item) === category),
     [category, flatCategories]
   );
+  const seoSearchLabel = searchQuery || selectedCategory?.name || '';
+  const shopSeoTitle = searchQuery
+    ? `${searchQuery} Products Bahrain | Leading Trading Est Catalog`
+    : 'Product Catalog | Medical, Dental & Industrial Supplies Bahrain | LTE';
+  const shopSeoDescription = searchQuery
+    ? `Find ${searchQuery} products and request quotation support from Leading Trading Est, a Bahrain supplier for medical, dental, laboratory, safety, and industrial buyers.`
+    : 'Browse Leading Trading Est products for Bahrain healthcare, dental, laboratory, CSSD, safety, and industrial procurement with quotation support.';
   const sortedProducts = useMemo(() => {
     const next = asProductArray(products);
     if (sort === 'price') {
@@ -245,10 +269,19 @@ const Shop = () => {
   return (
     <main>
       <Seo
-        title="Product Catalog | Medical, Dental & Industrial Supplies Bahrain | LTE"
-        description="Browse Leading Trading Est products for Bahrain healthcare, dental, laboratory, CSSD, safety, and industrial procurement with quotation support."
+        title={shopSeoTitle}
+        description={shopSeoDescription}
         canonicalPath="/shop"
-        keywords="medical product catalog Bahrain, dental supplies catalog Bahrain, laboratory supplies Bahrain, CSSD supplies Bahrain, industrial safety products Bahrain, surgical instruments Bahrain, LTE product catalog"
+        keywords={buildSeoKeywords(
+          seoSearchLabel,
+          'medical product catalog Bahrain',
+          'dental supplies catalog Bahrain',
+          'laboratory supplies Bahrain',
+          'CSSD supplies Bahrain',
+          'industrial safety products Bahrain',
+          'surgical instruments Bahrain',
+          'LTE product catalog'
+        )}
         structuredData={[
           buildBreadcrumbSchema([
             { name: 'Home', path: '/' },
@@ -263,6 +296,14 @@ const Shop = () => {
               path: `/product/${product._id || product.id || ''}`,
             })),
           }),
+          buildFaqSchema([
+            ...buildSeoFaqs(seoSearchLabel),
+            {
+              question: 'Can Bahrain buyers request quotations from the LTE product catalog?',
+              answer:
+                'Leading Trading Est supports Bahrain healthcare, dental, laboratory, safety, and industrial buyers with product browsing, sourcing support, and quotation handling.',
+            },
+          ]),
         ]}
       />
       <section className="shop-shell" ref={rootRef}>

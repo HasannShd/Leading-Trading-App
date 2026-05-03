@@ -4,7 +4,8 @@ import Input from '../Common/Input';
 import StatePanel from '../Common/StatePanel';
 import SkeletonGrid from '../Common/SkeletonGrid';
 import Seo from '../Common/Seo';
-import { buildBreadcrumbSchema, buildCollectionSchema } from '../../utils/seoSchemas';
+import { buildBreadcrumbSchema, buildCollectionSchema, buildFaqSchema } from '../../utils/seoSchemas';
+import { buildCommonRequests, buildSeoFaqs, buildSeoKeywords } from '../../utils/searchSeo';
 import { useLanguage } from '../../context/LanguageContext';
 import { normalizeImageSrc } from '../../utils/normalizeImageSrc';
 import { useScrollReveal } from '../../hooks/useScrollReveal';
@@ -150,6 +151,17 @@ const CategoryDetails = () => {
     });
     return `/contact?${params.toString()}`;
   }, [category]);
+  const seoCategoryLabel = category?.name ? categoryName(category.name) : '';
+  const seoCategoryText = [
+    seoCategoryLabel,
+    category?.description,
+    category?.parent?.name,
+    ...products.slice(0, 8).map((product) => product.name),
+  ].filter(Boolean).join(' ');
+  const commonRequests = buildCommonRequests(seoCategoryText);
+  const categorySeoDescription = category?.description?.trim()
+    ? categoryDescription(category.description.trim())
+    : `Browse ${seoCategoryLabel || 'category'} products from Leading Trading Est with quotation and sourcing support in Bahrain.`;
 
   if (!loading && !category) {
     return (
@@ -176,13 +188,18 @@ const CategoryDetails = () => {
             : 'Category Products | Leading Trading Est Bahrain'
         }
         description={
-          category?.description?.trim()
-            ? categoryDescription(category.description.trim())
-            : `Browse ${category?.name ? categoryName(category.name) : 'category'} products from Leading Trading Est with quotation and sourcing support in Bahrain.`
+          categorySeoDescription
         }
         canonicalPath={`/categories/${category?.slug || slug || ''}`}
         image={category?.image || undefined}
-        keywords={`${category?.name || 'medical supplies'} Bahrain, ${category?.name ? categoryName(category.name) : 'medical supplies Bahrain'}, LTE Bahrain products, quotation support Bahrain, medical industrial sourcing Bahrain`}
+        keywords={buildSeoKeywords(
+          seoCategoryText,
+          `${category?.name || 'medical supplies'} Bahrain`,
+          `${seoCategoryLabel || 'medical supplies Bahrain'}`,
+          'LTE Bahrain products',
+          'quotation support Bahrain',
+          'medical industrial sourcing Bahrain'
+        )}
         structuredData={[
           buildBreadcrumbSchema([
             { name: 'Home', path: '/' },
@@ -201,6 +218,14 @@ const CategoryDetails = () => {
               path: `/product/${product._id || product.id || ''}`,
             })),
           }),
+          buildFaqSchema([
+            ...buildSeoFaqs(seoCategoryText),
+            {
+              question: `How can buyers request ${seoCategoryLabel || 'category'} quotations in Bahrain?`,
+              answer:
+                'Open the relevant product or use the category quote button to send Leading Trading Est the requested product, category, and sourcing context for follow-up.',
+            },
+          ]),
         ]}
       />
       <section className="category-details-shell" ref={rootRef}>
@@ -266,6 +291,30 @@ const CategoryDetails = () => {
                       <strong>{categoryName(child.name)}</strong>
                       <p>{categoryDescription(child.description?.trim()) || t('Open this subcategory to review the dedicated product set.')}</p>
                     </Link>
+                  ))}
+                </div>
+              </section>
+            ) : null}
+
+            {commonRequests.length ? (
+              <section className="category-details-seo-block animate-stagger" data-stagger-step="80ms">
+                <div className="category-details-seo-copy animate-on-scroll">
+                  <span>{t('Common supply requests')}</span>
+                  <h2>{seoCategoryLabel} {t('procurement support in Bahrain')}</h2>
+                  <p>
+                    {t('Use these common buyer terms to narrow the catalog or send the exact requirement to our team for quotation support.')}
+                  </p>
+                </div>
+                <div className="category-details-seo-tags animate-stagger" data-stagger-step="60ms">
+                  {commonRequests.map((request) => (
+                    <button
+                      key={request}
+                      type="button"
+                      className="category-details-seo-tag animate-on-scroll"
+                      onClick={() => setQ(request)}
+                    >
+                      {request}
+                    </button>
                   ))}
                 </div>
               </section>

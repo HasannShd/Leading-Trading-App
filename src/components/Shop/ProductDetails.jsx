@@ -2,7 +2,8 @@ import { useEffect, useMemo, useState, useCallback, startTransition, useRef } fr
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import StatePanel from '../Common/StatePanel';
 import Seo from '../Common/Seo';
-import { buildBreadcrumbSchema, buildProductSchema } from '../../utils/seoSchemas';
+import { buildBreadcrumbSchema, buildFaqSchema, buildProductSchema } from '../../utils/seoSchemas';
+import { buildSeoFaqs, buildSeoKeywords } from '../../utils/searchSeo';
 import { useLanguage } from '../../context/LanguageContext';
 import { normalizeImageSrc } from '../../utils/normalizeImageSrc';
 import { useScrollReveal } from '../../hooks/useScrollReveal';
@@ -148,6 +149,18 @@ const ProductDetails = () => {
     if (categoryLabel) params.set('categoryName', categoryLabel);
     return `/contact?${params.toString()}`;
   }, [product, selectedVariant]);
+  const productSeoText = [
+    product?.name,
+    product?.brand,
+    product?.sku,
+    product?.categorySlug?.name,
+    product?.categorySlug?.parent?.name,
+    product?.description,
+    ...(productSpecs || []).map((spec) => `${spec.label || ''} ${spec.value || ''}`),
+  ].filter(Boolean).join(' ');
+  const productSeoDescription =
+    product?.description?.trim() ||
+    `Request pricing, availability, and specifications for ${product?.name || 'this product'} from Leading Trading Est, a Bahrain supplier for medical, dental, laboratory, safety, and industrial procurement.`;
 
   const handleTypeChange = (value) => {
     setVariantId(value);
@@ -266,14 +279,19 @@ const ProductDetails = () => {
     <main>
       <Seo
         title={`${product.name} | ${product.categorySlug?.name ? `${categoryName(product.categorySlug.name)} | ` : ''}Leading Trading Est Bahrain`}
-        description={
-          product.description?.trim() ||
-          `Request pricing, availability, and specifications for ${product.name} from Leading Trading Est in Bahrain.`
-        }
+        description={productSeoDescription}
         canonicalPath={`/product/${product._id}`}
         image={activeImage || product.image || product.images?.[0] || undefined}
         type="product"
-        keywords={`${product.name}, ${product.brand || ''}, ${product.sku || ''}, ${product.categorySlug?.name || 'medical supplies'} Bahrain, product quotation Bahrain, Leading Trading Est`}
+        keywords={buildSeoKeywords(
+          productSeoText,
+          product.name,
+          product.brand || '',
+          product.sku || '',
+          `${product.categorySlug?.name || 'medical supplies'} Bahrain`,
+          'product quotation Bahrain',
+          'Leading Trading Est'
+        )}
         structuredData={[
           buildBreadcrumbSchema([
             { name: 'Home', path: '/' },
@@ -287,6 +305,14 @@ const ProductDetails = () => {
             image: activeImage || product.image || product.images?.[0],
             categoryName: product.categorySlug?.name,
           }),
+          buildFaqSchema([
+            ...buildSeoFaqs(productSeoText),
+            {
+              question: `How can buyers request a quotation for ${product.name}?`,
+              answer:
+                'Use the Request Quotation button on the product page to send the product name, page URL, category, and available SKU context to Leading Trading Est for follow-up.',
+            },
+          ]),
         ]}
       />
       <section className="product-details-shell" ref={rootRef}>

@@ -27,6 +27,9 @@ export const organizationSchema = {
   ],
   knowsAbout: [
     'medical supplies Bahrain',
+    'medical gloves Bahrain',
+    'nitrile gloves Bahrain',
+    'PPE supplier Bahrain',
     'dental supplies Bahrain',
     'laboratory equipment Bahrain',
     'industrial safety supplies Bahrain',
@@ -102,6 +105,28 @@ export const buildCollectionSchema = ({ name, description, path, items = [] }) =
       })),
   },
 });
+
+export const buildFaqSchema = (questions = []) => {
+  const mainEntity = questions
+    .filter((item) => item?.question && item?.answer)
+    .slice(0, 8)
+    .map((item) => ({
+      '@type': 'Question',
+      name: item.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: item.answer,
+      },
+    }));
+
+  if (!mainEntity.length) return null;
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity,
+  };
+};
 
 export const buildProductSchema = (product, { image, categoryName } = {}) => {
   const priceValue = Number(product?.price || product?.basePrice || product?.variants?.[0]?.sizes?.[0]?.price || 0);
