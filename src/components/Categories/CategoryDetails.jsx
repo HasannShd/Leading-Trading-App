@@ -328,12 +328,12 @@ const CategoryDetails = () => {
                 <div className="category-details-seo-tags animate-stagger" data-stagger-step="60ms">
                   {commonRequests.map((request) => (
                     <button
-                      key={request}
+                      key={request.label}
                       type="button"
                       className="category-details-seo-tag animate-on-scroll"
-                      onClick={() => setQ(request)}
+                      onClick={() => setQ(request.search || '')}
                     >
-                      {request}
+                      {request.label}
                     </button>
                   ))}
                 </div>

@@ -24,11 +24,11 @@ const profiles = [
       'hospital gloves Bahrain',
     ],
     requests: [
-      'Nitrile examination gloves',
-      'Latex disposable gloves',
-      'Vinyl gloves for clinical use',
-      'Powder-free medical gloves',
-      'Dental and clinic glove supply',
+      { label: 'Nitrile examination gloves', search: 'nitrile' },
+      { label: 'Latex disposable gloves', search: 'latex' },
+      { label: 'Vinyl gloves for clinical use', search: 'vinyl' },
+      { label: 'Powder-free medical gloves', search: 'gloves' },
+      { label: 'Dental and clinic glove supply', search: 'gloves' },
     ],
     pageTitle: 'Medical Gloves Supplier in Bahrain',
     pageDescription:
@@ -63,10 +63,10 @@ const profiles = [
       'hospital PPE Bahrain',
     ],
     requests: [
-      'Disposable PPE for clinics',
-      'Face masks and shields',
-      'Protective clinical consumables',
-      'Non-woven medical disposables',
+      { label: 'Disposable PPE for clinics', search: 'ppe' },
+      { label: 'Face masks and shields', search: 'mask' },
+      { label: 'Protective clinical consumables', search: 'protective' },
+      { label: 'Non-woven medical disposables', search: 'non woven' },
     ],
     pageTitle: 'PPE Supplier in Bahrain',
     pageDescription:
@@ -94,9 +94,9 @@ const profiles = [
       'hospital instruments Bahrain',
     ],
     requests: [
-      'Surgical instruments',
-      'Clinical instrument sourcing',
-      'Specification-led quotation support',
+      { label: 'Surgical instruments', search: 'surgical' },
+      { label: 'Clinical instrument sourcing', search: 'instrument' },
+      { label: 'Specification-led quotation support', search: '' },
     ],
     pageTitle: 'Surgical Instruments Supplier in Bahrain',
     pageDescription:
@@ -124,9 +124,9 @@ const profiles = [
       'dental consumables Bahrain',
     ],
     requests: [
-      'Dental clinic consumables',
-      'Dental materials and equipment',
-      'Repeat procurement support',
+      { label: 'Dental clinic consumables', search: 'dental' },
+      { label: 'Dental materials and equipment', search: 'dental' },
+      { label: 'Repeat procurement support', search: '' },
     ],
     pageTitle: 'Dental Supplies Supplier in Bahrain',
     pageDescription:
@@ -154,9 +154,9 @@ const profiles = [
       'medical lab supplies Bahrain',
     ],
     requests: [
-      'Laboratory consumables',
-      'Lab equipment sourcing',
-      'Clinical laboratory supply support',
+      { label: 'Laboratory consumables', search: 'lab' },
+      { label: 'Lab equipment sourcing', search: 'lab' },
+      { label: 'Clinical laboratory supply support', search: 'laboratory' },
     ],
     pageTitle: 'Laboratory Supplies Supplier in Bahrain',
     pageDescription:
@@ -184,9 +184,9 @@ const profiles = [
       'safety products Bahrain',
     ],
     requests: [
-      'Industrial safety supplies',
-      'Facility and maintenance sourcing',
-      'Operational procurement support',
+      { label: 'Industrial safety supplies', search: 'safety' },
+      { label: 'Facility and maintenance sourcing', search: 'facility' },
+      { label: 'Operational procurement support', search: '' },
     ],
     pageTitle: 'Industrial Safety Supplies Supplier in Bahrain',
     pageDescription:
@@ -231,7 +231,10 @@ export const buildSeoKeywords = (...values) => {
 
 export const buildSeoFaqs = (...values) => getSeoProfile(...values)?.faq || [];
 
-export const buildCommonRequests = (...values) => getSeoProfile(...values)?.requests || [];
+export const buildCommonRequests = (...values) =>
+  (getSeoProfile(...values)?.requests || []).map((request) => (
+    typeof request === 'string' ? { label: request, search: request } : request
+  ));
 
 export const buildSeoContent = (...values) => {
   const profile = getSeoProfile(...values);
