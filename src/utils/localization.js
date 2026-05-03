@@ -374,6 +374,31 @@ export const AR_TRANSLATIONS = {
   'Team structure': 'هيكل الفريق',
   'A team structure built around leadership, commercial coordination, administrative control, and delivery execution.':
     'هيكل فريق قائم على القيادة والتنسيق التجاري والضبط الإداري وتنفيذ التسليم.',
+  'A team structure built around leadership, commercial coordination, administrative control, delivery execution, technology, and digital visibility.':
+    'هيكل فريق قائم على القيادة والتنسيق التجاري والضبط الإداري وتنفيذ التسليم والتقنية والحضور الرقمي.',
+  'Managing Director & CEO': 'المدير العام والرئيس التنفيذي',
+  'Sets the company’s strategic direction, strengthens supplier relationships, and maintains the service, quality, and operating standards clients expect from LTE.':
+    'يحدد التوجه الاستراتيجي للشركة، ويعزز علاقات الموردين، ويحافظ على معايير الخدمة والجودة والتشغيل التي يتوقعها العملاء من LTE.',
+  'Accounts & HR': 'الحسابات والموارد البشرية',
+  'Operational control and internal continuity': 'الضبط التشغيلي والاستمرارية الداخلية',
+  'Supports financial discipline, internal administration, staff coordination, and the controls required to keep day-to-day operations stable, accurate, and dependable.':
+    'يدعم الانضباط المالي والإدارة الداخلية وتنسيق الموظفين والضوابط اللازمة للحفاظ على استقرار ودقة واعتمادية العمليات اليومية.',
+  'Sales Department': 'قسم المبيعات',
+  'Customer-facing commercial execution': 'تنفيذ تجاري موجه للعملاء',
+  'Manages enquiries, quotations, account follow-up, and commercial coordination so customer requirements are converted into suitable sourcing and procurement decisions.':
+    'يدير الاستفسارات وعروض الأسعار ومتابعة الحسابات والتنسيق التجاري لتحويل متطلبات العملاء إلى قرارات توريد ومشتريات مناسبة.',
+  'Delivery Team': 'فريق التسليم',
+  'Final-mile fulfillment and handoff': 'تنفيذ التسليم النهائي والتسليم للعميل',
+  'Coordinates dispatch and handover so confirmed orders are delivered on time, in the correct condition, and with the follow-through required for repeat business.':
+    'ينسق الإرسال والتسليم لضمان وصول الطلبات المؤكدة في الوقت المحدد وبالحالة الصحيحة مع المتابعة المطلوبة للأعمال المتكررة.',
+  'IT Department': 'قسم تقنية المعلومات',
+  'Digital systems, security, and operational continuity': 'الأنظمة الرقمية والأمن والاستمرارية التشغيلية',
+  'Maintains the website, admin tools, data workflows, and technical controls that support secure operations, reliable access, and smoother customer-facing service.':
+    'يحافظ على الموقع وأدوات الإدارة ومسارات البيانات والضوابط التقنية التي تدعم التشغيل الآمن والوصول الموثوق والخدمة الرقمية الأكثر سلاسة للعملاء.',
+  'Digital Marketing': 'التسويق الرقمي',
+  'Brand visibility and customer communication': 'ظهور العلامة والتواصل مع العملاء',
+  'Supports LTE’s digital presence, social channels, campaign communication, and product visibility so customers can discover the company and stay connected more easily.':
+    'يدعم الحضور الرقمي لـ LTE وقنوات التواصل والحملات وظهور المنتجات حتى يتمكن العملاء من اكتشاف الشركة والبقاء على تواصل بسهولة أكبر.',
   'Quality commitment': 'الالتزام بالجودة',
   'Working relationship': 'علاقة العمل',
 };

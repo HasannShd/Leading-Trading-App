@@ -31,6 +31,18 @@ const teamUnits = [
     description:
       'Coordinates dispatch and handover so confirmed orders are delivered on time, in the correct condition, and with the follow-through required for repeat business.',
   },
+  {
+    label: 'IT Department',
+    title: 'Digital systems, security, and operational continuity',
+    description:
+      'Maintains the website, admin tools, data workflows, and technical controls that support secure operations, reliable access, and smoother customer-facing service.',
+  },
+  {
+    label: 'Digital Marketing',
+    title: 'Brand visibility and customer communication',
+    description:
+      'Supports LTE’s digital presence, social channels, campaign communication, and product visibility so customers can discover the company and stay connected more easily.',
+  },
 ];
 
 const companyPillars = [
@@ -233,7 +245,7 @@ const About = () => {
     <section className="about-team">
       <div className="about-section-heading animate-stagger" data-stagger-step="100ms">
         <span className="about-eyebrow animate-on-scroll">{t('Team structure')}</span>
-        <h2 className="animate-on-scroll">{t('A team structure built around leadership, commercial coordination, administrative control, and delivery execution.')}</h2>
+        <h2 className="animate-on-scroll">{t('A team structure built around leadership, commercial coordination, administrative control, delivery execution, technology, and digital visibility.')}</h2>
       </div>
 
       <div className="about-team-grid animate-stagger" data-stagger-step="110ms">
