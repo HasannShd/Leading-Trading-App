@@ -391,14 +391,14 @@ const CategoryDetails = () => {
                 action={<button className="btn" onClick={() => setQ('')}>{t('Clear Search')}</button>}
               />
             ) : (
-              <ul className="category-details-products-list animate-stagger" data-stagger-step="100ms">
+              <ul className="category-details-products-list">
                 {filteredProducts.map((p) => {
                   const productImage = p.image || p.images?.[0] || '';
                   const price = Number(p.basePrice || p.variants?.[0]?.price || 0);
                   const imageFailed = brokenImages[p._id] === true;
 
                   return (
-                    <li key={p._id} className="category-details-product-item animate-on-scroll">
+                    <li key={p._id} className="category-details-product-item">
                       <Link to={`/product/${p._id}`} className="category-details-product-link">
                         {productImage && !imageFailed ? (
                           <div className="category-details-product-media">
