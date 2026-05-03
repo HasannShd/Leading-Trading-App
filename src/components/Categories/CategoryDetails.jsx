@@ -5,7 +5,7 @@ import StatePanel from '../Common/StatePanel';
 import SkeletonGrid from '../Common/SkeletonGrid';
 import Seo from '../Common/Seo';
 import { buildBreadcrumbSchema, buildCollectionSchema, buildFaqSchema } from '../../utils/seoSchemas';
-import { buildCommonRequests, buildSeoFaqs, buildSeoKeywords } from '../../utils/searchSeo';
+import { buildCommonRequests, buildSeoContent, buildSeoFaqs, buildSeoKeywords } from '../../utils/searchSeo';
 import { useLanguage } from '../../context/LanguageContext';
 import { normalizeImageSrc } from '../../utils/normalizeImageSrc';
 import { useScrollReveal } from '../../hooks/useScrollReveal';
@@ -159,9 +159,15 @@ const CategoryDetails = () => {
     ...products.slice(0, 8).map((product) => product.name),
   ].filter(Boolean).join(' ');
   const commonRequests = buildCommonRequests(seoCategoryText);
+  const seoContent = buildSeoContent(seoCategoryText);
   const categorySeoDescription = category?.description?.trim()
     ? categoryDescription(category.description.trim())
-    : `Browse ${seoCategoryLabel || 'category'} products from Leading Trading Est with quotation and sourcing support in Bahrain.`;
+    : seoContent?.pageDescription || `Browse ${seoCategoryLabel || 'category'} products from Leading Trading Est with quotation and sourcing support in Bahrain.`;
+  const categorySeoTitle = seoContent?.pageTitle
+    ? `${seoContent.pageTitle} | Leading Trading Est`
+    : category?.name
+      ? `${categoryName(category.name)} Products | Leading Trading Est Bahrain`
+      : 'Category Products | Leading Trading Est Bahrain';
 
   if (!loading && !category) {
     return (
@@ -182,11 +188,7 @@ const CategoryDetails = () => {
   return (
     <main>
       <Seo
-        title={
-          category?.name
-            ? `${categoryName(category.name)} Products | Leading Trading Est Bahrain`
-            : 'Category Products | Leading Trading Est Bahrain'
-        }
+        title={categorySeoTitle}
         description={
           categorySeoDescription
         }
@@ -291,6 +293,24 @@ const CategoryDetails = () => {
                       <strong>{categoryName(child.name)}</strong>
                       <p>{categoryDescription(child.description?.trim()) || t('Open this subcategory to review the dedicated product set.')}</p>
                     </Link>
+                  ))}
+                </div>
+              </section>
+            ) : null}
+
+            {seoContent ? (
+              <section className="category-details-buyer-guide animate-stagger" data-stagger-step="90ms">
+                <div className="category-details-buyer-guide-copy animate-on-scroll">
+                  <span>{t('Buyer guide')}</span>
+                  <h2>{seoContent.guidanceTitle}</h2>
+                  <p>{seoContent.guidanceBody}</p>
+                </div>
+                <div className="category-details-buyer-guide-points animate-stagger" data-stagger-step="70ms">
+                  {seoContent.points.map((point) => (
+                    <div key={point} className="category-details-buyer-guide-point animate-on-scroll">
+                      <span aria-hidden="true">✓</span>
+                      <strong>{point}</strong>
+                    </div>
                   ))}
                 </div>
               </section>
