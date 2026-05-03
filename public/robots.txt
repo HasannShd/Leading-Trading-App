@@ -7,6 +7,8 @@ Disallow: /checkout
 Disallow: /orders
 Disallow: /sign-in
 Disallow: /sign-up
+Disallow: /admin
+Disallow: /staff
 Disallow: /.well-known/
 
 Sitemap: https://www.lte-bh.com/sitemap.xml

@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState, useCallback, startTransition, useRef } fr
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import StatePanel from '../Common/StatePanel';
 import Seo from '../Common/Seo';
+import { buildBreadcrumbSchema, buildProductSchema } from '../../utils/seoSchemas';
 import { useLanguage } from '../../context/LanguageContext';
 import { normalizeImageSrc } from '../../utils/normalizeImageSrc';
 import { useScrollReveal } from '../../hooks/useScrollReveal';
@@ -272,6 +273,21 @@ const ProductDetails = () => {
         canonicalPath={`/product/${product._id}`}
         image={activeImage || product.image || product.images?.[0] || undefined}
         type="product"
+        keywords={`${product.name}, ${product.brand || ''}, ${product.sku || ''}, ${product.categorySlug?.name || 'medical supplies'} Bahrain, product quotation Bahrain, Leading Trading Est`}
+        structuredData={[
+          buildBreadcrumbSchema([
+            { name: 'Home', path: '/' },
+            { name: 'Products', path: '/shop' },
+            ...(product.categorySlug?.name
+              ? [{ name: product.categorySlug.name, path: `/categories/${product.categorySlug?.slug || product.categorySlug?._id || ''}` }]
+              : []),
+            { name: product.name, path: `/product/${product._id}` },
+          ]),
+          buildProductSchema(product, {
+            image: activeImage || product.image || product.images?.[0],
+            categoryName: product.categorySlug?.name,
+          }),
+        ]}
       />
       <section className="product-details-shell" ref={rootRef}>
         <nav className="product-breadcrumb animate-on-scroll" aria-label="Breadcrumb">

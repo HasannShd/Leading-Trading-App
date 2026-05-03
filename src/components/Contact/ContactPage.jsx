@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import Seo from '../Common/Seo';
+import { buildBreadcrumbSchema, localBusinessSchema } from '../../utils/seoSchemas';
 import { useLanguage } from '../../context/LanguageContext';
 import './ContactPage.css';
 
@@ -122,6 +123,21 @@ const ContactPage = () => {
         title="Request a Quote | Leading Trading Est Bahrain"
         description="Contact Leading Trading Est in Bahrain for medical, dental, laboratory, industrial, and safety supply quotations and sourcing support."
         canonicalPath="/contact"
+        keywords="request quote Bahrain medical supplies, contact Leading Trading Est, Bahrain dental supplies quote, industrial supplies quote Bahrain, laboratory equipment quote Bahrain"
+        structuredData={[
+          localBusinessSchema,
+          buildBreadcrumbSchema([
+            { name: 'Home', path: '/' },
+            { name: 'Contact', path: '/contact' },
+          ]),
+          {
+            '@context': 'https://schema.org',
+            '@type': 'ContactPage',
+            name: 'Request a Quote from Leading Trading Est',
+            url: 'https://www.lte-bh.com/contact',
+            mainEntity: { '@id': 'https://www.lte-bh.com/#local-business' },
+          },
+        ]}
       />
       <div className="contact-form-block">
         <div className="contact-form-title-row">

@@ -5,6 +5,7 @@ import Card from '../Common/Card';
 import StatePanel from '../Common/StatePanel';
 import SkeletonGrid from '../Common/SkeletonGrid';
 import Seo from '../Common/Seo';
+import { buildBreadcrumbSchema, buildCollectionSchema } from '../../utils/seoSchemas';
 import { useLanguage } from '../../context/LanguageContext';
 import { normalizeImageSrc } from '../../utils/normalizeImageSrc';
 import { asCategoryArray, buildCategoryTree, getCategoryId } from '../../utils/categoryTree';
@@ -247,6 +248,22 @@ const Shop = () => {
         title="Product Catalog | Medical, Dental & Industrial Supplies Bahrain | LTE"
         description="Browse Leading Trading Est products for Bahrain healthcare, dental, laboratory, CSSD, safety, and industrial procurement with quotation support."
         canonicalPath="/shop"
+        keywords="medical product catalog Bahrain, dental supplies catalog Bahrain, laboratory supplies Bahrain, CSSD supplies Bahrain, industrial safety products Bahrain, surgical instruments Bahrain, LTE product catalog"
+        structuredData={[
+          buildBreadcrumbSchema([
+            { name: 'Home', path: '/' },
+            { name: 'Products', path: '/shop' },
+          ]),
+          buildCollectionSchema({
+            name: 'Leading Trading Est Product Catalog',
+            description: 'Medical, dental, laboratory, CSSD, safety, and industrial procurement catalog for Bahrain buyers.',
+            path: '/shop',
+            items: sortedProducts.map((product) => ({
+              name: product.name,
+              path: `/product/${product._id || product.id || ''}`,
+            })),
+          }),
+        ]}
       />
       <section className="shop-shell" ref={rootRef}>
         <nav className="shop-breadcrumb animate-on-scroll" aria-label="Breadcrumb">

@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import Seo from '../Common/Seo';
+import { buildBreadcrumbSchema } from '../../utils/seoSchemas';
 import StatePanel from '../Common/StatePanel';
 import { useLanguage } from '../../context/LanguageContext';
 import './Careers.css';
@@ -51,6 +53,24 @@ const Careers = () => {
 
   return (
     <main>
+      <Seo
+        title="Careers | Leading Trading Est Bahrain"
+        description="Apply to join Leading Trading Est in Bahrain and support healthcare, dental, industrial, and safety supply operations."
+        canonicalPath="/careers"
+        keywords="Leading Trading Est careers, LTE Bahrain jobs, medical supplies jobs Bahrain, sales jobs Bahrain healthcare, procurement jobs Bahrain"
+        structuredData={[
+          buildBreadcrumbSchema([
+            { name: 'Home', path: '/' },
+            { name: 'Careers', path: '/careers' },
+          ]),
+          {
+            '@context': 'https://schema.org',
+            '@type': 'WebPage',
+            name: 'Careers at Leading Trading Est',
+            url: 'https://www.lte-bh.com/careers',
+          },
+        ]}
+      />
       <section className="careers-hero">
         <div className="careers-hero-content">
           <h1>{t('Join Our Team')}</h1>

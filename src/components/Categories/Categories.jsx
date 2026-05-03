@@ -4,6 +4,7 @@ import Card from '../Common/Card';
 import Input from '../Common/Input';
 import StatePanel from '../Common/StatePanel';
 import Seo from '../Common/Seo';
+import { buildBreadcrumbSchema, buildCollectionSchema } from '../../utils/seoSchemas';
 import { useLanguage } from '../../context/LanguageContext';
 import { asCategoryArray, buildCategoryTree } from '../../utils/categoryTree';
 import { useScrollReveal } from '../../hooks/useScrollReveal';
@@ -67,6 +68,22 @@ const Categories = () => {
         title="Medical, Dental & Industrial Supply Categories Bahrain | LTE"
         description="Explore Leading Trading Est categories for medical equipment, laboratory, CSSD, surgical instruments, dental, disposables, and industrial safety sourcing in Bahrain."
         canonicalPath="/categories"
+        keywords="medical equipment categories Bahrain, dental supply categories Bahrain, laboratory supplies Bahrain, surgical instruments Bahrain, disposable medical supplies Bahrain, industrial safety supplies Bahrain"
+        structuredData={[
+          buildBreadcrumbSchema([
+            { name: 'Home', path: '/' },
+            { name: 'Categories', path: '/categories' },
+          ]),
+          buildCollectionSchema({
+            name: 'Medical, Dental and Industrial Supply Categories',
+            description: 'Browse LTE Bahrain supply categories for healthcare, dental, laboratory, CSSD, disposables, and industrial safety procurement.',
+            path: '/categories',
+            items: categories.map((category) => ({
+              name: category.name,
+              path: `/categories/${category.slug || category._id}`,
+            })),
+          }),
+        ]}
       />
       <section className="categories-shell" ref={rootRef}>
         <section className="categories-hero">

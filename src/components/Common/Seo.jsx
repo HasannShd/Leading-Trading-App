@@ -1,16 +1,13 @@
 import { useEffect } from 'react';
+import { absoluteUrl, SITE_ORIGIN } from '../../utils/seoSchemas';
 
-const SITE_ORIGIN = 'https://www.lte-bh.com';
 const DEFAULT_TITLE = 'Leading Trading Est | Medical & Industrial Supplies Bahrain';
 const DEFAULT_DESCRIPTION =
   'Leading Trading Est provides medical, dental, and industrial supplies in Bahrain with structured sourcing, quotation support, and local service.';
 const DEFAULT_IMAGE = `${SITE_ORIGIN}/company-logo.png`;
-
-const toAbsoluteUrl = (value = '/') => {
-  if (!value) return SITE_ORIGIN;
-  if (/^https?:\/\//i.test(value)) return value;
-  return `${SITE_ORIGIN}${value.startsWith('/') ? value : `/${value}`}`;
-};
+const DEFAULT_KEYWORDS =
+  'Leading Trading Est, LTE Bahrain, medical supplies Bahrain, dental supplies Bahrain, laboratory equipment Bahrain, industrial safety supplies Bahrain, healthcare procurement Bahrain';
+const JSON_LD_ID = 'lte-page-structured-data';
 
 const upsertMeta = (selector, attributes) => {
   let element = document.head.querySelector(selector);
@@ -34,6 +31,22 @@ const upsertCanonical = (href) => {
   element.setAttribute('href', href);
 };
 
+const upsertJsonLd = (data) => {
+  const existing = document.getElementById(JSON_LD_ID);
+  const entries = Array.isArray(data) ? data.filter(Boolean) : [data].filter(Boolean);
+
+  if (!entries.length) {
+    existing?.remove();
+    return;
+  }
+
+  const element = existing || document.createElement('script');
+  element.id = JSON_LD_ID;
+  element.type = 'application/ld+json';
+  element.textContent = JSON.stringify(entries.length === 1 ? entries[0] : entries);
+  if (!existing) document.head.appendChild(element);
+};
+
 export default function Seo({
   title = DEFAULT_TITLE,
   description = DEFAULT_DESCRIPTION,
@@ -41,25 +54,35 @@ export default function Seo({
   image = DEFAULT_IMAGE,
   type = 'website',
   robots = 'index,follow',
+  structuredData = [],
+  keywords = DEFAULT_KEYWORDS,
 }) {
   useEffect(() => {
-    const canonicalUrl = toAbsoluteUrl(canonicalPath);
-    const imageUrl = toAbsoluteUrl(image);
+    const canonicalUrl = absoluteUrl(canonicalPath);
+    const imageUrl = absoluteUrl(image);
 
     document.title = title;
+    document.documentElement.lang = document.documentElement.lang || 'en';
     upsertCanonical(canonicalUrl);
     upsertMeta('meta[name="description"]', { name: 'description', content: description });
+    upsertMeta('meta[name="keywords"]', { name: 'keywords', content: keywords });
     upsertMeta('meta[name="robots"]', { name: 'robots', content: robots });
+    upsertMeta('meta[name="author"]', { name: 'author', content: 'Leading Trading Est' });
+    upsertMeta('meta[name="geo.region"]', { name: 'geo.region', content: 'BH' });
+    upsertMeta('meta[name="geo.placename"]', { name: 'geo.placename', content: 'Bahrain' });
     upsertMeta('meta[property="og:type"]', { property: 'og:type', content: type });
+    upsertMeta('meta[property="og:locale"]', { property: 'og:locale', content: 'en_BH' });
     upsertMeta('meta[property="og:title"]', { property: 'og:title', content: title });
     upsertMeta('meta[property="og:description"]', { property: 'og:description', content: description });
     upsertMeta('meta[property="og:url"]', { property: 'og:url', content: canonicalUrl });
     upsertMeta('meta[property="og:image"]', { property: 'og:image', content: imageUrl });
+    upsertMeta('meta[property="og:image:alt"]', { property: 'og:image:alt', content: title });
     upsertMeta('meta[name="twitter:card"]', { name: 'twitter:card', content: 'summary_large_image' });
     upsertMeta('meta[name="twitter:title"]', { name: 'twitter:title', content: title });
     upsertMeta('meta[name="twitter:description"]', { name: 'twitter:description', content: description });
     upsertMeta('meta[name="twitter:image"]', { name: 'twitter:image', content: imageUrl });
-  }, [canonicalPath, description, image, robots, title, type]);
+    upsertJsonLd(structuredData);
+  }, [canonicalPath, description, image, keywords, robots, structuredData, title, type]);
 
   return null;
 }

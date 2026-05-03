@@ -5,6 +5,7 @@ const root = resolve(new URL('..', import.meta.url).pathname);
 const envPath = resolve(root, '.env');
 const sitemapPath = resolve(root, 'public/sitemap.xml');
 const siteUrl = (process.env.SITE_URL || 'https://www.lte-bh.com').replace(/\/+$/, '');
+const today = new Date().toISOString().slice(0, 10);
 
 const staticRoutes = [
   { path: '/', changefreq: 'daily', priority: '1.0' },
@@ -96,6 +97,7 @@ ${uniqueRoutes
   .map(
     (route) => `  <url>
     <loc>${escapeXml(`${siteUrl}${route.path}`)}</loc>
+    <lastmod>${route.lastmod || today}</lastmod>
     <changefreq>${route.changefreq}</changefreq>
     <priority>${route.priority}</priority>
   </url>`

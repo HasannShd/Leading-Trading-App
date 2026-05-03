@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'r
 import AppErrorBoundary from './components/AppErrorBoundary.jsx';
 import Header from './components/Header/Header.jsx';
 import Footer from './components/Footer/Footer.jsx';
+import Seo from './components/Common/Seo.jsx';
 import PageTransition from './components/Common/PageTransition.jsx';
 import BackToTop from './components/Common/BackToTop.jsx';
 import NotFoundPage from './components/NotFoundPage.jsx';
@@ -67,6 +68,9 @@ const AppShell = () => {
   const isHeroPage = location.pathname === '/';
   const isAdminRoute = location.pathname.startsWith('/admin');
   const isPortalRoute = isAdminRoute || location.pathname.startsWith('/staff');
+  const isPrivateSearchPath =
+    isPortalRoute ||
+    ['/cart', '/checkout', '/orders', '/sign-in', '/sign-up'].some((path) => location.pathname.startsWith(path));
   const showAdminChat =
     admin &&
     isAdminRoute &&
@@ -76,6 +80,15 @@ const AppShell = () => {
   return (
     <div className={`app${isHeroPage ? ' hero-page' : ''}${isPortalRoute ? ' admin-app' : ''}`} dir={isPortalRoute ? 'ltr' : undefined}>
       <PageTransition />
+      {isPrivateSearchPath ? (
+        <Seo
+          title="Private Area | Leading Trading Est"
+          description="Private customer, staff, or admin area for Leading Trading Est."
+          canonicalPath={location.pathname}
+          robots="noindex,nofollow,noarchive"
+          structuredData={[]}
+        />
+      ) : null}
       {!isPortalRoute && <Header />}
       <main className="app-main">
         <Suspense fallback={

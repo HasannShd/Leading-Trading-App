@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import Seo from '../Common/Seo';
+import { buildBreadcrumbSchema, localBusinessSchema, organizationSchema } from '../../utils/seoSchemas';
 import { useLanguage } from '../../context/LanguageContext';
 import { useScrollReveal } from '../../hooks/useScrollReveal';
 import './About.css';
@@ -74,6 +75,22 @@ const About = () => {
       title="About Leading Trading Est | Bahrain Medical & Industrial Supply"
       description="Learn about Leading Trading Est, a Bahrain-based medical, dental, industrial, and safety supply business focused on quality sourcing and dependable delivery."
       canonicalPath="/about"
+      keywords="about Leading Trading Est, Bahrain medical supplier, Bahrain industrial supplier, healthcare sourcing Bahrain, LTE Bahrain company"
+      structuredData={[
+        organizationSchema,
+        localBusinessSchema,
+        buildBreadcrumbSchema([
+          { name: 'Home', path: '/' },
+          { name: 'About', path: '/about' },
+        ]),
+        {
+          '@context': 'https://schema.org',
+          '@type': 'AboutPage',
+          name: 'About Leading Trading Est',
+          url: 'https://www.lte-bh.com/about',
+          about: { '@id': 'https://www.lte-bh.com/#organization' },
+        },
+      ]}
     />
     <section className="about-hero">
       <div className="about-hero-copy animate-stagger" data-stagger-step="100ms">

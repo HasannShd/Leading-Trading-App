@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Seo from '../Common/Seo';
+import { localBusinessSchema, organizationSchema, webSiteSchema } from '../../utils/seoSchemas';
 import { useLanguage } from '../../context/LanguageContext';
 import { normalizeImageSrc } from '../../utils/normalizeImageSrc';
 import { useHomepageScroll } from './useHomepageScroll';
@@ -208,6 +209,8 @@ const HomePage = () => {
         title="Leading Trading Est | Medical & Industrial Supplies Bahrain"
         description="Leading Trading Est supports Bahrain healthcare, dental, laboratory, safety, and industrial buyers with structured sourcing, supplier access, quotation support, and dependable delivery coordination."
         canonicalPath="/"
+        keywords="Leading Trading Est Bahrain, LTE Bahrain, medical supplies Bahrain, dental supplies Bahrain, laboratory equipment Bahrain, industrial supplies Bahrain, safety supplies Bahrain, hospital supplies Bahrain, Bahrain procurement"
+        structuredData={[organizationSchema, localBusinessSchema, webSiteSchema]}
       />
       <section className="home-hero">
         <div className="home-hero__ambient" />

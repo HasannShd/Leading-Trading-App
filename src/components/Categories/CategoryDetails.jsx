@@ -4,6 +4,7 @@ import Input from '../Common/Input';
 import StatePanel from '../Common/StatePanel';
 import SkeletonGrid from '../Common/SkeletonGrid';
 import Seo from '../Common/Seo';
+import { buildBreadcrumbSchema, buildCollectionSchema } from '../../utils/seoSchemas';
 import { useLanguage } from '../../context/LanguageContext';
 import { normalizeImageSrc } from '../../utils/normalizeImageSrc';
 import { useScrollReveal } from '../../hooks/useScrollReveal';
@@ -181,6 +182,26 @@ const CategoryDetails = () => {
         }
         canonicalPath={`/categories/${category?.slug || slug || ''}`}
         image={category?.image || undefined}
+        keywords={`${category?.name || 'medical supplies'} Bahrain, ${category?.name ? categoryName(category.name) : 'medical supplies Bahrain'}, LTE Bahrain products, quotation support Bahrain, medical industrial sourcing Bahrain`}
+        structuredData={[
+          buildBreadcrumbSchema([
+            { name: 'Home', path: '/' },
+            { name: 'Categories', path: '/categories' },
+            ...(category?.parent?.name
+              ? [{ name: category.parent.name, path: `/categories/${category.parent.slug || category.parent._id}` }]
+              : []),
+            { name: category?.name || 'Category', path: `/categories/${category?.slug || slug || ''}` },
+          ]),
+          buildCollectionSchema({
+            name: `${category?.name || 'Category'} Products`,
+            description: category?.description || 'Category products available from Leading Trading Est Bahrain with specification and quotation support.',
+            path: `/categories/${category?.slug || slug || ''}`,
+            items: products.map((product) => ({
+              name: product.name,
+              path: `/product/${product._id || product.id || ''}`,
+            })),
+          }),
+        ]}
       />
       <section className="category-details-shell" ref={rootRef}>
         {loading ? (

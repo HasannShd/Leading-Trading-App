@@ -1,9 +1,17 @@
 import { Link } from 'react-router-dom';
+import Seo from './Common/Seo';
 import StatePanel from './Common/StatePanel';
 
 export default function NotFoundPage() {
   return (
     <main className="app-route-shell">
+      <Seo
+        title="Page Not Found | Leading Trading Est"
+        description="The requested page is not available on the Leading Trading Est website."
+        canonicalPath="/"
+        robots="noindex,follow"
+        structuredData={[]}
+      />
       <StatePanel
         eyebrow="404"
         title="Page not found"
