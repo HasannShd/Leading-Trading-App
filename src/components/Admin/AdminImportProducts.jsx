@@ -126,6 +126,38 @@ const AdminImportProducts = () => {
     return hasCategory || hasName;
   };
 
+  const formatImportResult = (data, fallbackCount = 0) => {
+    const skipped = Number(data.skipped || 0);
+    const skippedText = skipped ? ` Skipped ${skipped}.` : '';
+    return `Processed ${data.processed ?? data.attempted ?? fallbackCount} rows. Added ${data.inserted ?? 0}, updated ${data.updated ?? 0}.${skippedText}`;
+  };
+
+  const importReviewFile = async (file) => {
+    setImporting(true);
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      const response = await authFetch('/products/import-file', {
+        method: 'POST',
+        scope: 'admin',
+        body: formData,
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        setError(data.message || 'Import failed.');
+        return;
+      }
+      setStatus(formatImportResult(data));
+      if (data.skippedRows?.length) {
+        setError(`Some rows were skipped: ${data.skippedRows.map(row => row.product || row.reason).filter(Boolean).slice(0, 5).join(', ')}`);
+      }
+    } catch (err) {
+      setError(err?.message || 'Import failed. Please try again.');
+    } finally {
+      setImporting(false);
+    }
+  };
+
   const handleFile = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -147,8 +179,15 @@ const AdminImportProducts = () => {
     setReviewActionCol('');
 
     try {
+      const lowerName = file.name.toLowerCase();
+      if (lowerName.endsWith('.xlsx')) {
+        await importReviewFile(file);
+        e.target.value = '';
+        return;
+      }
+
       if (!file.name.toLowerCase().endsWith('.csv')) {
-        setError('Only CSV imports are supported now. Export the spreadsheet as .csv and upload it again.');
+        setError('Upload the exported .xlsx review sheet or a CSV file from the Products sheet.');
         return;
       }
 
@@ -194,7 +233,7 @@ const AdminImportProducts = () => {
       setActiveCol(findByLabel('isactive') || findByLabel('is active') || findByLabel('status') || '');
       setReviewActionCol(findByLabel('reviewaction') || findByLabel('review action') || '');
     } catch (err) {
-      setError('Failed to read the file. Please upload a valid CSV file.');
+      setError('Failed to read the file. Please upload a valid CSV or Excel review sheet.');
     }
   };
 
@@ -366,7 +405,7 @@ const AdminImportProducts = () => {
         setError(data.message || 'Import failed.');
         return;
       }
-      setStatus(`Processed ${data.attempted ?? items.length} rows. Added ${data.inserted ?? 0}, updated ${data.updated ?? 0}.`);
+      setStatus(formatImportResult(data, items.length));
     } catch (err) {
       setError(err?.message || 'Import failed. Please try again.');
     } finally {
@@ -412,7 +451,7 @@ const AdminImportProducts = () => {
             <div className="admin-surface-copy">
               <h1>Import products with a cleaner mapping workflow.</h1>
               <p>
-                Download the live review sheet, edit it in Excel, export to CSV, then map the columns once before importing changes back into the visible catalog.
+                Download the live review sheet, edit it in Excel, then upload the same file back to update products without duplicating catalog data.
               </p>
             </div>
             {rows.length > 0 && (
@@ -450,10 +489,10 @@ const AdminImportProducts = () => {
           <div className="admin-side-stack">
         <div className="admin-import-panel">
           <div className="admin-import-upload">
-            <label className="admin-import-label">Upload CSV</label>
-            <input type="file" accept=".csv,text/csv" onChange={handleFile} />
+            <label className="admin-import-label">Upload product review sheet</label>
+            <input type="file" accept=".xlsx,.csv,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" onChange={handleFile} disabled={importing} />
             <p className="admin-import-help">
-              Upload a CSV file with at least product name and category. Review-ready files can also include ProductId, SKU, Featured, IsActive, and ReviewAction.
+              Upload the exported Excel file directly, or upload a CSV from the Products sheet. Keep ProductId and SKU unchanged to update existing products safely.
             </p>
             <button
               className="admin-btn-secondary"
@@ -665,7 +704,8 @@ const AdminImportProducts = () => {
               <ul>
                 <li>Make sure the file has a reliable product name column and category column.</li>
                 <li>Use the downloaded review sheet if the team wants to mark keep, add, update, or remove decisions in Excel.</li>
-                <li>Rows marked remove or deactivate are turned inactive on import instead of being deleted.</li>
+                <li>Do not delete rows to remove products; mark ReviewAction as remove/deactivate or set IsActive to false.</li>
+                <li>ProductId is matched first, then SKU, then Product + Category, so existing products update instead of copying.</li>
                 <li>Use “create missing categories” only when the file structure is already clean.</li>
               </ul>
             </div>
