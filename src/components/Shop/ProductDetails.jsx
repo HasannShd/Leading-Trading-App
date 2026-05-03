@@ -41,7 +41,7 @@ const ProductDetails = () => {
     setLoading(true);
     setNotice(null);
     try {
-      const response = await fetch(`${API_URL}/products/${id}`);
+      const response = await fetch(`${API_URL}/products/${id}`, { cache: 'no-store' });
       const data = await response.json().catch(() => ({}));
       if (!response.ok || !data?._id) {
         throw new Error(data?.message || 'Product could not be loaded.');
@@ -67,7 +67,7 @@ const ProductDetails = () => {
 
       const categoryId = data?.categorySlug?._id || data?.categorySlug;
       if (categoryId) {
-        const relatedRes = await fetch(`${API_URL}/products?category=${categoryId}&limit=4`);
+        const relatedRes = await fetch(`${API_URL}/products?category=${categoryId}&limit=4`, { cache: 'no-store' });
         const relatedData = await relatedRes.json();
         const relatedItems = Array.isArray(relatedData) ? relatedData : (relatedData.items || []);
         setRelatedProducts(relatedItems.filter((item) => item._id !== data._id).slice(0, 3));

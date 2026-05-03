@@ -17,7 +17,6 @@ const PRODUCT_PAGE_SIZE = 12;
 const SHOP_CACHE_TTL_MS = 5 * 60 * 1000;
 const memoryCache = {
   categories: null,
-  products: new Map(),
 };
 
 const asProductArray = (value) => (Array.isArray(value) ? value.filter(Boolean) : []);
@@ -112,30 +111,18 @@ const Shop = () => {
     const params = new URLSearchParams({ page, limit: PRODUCT_PAGE_SIZE });
     if (searchQuery) params.set('search', searchQuery);
     if (category) params.set('category', category);
-    const cacheKey = `${API_URL}:shop-products:${params.toString()}`;
-    const cached = memoryCache.products.get(cacheKey) || getSessionCache(cacheKey);
-    if (cached) {
-      memoryCache.products.set(cacheKey, cached);
-      setProducts(cached.items);
-      setTotal(cached.total);
-      setError('');
-      setLoading(false);
-      return;
-    }
 
     setLoading(true);
     setError('');
     setBrokenImages({});
     try {
-      const response = await fetch(`${API_URL}/products?${params.toString()}`);
+      const response = await fetch(`${API_URL}/products?${params.toString()}`, { cache: 'no-store' });
       const data = await response.json();
       const items = Array.isArray(data) ? data : asProductArray(data.items);
       const nextPayload = {
         items,
         total: Array.isArray(data) ? data.length : (data.total || 0),
       };
-      memoryCache.products.set(cacheKey, nextPayload);
-      setSessionCache(cacheKey, nextPayload);
       setProducts(nextPayload.items);
       setTotal(nextPayload.total);
     } catch (err) {

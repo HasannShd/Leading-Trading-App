@@ -58,6 +58,7 @@ const ContactPage = () => {
       try {
         const response = await fetch(`${API_URL}/products/${quoteContext.productId}`, {
           signal: controller.signal,
+          cache: 'no-store',
         });
         const data = await response.json().catch(() => ({}));
         if (!response.ok || !data?._id) return;

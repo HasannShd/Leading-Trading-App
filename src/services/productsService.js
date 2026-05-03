@@ -15,10 +15,10 @@ const requestJson = async (path, options = {}) => {
 
 // PUBLIC
 export const fetchProducts = (params = {}) =>
-  requestJson(`/products?${new URLSearchParams(params).toString()}`);
+  requestJson(`/products?${new URLSearchParams(params).toString()}`, { cache: 'no-store' });
 
 export const fetchProduct = (id) =>
-  requestJson(`/products/${id}`);
+  requestJson(`/products/${id}`, { cache: 'no-store' });
 
 // Get products by category (sync from local data)
 export const getProductsByCategory = (categorySlug) =>

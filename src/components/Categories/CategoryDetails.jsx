@@ -95,7 +95,7 @@ const CategoryDetails = () => {
           navigate(`/categories/${categoryData.slug}`, { replace: true });
         }
 
-        const productsRes = await fetch(`${API_URL}/products?category=${categoryData._id}&limit=200`);
+        const productsRes = await fetch(`${API_URL}/products?category=${categoryData._id}&limit=200`, { cache: 'no-store' });
         const productsData = await productsRes.json();
         setProducts(Array.isArray(productsData) ? productsData : (productsData.items || []));
       } catch (err) {

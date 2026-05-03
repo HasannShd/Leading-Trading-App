@@ -170,7 +170,7 @@ const HomePage = () => {
     const controller = new AbortController();
     const fetchFeatured = async () => {
       try {
-        const response = await fetch(`${API_URL}/products?featured=true&limit=5`, { signal: controller.signal });
+        const response = await fetch(`${API_URL}/products?featured=true&limit=5`, { signal: controller.signal, cache: 'no-store' });
         const data = await response.json();
         const items = Array.isArray(data) ? data : data.items || [];
         setFeaturedProducts(items);
