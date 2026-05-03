@@ -7,8 +7,8 @@ const LINKEDIN_URL = 'https://www.linkedin.com/company/leading-trading-est/';
 const INSTAGRAM_URL = 'https://www.instagram.com/leadingtradingest/';
 
 const emptyCampaign = {
-  subject: 'Follow Leading Trading Est for product updates',
-  previewText: 'Stay connected with LTE on Instagram and LinkedIn.',
+  subject: 'Stay Connected With Leading Trading Est',
+  previewText: 'A quick note from Leading Trading Est.',
   instagramUrl: INSTAGRAM_URL,
   linkedinUrl: LINKEDIN_URL,
 };
