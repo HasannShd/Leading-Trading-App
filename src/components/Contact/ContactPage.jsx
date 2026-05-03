@@ -193,7 +193,6 @@ const ContactPage = () => {
           <div><a href="tel:+97339939582">+97339939582</a></div>
           <div><a href="mailto:admin@lte-bh.com">admin@lte-bh.com</a></div>
           <div className="contact-info-socials">
-            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">Facebook</a> &nbsp;
             <a href="https://www.instagram.com/leadingtradingest/" target="_blank" rel="noopener noreferrer">Instagram</a> &nbsp;
             <a href="https://www.linkedin.com/company/leading-trading-est/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
           </div>
