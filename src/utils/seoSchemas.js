@@ -16,6 +16,7 @@ export const organizationSchema = {
   logo: `${SITE_ORIGIN}/company-logo.png`,
   description:
     'Leading Trading Est provides medical, dental, and industrial supplies in Bahrain with structured sourcing, quotation support, and local service.',
+  sameAs: ['https://www.linkedin.com/company/leading-trading-est/'],
   foundingDate: '2012',
   areaServed: [
     { '@type': 'Country', name: 'Bahrain' },
@@ -39,6 +40,7 @@ export const localBusinessSchema = {
   image: `${SITE_ORIGIN}/company-logo.png`,
   logo: `${SITE_ORIGIN}/company-logo.png`,
   description: organizationSchema.description,
+  sameAs: organizationSchema.sameAs,
   address: {
     '@type': 'PostalAddress',
     addressCountry: 'BH',
