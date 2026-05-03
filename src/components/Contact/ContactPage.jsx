@@ -194,7 +194,7 @@ const ContactPage = () => {
           <div><a href="mailto:admin@lte-bh.com">admin@lte-bh.com</a></div>
           <div className="contact-info-socials">
             <a href="https://www.instagram.com/leadingtradingest/" target="_blank" rel="noopener noreferrer">Instagram</a> &nbsp;
-            <a href="https://www.linkedin.com/company/leading-trading-est/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+            <a href="https://www.linkedin.com/company/leading-trading-est/?viewAsMember=true" target="_blank" rel="noopener noreferrer">LinkedIn</a>
           </div>
           <div className="contact-info-title">{t('Location')}</div>
           <div>

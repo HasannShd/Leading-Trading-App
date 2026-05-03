@@ -3,7 +3,7 @@ import './AdminCategories.css';
 import AdminTopNav from './AdminTopNav';
 import { authFetch } from '../../services/authFetch';
 
-const LINKEDIN_URL = 'https://www.linkedin.com/company/leading-trading-est/';
+const LINKEDIN_URL = 'https://www.linkedin.com/company/leading-trading-est/?viewAsMember=true';
 const INSTAGRAM_URL = 'https://www.instagram.com/leadingtradingest/';
 
 const emptyCampaign = {

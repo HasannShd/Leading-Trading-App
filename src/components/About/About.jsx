@@ -66,6 +66,7 @@ const workflowSteps = [
 const About = () => {
   const rootRef = useRef(null);
   const { t } = useLanguage();
+  const baseUrl = import.meta.env.BASE_URL;
 
   useScrollReveal(rootRef);
 
@@ -152,6 +153,39 @@ const About = () => {
             ))}
           </ul>
         </article>
+      </div>
+    </section>
+
+    <section className="about-medstar">
+      <div className="about-section-heading animate-stagger" data-stagger-step="100ms">
+        <span className="about-eyebrow animate-on-scroll">{t('Medstar')}</span>
+        <h2 className="animate-on-scroll">{t('Medstar reflects LTE’s own brand commitment to practical quality, dependable availability, and market trust.')}</h2>
+      </div>
+
+      <div className="about-medstar-card animate-stagger" data-stagger-step="100ms">
+        <div className="about-medstar-logo animate-on-scroll">
+          <img src={`${baseUrl}Brands/medstar.jpg`} alt="Medstar" loading="lazy" decoding="async" />
+        </div>
+
+        <div className="about-medstar-copy animate-on-scroll">
+          <span className="about-card-kicker">{t('LTE-owned medical supply brand')}</span>
+          <p>
+            {t('Medstar is part of Leading Trading Est’s own brand portfolio, developed to support recurring healthcare purchasing with products selected for practical use, steady availability, and dependable day-to-day performance.')}
+          </p>
+          <p>
+            {t('For Bahrain medical and dental buyers, Medstar strengthens LTE’s ability to provide a consistent local supply option backed by the same sourcing, quotation, delivery, and account support workflow behind the company.')}
+          </p>
+        </div>
+
+        <ul className="about-medstar-list animate-stagger" data-stagger-step="80ms">
+          {[
+            'Own-brand accountability from a Bahrain-based supplier',
+            'Focused on reliable routine healthcare requirements',
+            'Supported by LTE’s local sales, accounts, and delivery teams',
+          ].map((point) => (
+            <li className="animate-on-scroll" key={point}>{t(point)}</li>
+          ))}
+        </ul>
       </div>
     </section>
 

@@ -207,9 +207,9 @@ const HomePage = () => {
     <main className="cinematic-home" ref={rootRef}>
       <Seo
         title="Leading Trading Est | Medical & Industrial Supplies Bahrain"
-        description="Leading Trading Est supports Bahrain healthcare, dental, laboratory, safety, and industrial buyers with structured sourcing, supplier access, quotation support, and dependable delivery coordination."
+        description="Leading Trading Est supports Bahrain healthcare, dental, laboratory, safety, and industrial buyers with structured sourcing, Medstar own-brand supply, quotation support, and dependable delivery coordination."
         canonicalPath="/"
-        keywords="Leading Trading Est Bahrain, LTE Bahrain, medical supplies Bahrain, dental supplies Bahrain, laboratory equipment Bahrain, industrial supplies Bahrain, safety supplies Bahrain, hospital supplies Bahrain, Bahrain procurement"
+        keywords="Leading Trading Est Bahrain, LTE Bahrain, Medstar Bahrain, Medstar medical supplies, medical supplies Bahrain, dental supplies Bahrain, laboratory equipment Bahrain, industrial supplies Bahrain, safety supplies Bahrain, hospital supplies Bahrain, Bahrain procurement"
         structuredData={[organizationSchema, localBusinessSchema, webSiteSchema]}
       />
       <section className="home-hero">
@@ -356,6 +356,30 @@ const HomePage = () => {
             <p>
               {t('Our relationships with established brands and respected institutions demonstrate the level of trust placed in our sourcing, coordination, and delivery performance.')}
             </p>
+          </div>
+
+          <div className="medstar-spotlight animate-stagger" data-stagger-step="100ms">
+            <div className="medstar-spotlight__brand animate-on-scroll">
+              <img src={`${baseUrl}Brands/medstar.jpg`} alt="Medstar" loading="lazy" decoding="async" />
+            </div>
+
+            <div className="medstar-spotlight__copy animate-on-scroll">
+              <span className="home-eyebrow home-eyebrow--ink">{t('Our own brand')}</span>
+              <h3>{t('Medstar is LTE’s own trusted medical supply brand, built around consistency, practical quality, and dependable market confidence.')}</h3>
+              <p>
+                {t('Medstar supports day-to-day clinical purchasing with products selected for routine healthcare use, repeat procurement, and the service expectations of Bahrain medical and dental buyers.')}
+              </p>
+            </div>
+
+            <div className="medstar-spotlight__points animate-stagger" data-stagger-step="80ms">
+              {[
+                'LTE-owned brand with local accountability',
+                'Recognized by buyers for dependable routine supply',
+                'Supported by the same sourcing and delivery workflow behind LTE',
+              ].map((point) => (
+                <span className="animate-on-scroll" key={point}>{t(point)}</span>
+              ))}
+            </div>
           </div>
 
           <div className="logo-marquee animate-on-scroll">

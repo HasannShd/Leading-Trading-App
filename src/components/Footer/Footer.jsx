@@ -71,7 +71,7 @@ const Footer = () => {
         <div>© {new Date().getFullYear()} {t('Leading Trading Est')}. {t('All rights reserved.')}</div>
         <div className="footer-socials">
           <a href="https://www.instagram.com/leadingtradingest/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="footer-social-icon"><FaInstagram /></a>
-          <a href="https://www.linkedin.com/company/leading-trading-est/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="footer-social-icon"><FaLinkedinIn /></a>
+          <a href="https://www.linkedin.com/company/leading-trading-est/?viewAsMember=true" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="footer-social-icon"><FaLinkedinIn /></a>
         </div>
       </div>
     </footer>

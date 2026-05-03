@@ -33,6 +33,25 @@ export const AR_TRANSLATIONS = {
   'All Categories': 'كل الفئات',
   'Leading Trading Est': 'مؤسسة ليدنج تريدنج',
   'Medical, dental & industrial supply': 'توريد طبي وأسنان وصناعي',
+  'Medstar': 'ميدستار',
+  'Our own brand': 'علامتنا الخاصة',
+  'Medstar is LTE’s own trusted medical supply brand, built around consistency, practical quality, and dependable market confidence.':
+    'ميدستار هي علامة LTE الطبية الخاصة والموثوقة، مبنية على الاتساق والجودة العملية والثقة في السوق.',
+  'Medstar supports day-to-day clinical purchasing with products selected for routine healthcare use, repeat procurement, and the service expectations of Bahrain medical and dental buyers.':
+    'تدعم ميدستار المشتريات الطبية اليومية بمنتجات مختارة للاستخدام الصحي الروتيني والشراء المتكرر وتوقعات الخدمة لدى المشترين الطبيين وطب الأسنان في البحرين.',
+  'LTE-owned brand with local accountability': 'علامة مملوكة لـ LTE مع مسؤولية محلية',
+  'Recognized by buyers for dependable routine supply': 'معروفة لدى المشترين لتوريدها الروتيني الموثوق',
+  'Supported by the same sourcing and delivery workflow behind LTE': 'مدعومة بنفس مسار التوريد والتسليم لدى LTE',
+  'Medstar reflects LTE’s own brand commitment to practical quality, dependable availability, and market trust.':
+    'تعكس ميدستار التزام علامة LTE الخاصة بالجودة العملية والتوفر الموثوق والثقة في السوق.',
+  'LTE-owned medical supply brand': 'علامة توريد طبية مملوكة لـ LTE',
+  'Medstar is part of Leading Trading Est’s own brand portfolio, developed to support recurring healthcare purchasing with products selected for practical use, steady availability, and dependable day-to-day performance.':
+    'ميدستار جزء من محفظة العلامات الخاصة بمؤسسة ليدنج تريدنج، وتم تطويرها لدعم المشتريات الصحية المتكررة بمنتجات مختارة للاستخدام العملي والتوفر المستقر والأداء اليومي الموثوق.',
+  'For Bahrain medical and dental buyers, Medstar strengthens LTE’s ability to provide a consistent local supply option backed by the same sourcing, quotation, delivery, and account support workflow behind the company.':
+    'بالنسبة للمشترين الطبيين وطب الأسنان في البحرين، تعزز ميدستار قدرة LTE على توفير خيار توريد محلي ثابت مدعوم بنفس مسار التوريد وعروض الأسعار والتسليم ودعم الحسابات لدى الشركة.',
+  'Own-brand accountability from a Bahrain-based supplier': 'مسؤولية علامة خاصة من مورد مقره البحرين',
+  'Focused on reliable routine healthcare requirements': 'تركيز على المتطلبات الصحية الروتينية الموثوقة',
+  'Supported by LTE’s local sales, accounts, and delivery teams': 'مدعومة بفرق المبيعات والحسابات والتسليم المحلية لدى LTE',
   'Request Quote': 'طلب عرض سعر',
   'Request Quotation': 'طلب عرض سعر',
   'Talk to Our Team': 'تحدث مع فريقنا',

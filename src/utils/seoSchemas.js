@@ -15,10 +15,16 @@ export const organizationSchema = {
   url: SITE_ORIGIN,
   logo: `${SITE_ORIGIN}/company-logo.png`,
   description:
-    'Leading Trading Est provides medical, dental, and industrial supplies in Bahrain with structured sourcing, quotation support, and local service.',
+    'Leading Trading Est provides medical, dental, and industrial supplies in Bahrain with structured sourcing, Medstar own-brand supply, quotation support, and local service.',
+  brand: {
+    '@type': 'Brand',
+    name: 'Medstar',
+    description:
+      'Medstar is Leading Trading Est’s own medical supply brand, developed around practical quality, repeat healthcare procurement, and dependable local support.',
+  },
   sameAs: [
     'https://www.instagram.com/leadingtradingest/',
-    'https://www.linkedin.com/company/leading-trading-est/',
+    'https://www.linkedin.com/company/leading-trading-est/?viewAsMember=true',
   ],
   foundingDate: '2012',
   areaServed: [
@@ -27,6 +33,8 @@ export const organizationSchema = {
   ],
   knowsAbout: [
     'medical supplies Bahrain',
+    'Medstar Bahrain',
+    'Medstar medical supplies',
     'medical gloves Bahrain',
     'nitrile gloves Bahrain',
     'PPE supplier Bahrain',
