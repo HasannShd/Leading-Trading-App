@@ -89,7 +89,7 @@ const Categories = () => {
         <section className="categories-hero">
           <div className="categories-hero-copy animate-stagger" data-stagger-step="110ms">
             <span className="categories-eyebrow animate-on-scroll">{t('Our Categories')}</span>
-            <h1 className="categories-title animate-on-scroll">{t('Browse LTE&apos;s medical, dental, and industrial categories.')}</h1>
+            <h1 className="categories-title animate-on-scroll">{t("Browse LTE's medical, dental, and industrial categories.")}</h1>
             <p className="categories-subtitle animate-on-scroll">
               {t('Review the main groups first, then open the relevant category to find the right department or supply area faster.')}
             </p>

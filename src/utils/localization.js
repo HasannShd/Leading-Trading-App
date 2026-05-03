@@ -113,6 +113,7 @@ export const AR_TRANSLATIONS = {
   'Browse Category': 'تصفح الفئة',
   'Our Categories': 'فئاتنا',
   'Browse LTE’s medical, dental, and industrial categories.': 'تصفح فئات LTE الطبية وطب الأسنان والصناعية.',
+  "Browse LTE's medical, dental, and industrial categories.": 'تصفح فئات LTE الطبية وطب الأسنان والصناعية.',
   'Browse LTE&apos;s medical, dental, and industrial categories.': 'تصفح فئات LTE الطبية وطب الأسنان والصناعية.',
   'Review the main groups first, then open the relevant category to find the right department or supply area faster.': 'راجع المجموعات الرئيسية أولاً، ثم افتح الفئة المناسبة للوصول إلى القسم أو مجال التوريد بسرعة.',
   'Search categories, departments, or supply types': 'ابحث في الفئات أو الأقسام أو أنواع التوريد',
