@@ -369,6 +369,10 @@
   align-items: start;
 }
 
+.admin-marketing-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
 .admin-side-stack {
   display: grid;
   gap: 20px;
@@ -505,6 +509,7 @@
 
 @media (max-width: 1120px) {
   .admin-surface-grid,
+  .admin-marketing-grid,
   .admin-profile-grid {
     grid-template-columns: 1fr;
   }
