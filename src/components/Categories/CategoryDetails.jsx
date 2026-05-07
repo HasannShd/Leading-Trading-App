@@ -172,6 +172,12 @@ const CategoryDetails = () => {
   if (!loading && !category) {
     return (
       <main>
+        <Seo
+          title="Category Not Available | Leading Trading Est"
+          description="The requested Leading Trading Est category is not available."
+          canonicalPath="/categories"
+          robots="noindex,follow,noarchive"
+        />
         <section className="category-details-shell">
           <StatePanel
             eyebrow={t('Unavailable')}

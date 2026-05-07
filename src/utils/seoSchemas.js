@@ -15,7 +15,7 @@ export const organizationSchema = {
   url: SITE_ORIGIN,
   logo: `${SITE_ORIGIN}/company-logo.png`,
   description:
-    'Leading Trading Est provides medical, dental, and industrial supplies in Bahrain with structured sourcing, Medstar own-brand supply, quotation support, and local service.',
+    'Leading Trading Est is a Bahrain medical, dental, laboratory, safety, and industrial supplier providing structured sourcing, Medstar own-brand supply, quotation support, and local service.',
   brand: {
     '@type': 'Brand',
     name: 'Medstar',
@@ -24,7 +24,7 @@ export const organizationSchema = {
   },
   sameAs: [
     'https://www.instagram.com/leadingtradingest/',
-    'https://www.linkedin.com/company/leading-trading-est/?viewAsMember=true',
+    'https://www.linkedin.com/company/leading-trading-est/',
   ],
   foundingDate: '2012',
   areaServed: [
@@ -33,6 +33,9 @@ export const organizationSchema = {
   ],
   knowsAbout: [
     'medical supplies Bahrain',
+    'medical suppliers in Bahrain',
+    'medical equipment supplier Bahrain',
+    'hospital supplies Bahrain',
     'Medstar Bahrain',
     'Medstar medical supplies',
     'medical gloves Bahrain',
@@ -55,8 +58,12 @@ export const localBusinessSchema = {
   logo: `${SITE_ORIGIN}/company-logo.png`,
   description: organizationSchema.description,
   sameAs: organizationSchema.sameAs,
+  telephone: '+97339939582',
+  email: 'admin@lte-bh.com',
   address: {
     '@type': 'PostalAddress',
+    streetAddress: 'Warehousing World, Um Al-Baidh, Sitra',
+    addressLocality: 'Sitra',
     addressCountry: 'BH',
     addressRegion: 'Bahrain',
   },
@@ -65,6 +72,14 @@ export const localBusinessSchema = {
     name: 'Bahrain',
   },
   priceRange: '$$',
+  openingHoursSpecification: [
+    {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Saturday', 'Sunday'],
+      opens: '08:00',
+      closes: '16:00',
+    },
+  ],
 };
 
 export const webSiteSchema = {

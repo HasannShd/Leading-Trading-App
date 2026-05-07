@@ -3,7 +3,7 @@ import { absoluteUrl, SITE_ORIGIN } from '../../utils/seoSchemas';
 
 const DEFAULT_TITLE = 'Leading Trading Est | Medical & Industrial Supplies Bahrain';
 const DEFAULT_DESCRIPTION =
-  'Leading Trading Est provides medical, dental, and industrial supplies in Bahrain with structured sourcing, quotation support, and local service.';
+  'Leading Trading Est is a Bahrain medical, dental, laboratory, safety, and industrial supplier providing Medstar own-brand supply, quotation support, and local service.';
 const DEFAULT_IMAGE = `${SITE_ORIGIN}/company-logo.png`;
 const DEFAULT_KEYWORDS =
   'Leading Trading Est, LTE Bahrain, medical supplies Bahrain, dental supplies Bahrain, laboratory equipment Bahrain, industrial safety supplies Bahrain, healthcare procurement Bahrain';
@@ -53,7 +53,7 @@ export default function Seo({
   canonicalPath = '/',
   image = DEFAULT_IMAGE,
   type = 'website',
-  robots = 'index,follow',
+  robots = 'index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1',
   structuredData = [],
   keywords = DEFAULT_KEYWORDS,
 }) {
@@ -71,6 +71,7 @@ export default function Seo({
     upsertMeta('meta[name="geo.region"]', { name: 'geo.region', content: 'BH' });
     upsertMeta('meta[name="geo.placename"]', { name: 'geo.placename', content: 'Bahrain' });
     upsertMeta('meta[property="og:type"]', { property: 'og:type', content: type });
+    upsertMeta('meta[property="og:site_name"]', { property: 'og:site_name', content: 'Leading Trading Est' });
     upsertMeta('meta[property="og:locale"]', { property: 'og:locale', content: 'en_BH' });
     upsertMeta('meta[property="og:title"]', { property: 'og:title', content: title });
     upsertMeta('meta[property="og:description"]', { property: 'og:description', content: description });

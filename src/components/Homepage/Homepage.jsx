@@ -206,10 +206,10 @@ const HomePage = () => {
   return (
     <main className="cinematic-home" ref={rootRef}>
       <Seo
-        title="Leading Trading Est | Medical & Industrial Supplies Bahrain"
-        description="Leading Trading Est supports Bahrain healthcare, dental, laboratory, safety, and industrial buyers with structured sourcing, Medstar own-brand supply, quotation support, and dependable delivery coordination."
+        title="Medical Suppliers in Bahrain | Leading Trading Est"
+        description="Leading Trading Est is a Bahrain medical, dental, laboratory, safety, and industrial supplier supporting clinics, hospitals, dental centers, and industrial buyers with Medstar own-brand supply, quotation support, and dependable delivery coordination."
         canonicalPath="/"
-        keywords="Leading Trading Est Bahrain, LTE Bahrain, Medstar Bahrain, Medstar medical supplies, medical supplies Bahrain, dental supplies Bahrain, laboratory equipment Bahrain, industrial supplies Bahrain, safety supplies Bahrain, hospital supplies Bahrain, Bahrain procurement"
+        keywords="medical suppliers in Bahrain, Bahrain medical supplier, Leading Trading Est Bahrain, LTE Bahrain, Medstar Bahrain, Medstar medical supplies, medical supplies Bahrain, dental supplies Bahrain, laboratory equipment Bahrain, industrial supplies Bahrain, safety supplies Bahrain, hospital supplies Bahrain, Bahrain procurement"
         structuredData={[organizationSchema, localBusinessSchema, webSiteSchema]}
       />
       <section className="home-hero">
