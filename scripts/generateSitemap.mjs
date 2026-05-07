@@ -19,6 +19,20 @@ const staticRoutes = [
   { path: '/contact', changefreq: 'monthly', priority: '0.6' },
 ];
 
+const blockedSitemapPrefixes = [
+  '/admin',
+  '/staff',
+  '/cart',
+  '/checkout',
+  '/orders',
+  '/sign-in',
+  '/sign-up',
+  '/.well-known/',
+];
+
+const isIndexablePath = (path = '/') =>
+  !blockedSitemapPrefixes.some((prefix) => path === prefix || path.startsWith(`${prefix}/`) || path.startsWith(prefix));
+
 const escapeXml = (value) =>
   String(value)
     .replaceAll('&', '&amp;')
@@ -89,6 +103,7 @@ const renderSitemap = (routes) => {
   const seen = new Set();
   const uniqueRoutes = routes.filter((route) => {
     const path = route.path || '/';
+    if (!isIndexablePath(path)) return false;
     if (seen.has(path)) return false;
     seen.add(path);
     return true;

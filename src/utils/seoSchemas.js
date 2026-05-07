@@ -137,7 +137,8 @@ export const buildFaqSchema = (questions = []) => {
 };
 
 export const buildProductSchema = (product, { image, categoryName } = {}) => {
-  const priceValue = Number(product?.price || product?.basePrice || product?.variants?.[0]?.sizes?.[0]?.price || 0);
+  const priceValue = Number(product?.price || product?.basePrice || product?.variants?.[0]?.price || product?.variants?.[0]?.sizes?.[0]?.price || 0);
+  const offerPrice = Number.isFinite(priceValue) && priceValue > 0 ? priceValue.toFixed(3) : '0.000';
   const schema = {
     '@context': 'https://schema.org',
     '@type': 'Product',
@@ -155,14 +156,11 @@ export const buildProductSchema = (product, { image, categoryName } = {}) => {
       '@type': 'Offer',
       url: absoluteUrl(`/contact?source=product&product=${product?._id || ''}`),
       availability: 'https://schema.org/InStock',
+      price: offerPrice,
       priceCurrency: 'BHD',
       seller: { '@id': `${SITE_ORIGIN}/#organization` },
     },
   };
-
-  if (Number.isFinite(priceValue) && priceValue > 0) {
-    schema.offers.price = priceValue.toFixed(3);
-  }
 
   return schema;
 };
