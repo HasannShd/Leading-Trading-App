@@ -17,6 +17,7 @@ const Header = () => {
   const [dropdown, setDropdown] = useState(false);
   const [mobileNav, setMobileNav] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [expandedCategoryGroups, setExpandedCategoryGroups] = useState({});
   const [isMobileViewport, setIsMobileViewport] = useState(
     typeof window !== 'undefined' ? window.innerWidth <= 780 : false
   );
@@ -76,6 +77,7 @@ const Header = () => {
   useEffect(() => {
     setMobileNav(false);
     setDropdown(false);
+    setExpandedCategoryGroups({});
   }, [location.pathname]);
 
   useEffect(() => {
@@ -94,6 +96,7 @@ const Header = () => {
   const toggleMobileNav = () => {
     setMobileNav((open) => {
       if (open) setDropdown(false);
+      if (open) setExpandedCategoryGroups({});
       return !open;
     });
   };
@@ -101,6 +104,14 @@ const Header = () => {
   const closeMenus = () => {
     setDropdown(false);
     setMobileNav(false);
+    setExpandedCategoryGroups({});
+  };
+
+  const toggleCategoryGroup = (categoryId) => {
+    setExpandedCategoryGroups((current) => ({
+      ...current,
+      [categoryId]: !current[categoryId],
+    }));
   };
 
   return (
@@ -204,25 +215,60 @@ const Header = () => {
                   </Link>
                 )}
                 {categoryTree.map((parent) => {
+                  const isConsumablesGroup = (parent.slug || '').toLowerCase() === 'consumables-disposables';
+                  const hasChildren = Boolean(parent.children?.length);
+                  const childrenExpanded = !isConsumablesGroup || expandedCategoryGroups[parent._id];
+
                   return (
                   <div key={parent._id} className="nav-dropdown-group">
-                    <Link
-                      to={`/categories/${parent.slug || parent._id}`}
-                      className="nav-dropdown-item nav-dropdown-item-parent"
-                      onClick={closeMenus}
-                    >
-                      {categoryName(parent.name)}
-                    </Link>
-                    {parent.children?.map((child) => (
+                    <div className="nav-dropdown-parent-row">
                       <Link
-                        key={child._id}
-                        to={`/categories/${child.slug || child._id}`}
-                        className="nav-dropdown-item nav-dropdown-item-child"
+                        to={`/categories/${parent.slug || parent._id}`}
+                        className="nav-dropdown-item nav-dropdown-item-parent"
                         onClick={closeMenus}
                       >
-                        {categoryName(child.name)}
+                        {categoryName(parent.name)}
                       </Link>
-                    ))}
+                      {isConsumablesGroup && hasChildren ? (
+                        <button
+                          type="button"
+                          className="nav-dropdown-subtoggle"
+                          aria-expanded={Boolean(childrenExpanded)}
+                          aria-label={`${childrenExpanded ? t('Hide') : t('Show')} ${categoryName(parent.name)} ${t('subcategories')}`}
+                          onClick={(event) => {
+                            event.preventDefault();
+                            event.stopPropagation();
+                            toggleCategoryGroup(parent._id);
+                          }}
+                        >
+                          <span>{childrenExpanded ? t('Hide subcategories') : t('Show subcategories')}</span>
+                          <strong>{childrenExpanded ? '-' : '+'}</strong>
+                        </button>
+                      ) : null}
+                    </div>
+                    {isConsumablesGroup && hasChildren && !childrenExpanded ? (
+                      <button
+                        type="button"
+                        className="nav-dropdown-child-hint"
+                        onClick={(event) => {
+                          event.preventDefault();
+                          event.stopPropagation();
+                          toggleCategoryGroup(parent._id);
+                        }}
+                      >
+                        {t('Tap to view PPE, gowns, dressings, tapes, first aid, and sutures.')}
+                      </button>
+                    ) : null}
+                    {childrenExpanded ? parent.children?.map((child) => (
+                        <Link
+                          key={child._id}
+                          to={`/categories/${child.slug || child._id}`}
+                          className="nav-dropdown-item nav-dropdown-item-child"
+                          onClick={closeMenus}
+                        >
+                          {categoryName(child.name)}
+                        </Link>
+                      )) : null}
                   </div>
                   );
                 })}
