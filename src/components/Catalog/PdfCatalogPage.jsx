@@ -196,7 +196,7 @@ const PdfCatalogPage = () => {
       const parentId = getCategoryParentId(category);
       const parent = parentId ? categoryById.get(parentId) || category.parent : null;
       const rootName = parent?.name || category.name || 'Catalog';
-      const subcategoryName = parent ? category.name : 'General';
+      const subcategoryName = parent ? category.name : 'Main category products';
       const key = `${rootName}::${subcategoryName}`;
       if (!map.has(key)) {
         map.set(key, {
@@ -301,6 +301,12 @@ const PdfCatalogPage = () => {
             The company combines supplier access, quotation handling, local coordination, and Medstar own-brand support to help customers review suitable products and move requirements into clear purchasing decisions.
           </p>
         </div>
+        <div className="pdf-intro-brands">
+          <strong>Brand portfolio</strong>
+          <p>
+            LTE represents and supplies products across Medstar, Rogin, SMI, ROMSONS, Hermann Meditech, Zogear, ADC, Osseous, Berger, and Bastos-Viegas, with product availability and specifications confirmed during quotation.
+          </p>
+        </div>
         <div className="pdf-stats-row">
           <article><strong>{topCategories.length}</strong><span>main category groups</span></article>
           <article><strong>{products.length}</strong><span>active products loaded</span></article>
@@ -313,13 +319,30 @@ const PdfCatalogPage = () => {
           <span>Category Overview</span>
           <h2>Catalogue sections by procurement area.</h2>
         </div>
-        <div className="pdf-category-overview">
+        <div className="pdf-category-toc">
           {categoryTree.map((category) => (
             <article key={category._id}>
-              <strong>{category.name}</strong>
+              <div>
+                <strong>{category.name}</strong>
+                <span>
+                  {productSections
+                    .filter((section) => section.rootName === category.name)
+                    .reduce((total, section) => total + section.products.length, 0)} products
+                </span>
+              </div>
               {category.description ? <p>{category.description}</p> : null}
               {category.children?.length ? (
-                <small>{category.children.map((child) => child.name).join(' | ')}</small>
+                <ul>
+                  {category.children.map((child) => {
+                    const count = productSections.find((section) => section.rootName === category.name && section.subcategoryName === child.name)?.products.length || 0;
+                    return (
+                      <li key={child._id}>
+                        <span>{child.name}</span>
+                        <em>{count}</em>
+                      </li>
+                    );
+                  })}
+                </ul>
               ) : null}
             </article>
           ))}
@@ -343,29 +366,6 @@ const PdfCatalogPage = () => {
           ))}
         </div>
       </PdfPage>
-
-      {categoryTree.map((category) => (
-        <PdfPage key={`toc-${category._id}`} className="pdf-category-divider">
-          <div className="pdf-page-heading">
-            <span>Main Category</span>
-            <h2>{category.name}</h2>
-          </div>
-          {category.description ? <p className="pdf-category-divider-copy">{category.description}</p> : null}
-          {category.children?.length ? (
-            <div className="pdf-subcategory-index">
-              {category.children.map((child) => {
-                const count = productSections.find((section) => section.rootName === category.name && section.subcategoryName === child.name)?.products.length || 0;
-                return (
-                  <article key={child._id}>
-                    <strong>{child.name}</strong>
-                    <span>{count} products</span>
-                  </article>
-                );
-              })}
-            </div>
-          ) : null}
-        </PdfPage>
-      ))}
 
       {productPages.map((page, pageIndex) => (
         <PdfPage key={`${page.rootName}-${page.subcategoryName}-${page.part}-${pageIndex}`}>
