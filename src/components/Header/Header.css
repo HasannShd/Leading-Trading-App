@@ -196,9 +196,12 @@
   position: absolute;
   top: calc(100% + 2px);
   left: 0;
-  min-width: 240px;
+  min-width: 340px;
+  width: max-content;
+  max-width: min(420px, calc(100vw - 28px));
   max-height: min(620px, calc(100vh - 112px));
-  display: grid;
+  display: flex;
+  flex-direction: column;
   gap: 6px;
   padding: 10px;
   border-radius: 22px;
@@ -211,11 +214,19 @@
   overflow-y: auto;
   overflow-x: hidden;
   overscroll-behavior: contain;
+  scrollbar-gutter: stable;
   scrollbar-width: thin;
   scrollbar-color: rgba(198, 145, 89, 0.64) rgba(255, 255, 255, 0.06);
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
   /* Subtle entrance animation */
   animation: dropdown-enter 0.18s cubic-bezier(0.22, 1, 0.36, 1) both;
   transform-origin: top left;
+}
+
+.nav-dropdown-menu a,
+.nav-dropdown-menu button {
+  touch-action: pan-y manipulation;
 }
 
 .nav-dropdown-menu::-webkit-scrollbar {
@@ -560,10 +571,10 @@
 
   .nav.nav-mobile-active {
     display: flex !important;
-    position: absolute;
-    top: calc(100% + 10px);
-    left: 0;
-    right: 0;
+    position: fixed;
+    top: 82px;
+    left: 12px;
+    right: 12px;
     flex-direction: column;
     align-items: stretch;
     gap: 6px;
@@ -576,9 +587,12 @@
     box-shadow: 0 36px 60px rgba(7, 17, 31, 0.34);
     z-index: 280;
     overflow-y: auto;
+    overflow-x: hidden;
     justify-content: flex-start;
     overscroll-behavior: contain;
-    max-height: calc(100vh - 104px);
+    max-height: calc(100dvh - 98px);
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
   }
 
   .nav.nav-mobile-active a,
@@ -639,17 +653,23 @@
     margin-top: 6px;
     transform: none;
     width: 100%;
-    max-height: min(58vh, 520px);
+    max-width: none;
+    max-height: min(66dvh, 560px);
     min-width: 0;
-    padding: 8px;
+    padding: 10px;
     border-radius: 18px;
     background: rgba(248, 243, 235, 0.05);
     border: 1px solid rgba(248, 243, 235, 0.06);
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
-    display: grid;
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
     gap: 6px;
     animation: none;
+    overflow-y: auto;
+    overflow-x: hidden;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
   }
 
   .nav.nav-mobile-active .nav-dropdown-menu {
