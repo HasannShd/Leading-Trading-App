@@ -5,6 +5,7 @@ import { buildBreadcrumbSchema, buildCollectionSchema, localBusinessSchema, orga
 import { fetchCategories } from '../../services/categoriesService';
 import { fetchProducts } from '../../services/productsService';
 import { normalizeImageSrc } from '../../utils/normalizeImageSrc';
+import { buildCategoryTree, getCategoryId, getCategoryParentId } from '../../utils/categoryTree';
 import './PdfCatalogPage.css';
 
 const COPYRIGHT_NOTICE =
@@ -38,6 +39,19 @@ const contactRows = [
   ['Social', 'Instagram: @leadingtradingest | LinkedIn: Leading Trading Est.'],
 ];
 
+const catalogueBrands = [
+  { name: 'Medstar', logo: 'Brands/medstar.jpg', note: 'LTE own-brand support for routine healthcare procurement.' },
+  { name: 'Rogin', logo: 'Brands/rogin.png' },
+  { name: 'SMI', logo: 'Brands/Smi.png' },
+  { name: 'ROMSONS', logo: 'Brands/romsons.png' },
+  { name: 'Hermann Meditech', logo: 'Brands/Hermann.png' },
+  { name: 'Zogear', logo: 'Brands/Zogear.png' },
+  { name: 'ADC', logo: 'Brands/adc.png' },
+  { name: 'Osseous', logo: 'Brands/osseous.png' },
+  { name: 'Berger', logo: 'Brands/berger.jpg' },
+  { name: 'Bastos-Viegas', logo: 'Brands/bastosviegas.webp' },
+];
+
 const chunk = (items, size) => {
   const pages = [];
   for (let index = 0; index < items.length; index += size) {
@@ -64,13 +78,15 @@ const findPacking = (product) => {
   return match ? [match.label, match.value].filter(Boolean).join(': ') : '';
 };
 
-const productCategoryName = (product) =>
-  product.categorySlug?.parent?.name || product.categorySlug?.name || 'Catalog';
+const buildCategoryPath = (product) =>
+  [product.categorySlug?.parent?.name, product.categorySlug?.name].filter(Boolean).join(' > ') ||
+  product.categorySlug?.name ||
+  'Catalog';
 
 const ProductCard = ({ product }) => {
   const image = product.image || product.images?.[0] || '';
   const details = [
-    ['Category', product.categorySlug?.name],
+    ['Category', buildCategoryPath(product)],
     ['Brand', product.brand],
     ['Code / SKU', product.sku || product.variants?.find((variant) => variant.sku)?.sku],
     ['Size / Specification', buildSpecText(product)],
@@ -165,26 +181,47 @@ const PdfCatalogPage = () => {
   }, []);
 
   const topCategories = useMemo(() => categories.filter((category) => !category.parent), [categories]);
+  const categoryTree = useMemo(() => buildCategoryTree(categories), [categories]);
+  const categoryById = useMemo(() => {
+    const map = new Map();
+    categories.forEach((category) => map.set(getCategoryId(category), category));
+    return map;
+  }, [categories]);
 
-  const groupedProducts = useMemo(() => {
+  const productSections = useMemo(() => {
     const map = new Map();
     products.forEach((product) => {
-      const group = productCategoryName(product);
-      if (!map.has(group)) map.set(group, []);
-      map.get(group).push(product);
+      const category = product.categorySlug || {};
+      const categoryId = getCategoryId(category);
+      const parentId = getCategoryParentId(category);
+      const parent = parentId ? categoryById.get(parentId) || category.parent : null;
+      const rootName = parent?.name || category.name || 'Catalog';
+      const subcategoryName = parent ? category.name : 'General';
+      const key = `${rootName}::${subcategoryName}`;
+      if (!map.has(key)) {
+        map.set(key, {
+          rootName,
+          subcategoryName,
+          categoryId,
+          products: [],
+        });
+      }
+      map.get(key).products.push(product);
     });
-    return Array.from(map.entries()).sort(([a], [b]) => a.localeCompare(b));
-  }, [products]);
+    return Array.from(map.values()).sort((a, b) =>
+      `${a.rootName} ${a.subcategoryName}`.localeCompare(`${b.rootName} ${b.subcategoryName}`)
+    );
+  }, [categoryById, products]);
 
   const productPages = useMemo(() => {
     const pages = [];
-    groupedProducts.forEach(([category, items]) => {
-      chunk(items, 6).forEach((group, index) => {
-        pages.push({ category, products: group, part: index + 1 });
+    productSections.forEach((section) => {
+      chunk(section.products, 6).forEach((group, index) => {
+        pages.push({ ...section, products: group, part: index + 1 });
       });
     });
     return pages;
-  }, [groupedProducts]);
+  }, [productSections]);
 
   const handlePrint = () => window.print();
 
@@ -277,20 +314,65 @@ const PdfCatalogPage = () => {
           <h2>Catalogue sections by procurement area.</h2>
         </div>
         <div className="pdf-category-overview">
-          {topCategories.map((category) => (
+          {categoryTree.map((category) => (
             <article key={category._id}>
               <strong>{category.name}</strong>
               {category.description ? <p>{category.description}</p> : null}
+              {category.children?.length ? (
+                <small>{category.children.map((child) => child.name).join(' | ')}</small>
+              ) : null}
             </article>
           ))}
         </div>
       </PdfPage>
 
+      <PdfPage>
+        <div className="pdf-page-heading">
+          <span>Brands</span>
+          <h2>Brands represented across the LTE catalogue.</h2>
+        </div>
+        <div className="pdf-brand-grid">
+          {catalogueBrands.map((brand) => (
+            <article key={brand.name}>
+              <div>
+                <img src={`${import.meta.env.BASE_URL}${brand.logo}`} alt={brand.name} />
+              </div>
+              <strong>{brand.name}</strong>
+              {brand.note ? <p>{brand.note}</p> : null}
+            </article>
+          ))}
+        </div>
+      </PdfPage>
+
+      {categoryTree.map((category) => (
+        <PdfPage key={`toc-${category._id}`} className="pdf-category-divider">
+          <div className="pdf-page-heading">
+            <span>Main Category</span>
+            <h2>{category.name}</h2>
+          </div>
+          {category.description ? <p className="pdf-category-divider-copy">{category.description}</p> : null}
+          {category.children?.length ? (
+            <div className="pdf-subcategory-index">
+              {category.children.map((child) => {
+                const count = productSections.find((section) => section.rootName === category.name && section.subcategoryName === child.name)?.products.length || 0;
+                return (
+                  <article key={child._id}>
+                    <strong>{child.name}</strong>
+                    <span>{count} products</span>
+                  </article>
+                );
+              })}
+            </div>
+          ) : null}
+        </PdfPage>
+      ))}
+
       {productPages.map((page, pageIndex) => (
-        <PdfPage key={`${page.category}-${page.part}-${pageIndex}`}>
+        <PdfPage key={`${page.rootName}-${page.subcategoryName}-${page.part}-${pageIndex}`}>
           <div className="pdf-page-heading pdf-product-heading">
-            <span>Product Listings</span>
-            <h2>{page.category}</h2>
+            <span>{page.rootName}</span>
+            <h2>{page.subcategoryName}</h2>
+            {page.part > 1 ? <p>Continued product listing, part {page.part}.</p> : null}
           </div>
           <div className="pdf-product-grid">
             {page.products.map((product) => (

@@ -262,8 +262,116 @@
   line-height: 1.45;
 }
 
+.pdf-category-overview small {
+  display: block;
+  margin-top: 4mm;
+  color: var(--pdf-blue);
+  font-size: 7.5pt;
+  font-weight: 800;
+  line-height: 1.5;
+}
+
+.pdf-brand-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6mm;
+}
+
+.pdf-brand-grid article {
+  display: grid;
+  grid-template-columns: 30mm 1fr;
+  gap: 5mm;
+  align-items: center;
+  min-height: 30mm;
+  padding: 5mm;
+  border: 1px solid var(--pdf-line);
+  border-radius: 5mm;
+  background: #ffffff;
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+.pdf-brand-grid article div {
+  width: 30mm;
+  height: 20mm;
+  display: grid;
+  place-items: center;
+  border-radius: 4mm;
+  background: #f3f7fb;
+}
+
+.pdf-brand-grid img {
+  max-width: 90%;
+  max-height: 16mm;
+  object-fit: contain;
+}
+
+.pdf-brand-grid strong {
+  display: block;
+  color: var(--pdf-navy);
+  font-size: 13pt;
+}
+
+.pdf-brand-grid p {
+  margin: 2mm 0 0;
+  color: var(--pdf-grey);
+  font-size: 8pt;
+  line-height: 1.4;
+}
+
+.pdf-category-divider {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.pdf-category-divider-copy {
+  max-width: 145mm;
+  color: #34475b;
+  font-size: 12pt;
+  line-height: 1.7;
+}
+
+.pdf-subcategory-index {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 5mm;
+  margin-top: 12mm;
+}
+
+.pdf-subcategory-index article {
+  padding: 5mm;
+  border: 1px solid var(--pdf-line);
+  border-radius: 5mm;
+  background: rgba(232, 242, 251, 0.58);
+}
+
+.pdf-subcategory-index strong,
+.pdf-subcategory-index span {
+  display: block;
+}
+
+.pdf-subcategory-index strong {
+  color: var(--pdf-navy);
+  font-size: 11pt;
+}
+
+.pdf-subcategory-index span {
+  margin-top: 2mm;
+  color: var(--pdf-blue);
+  font-size: 8pt;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
 .pdf-product-heading {
   margin-bottom: 7mm;
+}
+
+.pdf-product-heading p {
+  margin: 3mm 0 0;
+  color: var(--pdf-grey);
+  font-size: 9pt;
 }
 
 .pdf-product-grid {
