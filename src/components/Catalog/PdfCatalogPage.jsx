@@ -196,7 +196,7 @@ const PdfCatalogPage = () => {
       const parentId = getCategoryParentId(category);
       const parent = parentId ? categoryById.get(parentId) || category.parent : null;
       const rootName = parent?.name || category.name || 'Catalog';
-      const subcategoryName = parent ? category.name : 'Main category products';
+      const subcategoryName = parent ? category.name : rootName;
       const key = `${rootName}::${subcategoryName}`;
       if (!map.has(key)) {
         map.set(key, {
@@ -302,10 +302,20 @@ const PdfCatalogPage = () => {
           </p>
         </div>
         <div className="pdf-intro-brands">
-          <strong>Brand portfolio</strong>
-          <p>
-            LTE represents and supplies products across Medstar, Rogin, SMI, ROMSONS, Hermann Meditech, Zogear, ADC, Osseous, Berger, and Bastos-Viegas, with product availability and specifications confirmed during quotation.
-          </p>
+          <div className="pdf-intro-brands-copy">
+            <strong>Brand portfolio</strong>
+            <p>
+              LTE represents and supplies products across Medstar, Rogin, SMI, ROMSONS, Hermann Meditech, Zogear, ADC, Osseous, Berger, and Bastos-Viegas, with availability and specifications confirmed during quotation.
+            </p>
+          </div>
+          <div className="pdf-intro-brand-logos">
+            {catalogueBrands.map((brand) => (
+              <div key={brand.name}>
+                <img src={`${import.meta.env.BASE_URL}${brand.logo}`} alt={brand.name} />
+                <span>{brand.name}</span>
+              </div>
+            ))}
+          </div>
         </div>
         <div className="pdf-stats-row">
           <article><strong>{topCategories.length}</strong><span>main category groups</span></article>
@@ -349,28 +359,10 @@ const PdfCatalogPage = () => {
         </div>
       </PdfPage>
 
-      <PdfPage>
-        <div className="pdf-page-heading">
-          <span>Brands</span>
-          <h2>Brands represented across the LTE catalogue.</h2>
-        </div>
-        <div className="pdf-brand-grid">
-          {catalogueBrands.map((brand) => (
-            <article key={brand.name}>
-              <div>
-                <img src={`${import.meta.env.BASE_URL}${brand.logo}`} alt={brand.name} />
-              </div>
-              <strong>{brand.name}</strong>
-              {brand.note ? <p>{brand.note}</p> : null}
-            </article>
-          ))}
-        </div>
-      </PdfPage>
-
       {productPages.map((page, pageIndex) => (
         <PdfPage key={`${page.rootName}-${page.subcategoryName}-${page.part}-${pageIndex}`}>
           <div className="pdf-page-heading pdf-product-heading">
-            <span>{page.rootName}</span>
+            <span>{page.subcategoryName === page.rootName ? 'Product Listings' : page.rootName}</span>
             <h2>{page.subcategoryName}</h2>
             {page.part > 1 ? <p>Continued product listing, part {page.part}.</p> : null}
           </div>

@@ -59,9 +59,10 @@
 .pdf-sheet {
   position: relative;
   width: 210mm;
+  height: 297mm;
   min-height: 297mm;
   margin: 0 auto 18px;
-  padding: 18mm 16mm 20mm;
+  padding: 17mm 16mm 19mm;
   overflow: hidden;
   background:
     linear-gradient(90deg, var(--pdf-navy) 0 6mm, transparent 6mm),
@@ -177,7 +178,7 @@
 .pdf-page-heading {
   position: relative;
   z-index: 1;
-  margin-bottom: 10mm;
+  margin-bottom: 8mm;
 }
 
 .pdf-page-heading h2 {
@@ -203,31 +204,67 @@
 }
 
 .pdf-intro-brands {
+  display: grid;
+  grid-template-columns: 48mm minmax(0, 1fr);
+  gap: 5mm;
+  align-items: start;
   margin-top: 8mm;
-  padding: 6mm;
+  padding: 5mm;
   border: 1px solid var(--pdf-line);
   border-radius: 5mm;
   background: rgba(232, 242, 251, 0.58);
 }
 
-.pdf-intro-brands strong {
+.pdf-intro-brands-copy strong {
   display: block;
   color: var(--pdf-navy);
   font-size: 12pt;
 }
 
-.pdf-intro-brands p {
+.pdf-intro-brands-copy p {
   margin: 2mm 0 0;
   color: #34475b;
-  font-size: 9.5pt;
-  line-height: 1.55;
+  font-size: 8.5pt;
+  line-height: 1.45;
+}
+
+.pdf-intro-brand-logos {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 2.5mm;
+}
+
+.pdf-intro-brand-logos div {
+  min-height: 18mm;
+  display: grid;
+  grid-template-rows: 12mm auto;
+  place-items: center;
+  gap: 1mm;
+  padding: 1.5mm;
+  border: 1px solid rgba(216, 226, 236, 0.82);
+  border-radius: 3mm;
+  background: #ffffff;
+}
+
+.pdf-intro-brand-logos img {
+  max-width: 20mm;
+  max-height: 10mm;
+  object-fit: contain;
+}
+
+.pdf-intro-brand-logos span {
+  color: var(--pdf-navy);
+  font-size: 5.8pt;
+  font-weight: 900;
+  line-height: 1.1;
+  text-align: center;
 }
 
 .pdf-stats-row {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 6mm;
-  margin-top: 14mm;
+  gap: 5mm;
+  margin-top: 8mm;
 }
 
 .pdf-stats-row article,
@@ -241,7 +278,7 @@
 }
 
 .pdf-stats-row article {
-  padding: 8mm;
+  padding: 6mm;
 }
 
 .pdf-stats-row strong {
@@ -260,13 +297,13 @@
 
 .pdf-category-toc {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 4mm;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 2.5mm;
 }
 
 .pdf-category-toc article {
-  min-height: 32mm;
-  padding: 5mm;
+  min-height: 0;
+  padding: 2.8mm;
   border: 1px solid var(--pdf-line);
   border-radius: 5mm;
   background: rgba(232, 242, 251, 0.5);
@@ -277,35 +314,36 @@
 .pdf-category-toc article > div {
   display: flex;
   justify-content: space-between;
-  gap: 4mm;
+  gap: 2mm;
   align-items: baseline;
 }
 
 .pdf-category-toc strong {
   display: block;
   color: var(--pdf-navy);
-  font-size: 12pt;
+  font-size: 8.7pt;
+  line-height: 1.18;
 }
 
 .pdf-category-toc article > div > span {
   flex: 0 0 auto;
   color: var(--pdf-blue);
-  font-size: 7.5pt;
+  font-size: 6.2pt;
   font-weight: 900;
   text-transform: uppercase;
 }
 
 .pdf-category-toc p {
-  margin: 3mm 0 0;
-  font-size: 8.5pt;
-  line-height: 1.45;
+  margin: 1.5mm 0 0;
+  font-size: 6pt;
+  line-height: 1.25;
 }
 
 .pdf-category-toc ul {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5mm 4mm;
-  margin: 4mm 0 0;
+  grid-template-columns: 1fr;
+  gap: 0.6mm;
+  margin: 1.6mm 0 0;
   padding: 0;
   list-style: none;
 }
@@ -313,12 +351,12 @@
 .pdf-category-toc li {
   display: flex;
   justify-content: space-between;
-  gap: 2mm;
+  gap: 1mm;
   border-bottom: 1px solid rgba(216, 226, 236, 0.7);
-  padding-bottom: 1mm;
+  padding-bottom: 0.35mm;
   color: var(--pdf-grey);
-  font-size: 7.4pt;
-  line-height: 1.25;
+  font-size: 5.5pt;
+  line-height: 1.18;
 }
 
 .pdf-category-toc li em {
