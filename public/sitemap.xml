@@ -13,6 +13,12 @@
     <priority>0.9</priority>
   </url>
   <url>
+    <loc>https://www.lte-bh.com/catalog</loc>
+    <lastmod>2026-05-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
     <loc>https://www.lte-bh.com/categories</loc>
     <lastmod>2026-05-09</lastmod>
     <changefreq>daily</changefreq>

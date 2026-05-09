@@ -11,7 +11,16 @@ const ContactPage = () => {
   const { t } = useLanguage();
   const [searchParams] = useSearchParams();
   const quoteSearch = searchParams.toString();
-  const [form, setForm] = useState({ name: '', email: '', phone: '', message: '' });
+  const [form, setForm] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    company: '',
+    quantity: '',
+    urgency: 'Standard',
+    preferredContact: 'WhatsApp',
+    message: '',
+  });
   const [quoteContext, setQuoteContext] = useState({
     source: '',
     productId: '',
@@ -108,7 +117,16 @@ const ContactPage = () => {
             ? `${t("We've received your request for")} ${quoteLabel}. ${t('Our team will get back to you shortly.')}`
             : data.message || t('Thank you! We will get back to you shortly.')
         );
-        setForm({ name: '', email: '', phone: '', message: '' });
+        setForm({
+          name: '',
+          email: '',
+          phone: '',
+          company: '',
+          quantity: '',
+          urgency: 'Standard',
+          preferredContact: 'WhatsApp',
+          message: '',
+        });
         setConsent(false);
       }
     } catch {
@@ -165,6 +183,29 @@ const ContactPage = () => {
           </label>
           <label>{t('Phone number')} <span className="required">*</span>
             <input type="tel" name="phone" placeholder="5555 5555 555" required value={form.phone} onChange={handleChange} />
+          </label>
+          <label>{t('Company / facility')}
+            <input type="text" name="company" placeholder="Clinic, hospital, company, or department" value={form.company} onChange={handleChange} />
+          </label>
+          <div className="contact-form-grid">
+            <label>{t('Quantity')}
+              <input type="text" name="quantity" placeholder="Example: 10 boxes" value={form.quantity} onChange={handleChange} />
+            </label>
+            <label>{t('Urgency')}
+              <select name="urgency" value={form.urgency} onChange={handleChange}>
+                <option value="Standard">{t('Standard')}</option>
+                <option value="Urgent">{t('Urgent')}</option>
+                <option value="Repeat order">{t('Repeat order')}</option>
+                <option value="Planning ahead">{t('Planning ahead')}</option>
+              </select>
+            </label>
+          </div>
+          <label>{t('Preferred contact method')}
+            <select name="preferredContact" value={form.preferredContact} onChange={handleChange}>
+              <option value="WhatsApp">{t('WhatsApp')}</option>
+              <option value="Phone call">{t('Phone call')}</option>
+              <option value="Email">{t('Email')}</option>
+            </select>
           </label>
           <label>{t('Message')}
             <textarea name="message" rows="4" value={form.message} onChange={handleChange} />

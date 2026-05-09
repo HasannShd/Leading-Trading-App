@@ -412,7 +412,10 @@ const HomePage = () => {
               <span className="home-eyebrow home-eyebrow--ink animate-on-scroll">{t('Core categories')}</span>
               <h2 className="animate-on-scroll">{t('Supply categories supporting clinical, dental, and industrial operations.')}</h2>
             </div>
-            <Link className="home-inline-link animate-on-scroll" to="/categories">{t('Browse all categories')}</Link>
+            <div className="home-inline-actions animate-on-scroll">
+              <Link className="home-inline-link" to="/categories">{t('Browse all categories')}</Link>
+              <Link className="home-inline-link" to="/catalog">{t('Download catalog')}</Link>
+            </div>
           </div>
 
           <div className="category-grid animate-stagger" data-stagger-step="100ms">
@@ -433,6 +436,17 @@ const HomePage = () => {
                 <span>{page.shortTitle}</span>
               </Link>
             ))}
+          </div>
+
+          <div className="catalog-template-callout animate-stagger" data-stagger-step="100ms">
+            <div className="animate-on-scroll">
+              <span className="home-eyebrow home-eyebrow--ink">{t('Catalog template')}</span>
+              <h3>{t('A procurement-first catalog that buyers can print, save, or send to their team.')}</h3>
+              <p>
+                {t('The catalog page is structured by buyer department, representative products, brand cues, and direct quote paths, keeping it useful for clinics, hospitals, dental centers, laboratories, and industrial buyers.')}
+              </p>
+            </div>
+            <Link className="home-btn home-btn--primary animate-on-scroll" to="/catalog">{t('Open Catalog')}</Link>
           </div>
 
           {spotlightProducts.length > 0 ? (

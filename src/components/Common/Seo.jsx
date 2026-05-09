@@ -31,6 +31,17 @@ const upsertCanonical = (href) => {
   element.setAttribute('href', href);
 };
 
+const upsertAlternate = (hreflang, href) => {
+  let element = document.head.querySelector(`link[rel="alternate"][hreflang="${hreflang}"]`);
+  if (!element) {
+    element = document.createElement('link');
+    element.setAttribute('rel', 'alternate');
+    element.setAttribute('hreflang', hreflang);
+    document.head.appendChild(element);
+  }
+  element.setAttribute('href', href);
+};
+
 const upsertJsonLd = (data) => {
   const existing = document.getElementById(JSON_LD_ID);
   const entries = Array.isArray(data) ? data.filter(Boolean) : [data].filter(Boolean);
@@ -64,6 +75,9 @@ export default function Seo({
     document.title = title;
     document.documentElement.lang = document.documentElement.lang || 'en';
     upsertCanonical(canonicalUrl);
+    upsertAlternate('en-BH', canonicalUrl);
+    upsertAlternate('ar-BH', canonicalUrl);
+    upsertAlternate('x-default', canonicalUrl);
     upsertMeta('meta[name="description"]', { name: 'description', content: description });
     upsertMeta('meta[name="keywords"]', { name: 'keywords', content: keywords });
     upsertMeta('meta[name="robots"]', { name: 'robots', content: robots });

@@ -9,6 +9,7 @@ import Footer from './components/Footer/Footer.jsx';
 import Seo from './components/Common/Seo.jsx';
 import PageTransition from './components/Common/PageTransition.jsx';
 import BackToTop from './components/Common/BackToTop.jsx';
+import MobileActionBar from './components/MobileActionBar.jsx';
 import NotFoundPage from './components/NotFoundPage.jsx';
 import ProtectedAdminRoute from './components/ProtectedAdminRoute';
 import { AdminContext, AdminProvider } from './context/AdminContext';
@@ -31,6 +32,7 @@ const About = lazy(() => import('./components/About/About'));
 const Shop = lazy(() => import('./components/Shop/Shop'));
 const ProductDetails = lazy(() => import('./components/Shop/ProductDetails'));
 const SeoLandingPage = lazy(() => import('./components/SeoLanding/SeoLandingPage'));
+const CatalogPage = lazy(() => import('./components/Catalog/CatalogPage'));
 const Cart = lazy(() => import('./components/Cart/Cart'));
 const Checkout = lazy(() => import('./components/Checkout/Checkout'));
 const Orders = lazy(() => import('./components/Orders/Orders'));
@@ -111,6 +113,7 @@ const AppShell = () => {
             <Route path="/categories/:slug" element={<CategoryDetails />} />
             <Route path="/products" element={<Navigate to="/categories" replace />} />
             <Route path="/shop" element={<Shop />} />
+            <Route path="/catalog" element={<CatalogPage />} />
             <Route path="/product/:id" element={<ProductDetails />} />
             <Route path="/solutions/:slug" element={<SeoLandingPage />} />
             <Route path="/cart" element={<Cart />} />
@@ -186,6 +189,7 @@ const AppShell = () => {
       {showAdminChat ? <PortalChatWidget role="admin" /> : null}
       {showStaffChat ? <PortalChatWidget role="sales_staff" /> : null}
       {!isPortalRoute && <Footer />}
+      {!isPortalRoute && <MobileActionBar />}
       {(!isPortalRoute || isAdminRoute) && <BackToTop variant={isAdminRoute ? 'admin' : 'default'} />}
     </div>
   );

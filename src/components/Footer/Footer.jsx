@@ -29,6 +29,7 @@ const Footer = () => {
           <div className="footer-cta-row">
             <a className="footer-cta" href="tel:+97317210665">{t('Call Us')}</a>
             <a className="footer-cta outline" href="https://wa.me/97317210665" target="_blank" rel="noopener noreferrer">{t('WhatsApp')}</a>
+            <a className="footer-cta outline" href="/catalog">{t('Catalog')}</a>
           </div>
         </div>
 

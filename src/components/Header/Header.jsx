@@ -280,6 +280,10 @@ const Header = () => {
             {t('Products')}
           </NavLink>
 
+          <NavLink to="/catalog" onClick={() => setMobileNav(false)}>
+            {t('Catalog')}
+          </NavLink>
+
           <NavLink to="/careers" onClick={() => setMobileNav(false)}>
             {t('Careers')}
           </NavLink>

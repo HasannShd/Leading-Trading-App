@@ -89,6 +89,7 @@
 .contact-form input[type="text"],
 .contact-form input[type="email"],
 .contact-form input[type="tel"],
+.contact-form select,
 .contact-form textarea {
   width: 100%;
   padding: 13px 16px;
@@ -111,6 +112,7 @@
 .contact-form input[type="text"]:hover,
 .contact-form input[type="email"]:hover,
 .contact-form input[type="tel"]:hover,
+.contact-form select:hover,
 .contact-form textarea:hover {
   border-color: rgba(168, 119, 68, 0.28);
   background: rgba(255, 255, 255, 0.96);
@@ -119,6 +121,7 @@
 .contact-form input[type="text"]:focus,
 .contact-form input[type="email"]:focus,
 .contact-form input[type="tel"]:focus,
+.contact-form select:focus,
 .contact-form textarea:focus {
   border-color: rgba(168, 119, 68, 0.5);
   background: #ffffff;
@@ -128,6 +131,12 @@
 .contact-form textarea {
   min-height: 120px;
   resize: vertical;
+}
+
+.contact-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
 }
 
 .contact-form-checkbox {
@@ -255,5 +264,10 @@
   .contact-info-block {
     padding: 24px;
     border-radius: 24px;
+  }
+
+  .contact-form-grid {
+    grid-template-columns: 1fr;
+    gap: 0;
   }
 }

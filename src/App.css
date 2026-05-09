@@ -224,6 +224,50 @@ select:focus-visible {
     linear-gradient(180deg, #f6f0e7 0%, #eef3f7 52%, #f8fbfc 100%);
 }
 
+.mobile-action-bar {
+  display: none;
+}
+
+@media (max-width: 780px) {
+  .mobile-action-bar {
+    position: fixed;
+    left: 10px;
+    right: 10px;
+    bottom: max(10px, env(safe-area-inset-bottom));
+    z-index: 80;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+    padding: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 20px;
+    background: rgba(7, 17, 31, 0.92);
+    box-shadow: 0 18px 44px rgba(7, 17, 31, 0.28);
+    backdrop-filter: blur(16px);
+  }
+
+  .mobile-action-bar a {
+    min-height: 44px;
+    display: grid;
+    place-items: center;
+    border-radius: 14px;
+    color: #fffaf1;
+    text-decoration: none;
+    font-size: 0.78rem;
+    font-weight: 900;
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  .mobile-action-bar a:nth-child(3) {
+    background: linear-gradient(135deg, #c88949, #e0aa6d);
+    color: #07111f;
+  }
+
+  .footer {
+    padding-bottom: 92px;
+  }
+}
+
 @media (max-width: 780px) {
   .app:not(.hero-page) .app-main {
     padding-top: 88px;

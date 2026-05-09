@@ -1,0 +1,249 @@
+.catalog-page {
+  width: min(var(--page-max), calc(100% - (var(--page-gutter) * 2)));
+  margin: 0 auto;
+  padding: 28px 0 86px;
+}
+
+.catalog-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 28px;
+  align-items: end;
+  padding: clamp(28px, 5vw, 58px);
+  border-radius: 28px;
+  background: linear-gradient(135deg, #07111f 0%, #12304d 100%);
+  color: #fffaf1;
+  box-shadow: var(--shadow-md);
+}
+
+.catalog-hero span,
+.catalog-section-head span,
+.catalog-category-card span {
+  display: block;
+  color: var(--accent-strong);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.catalog-hero h1 {
+  max-width: 900px;
+  margin: 0;
+  font-size: clamp(2.2rem, 6vw, 5.1rem);
+  line-height: 0.94;
+  letter-spacing: 0;
+}
+
+.catalog-hero p {
+  max-width: 760px;
+  color: rgba(255, 250, 241, 0.78);
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  line-height: 1.75;
+  margin: 24px 0 0;
+}
+
+.catalog-hero-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 230px;
+}
+
+.catalog-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin: 24px 0;
+}
+
+.catalog-summary article,
+.catalog-category-card,
+.catalog-product-group {
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: var(--surface-strong);
+  box-shadow: var(--shadow-sm);
+}
+
+.catalog-summary article {
+  padding: 22px;
+}
+
+.catalog-summary strong {
+  display: block;
+  color: var(--ink);
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  line-height: 1;
+}
+
+.catalog-summary span {
+  display: block;
+  margin-top: 8px;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.catalog-section {
+  margin-top: 42px;
+}
+
+.catalog-section-head {
+  max-width: 760px;
+  margin-bottom: 18px;
+}
+
+.catalog-section-head h2 {
+  margin: 0;
+  color: var(--ink);
+  font-size: clamp(1.7rem, 3.8vw, 3.2rem);
+  line-height: 1;
+  letter-spacing: 0;
+}
+
+.catalog-category-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.catalog-category-card {
+  display: block;
+  padding: 24px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.catalog-category-card strong {
+  display: block;
+  color: var(--ink);
+  font-size: 1.18rem;
+  line-height: 1.2;
+}
+
+.catalog-category-card p {
+  margin: 12px 0 0;
+  line-height: 1.6;
+}
+
+.catalog-product-groups {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.catalog-product-group {
+  padding: 22px;
+}
+
+.catalog-product-group h3 {
+  margin: 0 0 14px;
+  color: var(--ink);
+  letter-spacing: 0;
+}
+
+.catalog-product-list {
+  display: grid;
+  gap: 10px;
+}
+
+.catalog-product-row {
+  display: grid;
+  grid-template-columns: 54px minmax(0, 1fr);
+  gap: 12px;
+  align-items: center;
+  min-height: 64px;
+  padding: 8px;
+  border-radius: 14px;
+  color: inherit;
+  text-decoration: none;
+  background: rgba(255, 255, 255, 0.52);
+  border: 1px solid rgba(19, 48, 78, 0.08);
+}
+
+.catalog-product-row img,
+.catalog-product-initial {
+  width: 54px;
+  height: 54px;
+  border-radius: 12px;
+  object-fit: contain;
+  background: #fff;
+}
+
+.catalog-product-initial {
+  display: grid;
+  place-items: center;
+  color: var(--navy-700);
+  font-weight: 900;
+}
+
+.catalog-product-row strong,
+.catalog-product-row small {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.catalog-product-row small {
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+@media (max-width: 760px) {
+  .catalog-page {
+    width: min(100% - 28px, var(--page-max));
+    padding-top: 18px;
+    padding-bottom: 104px;
+  }
+
+  .catalog-hero {
+    grid-template-columns: 1fr;
+    padding: 26px 20px;
+    border-radius: 22px;
+  }
+
+  .catalog-hero h1 {
+    font-size: clamp(2rem, 12vw, 3rem);
+    line-height: 1.02;
+  }
+
+  .catalog-hero p {
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  .catalog-hero-actions,
+  .catalog-summary,
+  .catalog-category-grid,
+  .catalog-product-groups {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media print {
+  .header,
+  .footer,
+  .mobile-action-bar,
+  .catalog-hero-actions {
+    display: none !important;
+  }
+
+  .app:not(.hero-page) .app-main {
+    padding-top: 0;
+  }
+
+  .catalog-page {
+    width: 100%;
+    padding: 0;
+  }
+
+  .catalog-hero,
+  .catalog-summary article,
+  .catalog-category-card,
+  .catalog-product-group {
+    box-shadow: none;
+    break-inside: avoid;
+  }
+}

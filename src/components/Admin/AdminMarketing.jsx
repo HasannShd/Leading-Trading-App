@@ -11,6 +11,7 @@ const emptyCampaign = {
   previewText: 'A quick note from Leading Trading Est.',
   instagramUrl: INSTAGRAM_URL,
   linkedinUrl: LINKEDIN_URL,
+  tag: '',
 };
 
 const parseCsvLine = (line) => {
@@ -58,6 +59,9 @@ const parseCsv = (text) => {
 const AdminMarketing = () => {
   const [contacts, setContacts] = useState([]);
   const [campaigns, setCampaigns] = useState([]);
+  const [tags, setTags] = useState([]);
+  const [tagFilter, setTagFilter] = useState('');
+  const [editingTags, setEditingTags] = useState({});
   const [totals, setTotals] = useState({ total: 0, eligible: 0, unsubscribed: 0 });
   const [smtpConfigured, setSmtpConfigured] = useState(false);
   const [campaign, setCampaign] = useState(emptyCampaign);
@@ -88,6 +92,7 @@ const AdminMarketing = () => {
       }
 
       setContacts(Array.isArray(contactsData.contacts) ? contactsData.contacts : []);
+      setTags(Array.isArray(contactsData.tags) ? contactsData.tags : []);
       setTotals(contactsData.totals || { total: 0, eligible: 0, unsubscribed: 0 });
       setSmtpConfigured(Boolean(contactsData.smtpConfigured));
       setCampaign((prev) => ({
@@ -211,6 +216,29 @@ const AdminMarketing = () => {
     }
   };
 
+  const updateContactTags = async (contact) => {
+    const nextTags = editingTags[contact._id] ?? (contact.tags || []).join(', ');
+    setLoading(true);
+    setError('');
+    setStatus('');
+    try {
+      const response = await authFetch(`/marketing/contacts/${contact._id}/tags`, {
+        scope: 'admin',
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ tags: nextTags }),
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(data.err || 'Could not update contact tags.');
+      setStatus(`Tags updated for ${contact.companyName || contact.name || contact.email}.`);
+      await fetchMarketing();
+    } catch (err) {
+      setError(err.message || 'Could not update contact tags.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="admin-categories admin-surface">
       <AdminTopNav />
@@ -303,9 +331,19 @@ const AdminMarketing = () => {
               <label>LinkedIn URL</label>
               <input value={campaign.linkedinUrl} onChange={(e) => setCampaign((prev) => ({ ...prev, linkedinUrl: e.target.value }))} />
             </div>
+            <div className="admin-form-group">
+              <label>Audience tag</label>
+              <select value={campaign.tag} onChange={(e) => setCampaign((prev) => ({ ...prev, tag: e.target.value }))}>
+                <option value="">All eligible contacts</option>
+                {tags.map((item) => (
+                  <option key={item.tag} value={item.tag}>{item.tag} ({item.count})</option>
+                ))}
+              </select>
+              <small>Use tags such as dental, clinic, lab, hospital, accounts, or purchase to send focused campaigns.</small>
+            </div>
             <div className="admin-form-actions">
               <button className="admin-add-btn" type="button" onClick={sendCampaign} disabled={sending || loading || !eligibleContacts.length}>
-                {sending ? 'Sending...' : `Send to ${eligibleContacts.length} contacts`}
+                {sending ? 'Sending...' : `Send campaign`}
               </button>
             </div>
           </div>
@@ -318,6 +356,15 @@ const AdminMarketing = () => {
             <h2>Marketing Contacts ({contacts.length})</h2>
             <p>Only eligible contacts are included when you send a campaign.</p>
           </div>
+          <div className="admin-form-group admin-marketing-filter">
+            <label>Filter tag</label>
+            <select value={tagFilter} onChange={(event) => setTagFilter(event.target.value)}>
+              <option value="">All tags</option>
+              {tags.map((item) => (
+                <option key={item.tag} value={item.tag}>{item.tag} ({item.count})</option>
+              ))}
+            </select>
+          </div>
         </div>
         {loading ? (
           <p className="loading">Loading...</p>
@@ -329,16 +376,29 @@ const AdminMarketing = () => {
                   <th>Name</th>
                   <th>Company</th>
                   <th>Email</th>
+                  <th>Tags</th>
                   <th>Status</th>
                   <th>Last sent</th>
                 </tr>
               </thead>
               <tbody>
-                {contacts.map((contact) => (
+                {contacts
+                  .filter((contact) => !tagFilter || contact.tags?.includes(tagFilter))
+                  .map((contact) => (
                   <tr key={contact._id || contact.email}>
                     <td className="col-name" data-label="Name">{contact.name || '-'}</td>
                     <td data-label="Company">{contact.companyName || '-'}</td>
                     <td data-label="Email">{contact.email}</td>
+                    <td data-label="Tags">
+                      <div className="admin-tag-editor">
+                        <input
+                          value={editingTags[contact._id] ?? (contact.tags || []).join(', ')}
+                          placeholder="dental, accounts"
+                          onChange={(event) => setEditingTags((prev) => ({ ...prev, [contact._id]: event.target.value }))}
+                        />
+                        <button type="button" onClick={() => updateContactTags(contact)} disabled={loading || sending}>Save</button>
+                      </div>
+                    </td>
                     <td data-label="Status">
                       <span className={`status-badge ${contact.unsubscribedAt ? 'inactive' : 'active'}`}>
                         {contact.unsubscribedAt ? 'Unsubscribed' : contact.consentStatus || 'Eligible'}
@@ -366,6 +426,7 @@ const AdminMarketing = () => {
               <tr>
                 <th>Subject</th>
                 <th>Status</th>
+                <th>Audience</th>
                 <th>Sent</th>
                 <th>Skipped</th>
                 <th>Failed</th>
@@ -377,6 +438,7 @@ const AdminMarketing = () => {
                 <tr key={item._id}>
                   <td className="col-name" data-label="Subject">{item.subject}</td>
                   <td data-label="Status"><span className="status-badge active">{item.status}</span></td>
+                  <td data-label="Audience">{item.audienceTag || 'all'}</td>
                   <td data-label="Sent">{item.totals?.sent || 0}</td>
                   <td data-label="Skipped">{item.totals?.skipped || 0}</td>
                   <td data-label="Failed">{item.totals?.failed || 0}</td>
