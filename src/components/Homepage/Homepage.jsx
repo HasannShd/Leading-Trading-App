@@ -4,6 +4,7 @@ import Seo from '../Common/Seo';
 import { localBusinessSchema, organizationSchema, webSiteSchema } from '../../utils/seoSchemas';
 import { useLanguage } from '../../context/LanguageContext';
 import { normalizeImageSrc } from '../../utils/normalizeImageSrc';
+import { seoLandingPages } from '../../utils/seoLandingPages';
 import { useHomepageScroll } from './useHomepageScroll';
 import './Homepage.css';
 
@@ -421,6 +422,15 @@ const HomePage = () => {
                 <h3>{categoryName(category.name)}</h3>
                 <p>{t(category.description)}</p>
                 <span>{t('Explore category')}</span>
+              </Link>
+            ))}
+          </div>
+
+          <div className="seo-guide-strip animate-stagger" data-stagger-step="70ms">
+            {seoLandingPages.map((page) => (
+              <Link className="seo-guide-chip animate-on-scroll" key={page.slug} to={`/solutions/${page.slug}`}>
+                <small>{t('Guide')}</small>
+                <span>{page.shortTitle}</span>
               </Link>
             ))}
           </div>

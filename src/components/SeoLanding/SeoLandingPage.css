@@ -1,0 +1,242 @@
+.seo-landing {
+  min-height: 100vh;
+  background: linear-gradient(180deg, rgba(9, 22, 38, 0.97) 0%, rgba(9, 22, 38, 0.93) 32%, #f6f1e9 32%, #f6f1e9 100%);
+  color: var(--ink);
+}
+
+.seo-landing-shell {
+  width: min(var(--page-max), calc(100% - (var(--page-gutter) * 2)));
+  margin: 0 auto;
+}
+
+.seo-landing-empty {
+  padding: 160px 0 90px;
+}
+
+.seo-landing-hero {
+  padding: 154px 0 72px;
+  color: #f8f3eb;
+}
+
+.seo-landing-hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 0.42fr);
+  gap: 42px;
+  align-items: end;
+}
+
+.seo-landing-copy {
+  display: grid;
+  gap: 22px;
+}
+
+.seo-landing-eyebrow {
+  color: #c69159;
+  font-size: 0.76rem;
+  font-weight: 900;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.seo-landing-copy h1 {
+  margin: 0;
+  max-width: 12ch;
+  font-size: clamp(3rem, 6vw, 6rem);
+  line-height: 0.92;
+  color: #fffaf2;
+}
+
+.seo-landing-copy p {
+  margin: 0;
+  max-width: 68ch;
+  color: rgba(248, 243, 235, 0.86);
+  font-size: 1.08rem;
+  line-height: 1.8;
+}
+
+.seo-landing-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.seo-landing-panel {
+  padding: 22px;
+  border-radius: 18px;
+  background: rgba(248, 243, 235, 0.08);
+  border: 1px solid rgba(248, 243, 235, 0.12);
+  box-shadow: 0 28px 56px rgba(4, 11, 20, 0.28);
+}
+
+.seo-landing-panel span {
+  display: block;
+  margin-bottom: 14px;
+  color: rgba(248, 243, 235, 0.66);
+  font-size: 0.76rem;
+  font-weight: 900;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.seo-landing-panel div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.seo-landing-panel strong {
+  display: inline-flex;
+  min-height: 38px;
+  align-items: center;
+  padding: 0 13px;
+  border-radius: 999px;
+  background: rgba(248, 243, 235, 0.1);
+  color: #fffaf2;
+  font-size: 0.9rem;
+}
+
+.seo-landing-content {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 0.34fr);
+  gap: 34px;
+  padding: 72px 0 0;
+}
+
+.seo-landing-article {
+  display: grid;
+  gap: 18px;
+}
+
+.seo-landing-article article,
+.seo-landing-side,
+.seo-landing-faq article,
+.seo-landing-related a {
+  border: 1px solid rgba(19, 48, 78, 0.1);
+  background: rgba(255, 255, 255, 0.68);
+  box-shadow: 0 22px 48px rgba(7, 17, 31, 0.08);
+}
+
+.seo-landing-article article {
+  padding: 30px;
+  border-radius: 18px;
+}
+
+.seo-landing h2,
+.seo-landing h3,
+.seo-landing p {
+  margin: 0;
+}
+
+.seo-landing-article h2,
+.seo-landing-side h2,
+.seo-landing-faq h2,
+.seo-landing-related h2 {
+  color: var(--navy-900);
+  font-size: clamp(1.7rem, 3vw, 2.6rem);
+  line-height: 1.05;
+}
+
+.seo-landing-article p,
+.seo-landing-faq p {
+  margin-top: 14px;
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.76;
+}
+
+.seo-landing-side {
+  position: sticky;
+  top: 98px;
+  align-self: start;
+  display: grid;
+  gap: 12px;
+  padding: 24px;
+  border-radius: 18px;
+}
+
+.seo-landing-side a {
+  display: flex;
+  min-height: 48px;
+  align-items: center;
+  padding: 0 16px;
+  border-radius: 999px;
+  text-decoration: none;
+  color: var(--navy-900);
+  background: rgba(168, 119, 68, 0.1);
+  font-weight: 800;
+}
+
+.seo-landing-faq,
+.seo-landing-related {
+  display: grid;
+  gap: 24px;
+  padding: 72px 0 0;
+}
+
+.seo-landing-faq-grid,
+.seo-landing-related-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.seo-landing-faq article,
+.seo-landing-related a {
+  padding: 24px;
+  border-radius: 18px;
+}
+
+.seo-landing-faq h3,
+.seo-landing-related strong {
+  color: var(--navy-900);
+  font-size: 1.1rem;
+  line-height: 1.25;
+}
+
+.seo-landing-related {
+  padding-bottom: 86px;
+}
+
+.seo-landing-related a {
+  display: grid;
+  gap: 12px;
+  text-decoration: none;
+}
+
+.seo-landing-related small {
+  color: #8c5d2f;
+  font-weight: 900;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.seo-landing-related span {
+  color: #8c5d2f;
+  font-weight: 900;
+}
+
+@media (max-width: 780px) {
+  .seo-landing {
+    background: linear-gradient(180deg, rgba(9, 22, 38, 0.98) 0%, rgba(9, 22, 38, 0.93) 38%, #f6f1e9 38%, #f6f1e9 100%);
+  }
+
+  .seo-landing-hero {
+    padding: 112px 0 48px;
+  }
+
+  .seo-landing-hero-grid,
+  .seo-landing-content,
+  .seo-landing-faq-grid,
+  .seo-landing-related-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .seo-landing-copy h1 {
+    max-width: 11ch;
+    font-size: clamp(2.7rem, 13vw, 4.3rem);
+  }
+
+  .seo-landing-side {
+    position: static;
+  }
+}

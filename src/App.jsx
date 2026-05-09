@@ -30,6 +30,7 @@ const Categories = lazy(() => import('./components/Categories/Categories'));
 const About = lazy(() => import('./components/About/About'));
 const Shop = lazy(() => import('./components/Shop/Shop'));
 const ProductDetails = lazy(() => import('./components/Shop/ProductDetails'));
+const SeoLandingPage = lazy(() => import('./components/SeoLanding/SeoLandingPage'));
 const Cart = lazy(() => import('./components/Cart/Cart'));
 const Checkout = lazy(() => import('./components/Checkout/Checkout'));
 const Orders = lazy(() => import('./components/Orders/Orders'));
@@ -111,6 +112,7 @@ const AppShell = () => {
             <Route path="/products" element={<Navigate to="/categories" replace />} />
             <Route path="/shop" element={<Shop />} />
             <Route path="/product/:id" element={<ProductDetails />} />
+            <Route path="/solutions/:slug" element={<SeoLandingPage />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/about" element={<About />} />
             <Route path="/careers" element={<Careers />} />

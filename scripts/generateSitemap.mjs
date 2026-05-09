@@ -1,5 +1,6 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
+import { seoLandingRoutes } from '../src/utils/seoLandingPages.js';
 
 const root = resolve(new URL('..', import.meta.url).pathname);
 const envPath = resolve(root, '.env');
@@ -14,6 +15,7 @@ const staticRoutes = [
   { path: '/about', changefreq: 'monthly', priority: '0.7' },
   { path: '/careers', changefreq: 'weekly', priority: '0.6' },
   { path: '/contact', changefreq: 'monthly', priority: '0.6' },
+  ...seoLandingRoutes,
 ];
 
 const blockedSitemapPrefixes = [
