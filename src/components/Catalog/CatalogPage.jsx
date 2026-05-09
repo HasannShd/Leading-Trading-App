@@ -123,6 +123,9 @@ const CatalogPage = () => {
           <button type="button" className="home-btn home-btn--primary" onClick={handlePrint}>
             {t('Download / Print Catalog')}
           </button>
+          <Link className="home-btn home-btn--ghost" to="/catalog/pdf">
+            {t('Open PDF Catalogue')}
+          </Link>
           <Link className="home-btn home-btn--ghost" to="/contact?source=catalog">
             {t('Request Catalog Quote')}
           </Link>

@@ -33,6 +33,7 @@ const Shop = lazy(() => import('./components/Shop/Shop'));
 const ProductDetails = lazy(() => import('./components/Shop/ProductDetails'));
 const SeoLandingPage = lazy(() => import('./components/SeoLanding/SeoLandingPage'));
 const CatalogPage = lazy(() => import('./components/Catalog/CatalogPage'));
+const PdfCatalogPage = lazy(() => import('./components/Catalog/PdfCatalogPage'));
 const Cart = lazy(() => import('./components/Cart/Cart'));
 const Checkout = lazy(() => import('./components/Checkout/Checkout'));
 const Orders = lazy(() => import('./components/Orders/Orders'));
@@ -114,6 +115,7 @@ const AppShell = () => {
             <Route path="/products" element={<Navigate to="/categories" replace />} />
             <Route path="/shop" element={<Shop />} />
             <Route path="/catalog" element={<CatalogPage />} />
+            <Route path="/catalog/pdf" element={<PdfCatalogPage />} />
             <Route path="/product/:id" element={<ProductDetails />} />
             <Route path="/solutions/:slug" element={<SeoLandingPage />} />
             <Route path="/cart" element={<Cart />} />
