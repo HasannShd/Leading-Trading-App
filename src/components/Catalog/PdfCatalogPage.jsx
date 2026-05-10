@@ -25,6 +25,7 @@ const serviceSteps = [
 const whyChoose = [
   'Bahrain-based medical, dental, laboratory, PPE, safety, and industrial supply support.',
   'Medstar own-brand supply backed by local accountability and repeat procurement support.',
+  'International supplier and distributor relationships with dedicated ROMSONS and SMI sole-agent support in Bahrain.',
   'Structured sourcing workflow for clinics, hospitals, laboratories, dental centers, and industrial buyers.',
   'Supplier relationships, quotation handling, and delivery coordination through one accountable team.',
   'Product-focused communication that helps buyers confirm availability, specifications, and fit before purchase.',
@@ -42,8 +43,8 @@ const contactRows = [
 const catalogueBrands = [
   { name: 'Medstar', logo: 'Brands/medstar.jpg', note: 'LTE own-brand support for routine healthcare procurement.' },
   { name: 'Rogin', logo: 'Brands/rogin.png' },
-  { name: 'SMI', logo: 'Brands/Smi.png' },
-  { name: 'ROMSONS', logo: 'Brands/romsons.png' },
+  { name: 'SMI', logo: 'Brands/Smi.png', note: 'Sole-agent support in Bahrain.' },
+  { name: 'ROMSONS', logo: 'Brands/romsons.png', note: 'Sole-agent support in Bahrain.' },
   { name: 'Hermann Meditech', logo: 'Brands/Hermann.png' },
   { name: 'Zogear', logo: 'Brands/Zogear.png' },
   { name: 'ADC', logo: 'Brands/adc.png' },
@@ -247,7 +248,7 @@ const PdfCatalogPage = () => {
         title="PDF Product Catalogue | Leading Trading Est Bahrain"
         description="Professional PDF-ready product catalogue for Leading Trading Est. using live product and category data."
         canonicalPath="/catalog/pdf"
-        keywords="Leading Trading Est PDF catalogue, Bahrain medical supplies catalogue, dental supplies catalogue Bahrain, LTE product catalogue"
+        keywords="Leading Trading Est PDF catalogue, Bahrain medical supplies catalogue, dental supplies catalogue Bahrain, ROMSONS Bahrain, SMI Bahrain, LTE product catalogue"
         structuredData={[
           organizationSchema,
           localBusinessSchema,
@@ -298,14 +299,14 @@ const PdfCatalogPage = () => {
             Leading Trading Est. supports hospitals, clinics, laboratories, dental centers, and industrial clients across Bahrain with medical, dental, laboratory, PPE, sterile consumable, and operational supply requirements.
           </p>
           <p>
-            The company combines supplier access, quotation handling, local coordination, and Medstar own-brand support to help customers review suitable products and move requirements into clear purchasing decisions.
+            The company combines international supplier access, distributor relationships, quotation handling, local coordination, Medstar own-brand support, and dedicated ROMSONS and SMI sole-agent support in Bahrain to help customers review suitable products and move requirements into clear purchasing decisions.
           </p>
         </div>
         <div className="pdf-intro-brands">
           <div className="pdf-intro-brands-copy">
             <strong>Brand portfolio</strong>
             <p>
-              LTE represents and supplies products across Medstar, Rogin, SMI, ROMSONS, Hermann Meditech, Zogear, ADC, Osseous, Berger, and Bastos-Viegas, with availability and specifications confirmed during quotation.
+              LTE represents and supplies products across Medstar, Rogin, SMI, ROMSONS, Hermann Meditech, Zogear, ADC, Osseous, Berger, and Bastos-Viegas. ROMSONS and SMI are supported through sole-agent representation in Bahrain, with availability and specifications confirmed during quotation.
             </p>
           </div>
           <div className="pdf-intro-brand-logos">
@@ -313,6 +314,7 @@ const PdfCatalogPage = () => {
               <div key={brand.name}>
                 <img src={`${import.meta.env.BASE_URL}${brand.logo}`} alt={brand.name} />
                 <span>{brand.name}</span>
+                {brand.note ? <small>{brand.note}</small> : null}
               </div>
             ))}
           </div>
@@ -321,6 +323,7 @@ const PdfCatalogPage = () => {
           <article><strong>{topCategories.length}</strong><span>main category groups</span></article>
           <article><strong>{products.length}</strong><span>active products loaded</span></article>
           <article><strong>Medstar</strong><span>own-brand support</span></article>
+          <article><strong>ROMSONS & SMI</strong><span>sole-agent Bahrain support</span></article>
         </div>
       </PdfPage>
 

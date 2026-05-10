@@ -237,7 +237,7 @@
 .pdf-intro-brand-logos div {
   min-height: 18mm;
   display: grid;
-  grid-template-rows: 12mm auto;
+  grid-template-rows: 12mm auto auto;
   place-items: center;
   gap: 1mm;
   padding: 1.5mm;
@@ -260,9 +260,17 @@
   text-align: center;
 }
 
+.pdf-intro-brand-logos small {
+  color: #5f7288;
+  font-size: 4.8pt;
+  font-weight: 800;
+  line-height: 1.1;
+  text-align: center;
+}
+
 .pdf-stats-row {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 5mm;
   margin-top: 8mm;
 }

@@ -77,9 +77,9 @@ const CatalogPage = () => {
     <main className="catalog-page">
       <Seo
         title="Medical and Industrial Supply Catalog Bahrain | Leading Trading Est"
-        description="Browse the Leading Trading Est procurement catalog for Bahrain medical, dental, laboratory, PPE, surgical, sterile consumable, and industrial supply requirements."
+        description="Browse the Leading Trading Est procurement catalog for Bahrain medical, dental, laboratory, PPE, surgical, sterile consumable, and industrial supply requirements, including Medstar own-brand products and ROMSONS and SMI sole-agent brand support."
         canonicalPath="/catalog"
-        keywords="Bahrain medical supply catalog, dental supplies catalog Bahrain, PPE catalog Bahrain, laboratory supplies Bahrain, surgical consumables Bahrain, Leading Trading Est catalog"
+        keywords="Bahrain medical supply catalog, dental supplies catalog Bahrain, PPE catalog Bahrain, laboratory supplies Bahrain, surgical consumables Bahrain, ROMSONS Bahrain, SMI Bahrain, Leading Trading Est catalog"
         structuredData={[
           organizationSchema,
           localBusinessSchema,
@@ -116,7 +116,7 @@ const CatalogPage = () => {
           <span>LTE procurement catalog</span>
           <h1>{t('Medical, dental, laboratory, PPE, and industrial supply catalog for Bahrain buyers.')}</h1>
           <p>
-            {t('This catalog uses a procurement-first template: category overview, representative products, brand cues, and direct quote paths so buyers can move from browsing to inquiry quickly.')}
+            {t('This catalog uses a procurement-first template: category overview, representative products, brand cues, international supplier access, and direct quote paths so buyers can move from browsing to inquiry quickly.')}
           </p>
         </div>
         <div className="catalog-hero-actions">
@@ -150,6 +150,10 @@ const CatalogPage = () => {
             <article>
               <strong>Medstar</strong>
               <span>{t('own-brand supply support')}</span>
+            </article>
+            <article>
+              <strong>ROMSONS & SMI</strong>
+              <span>{t('sole-agent support in Bahrain')}</span>
             </article>
           </section>
 

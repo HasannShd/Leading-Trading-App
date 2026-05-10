@@ -208,9 +208,9 @@ const HomePage = () => {
     <main className="cinematic-home" ref={rootRef}>
       <Seo
         title="Medical Suppliers in Bahrain | Leading Trading Est"
-        description="Leading Trading Est is a Bahrain medical, dental, laboratory, safety, and industrial supplier supporting clinics, hospitals, dental centers, and industrial buyers with Medstar own-brand supply, quotation support, and dependable delivery coordination."
+        description="Leading Trading Est is a Bahrain medical, dental, laboratory, safety, and industrial supplier supporting clinics, hospitals, dental centers, and industrial buyers with Medstar own-brand supply, international supplier relationships, ROMSONS and SMI sole-agent support, quotation support, and dependable delivery coordination."
         canonicalPath="/"
-        keywords="medical suppliers in Bahrain, Bahrain medical supplier, Leading Trading Est Bahrain, LTE Bahrain, Medstar Bahrain, Medstar medical supplies, medical supplies Bahrain, dental supplies Bahrain, laboratory equipment Bahrain, industrial supplies Bahrain, safety supplies Bahrain, hospital supplies Bahrain, Bahrain procurement"
+        keywords="medical suppliers in Bahrain, Bahrain medical supplier, Leading Trading Est Bahrain, LTE Bahrain, Medstar Bahrain, Medstar medical supplies, ROMSONS Bahrain, SMI Bahrain, medical distributors Bahrain, medical supplies Bahrain, dental supplies Bahrain, laboratory equipment Bahrain, industrial supplies Bahrain, safety supplies Bahrain, hospital supplies Bahrain, Bahrain procurement"
         structuredData={[organizationSchema, localBusinessSchema, webSiteSchema]}
       />
       <section className="home-hero">
@@ -355,7 +355,7 @@ const HomePage = () => {
 
           <div className="trust-stage__copy animate-on-scroll">
             <p>
-              {t('Our relationships with established brands and respected institutions demonstrate the level of trust placed in our sourcing, coordination, and delivery performance.')}
+              {t('Our relationships with established brands, international suppliers, distributors, and respected institutions demonstrate the level of trust placed in our sourcing, coordination, and delivery performance. LTE also supports dedicated brand representation, including sole-agent support for ROMSONS and SMI in Bahrain.')}
             </p>
           </div>
 
@@ -376,7 +376,7 @@ const HomePage = () => {
               {[
                 'LTE-owned brand with local accountability',
                 'Recognized by buyers for dependable routine supply',
-                'Supported by the same sourcing and delivery workflow behind LTE',
+                'Supported by LTE supplier access, brand relationships, and delivery workflow',
               ].map((point) => (
                 <span className="animate-on-scroll" key={point}>{t(point)}</span>
               ))}

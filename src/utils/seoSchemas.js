@@ -15,13 +15,25 @@ export const organizationSchema = {
   url: SITE_ORIGIN,
   logo: `${SITE_ORIGIN}/company-logo.png`,
   description:
-    'Leading Trading Est is a Bahrain medical, dental, laboratory, safety, and industrial supplier providing structured sourcing, Medstar own-brand supply, quotation support, and local service.',
-  brand: {
-    '@type': 'Brand',
-    name: 'Medstar',
-    description:
-      'Medstar is Leading Trading Est’s own medical supply brand, developed around practical quality, repeat healthcare procurement, and dependable local support.',
-  },
+    'Leading Trading Est is a Bahrain medical, dental, laboratory, safety, and industrial supplier providing structured sourcing, international supplier and distributor relationships, Medstar own-brand supply, ROMSONS and SMI sole-agent support, quotation support, and local service.',
+  brand: [
+    {
+      '@type': 'Brand',
+      name: 'Medstar',
+      description:
+        'Medstar is Leading Trading Est’s own medical supply brand, developed around practical quality, repeat healthcare procurement, and dependable local support.',
+    },
+    {
+      '@type': 'Brand',
+      name: 'ROMSONS',
+      description: 'ROMSONS brand support through Leading Trading Est in Bahrain.',
+    },
+    {
+      '@type': 'Brand',
+      name: 'SMI',
+      description: 'SMI brand support through Leading Trading Est in Bahrain.',
+    },
+  ],
   sameAs: [
     'https://www.instagram.com/leadingtradingest/',
     'https://www.linkedin.com/company/leading-trading-est/',
@@ -38,8 +50,12 @@ export const organizationSchema = {
     'hospital supplies Bahrain',
     'Medstar Bahrain',
     'Medstar medical supplies',
+    'ROMSONS Bahrain',
+    'SMI Bahrain',
+    'medical distributors Bahrain',
     'medical gloves Bahrain',
     'nitrile gloves Bahrain',
+    'vinyl gloves Bahrain',
     'PPE supplier Bahrain',
     'dental supplies Bahrain',
     'laboratory equipment Bahrain',

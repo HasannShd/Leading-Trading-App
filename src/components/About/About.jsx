@@ -86,9 +86,9 @@ const About = () => {
   <main className="about-shell" ref={rootRef}>
     <Seo
       title="About Leading Trading Est | Bahrain Medical & Industrial Supply"
-      description="Learn about Leading Trading Est, a Bahrain-based medical, dental, industrial, and safety supply business focused on quality sourcing and dependable delivery."
+      description="Learn about Leading Trading Est, a Bahrain-based medical, dental, industrial, and safety supply business focused on quality sourcing, international supplier relationships, ROMSONS and SMI sole-agent support, and dependable delivery."
       canonicalPath="/about"
-      keywords="about Leading Trading Est, Bahrain medical supplier, Bahrain industrial supplier, healthcare sourcing Bahrain, LTE Bahrain company"
+      keywords="about Leading Trading Est, Bahrain medical supplier, Bahrain industrial supplier, healthcare sourcing Bahrain, medical distributors Bahrain, ROMSONS Bahrain, SMI Bahrain, LTE Bahrain company"
       structuredData={[
         organizationSchema,
         localBusinessSchema,
@@ -154,6 +154,9 @@ const About = () => {
           </p>
           <p>
             {t('The company operates across medical, dental, and industrial categories, combining supplier access with practical coordination on pricing, quality, lead times, stock readiness, and delivery planning. This allows LTE to support both recurring demand and urgent procurement requirements with better control and clearer accountability.')}
+          </p>
+          <p>
+            {t('LTE maintains international supplier and distributor relationships to support broader product access, brand continuity, and clearer procurement options for Bahrain customers. This includes dedicated brand support and sole-agent representation for ROMSONS and SMI in Bahrain.')}
           </p>
         </article>
 
@@ -236,7 +239,7 @@ const About = () => {
             {t('At Leading Trading Est, the objective has always been clear: build a supply business that customers can rely on when product quality, timing, and service standards matter. That requires disciplined sourcing, careful supplier evaluation, and operational follow-through that matches what has been committed.')}
           </p>
           <p>
-            {t('Our growth has been built on trust, consistency, and a team structure that supports execution from enquiry to delivery. We continue to strengthen supplier relationships, maintain service standards, and support customers with solutions that remain dependable in practice as well as on paper.')}
+            {t('Our growth has been built on trust, consistency, and a team structure that supports execution from enquiry to delivery. We continue to strengthen international supplier relationships, maintain service standards, and support customers with solutions that remain dependable in practice as well as on paper.')}
           </p>
         </div>
       </div>

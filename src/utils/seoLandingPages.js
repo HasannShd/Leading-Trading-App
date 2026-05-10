@@ -4,9 +4,9 @@ export const seoLandingPages = [
     title: 'Medical Suppliers in Bahrain',
     shortTitle: 'Medical suppliers',
     description:
-      'Leading Trading Est supports Bahrain clinics, hospitals, dental centers, laboratories, and procurement teams with medical supplies, Medstar own-brand support, quotation handling, and local delivery coordination.',
+      'Leading Trading Est supports Bahrain clinics, hospitals, dental centers, laboratories, and procurement teams with medical supplies, international supplier and distributor relationships, Medstar own-brand support, ROMSONS and SMI sole-agent support, quotation handling, and local delivery coordination.',
     keywords:
-      'medical suppliers in Bahrain, Bahrain medical supplier, hospital supplies Bahrain, clinic supplies Bahrain, medical equipment supplier Bahrain, Leading Trading Est Bahrain',
+      'medical suppliers in Bahrain, Bahrain medical supplier, medical distributors Bahrain, hospital supplies Bahrain, clinic supplies Bahrain, medical equipment supplier Bahrain, ROMSONS Bahrain, SMI Bahrain, Leading Trading Est Bahrain',
     categoryPath: '/categories/medical-equipment',
     categoryLabel: 'Medical Equipment',
     shopQuery: 'medical',
@@ -21,6 +21,11 @@ export const seoLandingPages = [
         title: 'Support across routine and urgent requirements',
         body:
           'The catalog supports recurring consumables, diagnostic devices, clinical equipment, infection-control products, and related supply needs for healthcare organizations that require dependable local follow-up.',
+      },
+      {
+        title: 'International supplier access with Bahrain accountability',
+        body:
+          'LTE combines international supplier and distributor relationships with local quotation, delivery, and account support. The company also provides dedicated brand representation including ROMSONS and SMI sole-agent support in Bahrain.',
       },
     ],
     faqs: [
@@ -161,6 +166,43 @@ export const seoLandingPages = [
         question: 'Can LTE support glove enquiries in Bahrain?',
         answer:
           'Yes. LTE supports Bahrain clinics, dental centers, hospitals, and procurement teams with glove sourcing and quotation support.',
+      },
+    ],
+  },
+  {
+    slug: 'vinyl-gloves-bahrain',
+    title: 'Vinyl Gloves Supplier in Bahrain',
+    shortTitle: 'Vinyl gloves',
+    description:
+      'Vinyl glove sourcing and quotation support for Bahrain clinics, dental centers, hospitals, laboratories, and procurement teams looking for disposable examination glove options.',
+    keywords:
+      'vinyl gloves Bahrain, vinyl glove supplier Bahrain, disposable vinyl gloves Bahrain, examination vinyl gloves Bahrain, medical gloves Bahrain, dental gloves Bahrain',
+    categoryPath: '/categories/ppe-gloves',
+    categoryLabel: 'PPE Gloves',
+    shopQuery: 'vinyl',
+    buyerTerms: ['Vinyl gloves', 'Disposable examination gloves', 'Clinic and dental use', 'Quotation support'],
+    sections: [
+      {
+        title: 'Vinyl glove enquiries need practical product matching',
+        body:
+          'Vinyl gloves are often requested for routine examination, dental, clinic, and general disposable-use requirements. LTE helps buyers confirm availability, packing, brand options, and fit against the intended procurement use.',
+      },
+      {
+        title: 'Built for Bahrain repeat procurement',
+        body:
+          'Healthcare and dental buyers can use this guide to move from a vinyl glove search into a clear quotation request, with the product context passed to the LTE team for follow-up.',
+      },
+    ],
+    faqs: [
+      {
+        question: 'Does LTE support vinyl glove enquiries in Bahrain?',
+        answer:
+          'Yes. Leading Trading Est supports Bahrain clinics, dental centers, hospitals, laboratories, and procurement teams with vinyl glove quotation enquiries.',
+      },
+      {
+        question: 'Can buyers request other glove types?',
+        answer:
+          'Yes. Buyers can also request support for nitrile, latex, examination, PPE, and disposable glove requirements.',
       },
     ],
   },
