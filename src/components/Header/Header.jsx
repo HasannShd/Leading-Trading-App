@@ -24,6 +24,7 @@ const Header = () => {
 
   const navRef = useRef(null);
   const isHome = location.pathname === '/';
+  const isCategoriesActive = location.pathname === '/categories' || location.pathname.startsWith('/categories/');
   const categoryTree = useMemo(() => buildCategoryTree(categories), [categories]);
 
   const fetchCategories = useCallback(async () => {
@@ -41,20 +42,21 @@ const Header = () => {
     fetchCategories();
   }, [fetchCategories]);
 
-  // Close mobile nav on outside click
+  // Close open navigation surfaces on outside click.
   useEffect(() => {
-    if (!mobileNav) return;
+    if (!mobileNav && !dropdown) return;
 
     function handleClick(e) {
       if (navRef.current && !navRef.current.contains(e.target)) {
         setMobileNav(false);
         setDropdown(false);
+        setExpandedCategoryGroups({});
       }
     }
 
-    document.addEventListener('mousedown', handleClick);
-    return () => document.removeEventListener('mousedown', handleClick);
-  }, [mobileNav]);
+    document.addEventListener('pointerdown', handleClick);
+    return () => document.removeEventListener('pointerdown', handleClick);
+  }, [mobileNav, dropdown]);
 
   useEffect(() => {
     const syncScroll = () => setIsScrolled(window.scrollY > 24);
@@ -105,6 +107,14 @@ const Header = () => {
     setDropdown(false);
     setMobileNav(false);
     setExpandedCategoryGroups({});
+  };
+
+  const openDropdown = () => {
+    setDropdown(true);
+  };
+
+  const toggleDropdown = () => {
+    setDropdown((open) => !open);
   };
 
   const toggleCategoryGroup = (categoryId) => {
@@ -168,8 +178,7 @@ const Header = () => {
           {/* Categories Dropdown */}
           <div
             className="nav-dropdown-wrapper"
-            onMouseEnter={!isMobileViewport ? () => setDropdown(true) : undefined}
-            onMouseLeave={!isMobileViewport ? () => setDropdown(false) : undefined}
+            onMouseEnter={!isMobileViewport ? openDropdown : undefined}
           >
             {isMobileViewport ? (
               <button
@@ -185,18 +194,27 @@ const Header = () => {
                 {t('Categories')} ▾
               </button>
             ) : (
-              <NavLink
-                to="/categories"
-                className="nav-dropdown-toggle"
+              <button
+                type="button"
+                className={`nav-dropdown-toggle nav-category-trigger${isCategoriesActive ? ' active' : ''}`}
+                aria-expanded={dropdown}
+                aria-controls="desktop-categories-menu"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  toggleDropdown();
+                }}
               >
                 {t('Categories')} ▾
-              </NavLink>
+              </button>
             )}
 
             {dropdown && (
               <div
-                id={isMobileViewport ? 'mobile-categories-menu' : undefined}
+                id={isMobileViewport ? 'mobile-categories-menu' : 'desktop-categories-menu'}
                 className="nav-dropdown-menu"
+                onMouseEnter={!isMobileViewport ? openDropdown : undefined}
+                onWheel={(event) => event.stopPropagation()}
               >
                 <Link
                   to="/categories"
@@ -229,22 +247,6 @@ const Header = () => {
                       >
                         {categoryName(parent.name)}
                       </Link>
-                      {isConsumablesGroup && hasChildren ? (
-                        <button
-                          type="button"
-                          className="nav-dropdown-subtoggle"
-                          aria-expanded={Boolean(childrenExpanded)}
-                          aria-label={`${childrenExpanded ? t('Hide') : t('Show')} ${categoryName(parent.name)} ${t('subcategories')}`}
-                          onClick={(event) => {
-                            event.preventDefault();
-                            event.stopPropagation();
-                            toggleCategoryGroup(parent._id);
-                          }}
-                        >
-                          <span>{childrenExpanded ? t('Hide subcategories') : t('Show subcategories')}</span>
-                          <strong>{childrenExpanded ? '-' : '+'}</strong>
-                        </button>
-                      ) : null}
                     </div>
                     {isConsumablesGroup && hasChildren && !childrenExpanded ? (
                       <button
@@ -256,7 +258,19 @@ const Header = () => {
                           toggleCategoryGroup(parent._id);
                         }}
                       >
-                        {t('Tap to view PPE, gowns, dressings, tapes, first aid, and sutures.')}
+                        {t('Open PPE, gowns, dressings, tapes, first aid, and sutures.')}
+                      </button>
+                    ) : isConsumablesGroup && hasChildren ? (
+                      <button
+                        type="button"
+                        className="nav-dropdown-child-hint nav-dropdown-child-hint-compact"
+                        onClick={(event) => {
+                          event.preventDefault();
+                          event.stopPropagation();
+                          toggleCategoryGroup(parent._id);
+                        }}
+                      >
+                        {t('Hide consumables subcategories')}
                       </button>
                     ) : null}
                     {childrenExpanded ? parent.children?.map((child) => (
