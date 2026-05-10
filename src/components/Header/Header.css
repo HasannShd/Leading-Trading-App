@@ -194,6 +194,9 @@
 
 .nav-category-trigger {
   appearance: none;
+  border: 1px solid transparent;
+  background: transparent;
+  color: inherit;
   cursor: pointer;
   font-family: inherit;
 }
