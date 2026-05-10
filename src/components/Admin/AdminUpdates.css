@@ -1,0 +1,226 @@
+.admin-updates-page {
+  display: grid;
+  gap: 22px;
+}
+
+.admin-updates-hero,
+.admin-update-card,
+.admin-roadmap-card {
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(248, 251, 255, 0.92)),
+    radial-gradient(circle at top right, rgba(56, 189, 248, 0.14), transparent 34%);
+  box-shadow: 0 22px 54px rgba(15, 23, 42, 0.08);
+}
+
+.admin-updates-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(240px, 320px);
+  gap: 22px;
+  align-items: stretch;
+  padding: 28px;
+  border-radius: 28px;
+}
+
+.admin-updates-kicker,
+.admin-updates-section-heading span,
+.admin-update-version,
+.admin-roadmap-card span {
+  display: inline-flex;
+  color: #2563eb;
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.admin-updates-hero h1,
+.admin-updates-section-heading h2,
+.admin-update-card h3 {
+  margin: 8px 0 0;
+  color: #0f172a;
+  line-height: 1.05;
+}
+
+.admin-updates-hero h1 {
+  max-width: 760px;
+  font-size: clamp(2rem, 4vw, 3.8rem);
+}
+
+.admin-updates-hero p,
+.admin-update-card p,
+.admin-roadmap-card li {
+  color: #64748b;
+  line-height: 1.65;
+}
+
+.admin-updates-hero p {
+  max-width: 760px;
+  margin: 14px 0 0;
+  font-size: 1rem;
+}
+
+.admin-updates-version-card {
+  display: grid;
+  align-content: space-between;
+  gap: 12px;
+  min-height: 190px;
+  padding: 22px;
+  border-radius: 24px;
+  background:
+    linear-gradient(145deg, rgba(15, 23, 42, 0.96), rgba(30, 64, 175, 0.86)),
+    radial-gradient(circle at top right, rgba(96, 165, 250, 0.35), transparent 38%);
+  color: #ffffff;
+}
+
+.admin-updates-version-card span {
+  color: rgba(226, 232, 240, 0.78);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.admin-updates-version-card strong {
+  font-size: 3rem;
+  line-height: 1;
+}
+
+.admin-updates-version-card p {
+  margin: 0;
+  color: rgba(241, 245, 249, 0.86);
+}
+
+.admin-updates-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 360px);
+  gap: 22px;
+  align-items: start;
+}
+
+.admin-updates-timeline,
+.admin-updates-roadmap {
+  display: grid;
+  gap: 16px;
+}
+
+.admin-updates-section-heading {
+  padding: 0 4px;
+}
+
+.admin-updates-section-heading h2 {
+  font-size: 1.35rem;
+}
+
+.admin-update-card,
+.admin-roadmap-card {
+  border-radius: 24px;
+  padding: 22px;
+}
+
+.admin-update-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.admin-update-card h3 {
+  font-size: 1.35rem;
+}
+
+.admin-update-meta {
+  display: grid;
+  justify-items: end;
+  gap: 6px;
+  flex: 0 0 auto;
+}
+
+.admin-update-meta span,
+.admin-roadmap-card em {
+  display: inline-flex;
+  min-height: 30px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: rgba(34, 197, 94, 0.12);
+  color: #15803d;
+  font-size: 0.78rem;
+  font-style: normal;
+  font-weight: 900;
+}
+
+.admin-update-meta small {
+  color: #94a3b8;
+  font-weight: 700;
+}
+
+.admin-update-card ul,
+.admin-roadmap-card ul {
+  display: grid;
+  gap: 9px;
+  margin: 16px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.admin-update-card li,
+.admin-roadmap-card li {
+  position: relative;
+  padding-left: 22px;
+}
+
+.admin-update-card li::before,
+.admin-roadmap-card li::before {
+  content: '';
+  position: absolute;
+  top: 0.72em;
+  left: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: #2563eb;
+}
+
+.admin-roadmap-card {
+  display: grid;
+  gap: 12px;
+}
+
+.admin-roadmap-card strong {
+  display: block;
+  margin-top: 6px;
+  color: #0f172a;
+  font-size: 1.04rem;
+}
+
+.admin-roadmap-card em {
+  width: fit-content;
+  background: rgba(37, 99, 235, 0.1);
+  color: #1d4ed8;
+}
+
+@media (max-width: 1050px) {
+  .admin-updates-hero,
+  .admin-updates-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .admin-updates-hero,
+  .admin-update-card,
+  .admin-roadmap-card {
+    border-radius: 20px;
+    padding: 18px;
+  }
+
+  .admin-update-card-top {
+    display: grid;
+  }
+
+  .admin-update-meta {
+    justify-items: start;
+  }
+}

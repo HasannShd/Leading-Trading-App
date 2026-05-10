@@ -45,6 +45,7 @@ const AdminProducts = lazy(() => import('./components/Admin/AdminProducts'));
 const AdminImportProducts = lazy(() => import('./components/Admin/AdminImportProducts'));
 const AdminOrders = lazy(() => import('./components/Admin/AdminOrders'));
 const AdminMarketing = lazy(() => import('./components/Admin/AdminMarketing'));
+const AdminUpdates = lazy(() => import('./components/Admin/AdminUpdates'));
 const AdminOrderDetails = lazy(() => import('./components/Admin/AdminOrderDetails'));
 const AdminAccount = lazy(() => import('./components/Admin/AdminAccount'));
 const AdminPortalLayout = lazy(() => import('./components/Portal/AdminPortalLayout'));
@@ -173,6 +174,7 @@ const AppShell = () => {
               <Route path="site-orders" element={<AdminOrders />} />
               <Route path="site-orders/:id" element={<AdminOrderDetails />} />
               <Route path="marketing" element={<AdminMarketing />} />
+              <Route path="updates" element={<AdminUpdates />} />
               <Route path="account" element={<AdminAccount />} />
               <Route path="staff" element={<AdminStaffPage />} />
               <Route path="messages" element={<AdminMessagesPage />} />

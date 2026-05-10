@@ -29,6 +29,7 @@ const linkGroups = [
       { to: '/admin/catalog/import', label: 'Import', icon: '↥' },
       { to: '/admin/site-orders', label: 'Website Orders', icon: '▥' },
       { to: '/admin/marketing', label: 'Marketing', icon: '✦' },
+      { to: '/admin/updates', label: 'App Updates', icon: '⬡' },
       { to: '/admin/account', label: 'Account', icon: '⚙' },
     ],
   },
