@@ -12,6 +12,7 @@ const emptyCampaign = {
   instagramUrl: INSTAGRAM_URL,
   linkedinUrl: LINKEDIN_URL,
   tag: '',
+  scheduledAt: '',
 };
 
 const parseCsvLine = (line) => {
@@ -75,6 +76,10 @@ const AdminMarketing = () => {
     () => contacts.filter((contact) => contact.email && !contact.unsubscribedAt && contact.consentStatus !== 'unsubscribed'),
     [contacts]
   );
+
+  const selectedAudienceCount = useMemo(() => (
+    eligibleContacts.filter((contact) => !campaign.tag || contact.tags?.includes(campaign.tag)).length
+  ), [campaign.tag, eligibleContacts]);
 
   const fetchMarketing = useCallback(async () => {
     setLoading(true);
@@ -180,18 +185,28 @@ const AdminMarketing = () => {
     }
   };
 
-  const sendCampaign = async () => {
+  const sendCampaign = async ({ schedule = false } = {}) => {
     if (!eligibleContacts.length) {
       setError('There are no eligible contacts to send to.');
+      return;
+    }
+    if (!selectedAudienceCount) {
+      setError('There are no eligible contacts for the selected tag.');
       return;
     }
     if (!campaign.instagramUrl && !campaign.linkedinUrl) {
       setError('Add Instagram or LinkedIn before sending.');
       return;
     }
+    if (schedule && !campaign.scheduledAt) {
+      setError('Choose a schedule date and time first.');
+      return;
+    }
 
     const confirmed = window.confirm(
-      `Send one individual email to each eligible contact (${eligibleContacts.length} recipients)?`
+      schedule
+        ? `Schedule one individual email for ${selectedAudienceCount} recipients?`
+        : `Send one individual email to each selected eligible contact (${selectedAudienceCount} recipients)?`
     );
     if (!confirmed) return;
 
@@ -203,11 +218,18 @@ const AdminMarketing = () => {
         scope: 'admin',
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(campaign),
+        body: JSON.stringify({
+          ...campaign,
+          scheduledAt: schedule ? new Date(campaign.scheduledAt).toISOString() : undefined,
+        }),
       });
       const data = await response.json().catch(() => ({}));
       if (!response.ok) throw new Error(data.err || 'Campaign send failed.');
-      setStatus(`Campaign finished: ${data.totals.sent} sent, ${data.totals.skipped} skipped, ${data.totals.failed} failed.`);
+      if (data.status === 'scheduled') {
+        setStatus(`Campaign scheduled for ${new Date(data.scheduledAt).toLocaleString()} with ${data.totals.targeted} recipients.`);
+      } else {
+        setStatus(`Campaign finished: ${data.totals.sent} sent, ${data.totals.skipped} skipped, ${data.totals.failed} failed.`);
+      }
       await fetchMarketing();
     } catch (err) {
       setError(err.message || 'Campaign send failed.');
@@ -341,9 +363,21 @@ const AdminMarketing = () => {
               </select>
               <small>Use tags such as dental, clinic, lab, hospital, accounts, or purchase to send focused campaigns.</small>
             </div>
+            <div className="admin-form-group">
+              <label>Schedule time</label>
+              <input
+                type="datetime-local"
+                value={campaign.scheduledAt}
+                onChange={(e) => setCampaign((prev) => ({ ...prev, scheduledAt: e.target.value }))}
+              />
+              <small>Leave empty to send now. Use Bahrain local time from your device.</small>
+            </div>
             <div className="admin-form-actions">
-              <button className="admin-add-btn" type="button" onClick={sendCampaign} disabled={sending || loading || !eligibleContacts.length}>
+              <button className="admin-add-btn" type="button" onClick={() => sendCampaign()} disabled={sending || loading || !selectedAudienceCount}>
                 {sending ? 'Sending...' : `Send campaign`}
+              </button>
+              <button className="admin-btn-secondary" type="button" onClick={() => sendCampaign({ schedule: true })} disabled={sending || loading || !selectedAudienceCount}>
+                Schedule campaign
               </button>
             </div>
           </div>
@@ -430,6 +464,7 @@ const AdminMarketing = () => {
                 <th>Sent</th>
                 <th>Skipped</th>
                 <th>Failed</th>
+                <th>Scheduled</th>
                 <th>Date</th>
               </tr>
             </thead>
@@ -442,6 +477,7 @@ const AdminMarketing = () => {
                   <td data-label="Sent">{item.totals?.sent || 0}</td>
                   <td data-label="Skipped">{item.totals?.skipped || 0}</td>
                   <td data-label="Failed">{item.totals?.failed || 0}</td>
+                  <td data-label="Scheduled">{item.scheduledAt ? new Date(item.scheduledAt).toLocaleString() : '-'}</td>
                   <td data-label="Date">{item.createdAt ? new Date(item.createdAt).toLocaleString() : '-'}</td>
                 </tr>
               ))}
