@@ -1,6 +1,6 @@
 .seo-landing {
   min-height: 100vh;
-  background: linear-gradient(180deg, rgba(9, 22, 38, 0.97) 0%, rgba(9, 22, 38, 0.93) 32%, #f6f1e9 32%, #f6f1e9 100%);
+  background: #f6f1e9;
   color: var(--ink);
 }
 
@@ -14,15 +14,16 @@
 }
 
 .seo-landing-hero {
-  padding: 154px 0 72px;
+  padding: 120px 0 64px;
+  background: linear-gradient(135deg, rgba(9, 22, 38, 0.98), rgba(20, 45, 70, 0.96));
   color: #f8f3eb;
 }
 
 .seo-landing-hero-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(280px, 0.42fr);
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 0.36fr);
   gap: 42px;
-  align-items: end;
+  align-items: center;
 }
 
 .seo-landing-copy {
@@ -40,9 +41,9 @@
 
 .seo-landing-copy h1 {
   margin: 0;
-  max-width: 12ch;
-  font-size: clamp(3rem, 6vw, 6rem);
-  line-height: 0.92;
+  max-width: 15ch;
+  font-size: clamp(2.7rem, 5.2vw, 5rem);
+  line-height: 0.98;
   color: #fffaf2;
 }
 
@@ -216,12 +217,8 @@
 }
 
 @media (max-width: 780px) {
-  .seo-landing {
-    background: linear-gradient(180deg, rgba(9, 22, 38, 0.98) 0%, rgba(9, 22, 38, 0.93) 38%, #f6f1e9 38%, #f6f1e9 100%);
-  }
-
   .seo-landing-hero {
-    padding: 112px 0 48px;
+    padding: 104px 0 44px;
   }
 
   .seo-landing-hero-grid,
@@ -232,11 +229,64 @@
   }
 
   .seo-landing-copy h1 {
-    max-width: 11ch;
-    font-size: clamp(2.7rem, 13vw, 4.3rem);
+    max-width: 12ch;
+    font-size: clamp(2.35rem, 10.5vw, 3.8rem);
+    line-height: 1;
   }
 
   .seo-landing-side {
     position: static;
+  }
+}
+
+@media (min-width: 781px) and (max-width: 1180px) {
+  .seo-landing-hero {
+    padding: 108px 0 56px;
+  }
+
+  .seo-landing-hero-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(250px, 0.34fr);
+    gap: 30px;
+  }
+
+  .seo-landing-copy h1 {
+    max-width: 16ch;
+    font-size: clamp(2.75rem, 5.6vw, 4.35rem);
+    line-height: 1;
+  }
+}
+
+@media (max-width: 520px) {
+  .seo-landing-hero {
+    padding: 92px 0 38px;
+  }
+
+  .seo-landing-copy {
+    gap: 16px;
+  }
+
+  .seo-landing-copy h1 {
+    max-width: 100%;
+    font-size: clamp(2.05rem, 9vw, 2.8rem);
+    line-height: 1.04;
+  }
+
+  .seo-landing-copy p {
+    font-size: 0.98rem;
+    line-height: 1.65;
+  }
+
+  .seo-landing-actions {
+    display: grid;
+  }
+
+  .seo-landing-panel {
+    padding: 18px;
+  }
+
+  .seo-landing-content,
+  .seo-landing-faq,
+  .seo-landing-related {
+    padding-top: 42px;
   }
 }
