@@ -32,6 +32,9 @@ const About = lazy(() => import('./components/About/About'));
 const Shop = lazy(() => import('./components/Shop/Shop'));
 const ProductDetails = lazy(() => import('./components/Shop/ProductDetails'));
 const SeoLandingPage = lazy(() => import('./components/SeoLanding/SeoLandingPage'));
+const PrivacyPage = lazy(() => import('./components/Privacy/PrivacyPage'));
+const ResourcesPage = lazy(() => import('./components/Resources/ResourcesPage'));
+const ResourceArticlePage = lazy(() => import('./components/Resources/ResourceArticlePage'));
 const CatalogPage = lazy(() => import('./components/Catalog/CatalogPage'));
 const PdfCatalogPage = lazy(() => import('./components/Catalog/PdfCatalogPage'));
 const Cart = lazy(() => import('./components/Cart/Cart'));
@@ -118,11 +121,15 @@ const AppShell = () => {
             <Route path="/catalog" element={<CatalogPage />} />
             <Route path="/catalog/pdf" element={<PdfCatalogPage />} />
             <Route path="/product/:id" element={<ProductDetails />} />
+            <Route path="/product/:id/:slug" element={<ProductDetails />} />
             <Route path="/solutions/:slug" element={<SeoLandingPage />} />
+            <Route path="/resources" element={<ResourcesPage />} />
+            <Route path="/resources/:slug" element={<ResourceArticlePage />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/about" element={<About />} />
             <Route path="/careers" element={<Careers />} />
             <Route path="/contact" element={<ContactPage />} />
+            <Route path="/privacy" element={<PrivacyPage />} />
             <Route path="/sign-in" element={<SignIn />} />
             <Route path="/sign-up" element={<SignUp />} />
 

@@ -9,6 +9,7 @@ import { buildBreadcrumbSchema, buildCollectionSchema, buildFaqSchema } from '..
 import { buildSeoFaqs, buildSeoKeywords } from '../../utils/searchSeo';
 import { useLanguage } from '../../context/LanguageContext';
 import { normalizeImageSrc } from '../../utils/normalizeImageSrc';
+import { buildProductPath } from '../../utils/productUrls';
 import { asCategoryArray, buildCategoryTree, getCategoryId } from '../../utils/categoryTree';
 import { useScrollReveal } from '../../hooks/useScrollReveal';
 import './Shop.css';
@@ -280,7 +281,7 @@ const Shop = () => {
             path: '/shop',
             items: sortedProducts.map((product) => ({
               name: product.name,
-              path: `/product/${product._id || product.id || ''}`,
+              path: buildProductPath(product),
             })),
           }),
           buildFaqSchema([
@@ -465,7 +466,7 @@ const Shop = () => {
               const imageFailed = brokenImages[productId] === true;
 
               return (
-                <Link key={productId} to={`/product/${productId}`} className="shop-card-link animate-on-scroll" onMouseMove={handleTiltMove} onMouseLeave={handleTiltReset}>
+                <Link key={productId} to={buildProductPath(product)} className="shop-card-link animate-on-scroll" onMouseMove={handleTiltMove} onMouseLeave={handleTiltReset}>
                   <Card className="shop-card">
                     <div className="shop-card-media">
                       {product.featured && (

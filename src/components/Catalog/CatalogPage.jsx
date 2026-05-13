@@ -10,6 +10,7 @@ import {
   organizationSchema,
 } from '../../utils/seoSchemas';
 import { normalizeImageSrc } from '../../utils/normalizeImageSrc';
+import { buildProductPath } from '../../utils/productUrls';
 import { useLanguage } from '../../context/LanguageContext';
 import './CatalogPage.css';
 
@@ -93,7 +94,7 @@ const CatalogPage = () => {
             path: '/catalog',
             items: products.slice(0, 24).map((product) => ({
               name: product.name,
-              path: `/product/${product._id}`,
+              path: buildProductPath(product),
             })),
           }),
           buildFaqSchema([
@@ -186,7 +187,7 @@ const CatalogPage = () => {
                     {items.slice(0, 8).map((product) => {
                       const image = product.image || product.images?.[0] || '';
                       return (
-                        <Link key={product._id} to={`/product/${product._id}`} className="catalog-product-row">
+                        <Link key={product._id} to={buildProductPath(product)} className="catalog-product-row">
                           {image ? (
                             <img src={normalizeImageSrc(image, { width: 180 })} alt={product.name} loading="lazy" decoding="async" />
                           ) : (

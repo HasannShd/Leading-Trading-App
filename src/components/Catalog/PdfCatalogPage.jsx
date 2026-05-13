@@ -4,6 +4,7 @@ import StatePanel from '../Common/StatePanel';
 import { buildBreadcrumbSchema, buildCollectionSchema, localBusinessSchema, organizationSchema } from '../../utils/seoSchemas';
 import { fetchCategories } from '../../services/categoriesService';
 import { fetchProducts } from '../../services/productsService';
+import { buildProductPath } from '../../utils/productUrls';
 import { normalizeImageSrc } from '../../utils/normalizeImageSrc';
 import { buildCategoryTree, getCategoryId, getCategoryParentId } from '../../utils/categoryTree';
 import './PdfCatalogPage.css';
@@ -261,7 +262,7 @@ const PdfCatalogPage = () => {
             name: 'Leading Trading Est PDF Product Catalogue',
             description: 'PDF-ready product catalogue for medical, dental, laboratory, PPE, sterile consumable, and industrial supply buyers.',
             path: '/catalog/pdf',
-            items: products.slice(0, 24).map((product) => ({ name: product.name, path: `/product/${product._id}` })),
+            items: products.slice(0, 24).map((product) => ({ name: product.name, path: buildProductPath(product) })),
           }),
         ]}
       />

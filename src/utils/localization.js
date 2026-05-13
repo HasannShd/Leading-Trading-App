@@ -291,6 +291,7 @@ export const AR_TRANSLATIONS = {
   'Leading Trading Est. supports hospitals, clinics, practices, and operational teams across Bahrain with structured sourcing, established supplier relationships, a 10-11 person team, and coordinated delivery execution.':
     'تدعم مؤسسة ليدنج تريدنج المستشفيات والعيادات والممارسات والفرق التشغيلية في البحرين من خلال توريد منظم وعلاقات موردين راسخة وفريق من 10 إلى 11 شخصاً وتنفيذ منسق للتسليم.',
   'NHRA-Approved': 'معتمد من الهيئة الوطنية لتنظيم المهن والخدمات الصحية',
+  'Documentation Support': 'دعم المستندات',
   'Medical and industrial sourcing': 'توريد طبي وصناعي',
   'Dependable Bahrain-based support': 'دعم موثوق من البحرين',
   'How LTE creates value': 'كيف تقدم LTE القيمة',

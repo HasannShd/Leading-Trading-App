@@ -1,5 +1,10 @@
 User-agent: *
 Allow: /
+Allow: /solutions/
+Allow: /product/
+Allow: /shop
+Allow: /categories/
+Allow: /catalog
 
 # Keep private, user-specific, and admin paths out of search.
 Disallow: /cart
@@ -9,6 +14,9 @@ Disallow: /sign-in
 Disallow: /sign-up
 Disallow: /admin
 Disallow: /staff
+Disallow: /api/
+Disallow: /search?*
+Disallow: /*?lightbox=
 Disallow: /.well-known/
 
 Sitemap: https://www.lte-bh.com/sitemap.xml

@@ -1,11 +1,12 @@
 import { useEffect, useMemo, useState, useCallback, startTransition, useRef } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, useNavigate, Link, useLocation } from 'react-router-dom';
 import StatePanel from '../Common/StatePanel';
 import Seo from '../Common/Seo';
 import { buildBreadcrumbSchema, buildFaqSchema, buildProductSchema } from '../../utils/seoSchemas';
 import { buildSeoFaqs, buildSeoKeywords } from '../../utils/searchSeo';
 import { useLanguage } from '../../context/LanguageContext';
 import { normalizeImageSrc } from '../../utils/normalizeImageSrc';
+import { buildProductPath } from '../../utils/productUrls';
 import { useScrollReveal } from '../../hooks/useScrollReveal';
 import { authFetch } from '../../services/authFetch';
 import './ProductDetails.css';
@@ -20,6 +21,7 @@ const getSizePrice = (entry) => {
 const ProductDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
   const { t, categoryName } = useLanguage();
 
@@ -89,6 +91,14 @@ const ProductDetails = () => {
     fetchProduct();
   }, [fetchProduct]);
 
+  useEffect(() => {
+    if (!product?._id) return;
+    const expectedPath = buildProductPath(product);
+    if (location.pathname !== expectedPath) {
+      navigate(`${expectedPath}${location.search}`, { replace: true });
+    }
+  }, [location.pathname, location.search, navigate, product]);
+
   const variants = product?.variants || [];
   const selectedVariant = variants.find((v) => v._id === variantId);
   const sizeOptions = (selectedVariant?.sizes || []).filter((entry) => entry.size || entry.inches || entry.color);
@@ -139,7 +149,7 @@ const ProductDetails = () => {
       source: 'product',
       product: product._id,
       productName: product.name || '',
-      pageUrl: typeof window !== 'undefined' ? `${window.location.origin}/product/${product._id}` : `/product/${product._id}`,
+      pageUrl: typeof window !== 'undefined' ? `${window.location.origin}${buildProductPath(product)}` : buildProductPath(product),
     });
     const sku = selectedVariant?.sku || product.sku || product.variants?.[0]?.sku || '';
     const categoryId = product.categorySlug?._id || '';
@@ -280,7 +290,7 @@ const ProductDetails = () => {
       <Seo
         title={`${product.name} | ${product.categorySlug?.name ? `${categoryName(product.categorySlug.name)} | ` : ''}Leading Trading Est Bahrain`}
         description={productSeoDescription}
-        canonicalPath={`/product/${product._id}`}
+        canonicalPath={buildProductPath(product)}
         image={activeImage || product.image || product.images?.[0] || undefined}
         type="product"
         keywords={buildSeoKeywords(
@@ -299,7 +309,7 @@ const ProductDetails = () => {
             ...(product.categorySlug?.name
               ? [{ name: product.categorySlug.name, path: `/categories/${product.categorySlug?.slug || product.categorySlug?._id || ''}` }]
               : []),
-            { name: product.name, path: `/product/${product._id}` },
+            { name: product.name, path: buildProductPath(product) },
           ]),
           buildProductSchema(product, {
             image: activeImage || product.image || product.images?.[0],
@@ -528,7 +538,7 @@ const ProductDetails = () => {
                 const imageFailed = brokenRelatedImages[item._id] === true;
 
                 return (
-                  <Link key={item._id} to={`/product/${item._id}`} className="product-related-card">
+                  <Link key={item._id} to={buildProductPath(item)} className="product-related-card">
                     <div className="product-related-media">
                       {image && !imageFailed ? (
                         <img

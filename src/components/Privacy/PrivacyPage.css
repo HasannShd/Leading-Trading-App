@@ -1,0 +1,67 @@
+.privacy-page {
+  width: min(1120px, calc(100% - 32px));
+  margin: 0 auto;
+}
+
+.privacy-shell {
+  padding: 64px 0 24px;
+}
+
+.privacy-eyebrow {
+  display: inline-flex;
+  margin-bottom: 12px;
+  color: #875625;
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.privacy-shell h1 {
+  margin: 0;
+  color: var(--navy-900);
+  font-size: clamp(2.5rem, 5vw, 4.8rem);
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.privacy-shell > p {
+  max-width: 820px;
+  margin: 22px 0 0;
+  color: var(--muted);
+  font-size: 1.08rem;
+  line-height: 1.85;
+}
+
+.privacy-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: 34px;
+}
+
+.privacy-grid article {
+  padding: 22px;
+  border: 1px solid rgba(19, 48, 78, 0.08);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.78);
+  box-shadow: 0 14px 30px rgba(7, 17, 31, 0.05);
+}
+
+.privacy-grid h2 {
+  margin: 0 0 10px;
+  color: var(--navy-900);
+  font-size: 1.1rem;
+}
+
+.privacy-grid p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.75;
+}
+
+@media (max-width: 760px) {
+  .privacy-grid {
+    grid-template-columns: 1fr;
+  }
+}

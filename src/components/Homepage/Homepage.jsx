@@ -4,6 +4,7 @@ import Seo from '../Common/Seo';
 import { buildFaqSchema, localBusinessSchema, organizationSchema, webSiteSchema } from '../../utils/seoSchemas';
 import { useLanguage } from '../../context/LanguageContext';
 import { normalizeImageSrc } from '../../utils/normalizeImageSrc';
+import { buildProductPath } from '../../utils/productUrls';
 import { seoLandingPages } from '../../utils/seoLandingPages';
 import { useHomepageScroll } from './useHomepageScroll';
 import './Homepage.css';
@@ -251,7 +252,7 @@ const HomePage = () => {
               </div>
             </div>
             <div className="home-hero__notes animate-stagger" data-stagger-step="90ms">
-              <span className="animate-on-scroll">{t('NHRA-Approved')}</span>
+              <span className="animate-on-scroll">{t('Documentation Support')}</span>
               <span className="animate-on-scroll">{t('Medical and industrial sourcing')}</span>
               <span className="animate-on-scroll">{t('Dependable Bahrain-based support')}</span>
             </div>
@@ -482,7 +483,7 @@ const HomePage = () => {
 
               <div className="featured-showcase__grid animate-stagger" data-stagger-step="110ms">
                 {leadProduct ? (
-                  <Link className="featured-spotlight animate-on-scroll" to={`/product/${leadProduct._id}`}>
+                  <Link className="featured-spotlight animate-on-scroll" to={buildProductPath(leadProduct)}>
                     <div className="featured-spotlight__copy">
                       <small>{t('Product spotlight')}</small>
                       <h3>{leadProduct.name}</h3>
@@ -509,7 +510,7 @@ const HomePage = () => {
 
                 <div className="featured-rail">
                   {secondaryProducts.map((product, index) => (
-                    <Link className="featured-compact animate-on-scroll" key={product._id} to={`/product/${product._id}`}>
+                    <Link className="featured-compact animate-on-scroll" key={product._id} to={buildProductPath(product)}>
                       <div className="featured-compact__media" data-parallax={index % 2 === 0 ? 'soft' : 'lift'}>
                         {product.image ? (
                           <img src={normalizeImageSrc(product.image)} alt={product.name} loading="lazy" decoding="async" />

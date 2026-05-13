@@ -1,0 +1,127 @@
+.resources-page {
+  width: min(1180px, calc(100% - 32px));
+  margin: 0 auto;
+}
+
+.resources-shell {
+  padding: 64px 0 26px;
+}
+
+.resources-eyebrow,
+.resources-back {
+  display: inline-flex;
+  margin-bottom: 12px;
+  color: #875625;
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.resources-shell h1 {
+  max-width: 980px;
+  margin: 0;
+  color: var(--navy-900);
+  font-size: clamp(2.4rem, 5vw, 4.8rem);
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.resources-shell > p {
+  max-width: 780px;
+  margin: 22px 0 0;
+  color: var(--muted);
+  font-size: 1.08rem;
+  line-height: 1.85;
+}
+
+.resources-grid,
+.resources-article-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: 34px;
+}
+
+.resources-card,
+.resources-article-grid section {
+  padding: 24px;
+  border: 1px solid rgba(19, 48, 78, 0.08);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.78);
+  box-shadow: 0 14px 30px rgba(7, 17, 31, 0.05);
+}
+
+.resources-card {
+  display: grid;
+  gap: 12px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.resources-card small {
+  color: #875625;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.resources-card strong,
+.resources-article-grid h2 {
+  color: var(--navy-900);
+  font-size: 1.18rem;
+  line-height: 1.25;
+}
+
+.resources-card p,
+.resources-article-grid p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.75;
+}
+
+.resources-card span {
+  color: var(--navy-800);
+  font-weight: 800;
+}
+
+.resources-article-grid {
+  grid-template-columns: 1fr;
+}
+
+.resources-article-grid section {
+  display: grid;
+  gap: 12px;
+}
+
+.resources-article-grid h2 {
+  margin: 0;
+}
+
+.resources-cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 24px;
+  padding: 22px;
+  border-radius: 18px;
+  background: rgba(168, 119, 68, 0.1);
+}
+
+.resources-cta strong {
+  color: var(--navy-900);
+  font-size: 1.1rem;
+}
+
+@media (max-width: 860px) {
+  .resources-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .resources-cta {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

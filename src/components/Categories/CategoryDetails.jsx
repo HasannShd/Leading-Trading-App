@@ -8,6 +8,7 @@ import { buildBreadcrumbSchema, buildCollectionSchema, buildFaqSchema } from '..
 import { buildCommonRequests, buildSeoContent, buildSeoFaqs, buildSeoKeywords } from '../../utils/searchSeo';
 import { useLanguage } from '../../context/LanguageContext';
 import { normalizeImageSrc } from '../../utils/normalizeImageSrc';
+import { buildProductPath } from '../../utils/productUrls';
 import { useScrollReveal } from '../../hooks/useScrollReveal';
 import { useCountUp } from '../../hooks/useCountUp';
 import './CategoryDetails.css';
@@ -223,7 +224,7 @@ const CategoryDetails = () => {
             path: `/categories/${category?.slug || slug || ''}`,
             items: products.map((product) => ({
               name: product.name,
-              path: `/product/${product._id || product.id || ''}`,
+              path: buildProductPath(product),
             })),
           }),
           buildFaqSchema([
@@ -405,7 +406,7 @@ const CategoryDetails = () => {
 
                   return (
                     <li key={p._id} className="category-details-product-item">
-                      <Link to={`/product/${p._id}`} className="category-details-product-link">
+                      <Link to={buildProductPath(p)} className="category-details-product-link">
                         {productImage && !imageFailed ? (
                           <div className="category-details-product-media">
                             <img

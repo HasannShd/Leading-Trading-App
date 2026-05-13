@@ -122,6 +122,10 @@
   border-radius: 18px;
 }
 
+.seo-landing-article article.seo-landing-depth {
+  background: rgba(255, 255, 255, 0.82);
+}
+
 .seo-landing h2,
 .seo-landing h3,
 .seo-landing p {

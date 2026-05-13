@@ -1,6 +1,8 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { seoLandingRoutes } from '../src/utils/seoLandingPages.js';
+import { buildProductPath } from '../src/utils/productUrls.js';
+import { resourceGuideRoutes } from '../src/utils/resourceGuides.js';
 
 const root = resolve(new URL('..', import.meta.url).pathname);
 const envPath = resolve(root, '.env');
@@ -17,7 +19,9 @@ const staticRoutes = [
   { path: '/about', changefreq: 'monthly', priority: '0.7' },
   { path: '/careers', changefreq: 'weekly', priority: '0.6' },
   { path: '/contact', changefreq: 'monthly', priority: '0.6' },
+  { path: '/privacy', changefreq: 'yearly', priority: '0.4' },
   ...seoLandingRoutes,
+  ...resourceGuideRoutes,
 ];
 
 const blockedSitemapPrefixes = [
@@ -86,7 +90,7 @@ const collectDynamicRoutes = async (apiUrl) => {
     items.forEach((product) => {
       if (!product?._id) return;
       routes.push({
-        path: `/product/${product._id}`,
+        path: buildProductPath(product),
         changefreq: 'weekly',
         priority: product.featured ? '0.8' : '0.7',
       });

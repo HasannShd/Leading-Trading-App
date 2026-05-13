@@ -31,6 +31,7 @@ const Footer = () => {
             <a className="footer-cta" href="tel:+97317210665">{t('Call Us')}</a>
             <a className="footer-cta outline" href="https://wa.me/97317210665" target="_blank" rel="noopener noreferrer">{t('WhatsApp')}</a>
             <a className="footer-cta outline" href="/catalog">{t('Catalog')}</a>
+            <a className="footer-cta outline" href="/resources">{t('Resources')}</a>
           </div>
         </div>
 
@@ -69,13 +70,24 @@ const Footer = () => {
             </div>
           </div>
         </div>
+
+        <div className="footer-trust">
+          <span>{t('Established 2012')}</span>
+          <span>{t('Owner and Managing Director: Shahid Majeed')}</span>
+          <span>{t('10-11 person Bahrain team')}</span>
+          <span>{t('Commercial and regulatory documents shared during qualified quotation review')}</span>
+        </div>
       </div>
 
       <div className="footer-bottom">
         <div>© {new Date().getFullYear()} {t('Leading Trading Est')}. {t('All rights reserved.')}</div>
-        <div className="footer-socials">
-          <a href="https://www.instagram.com/leadingtradingest/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="footer-social-icon"><FaInstagram /></a>
-          <a href="https://www.linkedin.com/company/leading-trading-est/?viewAsMember=true" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="footer-social-icon"><FaLinkedinIn /></a>
+        <div className="footer-bottom-links">
+          <a href="/resources">{t('Resources')}</a>
+          <a href="/privacy">{t('Privacy Policy')}</a>
+          <div className="footer-socials">
+            <a href="https://www.instagram.com/leadingtradingest/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="footer-social-icon"><FaInstagram /></a>
+            <a href="https://www.linkedin.com/company/leading-trading-est/?viewAsMember=true" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="footer-social-icon"><FaLinkedinIn /></a>
+          </div>
         </div>
       </div>
     </footer>

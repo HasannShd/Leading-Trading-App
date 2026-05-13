@@ -1,4 +1,5 @@
 import { BUSINESS_HOURS, businessAddress, businessContact, businessMapsUrl } from './businessProfile.js';
+import { buildProductPath } from './productUrls.js';
 
 export const SITE_ORIGIN = 'https://www.lte-bh.com';
 
@@ -109,6 +110,11 @@ export const localBusinessSchema = {
   telephone: businessContact.telephone,
   email: businessContact.email,
   hasMap: businessMapsUrl,
+  geo: {
+    '@type': 'GeoCoordinates',
+    latitude: 26.1151676,
+    longitude: 50.6307677,
+  },
   address: {
     '@type': 'PostalAddress',
     ...businessAddress,
@@ -216,10 +222,11 @@ export const buildFaqSchema = (questions = []) => {
 export const buildProductSchema = (product, { image, categoryName } = {}) => {
   const priceValue = Number(product?.price || product?.basePrice || product?.variants?.[0]?.price || product?.variants?.[0]?.sizes?.[0]?.price || 0);
   const offerPrice = Number.isFinite(priceValue) && priceValue > 0 ? priceValue.toFixed(3) : '0.000';
+  const productPath = buildProductPath(product);
   const schema = {
     '@context': 'https://schema.org',
     '@type': 'Product',
-    '@id': `${SITE_ORIGIN}/product/${product?._id}#product`,
+    '@id': `${SITE_ORIGIN}${productPath}#product`,
     name: product?.name,
     description:
       product?.description ||
@@ -228,7 +235,7 @@ export const buildProductSchema = (product, { image, categoryName } = {}) => {
     brand: product?.brand ? { '@type': 'Brand', name: product.brand } : { '@type': 'Brand', name: 'Leading Trading Est' },
     sku: product?.sku || product?._id,
     category: categoryName || product?.categorySlug?.name,
-    url: absoluteUrl(`/product/${product?._id}`),
+    url: absoluteUrl(productPath),
     offers: {
       '@type': 'Offer',
       url: absoluteUrl(`/contact?source=product&product=${product?._id || ''}`),

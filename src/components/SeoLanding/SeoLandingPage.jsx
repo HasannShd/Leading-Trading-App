@@ -14,6 +14,37 @@ import './SeoLandingPage.css';
 const getRelatedPages = (activeSlug) =>
   seoLandingPages.filter((page) => page.slug !== activeSlug).slice(0, 4);
 
+const SEO_OVERRIDES = {
+  'medical-suppliers-bahrain': {
+    title: 'Medical Equipment & Consumables Supplier Bahrain',
+    description:
+      'Source urology, anesthesia, surgical, and medical consumables in Bahrain with LTE quotation support, documentation review, and local follow-up.',
+  },
+  'laboratory-supplies-bahrain': {
+    title: 'Laboratory Sourcing & Diagnostic Devices Bahrain',
+    description:
+      'Clinical lab equipment, diagnostics, and testing consumables for Bahrain healthcare facilities with specification review and quotation support.',
+  },
+};
+
+const buildProcurementDepth = (page) => [
+  {
+    title: `${page.categoryLabel} procurement standards in Bahrain`,
+    body:
+      `For ${page.categoryLabel.toLowerCase()} enquiries, LTE keeps the buying process focused on specification fit, product suitability, packaging, brand preference, and documentation needs before a quotation is prepared. Bahrain procurement teams often compare items across clinical, laboratory, dental, safety, and industrial use cases, so this page connects the category context with direct catalogue search, related supply guides, and a contact route that preserves the buyer requirement. The goal is to help hospitals, clinics, labs, offices, and operations teams move from a broad search into a clear RFQ without losing the category or product context.`,
+  },
+  {
+    title: 'Brand access, documentation, and quotation workflow',
+    body:
+      'Leading Trading Est supports local buyers with Medstar own-brand supply, international supplier and distributor relationships, and dedicated support for ROMSONS and SMI where relevant. Requirements can include model references, SKU details, preferred brand, quantity, urgency, delivery expectations, and supporting documents such as RFQ spreadsheets or technical schedules. The quotation workflow is built for B2B purchasing rather than retail checkout: buyers shortlist products, share requirements, and receive follow-up from the LTE team for availability, specifications, and commercial handling.',
+  },
+  {
+    title: 'Local supply support for Sitra and Bahrain buyers',
+    body:
+      'LTE operates from Sitra with a Bahrain-based team covering leadership, sales, accounts, HR, IT, digital marketing, and delivery coordination. That local structure matters for procurement teams that need responsive communication, repeat-order continuity, and better follow-up than a generic catalogue site can provide. Buyers can use this guide to understand the category, open the relevant catalogue section, compare related supply guides, and submit an online enquiry with enough detail for the team to respond accurately.',
+  },
+];
+
 const SeoLandingPage = () => {
   const { slug } = useParams();
   const page = getSeoLandingPage(slug);
@@ -42,12 +73,13 @@ const SeoLandingPage = () => {
 
   const canonicalPath = `/solutions/${page.slug}`;
   const related = getRelatedPages(page.slug);
+  const seoOverride = SEO_OVERRIDES[page.slug] || {};
 
   return (
     <main className="seo-landing">
       <Seo
-        title={`${page.title} | Leading Trading Est`}
-        description={page.description}
+        title={seoOverride.title || `${page.title} | Leading Trading Est`}
+        description={seoOverride.description || page.description}
         canonicalPath={canonicalPath}
         keywords={page.keywords}
         structuredData={[
@@ -110,6 +142,12 @@ const SeoLandingPage = () => {
         <div className="seo-landing-article">
           {page.sections.map((section) => (
             <article key={section.title}>
+              <h2>{section.title}</h2>
+              <p>{section.body}</p>
+            </article>
+          ))}
+          {buildProcurementDepth(page).map((section) => (
+            <article key={section.title} className="seo-landing-depth">
               <h2>{section.title}</h2>
               <p>{section.body}</p>
             </article>

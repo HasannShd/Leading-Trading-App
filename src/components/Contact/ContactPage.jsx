@@ -4,12 +4,16 @@ import Seo from '../Common/Seo';
 import { buildBreadcrumbSchema, localBusinessSchema, medicalOrganizationSchema, organizationSchema } from '../../utils/seoSchemas';
 import { useLanguage } from '../../context/LanguageContext';
 import { BUSINESS_HOURS, businessMapsEmbedUrl, businessMapsUrl } from '../../utils/businessProfile';
+import { buildProductPath } from '../../utils/productUrls';
 import './ContactPage.css';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY || '';
 const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || '';
 const GOOGLE_MAPS_MAP_ID = import.meta.env.VITE_GOOGLE_MAPS_MAP_ID || '';
+const RFQ_FILE_ACCEPT = '.pdf,.doc,.docx,.xls,.xlsx,.csv';
+const RFQ_ALLOWED_EXTENSIONS = ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'csv'];
+const RFQ_MAX_SIZE_MB = 8;
 
 const STORE_LOCATOR_CONFIGURATION = {
   locations: [
@@ -70,13 +74,40 @@ const ContactPage = () => {
   const [success, setSuccess] = useState('');
   const [error, setError] = useState('');
   const [turnstileToken, setTurnstileToken] = useState('');
+  const [rfqFile, setRfqFile] = useState(null);
   const turnstileRef = useRef(null);
   const turnstileWidgetIdRef = useRef(null);
   const locatorRef = useRef(null);
   const apiLoaderRef = useRef(null);
+  const rfqFileInputRef = useRef(null);
 
   const handleChange = (e) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleRfqFileChange = (event) => {
+    const file = event.target.files?.[0] || null;
+    setError('');
+    if (!file) {
+      setRfqFile(null);
+      return;
+    }
+
+    const extension = file.name.split('.').pop()?.toLowerCase() || '';
+    if (!RFQ_ALLOWED_EXTENSIONS.includes(extension)) {
+      setRfqFile(null);
+      event.target.value = '';
+      setError(t('Please upload RFQ documents as PDF, Word, Excel, or CSV files only.'));
+      return;
+    }
+    if (file.size > RFQ_MAX_SIZE_MB * 1024 * 1024) {
+      setRfqFile(null);
+      event.target.value = '';
+      setError(t('RFQ attachment must be 8 MB or smaller.'));
+      return;
+    }
+
+    setRfqFile(file);
   };
 
   useEffect(() => {
@@ -118,7 +149,7 @@ const ContactPage = () => {
           sku: data.sku || data.variants?.[0]?.sku || prev.sku,
           categoryId: data.categorySlug?._id || prev.categoryId,
           categoryName: data.categorySlug?.name || prev.categoryName,
-          pageUrl: prev.pageUrl || (typeof window !== 'undefined' ? `${window.location.origin}/product/${data._id}` : `/product/${data._id}`),
+          pageUrl: prev.pageUrl || (typeof window !== 'undefined' ? `${window.location.origin}${buildProductPath(data)}` : buildProductPath(data)),
         }));
       } catch (err) {
         if (err.name !== 'AbortError') {
@@ -230,10 +261,16 @@ const ContactPage = () => {
 
     setLoading(true);
     try {
+      const payload = new FormData();
+      Object.entries(form).forEach(([key, value]) => payload.append(key, value));
+      payload.append('consent', String(consent));
+      payload.append('turnstileToken', turnstileToken);
+      payload.append('quoteContext', JSON.stringify(quoteContext));
+      if (rfqFile) payload.append('rfqFile', rfqFile);
+
       const res = await fetch(`${API_URL}/contact`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...form, consent, turnstileToken, quoteContext }),
+        body: payload,
       });
       const data = await res.json();
       if (!res.ok) {
@@ -255,6 +292,10 @@ const ContactPage = () => {
           message: '',
         });
         setConsent(false);
+        setRfqFile(null);
+        if (rfqFileInputRef.current) {
+          rfqFileInputRef.current.value = '';
+        }
         setTurnstileToken('');
         if (window.turnstile && turnstileWidgetIdRef.current) {
           window.turnstile.reset(turnstileWidgetIdRef.current);
@@ -345,6 +386,19 @@ const ContactPage = () => {
           </label>
           <label>{t('Message')}
             <textarea name="message" rows="4" value={form.message} onChange={handleChange} />
+          </label>
+          <label>{t('Attach RFQ or requirement file')}
+            <input
+              ref={rfqFileInputRef}
+              type="file"
+              name="rfqFile"
+              accept={RFQ_FILE_ACCEPT}
+              onChange={handleRfqFileChange}
+              aria-describedby="rfq-file-help"
+            />
+            <small id="rfq-file-help" className="contact-file-help">
+              {rfqFile ? rfqFile.name : t('Optional: PDF, Word, Excel, or CSV up to 8 MB.')}
+            </small>
           </label>
           <label className="contact-form-checkbox">
             <input type="checkbox" checked={consent} onChange={(e) => setConsent(e.target.checked)} />
