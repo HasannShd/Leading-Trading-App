@@ -5,6 +5,21 @@ import StatePanel from '../Common/StatePanel';
 import { useLanguage } from '../../context/LanguageContext';
 import './Careers.css';
 
+const CV_ACCEPT = '.pdf,.doc,.docx';
+const ALLOWED_CV_EXTENSIONS = ['pdf', 'doc', 'docx'];
+const ALLOWED_CV_TYPES = [
+  'application/pdf',
+  'application/msword',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+];
+
+const isAllowedCvFile = (file) => {
+  if (!file) return false;
+  const extension = file.name.split('.').pop()?.toLowerCase();
+  const typeAllowed = file.type ? ALLOWED_CV_TYPES.includes(file.type) : true;
+  return ALLOWED_CV_EXTENSIONS.includes(extension) && typeAllowed;
+};
+
 // Careers page with application form
 const Careers = () => {
   const { t } = useLanguage();
@@ -15,6 +30,19 @@ const Careers = () => {
 
   const handleChange = e => {
     const { name, value, files } = e.target;
+    if (name === 'cv') {
+      const file = files?.[0] || null;
+      if (file && !isAllowedCvFile(file)) {
+        e.target.value = '';
+        setForm(f => ({ ...f, cv: null }));
+        setError(t('Please upload your CV as a PDF, DOC, or DOCX file.'));
+        return;
+      }
+      setError('');
+      setForm(f => ({ ...f, cv: file }));
+      return;
+    }
+
     setForm(f => ({
       ...f,
       [name]: files ? files[0] : value
@@ -27,6 +55,10 @@ const Careers = () => {
     e.preventDefault();
     if (submitting) return;
     setError('');
+    if (!isAllowedCvFile(form.cv)) {
+      setError(t('Please upload your CV as a PDF, DOC, or DOCX file.'));
+      return;
+    }
     setSubmitting(true);
     try {
       const data = new FormData();
@@ -154,9 +186,10 @@ const Careers = () => {
                   id="careers-cv-upload"
                   type="file"
                   name="cv"
-                  accept=".pdf,.doc,.docx"
+                  accept={CV_ACCEPT}
                   onChange={handleChange}
                   required
+                  aria-describedby="careers-cv-help"
                   className="careers-file-native"
                 />
                 <label htmlFor="careers-cv-upload" className="careers-file-trigger">
@@ -166,6 +199,9 @@ const Careers = () => {
                   {form.cv?.name || t('No file chosen')}
                 </span>
               </div>
+              <small id="careers-cv-help" className="careers-file-help">
+                {t('Accepted formats: PDF, DOC, or DOCX.')}
+              </small>
             </label>
             <button type="submit" className="btn" disabled={submitting}>
               {submitting ? t('Sending Application...') : t('Submit Application')}

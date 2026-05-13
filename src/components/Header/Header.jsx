@@ -303,7 +303,7 @@ const Header = () => {
           </NavLink>
 
           <NavLink to="/cart" onClick={() => setMobileNav(false)}>
-            {t('Cart')}
+            {t('Quote Basket')}
           </NavLink>
 
           {user && (

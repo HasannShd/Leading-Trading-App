@@ -1,11 +1,13 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import Seo from '../Common/Seo';
-import { buildBreadcrumbSchema, localBusinessSchema } from '../../utils/seoSchemas';
+import { buildBreadcrumbSchema, localBusinessSchema, medicalOrganizationSchema, organizationSchema } from '../../utils/seoSchemas';
 import { useLanguage } from '../../context/LanguageContext';
+import { BUSINESS_HOURS } from '../../utils/businessProfile';
 import './ContactPage.css';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY || '';
 
 const ContactPage = () => {
   const { t } = useLanguage();
@@ -34,6 +36,9 @@ const ContactPage = () => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState('');
   const [error, setError] = useState('');
+  const [turnstileToken, setTurnstileToken] = useState('');
+  const turnstileRef = useRef(null);
+  const turnstileWidgetIdRef = useRef(null);
 
   const handleChange = (e) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -92,6 +97,47 @@ const ContactPage = () => {
     return () => controller.abort();
   }, [quoteContext.productId, quoteContext.productName]);
 
+  useEffect(() => {
+    if (!TURNSTILE_SITE_KEY || !turnstileRef.current) return undefined;
+
+    let cancelled = false;
+
+    const renderTurnstile = () => {
+      if (cancelled || !window.turnstile || !turnstileRef.current || turnstileWidgetIdRef.current) return;
+      turnstileWidgetIdRef.current = window.turnstile.render(turnstileRef.current, {
+        sitekey: TURNSTILE_SITE_KEY,
+        callback: (token) => setTurnstileToken(token),
+        'expired-callback': () => setTurnstileToken(''),
+        'error-callback': () => setTurnstileToken(''),
+      });
+    };
+
+    if (window.turnstile) {
+      renderTurnstile();
+    } else {
+      const existing = document.querySelector('script[data-turnstile-script="true"]');
+      if (existing) {
+        existing.addEventListener('load', renderTurnstile, { once: true });
+      } else {
+        const script = document.createElement('script');
+        script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+        script.async = true;
+        script.defer = true;
+        script.dataset.turnstileScript = 'true';
+        script.addEventListener('load', renderTurnstile, { once: true });
+        document.head.appendChild(script);
+      }
+    }
+
+    return () => {
+      cancelled = true;
+      if (window.turnstile && turnstileWidgetIdRef.current) {
+        window.turnstile.remove(turnstileWidgetIdRef.current);
+      }
+      turnstileWidgetIdRef.current = null;
+    };
+  }, []);
+
   const quoteLabel = useMemo(
     () => quoteContext.productName || quoteContext.categoryName || '',
     [quoteContext.categoryName, quoteContext.productName]
@@ -101,12 +147,22 @@ const ContactPage = () => {
     e.preventDefault();
     setError('');
     setSuccess('');
+
+    if (!consent) {
+      setError(t('Please allow this website to store your submission so we can respond to your inquiry.'));
+      return;
+    }
+    if (TURNSTILE_SITE_KEY && !turnstileToken) {
+      setError(t('Please complete the bot verification before submitting.'));
+      return;
+    }
+
     setLoading(true);
     try {
       const res = await fetch(`${API_URL}/contact`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...form, quoteContext }),
+        body: JSON.stringify({ ...form, consent, turnstileToken, quoteContext }),
       });
       const data = await res.json();
       if (!res.ok) {
@@ -128,6 +184,10 @@ const ContactPage = () => {
           message: '',
         });
         setConsent(false);
+        setTurnstileToken('');
+        if (window.turnstile && turnstileWidgetIdRef.current) {
+          window.turnstile.reset(turnstileWidgetIdRef.current);
+        }
       }
     } catch {
       setError(t('Network error. Please check your connection and try again.'));
@@ -144,7 +204,9 @@ const ContactPage = () => {
         canonicalPath="/contact"
         keywords="request quote Bahrain medical supplies, contact Leading Trading Est, Bahrain dental supplies quote, industrial supplies quote Bahrain, laboratory equipment quote Bahrain"
         structuredData={[
+          organizationSchema,
           localBusinessSchema,
+          medicalOrganizationSchema,
           buildBreadcrumbSchema([
             { name: 'Home', path: '/' },
             { name: 'Contact', path: '/contact' },
@@ -154,7 +216,10 @@ const ContactPage = () => {
             '@type': 'ContactPage',
             name: 'Request a Quote from Leading Trading Est',
             url: 'https://www.lte-bh.com/contact',
-            mainEntity: { '@id': 'https://www.lte-bh.com/#local-business' },
+            mainEntity: [
+              { '@id': 'https://www.lte-bh.com/#local-business' },
+              { '@id': 'https://www.lte-bh.com/#medical-organization' },
+            ],
           },
         ]}
       />
@@ -211,9 +276,12 @@ const ContactPage = () => {
             <textarea name="message" rows="4" value={form.message} onChange={handleChange} />
           </label>
           <label className="contact-form-checkbox">
-            <input type="checkbox" required checked={consent} onChange={(e) => setConsent(e.target.checked)} />
+            <input type="checkbox" checked={consent} onChange={(e) => setConsent(e.target.checked)} />
             <span>{t('I allow this website to store my submission so they can respond to my inquiry.')} <span className="required">*</span></span>
           </label>
+          {TURNSTILE_SITE_KEY ? (
+            <div className="contact-turnstile" ref={turnstileRef} />
+          ) : null}
           {error && <div className="contact-form-error">{error}</div>}
           {success && <div className="contact-form-success">{success}</div>}
           <button type="submit" className="contact-form-submit" disabled={loading}>
@@ -241,18 +309,22 @@ const ContactPage = () => {
           <div className="contact-info-title">{t('Location')}</div>
           <div>
             <a href="https://maps.app.goo.gl/1Qw2Qw3Qw4Qw5Qw6A" target="_blank" rel="noopener noreferrer">
-              Warehousing world, Um Al-Baidh<br />Sitra, Capital Governorate BH
+              Office 109, Building 658, Road 16, Block 616<br />
+              Warehousing World, Um Al-Baidh<br />
+              Sitra, Capital Governorate BH
             </a>
           </div>
           <div className="contact-info-title">{t('Hours')}</div>
-          <div className="contact-info-hours">
-            <div>Monday&nbsp;&nbsp;&nbsp;8:00am – 4:00pm</div>
-            <div>Tuesday&nbsp;&nbsp;&nbsp;8:00am – 4:00pm</div>
-            <div>Wednesday&nbsp;&nbsp;&nbsp;8:00am – 4:00pm</div>
-            <div>Thursday&nbsp;&nbsp;&nbsp;8:00am – 4:00pm</div>
-            <div>Saturday&nbsp;&nbsp;&nbsp;8:00am – 4:00pm</div>
-            <div>Sunday&nbsp;&nbsp;&nbsp;8:00am – 4:00pm</div>
-          </div>
+          <table className="contact-info-hours">
+            <tbody>
+              {BUSINESS_HOURS.map((item) => (
+                <tr key={item.day}>
+                  <th scope="row">{item.day}</th>
+                  <td>{item.label}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

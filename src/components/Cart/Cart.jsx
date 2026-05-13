@@ -59,12 +59,12 @@ const Cart = () => {
   return (
     <main>
       <section className="cart-section">
-        <h1>{t('Your Cart')}</h1>
+        <h1>{t('Your Quote Basket')}</h1>
         {loading ? (
-          <p className="shop-empty">{t('Loading cart...')}</p>
+          <p className="shop-empty">{t('Loading quote basket...')}</p>
         ) : !cart || cart.items.length === 0 ? (
           <div className="cart-empty">
-            <p>{t('Your cart is empty.')}</p>
+            <p>{t('Your quote basket is empty.')}</p>
             <Link to="/shop" className="btn">{t('Browse products')}</Link>
           </div>
         ) : (
@@ -114,18 +114,18 @@ const Cart = () => {
             <div className="cart-summary">
               <h2>{t('Summary')}</h2>
               <div className="cart-summary-row">
-                <span>{t('Subtotal')}</span>
+                <span>{t('Estimated subtotal')}</span>
                 <span>{subtotal.toFixed(3)} BHD</span>
               </div>
               <div className="cart-summary-row">
-                <span>{t('Shipping')}</span>
+                <span>{t('Estimated shipping')}</span>
                 <span>{subtotal < 10 ? '1.000 BHD' : '0.000 BHD'}</span>
               </div>
               <div className="cart-summary-row total">
-                <span>{t('Total')}</span>
+                <span>{t('Estimated total')}</span>
                 <span>{(subtotal + (subtotal < 10 ? 1 : 0)).toFixed(3)} BHD</span>
               </div>
-              <Link className="btn primary" to="/checkout">{t('Proceed to Checkout')}</Link>
+              <Link className="btn primary" to="/checkout">{t('Request Final Quotation')}</Link>
             </div>
           </div>
         )}

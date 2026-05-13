@@ -106,8 +106,8 @@ const Checkout = () => {
     return (
       <main>
         <section className="cart-section">
-          <h1>{t('Checkout')}</h1>
-          <p className="shop-empty">{t('Your cart is empty.')}</p>
+          <h1>{t('Request Final Quotation')}</h1>
+          <p className="shop-empty">{t('Your quote basket is empty.')}</p>
         </section>
       </main>
     );
@@ -116,10 +116,10 @@ const Checkout = () => {
   return (
     <main>
       <section className="checkout-section">
-        <h1>{t('Checkout')}</h1>
+        <h1>{t('Request Final Quotation')}</h1>
         <div className="checkout-grid">
           <form className="checkout-form" onSubmit={handleSubmit}>
-            <h2>{t('Shipping Details')}</h2>
+            <h2>{t('Quotation Contact Details')}</h2>
             <label>
               {t('Full Name')}
               <input
@@ -180,7 +180,7 @@ const Checkout = () => {
               />
             </label>
 
-            <h2>{t('Payment')}</h2>
+            <h2>{t('Quotation Method')}</h2>
             <div className="checkout-payment">
               <label>
                 <input
@@ -190,7 +190,7 @@ const Checkout = () => {
                   checked={paymentMethod === 'cod'}
                   onChange={() => setPaymentMethod('cod')}
                 />
-                {t('Cash on Delivery')}
+                {t('Confirm by phone')}
               </label>
               <label>
                 <input
@@ -200,7 +200,7 @@ const Checkout = () => {
                   checked={paymentMethod === 'bank'}
                   onChange={() => setPaymentMethod('bank')}
                 />
-                {t('Bank Transfer')}
+                {t('Prepare bank-transfer quote')}
               </label>
               <label className={!tapReady ? 'checkout-disabled' : ''}>
                 <input
@@ -211,17 +211,17 @@ const Checkout = () => {
                   onChange={() => setPaymentMethod('tap')}
                   disabled={!tapReady}
                 />
-                {t('Tap Card Payment')} {tapReady ? '' : `(${t('Unavailable')})`}
+                {t('Online payment link')} {tapReady ? '' : `(${t('Unavailable')})`}
               </label>
             </div>
             {paymentMethod === 'bank' && (
               <div className="checkout-note">
-                {t('Bank transfer details will be shared after placing the order.')}
+                {t('Bank transfer details will be shared after the quotation is confirmed.')}
               </div>
             )}
             {paymentMethod === 'tap' && !tapReady && (
               <div className="checkout-note">
-                {t('Tap is not configured yet. Please use COD or Bank Transfer.')}
+                {t('Online payment is not configured yet. Please request a quotation first.')}
               </div>
             )}
             <label>
@@ -230,7 +230,7 @@ const Checkout = () => {
             </label>
 
             <button className="btn primary" type="submit" disabled={loading}>
-              {loading ? t('Placing order...') : t('Place Order')}
+              {loading ? t('Sending quotation request...') : t('Submit Quotation Request')}
             </button>
             {formNotice ? (
               <div className="checkout-form-notice" role="alert">
@@ -240,7 +240,7 @@ const Checkout = () => {
           </form>
 
           <div className="checkout-summary">
-            <h2>{t('Order Summary')}</h2>
+            <h2>{t('Quote Basket Summary')}</h2>
             <div className="checkout-items">
               {cart.items.map(item => (
                 <div className="checkout-item" key={item._id}>
@@ -267,15 +267,15 @@ const Checkout = () => {
               ))}
             </div>
             <div className="checkout-summary-row">
-              <span>{t('Subtotal')}</span>
+              <span>{t('Estimated subtotal')}</span>
               <span>{subtotal.toFixed(3)} BHD</span>
             </div>
             <div className="checkout-summary-row">
-              <span>{t('Shipping')}</span>
+              <span>{t('Estimated shipping')}</span>
               <span>{shippingFee.toFixed(3)} BHD</span>
             </div>
             <div className="checkout-summary-row total">
-              <span>{t('Total')}</span>
+              <span>{t('Estimated total')}</span>
               <span>{(subtotal + shippingFee).toFixed(3)} BHD</span>
             </div>
           </div>

@@ -191,7 +191,7 @@ const ProductDetails = () => {
     if (sizeOptions.length && (selectedSizeIndex === '' || Number.isNaN(Number(selectedSizeIndex)))) {
       setNotice({
         type: 'error',
-        title: t('Choose a size before adding to cart'),
+        title: t('Choose a size before adding to quote basket'),
         description: t('This product uses size-level selection, so we need that choice first.'),
       });
       return;
@@ -222,7 +222,7 @@ const ProductDetails = () => {
         const data = await response.json();
         setNotice({
           type: 'error',
-          title: t('Could not add product to cart'),
+          title: t('Could not add product to quote basket'),
           description: data.message || t('Please try again in a moment.'),
         });
         return;
@@ -231,14 +231,14 @@ const ProductDetails = () => {
       startTransition(() => {
         setNotice({
           type: 'success',
-          title: t('Added to cart'),
-          description: t('The product was added successfully. You can continue browsing or review the cart now.'),
+          title: t('Added to quote basket'),
+          description: t('The product was added successfully. You can continue browsing or review the quote basket now.'),
         });
       });
     } catch (err) {
       setNotice({
         type: 'error',
-        title: t('Could not add product to cart'),
+        title: t('Could not add product to quote basket'),
         description: t('Please try again in a moment.'),
       });
     }
@@ -391,7 +391,7 @@ const ProductDetails = () => {
             <div className="product-service-grid animate-stagger" data-stagger-step="100ms">
               <article className="product-service-card animate-on-scroll">
                 <span>{t('Procurement use')}</span>
-                <strong>{t('Review the product structure before moving into quotation or cart handling.')}</strong>
+                <strong>{t('Review the product structure before moving into quotation or quote-basket handling.')}</strong>
                 <p>{t('Where products depend on type, size, brand, or commercial fit, the detail page gives the clearest next step.')}</p>
               </article>
               <article className="product-service-card animate-on-scroll">
@@ -408,7 +408,7 @@ const ProductDetails = () => {
                 description={notice.description}
                 variant={notice.type === 'success' ? 'success' : 'error'}
                 className="product-notice"
-                action={notice.type === 'success' ? <Link className="btn primary" to="/cart">{t('Open Cart')}</Link> : null}
+                action={notice.type === 'success' ? <Link className="btn primary" to="/cart">{t('Open Quote Basket')}</Link> : null}
               />
             )}
 
@@ -487,7 +487,7 @@ const ProductDetails = () => {
 
               <div className="product-actions">
                 <button className="btn primary" onClick={handleAddToCart}>
-                  {t('Add to Cart')}
+                  {t('Add to Quote Basket')}
                 </button>
                 <Link className="btn" to={quoteHref}>{t('Request Quotation')}</Link>
               </div>

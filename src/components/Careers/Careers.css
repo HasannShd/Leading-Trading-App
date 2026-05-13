@@ -124,6 +124,12 @@
   font-weight: 500;
 }
 
+.careers-file-help {
+  color: var(--muted);
+  font-weight: 500;
+  line-height: 1.5;
+}
+
 .careers-form button {
   align-self: flex-start;
   border-radius: 999px;

@@ -1,3 +1,5 @@
+import { BUSINESS_HOURS, businessAddress, businessContact } from './businessProfile.js';
+
 export const SITE_ORIGIN = 'https://www.lte-bh.com';
 
 export const shahidMajeedSchema = {
@@ -104,28 +106,40 @@ export const localBusinessSchema = {
   employee: organizationSchema.employee,
   numberOfEmployees: organizationSchema.numberOfEmployees,
   sameAs: organizationSchema.sameAs,
-  telephone: '+97339939582',
-  email: 'admin@lte-bh.com',
+  telephone: businessContact.telephone,
+  email: businessContact.email,
   address: {
     '@type': 'PostalAddress',
-    streetAddress: 'Warehousing World, Um Al-Baidh, Sitra',
-    addressLocality: 'Sitra',
-    addressCountry: 'BH',
-    addressRegion: 'Bahrain',
+    ...businessAddress,
   },
   areaServed: {
     '@type': 'Country',
     name: 'Bahrain',
   },
   priceRange: '$$',
-  openingHoursSpecification: [
-    {
-      '@type': 'OpeningHoursSpecification',
-      dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Saturday', 'Sunday'],
-      opens: '08:00',
-      closes: '16:00',
-    },
-  ],
+  openingHoursSpecification: BUSINESS_HOURS.map((item) => ({
+    '@type': 'OpeningHoursSpecification',
+    dayOfWeek: item.day,
+    opens: item.opens,
+    closes: item.closes,
+  })),
+};
+
+export const medicalOrganizationSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'MedicalOrganization',
+  '@id': `${SITE_ORIGIN}/#medical-organization`,
+  name: 'Leading Trading Est',
+  url: SITE_ORIGIN,
+  logo: `${SITE_ORIGIN}/company-logo.png`,
+  description: organizationSchema.description,
+  parentOrganization: { '@id': `${SITE_ORIGIN}/#organization` },
+  address: localBusinessSchema.address,
+  telephone: localBusinessSchema.telephone,
+  email: localBusinessSchema.email,
+  openingHoursSpecification: localBusinessSchema.openingHoursSpecification,
+  areaServed: localBusinessSchema.areaServed,
+  sameAs: organizationSchema.sameAs,
 };
 
 export const webSiteSchema = {
