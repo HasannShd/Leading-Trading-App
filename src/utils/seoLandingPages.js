@@ -74,6 +74,43 @@ export const seoLandingPages = [
     ],
   },
   {
+    slug: 'medical-distributors-bahrain',
+    title: 'Medical Distributors in Bahrain',
+    shortTitle: 'Medical distributors',
+    description:
+      'Medical distributor and supplier support in Bahrain for clinics, hospitals, dental centers, laboratories, and procurement teams looking for dependable product sourcing, quotation handling, and local follow-up.',
+    keywords:
+      'medical distributors Bahrain, medical distributor in Bahrain, medical suppliers Bahrain, healthcare distributors Bahrain, hospital supply distributors Bahrain, clinic supply distributors Bahrain',
+    categoryPath: '/categories/medical-equipment',
+    categoryLabel: 'Medical Equipment',
+    shopQuery: 'medical',
+    buyerTerms: ['Medical distribution', 'Healthcare procurement', 'Supplier relationships', 'Local quotation support'],
+    sections: [
+      {
+        title: 'Distributor support with local accountability',
+        body:
+          'Healthcare buyers often search for distributors because they need more than a single product. LTE supports Bahrain procurement teams with product sourcing, quotation handling, supplier coordination, and delivery follow-up from one local point of contact.',
+      },
+      {
+        title: 'Useful across medical, dental, laboratory, and safety needs',
+        body:
+          'The catalog and quotation workflow help buyers move from a distributor search into a specific requirement, whether the enquiry is routine consumables, clinical equipment, PPE, or product-specific supply support.',
+      },
+    ],
+    faqs: [
+      {
+        question: 'Does LTE work as a medical distributor in Bahrain?',
+        answer:
+          'Yes. Leading Trading Est supports Bahrain healthcare buyers through medical supply sourcing, distributor relationships, brand support, quotation handling, and local account follow-up.',
+      },
+      {
+        question: 'Can procurement teams send mixed requirements?',
+        answer:
+          'Yes. Buyers can send medical, dental, laboratory, PPE, and consumable requirements together so the LTE team can review and respond with the right quotation path.',
+      },
+    ],
+  },
+  {
     slug: 'laboratory-supplies-bahrain',
     title: 'Laboratory Supplies Supplier in Bahrain',
     shortTitle: 'Laboratory supplies',
@@ -102,6 +139,226 @@ export const seoLandingPages = [
         question: 'Can LTE source laboratory products in Bahrain?',
         answer:
           'Yes. LTE supports laboratory product enquiries with category browsing, specification review, and quotation handling.',
+      },
+    ],
+  },
+  {
+    slug: 'derma-suppliers-bahrain',
+    title: 'Derma Suppliers in Bahrain',
+    shortTitle: 'Derma suppliers',
+    description:
+      'Derma supply sourcing and quotation support for Bahrain clinics, dermatology centers, aesthetic practices, and healthcare procurement teams reviewing medical, clinical, and procedure-support requirements.',
+    keywords:
+      'derma suppliers Bahrain, dermatology supplies Bahrain, derma clinic supplies Bahrain, aesthetic clinic supplies Bahrain, skin clinic supplies Bahrain, medical aesthetic supplies Bahrain',
+    categoryPath: '/categories/medical-equipment',
+    categoryLabel: 'Medical Equipment',
+    shopQuery: 'derma',
+    buyerTerms: ['Dermatology clinics', 'Aesthetic practices', 'Procedure support', 'Quotation review'],
+    sections: [
+      {
+        title: 'Derma enquiries need careful requirement review',
+        body:
+          'Dermatology and skin clinic buyers often need to confirm product type, intended use, brand preference, documentation, and availability before a quote is useful. LTE routes these enquiries through a specification-led quotation process.',
+      },
+      {
+        title: 'Support for clinic and procedure workflows',
+        body:
+          'Derma and skin clinic requirements may overlap with medical consumables, PPE, clinical devices, and procedure-support supplies. LTE helps buyers organize the requirement before follow-up.',
+      },
+    ],
+    faqs: [
+      {
+        question: 'Can LTE support derma supply enquiries in Bahrain?',
+        answer:
+          'Yes. LTE can review dermatology and skin clinic supply enquiries and route them through sourcing, product review, and quotation follow-up.',
+      },
+    ],
+    catalogPicksTitle: 'Catalogue items that fit derma clinic workflows',
+    catalogPicks: [
+      {
+        name: 'Alcohol Swab Pad',
+        category: 'Skin Prep & First Aid',
+        useCase: 'Skin preparation before injections, minor procedures, and routine treatment-room work.',
+        query: 'Alcohol Swab Pad',
+      },
+      {
+        name: 'Nitrile Gloves',
+        category: 'PPE Gloves',
+        useCase: 'Hand protection for dermatology consultations, treatment rooms, and procedure support.',
+        query: 'Nitrile Gloves',
+      },
+      {
+        name: 'Face Mask',
+        category: 'PPE Masks & Shields',
+        useCase: 'Routine respiratory barrier support for staff and patient-facing clinical work.',
+        query: 'Face Mask',
+      },
+      {
+        name: 'Disposable Razors',
+        category: 'Examination & General Disposable',
+        useCase: 'Pre-procedure hair removal before dressings, treatment, or minor clinical work.',
+        query: 'Disposable Razors',
+      },
+      {
+        name: 'Dressing Set',
+        category: 'Wound Dressings & Gauze',
+        useCase: 'Organized tools for wound cleaning, dressing changes, and follow-up care.',
+        query: 'Dressing Set',
+      },
+      {
+        name: 'Sterile Gauze Swab',
+        category: 'Wound Dressings & Gauze',
+        useCase: 'Absorption, wound cleaning, and sterile procedure support.',
+        query: 'Sterile Gauze Swab',
+      },
+      {
+        name: 'PU transparent wound dressing',
+        category: 'Wound Dressings & Gauze',
+        useCase: 'Transparent protection for treated areas where visibility and coverage are useful.',
+        query: 'PU transparent wound dressing',
+      },
+      {
+        name: 'Microporous Surgical Tape Non-Woven',
+        category: 'Medical Tapes & Bandages',
+        useCase: 'Securing dressings after derma procedures or minor wound care.',
+        query: 'Microporous Surgical Tape Non-Woven',
+      },
+      {
+        name: 'Surgical Skin Marker',
+        category: 'Surgical Instruments',
+        useCase: 'Marking treatment areas, procedural reference points, and pre-procedure lines.',
+        query: 'Surgical Skin Marker',
+      },
+      {
+        name: 'Sharp Containers',
+        category: 'Miscellaneous',
+        useCase: 'Safe disposal of needles, blades, and sharp clinical waste.',
+        query: 'Sharp Containers',
+      },
+      {
+        name: 'Examination lamps',
+        category: 'Medical Equipment',
+        useCase: 'Focused lighting for skin assessment, wound review, and minor procedures.',
+        query: 'Examination lamps',
+      },
+      {
+        name: 'Examination Couch',
+        category: 'Hospital Furniture & Utilities',
+        useCase: 'Patient positioning for dermatology assessment and treatment-room workflows.',
+        query: 'Examination Couch',
+      },
+    ],
+  },
+  {
+    slug: 'aesthetic-supplies-bahrain',
+    title: 'Aesthetic Supplies Supplier in Bahrain',
+    shortTitle: 'Aesthetic supplies',
+    description:
+      'Aesthetic clinic supply sourcing support in Bahrain for derma, skin clinic, medical aesthetic, and procedure-support requirements that need quotation review and local follow-up.',
+    keywords:
+      'aesthetic supplies Bahrain, aesthetic clinic supplies Bahrain, medical aesthetic supplies Bahrain, derma aesthetic supplies Bahrain, skin clinic supplies Bahrain, aesthetic supplier Bahrain',
+    categoryPath: '/categories/medical-equipment',
+    categoryLabel: 'Medical Equipment',
+    shopQuery: 'aesthetic',
+    buyerTerms: ['Aesthetic clinics', 'Medical aesthetic supplies', 'Derma support', 'Specification-led quoting'],
+    sections: [
+      {
+        title: 'Aesthetic clinic buying needs context',
+        body:
+          'Aesthetic supply enquiries can involve clinical consumables, PPE, devices, and product-specific preferences. LTE helps buyers provide enough detail for accurate sourcing and quotation follow-up.',
+      },
+      {
+        title: 'A practical route from search to quotation',
+        body:
+          'This guide gives Bahrain aesthetic and derma buyers a direct route into the LTE enquiry workflow, keeping clinic requirements connected to product browsing and contact follow-up.',
+      },
+    ],
+    faqs: [
+      {
+        question: 'Does LTE support aesthetic clinic supply enquiries?',
+        answer:
+          'Yes. LTE can review aesthetic clinic and medical aesthetic supply enquiries in Bahrain and follow up with sourcing and quotation support where the requirement is clear.',
+      },
+    ],
+    catalogPicksTitle: 'Catalogue items that fit aesthetic clinic workflows',
+    catalogPicks: [
+      {
+        name: 'Alcohol Swab Pad',
+        category: 'Skin Prep & First Aid',
+        useCase: 'Pre-treatment skin cleaning for aesthetic clinic procedure rooms.',
+        query: 'Alcohol Swab Pad',
+      },
+      {
+        name: 'Disposable Syringes',
+        category: 'Injection & IV Disposable',
+        useCase: 'General clinical injection and fluid-measurement support where appropriate to licensed practice.',
+        query: 'Disposable Syringes',
+      },
+      {
+        name: 'Disposable Hypodermic Needle',
+        category: 'Injection & IV Disposable',
+        useCase: 'Single-use needle requirements for clinical injection workflows.',
+        query: 'Disposable Hypodermic Needle',
+      },
+      {
+        name: 'I.V cannula',
+        category: 'Injection & IV Disposable',
+        useCase: 'Venous access support for clinics that handle IV-based clinical services.',
+        query: 'I.V cannula',
+      },
+      {
+        name: 'Examination Glove',
+        category: 'PPE Gloves',
+        useCase: 'Routine hand protection for consultations, treatment rooms, and procedure setup.',
+        query: 'Examination Glove',
+      },
+      {
+        name: 'Face Mask with Eye Shield',
+        category: 'PPE Masks & Shields',
+        useCase: 'Splash and facial barrier protection during closer-contact treatment workflows.',
+        query: 'Face Mask with Eye Shield',
+      },
+      {
+        name: 'Disposable Razors',
+        category: 'Examination & General Disposable',
+        useCase: 'Area preparation before treatment, dressing, or minor procedure support.',
+        query: 'Disposable Razors',
+      },
+      {
+        name: 'Gauze/Cotton Balls',
+        category: 'Wound Dressings & Gauze',
+        useCase: 'Absorption, skin cleaning, and post-treatment support.',
+        query: 'Gauze/Cotton Balls',
+      },
+      {
+        name: 'Sterile Gauze Swab',
+        category: 'Wound Dressings & Gauze',
+        useCase: 'Sterile absorption and cleaning support after procedures.',
+        query: 'Sterile Gauze Swab',
+      },
+      {
+        name: 'Transparent surgical tape PE',
+        category: 'Medical Tapes & Bandages',
+        useCase: 'Securing light dressings while keeping the treated area visible.',
+        query: 'Transparent surgical tape PE',
+      },
+      {
+        name: 'Surgical Skin Marker',
+        category: 'Surgical Instruments',
+        useCase: 'Marking treatment zones and reference points before procedure work.',
+        query: 'Surgical Skin Marker',
+      },
+      {
+        name: 'Sharp Containers',
+        category: 'Miscellaneous',
+        useCase: 'Sharps disposal for needles, blades, and other clinical waste.',
+        query: 'Sharp Containers',
+      },
+      {
+        name: 'Examination lamps',
+        category: 'Medical Equipment',
+        useCase: 'Focused lighting for skin inspection and treatment-room visibility.',
+        query: 'Examination lamps',
       },
     ],
   },
@@ -138,6 +395,70 @@ export const seoLandingPages = [
     ],
   },
   {
+    slug: 'sutures-bahrain',
+    title: 'Sutures Supplier in Bahrain',
+    shortTitle: 'Sutures',
+    description:
+      'Suture sourcing and quotation support for Bahrain hospitals, clinics, dental centers, surgical teams, and healthcare procurement buyers reviewing sterile procedure requirements.',
+    keywords:
+      'sutures Bahrain, suture supplier Bahrain, surgical sutures Bahrain, sterile sutures Bahrain, medical sutures Bahrain, dental sutures Bahrain',
+    categoryPath: '/categories/sutures',
+    categoryLabel: 'Sutures',
+    shopQuery: 'suture',
+    buyerTerms: ['Surgical sutures', 'Sterile procedure support', 'Clinic and dental use', 'Quotation handling'],
+    sections: [
+      {
+        title: 'Suture enquiries depend on specification',
+        body:
+          'Suture buyers often need to confirm type, size, material, needle profile, sterility, and intended clinical use. LTE supports these enquiries through product review and quotation follow-up.',
+      },
+      {
+        title: 'Useful for surgical and dental procurement',
+        body:
+          'The sutures category gives Bahrain buyers a focused path for procedure-related requirements alongside wider sterile surgical consumables and clinical supplies.',
+      },
+    ],
+    faqs: [
+      {
+        question: 'Can LTE quote sutures in Bahrain?',
+        answer:
+          'Yes. Buyers can request suture quotations with product details, preferred specifications, quantities, and intended use so LTE can review the requirement.',
+      },
+    ],
+  },
+  {
+    slug: 'gloves-bahrain',
+    title: 'Gloves Supplier in Bahrain',
+    shortTitle: 'Gloves',
+    description:
+      'Medical, examination, nitrile, latex, vinyl, and disposable glove sourcing support for Bahrain clinics, dental centers, hospitals, laboratories, and procurement teams.',
+    keywords:
+      'gloves Bahrain, gloves supplier Bahrain, medical gloves Bahrain, examination gloves Bahrain, nitrile gloves Bahrain, latex gloves Bahrain, vinyl gloves Bahrain, disposable gloves Bahrain',
+    categoryPath: '/categories/ppe-gloves',
+    categoryLabel: 'PPE Gloves',
+    shopQuery: 'gloves',
+    buyerTerms: ['Medical gloves', 'Nitrile, latex, and vinyl', 'Examination use', 'Repeat procurement'],
+    sections: [
+      {
+        title: 'A direct Bahrain glove supply search path',
+        body:
+          'Buyers searching for gloves in Bahrain may need examination, nitrile, latex, vinyl, powder-free, dental, laboratory, or general disposable glove options. LTE helps route those searches into clear quotation requests.',
+      },
+      {
+        title: 'Built for clinical and operational repeat demand',
+        body:
+          'Glove purchasing often repeats by department, size, material, and usage pattern. LTE supports recurring procurement with product context, availability review, and local follow-up.',
+      },
+    ],
+    faqs: [
+      {
+        question: 'Can LTE support glove supply in Bahrain?',
+        answer:
+          'Yes. LTE supports Bahrain clinics, dental centers, hospitals, laboratories, and procurement teams with medical, examination, nitrile, latex, vinyl, and disposable glove enquiries.',
+      },
+    ],
+  },
+  {
     slug: 'ppe-gloves-bahrain',
     title: 'PPE and Medical Gloves Supplier in Bahrain',
     shortTitle: 'PPE gloves',
@@ -166,6 +487,38 @@ export const seoLandingPages = [
         question: 'Can LTE support glove enquiries in Bahrain?',
         answer:
           'Yes. LTE supports Bahrain clinics, dental centers, hospitals, and procurement teams with glove sourcing and quotation support.',
+      },
+    ],
+  },
+  {
+    slug: 'face-masks-bahrain',
+    title: 'Face Masks Supplier in Bahrain',
+    shortTitle: 'Face masks',
+    description:
+      'Face mask, medical mask, surgical mask, PPE mask, and protective disposable sourcing support for Bahrain clinics, hospitals, dental centers, laboratories, and procurement teams.',
+    keywords:
+      'face masks Bahrain, face mask supplier Bahrain, medical masks Bahrain, surgical masks Bahrain, PPE masks Bahrain, disposable masks Bahrain, clinic masks Bahrain',
+    categoryPath: '/categories/ppe-masks-shields',
+    categoryLabel: 'PPE Masks and Shields',
+    shopQuery: 'mask',
+    buyerTerms: ['Medical face masks', 'Surgical masks', 'PPE masks', 'Disposable protection'],
+    sections: [
+      {
+        title: 'Mask enquiries need the right PPE context',
+        body:
+          'Face mask searches can cover surgical masks, medical masks, protective masks, face shields, and disposable PPE. LTE helps Bahrain buyers clarify the requirement before quotation follow-up.',
+      },
+      {
+        title: 'Support for clinics, hospitals, dental, and lab teams',
+        body:
+          'Mask and PPE procurement often sits alongside gloves, gowns, shields, and other disposable protective items. LTE keeps these requirements connected to the wider PPE catalog and enquiry workflow.',
+      },
+    ],
+    faqs: [
+      {
+        question: 'Can LTE supply face masks in Bahrain?',
+        answer:
+          'Yes. Buyers can request support for face masks, medical masks, surgical masks, PPE masks, shields, and related disposable protection requirements in Bahrain.',
       },
     ],
   },

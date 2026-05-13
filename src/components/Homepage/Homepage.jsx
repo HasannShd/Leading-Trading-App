@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Seo from '../Common/Seo';
-import { localBusinessSchema, organizationSchema, webSiteSchema } from '../../utils/seoSchemas';
+import { buildFaqSchema, localBusinessSchema, organizationSchema, webSiteSchema } from '../../utils/seoSchemas';
 import { useLanguage } from '../../context/LanguageContext';
 import { normalizeImageSrc } from '../../utils/normalizeImageSrc';
 import { seoLandingPages } from '../../utils/seoLandingPages';
@@ -117,9 +117,9 @@ const sectors = [
 ];
 
 const whyStats = [
-  { value: '10+', label: 'Years supporting Bahrain-based healthcare and industrial buyers' },
+  { value: '2012', label: 'Established Bahrain supplier supporting healthcare and industrial buyers' },
+  { value: '10-11', label: 'People across leadership, sales, accounts, IT, digital marketing, and delivery' },
   { value: 'Medical + Industrial', label: 'One operating structure supporting clinical, dental, safety, and utility requirements' },
-  { value: 'Integrated execution', label: 'Leadership, sales, accounts, and delivery working through one accountable workflow' },
   { value: 'Quality review', label: 'Supplier and product decisions guided by suitability, documentation, and continuity of supply' },
 ];
 
@@ -208,10 +208,31 @@ const HomePage = () => {
     <main className="cinematic-home" ref={rootRef}>
       <Seo
         title="Medical Suppliers in Bahrain | Leading Trading Est"
-        description="Leading Trading Est is a Bahrain medical, dental, laboratory, safety, and industrial supplier supporting clinics, hospitals, dental centers, and industrial buyers with Medstar own-brand supply, international supplier relationships, ROMSONS and SMI sole-agent support, quotation support, and dependable delivery coordination."
+        description="Leading Trading Est is a Bahrain medical, dental, laboratory, safety, and industrial supplier led by Shahid Majeed and supported by a 10-11 person operating team. LTE supports clinics, hospitals, dental centers, and industrial buyers with Medstar own-brand supply, international supplier relationships, ROMSONS and SMI sole-agent support, quotation support, and dependable delivery coordination."
         canonicalPath="/"
-        keywords="medical suppliers in Bahrain, Bahrain medical supplier, Leading Trading Est Bahrain, LTE Bahrain, Medstar Bahrain, Medstar medical supplies, ROMSONS Bahrain, SMI Bahrain, medical distributors Bahrain, medical supplies Bahrain, dental supplies Bahrain, laboratory equipment Bahrain, industrial supplies Bahrain, safety supplies Bahrain, hospital supplies Bahrain, Bahrain procurement"
-        structuredData={[organizationSchema, localBusinessSchema, webSiteSchema]}
+        keywords="medical suppliers in Bahrain, Bahrain medical supplier, Leading Trading Est Bahrain, Leading Trading Est owner, Shahid Majeed, LTE Bahrain, Medstar Bahrain, Medstar medical supplies, ROMSONS Bahrain, SMI Bahrain, medical distributors Bahrain, medical supplies Bahrain, dental supplies Bahrain, laboratory equipment Bahrain, industrial supplies Bahrain, safety supplies Bahrain, hospital supplies Bahrain, Bahrain procurement"
+        structuredData={[
+          organizationSchema,
+          localBusinessSchema,
+          webSiteSchema,
+          buildFaqSchema([
+            {
+              question: 'Who owns and leads Leading Trading Est?',
+              answer:
+                'Leading Trading Est is owned and led by Shahid Majeed, Managing Director and CEO of the company in Bahrain.',
+            },
+            {
+              question: 'How large is the Leading Trading Est team?',
+              answer:
+                'Leading Trading Est is supported by a 10-11 person team across leadership, sales, accounts and HR, delivery, IT, and digital marketing.',
+            },
+            {
+              question: 'Does Leading Trading Est supply medical products in Bahrain?',
+              answer:
+                'Leading Trading Est supports Bahrain clinics, hospitals, dental centers, laboratories, and industrial buyers with medical, dental, laboratory, safety, and industrial supply enquiries.',
+            },
+          ]),
+        ]}
       />
       <section className="home-hero">
         <div className="home-hero__ambient" />
@@ -222,7 +243,7 @@ const HomePage = () => {
             <h1 className="animate-on-scroll">{t('Reliable medical and industrial supply with disciplined sourcing, quality assurance, and dependable local support.')}</h1>
             <div className="home-hero__meta">
               <p className="animate-on-scroll">
-                {t('Leading Trading Est. supports hospitals, clinics, practices, and operational teams across Bahrain with structured sourcing, established supplier relationships, and coordinated delivery execution.')}
+                {t('Leading Trading Est. supports hospitals, clinics, practices, and operational teams across Bahrain with structured sourcing, established supplier relationships, a 10-11 person team, and coordinated delivery execution.')}
               </p>
               <div className="home-hero__actions animate-on-scroll">
                 <Link className="home-btn home-btn--primary" to="/contact?source=home">{t('Request a Quote')}</Link>
@@ -521,7 +542,7 @@ const HomePage = () => {
             <span className="home-eyebrow animate-on-scroll">{t('Why LTE')}</span>
             <h2 className="animate-on-scroll">{t('LTE is structured around accountable teams, disciplined sourcing, and support that stays clear from enquiry through delivery.')}</h2>
             <p className="animate-on-scroll">
-              {t('Our operating model is designed for customers who need dependable communication, better commercial control, and a supply partner that can support repeat requirements without losing structure.')}
+              {t('Led by Shahid Majeed, our operating model is designed for customers who need dependable communication, better commercial control, and a supply partner with real team depth across sourcing, accounts, technology, marketing, and delivery.')}
             </p>
           </div>
 

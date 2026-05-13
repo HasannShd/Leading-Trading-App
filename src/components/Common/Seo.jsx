@@ -3,10 +3,10 @@ import { absoluteUrl, SITE_ORIGIN } from '../../utils/seoSchemas';
 
 const DEFAULT_TITLE = 'Leading Trading Est | Medical & Industrial Supplies Bahrain';
 const DEFAULT_DESCRIPTION =
-  'Leading Trading Est is a Bahrain medical, dental, laboratory, safety, and industrial supplier providing Medstar own-brand supply, quotation support, and local service.';
+  'Leading Trading Est is a Bahrain medical, dental, laboratory, safety, and industrial supplier led by Shahid Majeed and supported by a 10-11 person team providing Medstar own-brand supply, quotation support, and local service.';
 const DEFAULT_IMAGE = `${SITE_ORIGIN}/company-logo.png`;
 const DEFAULT_KEYWORDS =
-  'Leading Trading Est, LTE Bahrain, medical supplies Bahrain, dental supplies Bahrain, laboratory equipment Bahrain, industrial safety supplies Bahrain, healthcare procurement Bahrain';
+  'Leading Trading Est, Shahid Majeed, Leading Trading Est owner, LTE Bahrain, medical supplies Bahrain, dental supplies Bahrain, laboratory equipment Bahrain, industrial safety supplies Bahrain, healthcare procurement Bahrain';
 const JSON_LD_ID = 'lte-page-structured-data';
 
 const upsertMeta = (selector, attributes) => {

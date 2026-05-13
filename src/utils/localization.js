@@ -260,6 +260,8 @@ export const AR_TRANSLATIONS = {
     'توريد طبي وصناعي موثوق مع توريد منظم، وضمان جودة، ودعم محلي يعتمد عليه.',
   'Leading Trading Est. supports hospitals, clinics, practices, and operational teams across Bahrain with structured sourcing, established supplier relationships, and coordinated delivery execution.':
     'تدعم مؤسسة ليدنج تريدنج المستشفيات والعيادات والممارسات والفرق التشغيلية في البحرين من خلال توريد منظم وعلاقات موردين راسخة وتنفيذ منسق للتسليم.',
+  'Leading Trading Est. supports hospitals, clinics, practices, and operational teams across Bahrain with structured sourcing, established supplier relationships, a 10-11 person team, and coordinated delivery execution.':
+    'تدعم مؤسسة ليدنج تريدنج المستشفيات والعيادات والممارسات والفرق التشغيلية في البحرين من خلال توريد منظم وعلاقات موردين راسخة وفريق من 10 إلى 11 شخصاً وتنفيذ منسق للتسليم.',
   'NHRA-Approved': 'معتمد من الهيئة الوطنية لتنظيم المهن والخدمات الصحية',
   'Medical and industrial sourcing': 'توريد طبي وصناعي',
   'Dependable Bahrain-based support': 'دعم موثوق من البحرين',
@@ -296,6 +298,10 @@ export const AR_TRANSLATIONS = {
   'LTE selection': 'اختيار LTE',
   'Open product': 'فتح المنتج',
   'Why LTE': 'لماذا LTE',
+  'Led by Shahid Majeed, our operating model is designed for customers who need dependable communication, better commercial control, and a supply partner with real team depth across sourcing, accounts, technology, marketing, and delivery.':
+    'بقيادة شاهد ماجد، تم تصميم نموذجنا التشغيلي للعملاء الذين يحتاجون إلى تواصل موثوق وضبط تجاري أفضل وشريك توريد يمتلك عمقاً حقيقياً في التوريد والحسابات والتقنية والتسويق والتسليم.',
+  'Established Bahrain supplier supporting healthcare and industrial buyers': 'مورد بحريني قائم يدعم المشترين في القطاع الصحي والصناعي',
+  'People across leadership, sales, accounts, IT, digital marketing, and delivery': 'أشخاص ضمن القيادة والمبيعات والحسابات وتقنية المعلومات والتسويق الرقمي والتسليم',
   'Next step': 'الخطوة التالية',
   'Learn More About LTE': 'اعرف المزيد عن LTE',
   'Category not available': 'الفئة غير متاحة',
@@ -353,12 +359,15 @@ export const AR_TRANSLATIONS = {
     'دعم المشتريات في البحرين من خلال توريد منظم، وضمان جودة، وتنسيق تسليم موثوق.',
   'Since 2012, Leading Trading Est has supported organizations in Bahrain across medical, dental, industrial, and safety requirements with a focus on product quality, service reliability, and professional execution.':
     'منذ عام 2012، دعمت مؤسسة ليدنج تريدنج المؤسسات في البحرين ضمن الاحتياجات الطبية وطب الأسنان والصناعية والسلامة، مع التركيز على جودة المنتجات واعتمادية الخدمة والتنفيذ المهني.',
+  'Since 2012, Leading Trading Est has supported organizations in Bahrain across medical, dental, industrial, and safety requirements under the leadership of Shahid Majeed, with a 10-11 person team focused on product quality, service reliability, and professional execution.':
+    'منذ عام 2012، دعمت مؤسسة ليدنج تريدنج المؤسسات في البحرين ضمن الاحتياجات الطبية وطب الأسنان والصناعية والسلامة بقيادة شاهد ماجد، ومن خلال فريق من 10 إلى 11 شخصاً يركز على جودة المنتجات واعتمادية الخدمة والتنفيذ المهني.',
   'Operating profile': 'الملف التشغيلي',
   'Supplier-led sourcing, structured procurement, and dependable operational follow-through.':
     'توريد قائم على الموردين، ومشتريات منظمة، ومتابعة تشغيلية موثوقة.',
   'Our business model combines supplier access, quality review, procurement discipline, logistics planning, and local account support under one coordinated operating workflow.':
     'يجمع نموذج عملنا بين الوصول إلى الموردين ومراجعة الجودة وانضباط المشتريات وتخطيط اللوجستيات ودعم الحسابات محلياً ضمن سير عمل تشغيلي منسق.',
   'company foundation': 'تأسيس الشركة',
+  'people across core operating teams': 'أشخاص ضمن فرق التشغيل الأساسية',
   'Medical': 'طبي',
   'Industrial': 'صناعي',
   'clinical and equipment supply': 'توريد سريري ومعدات',
@@ -376,7 +385,11 @@ export const AR_TRANSLATIONS = {
     'هيكل فريق قائم على القيادة والتنسيق التجاري والضبط الإداري وتنفيذ التسليم.',
   'A team structure built around leadership, commercial coordination, administrative control, delivery execution, technology, and digital visibility.':
     'هيكل فريق قائم على القيادة والتنسيق التجاري والضبط الإداري وتنفيذ التسليم والتقنية والحضور الرقمي.',
+  'A 10-11 person team structure built around leadership, commercial coordination, administrative control, delivery execution, technology, and digital visibility.':
+    'هيكل فريق من 10 إلى 11 شخصاً قائم على القيادة والتنسيق التجاري والضبط الإداري وتنفيذ التسليم والتقنية والحضور الرقمي.',
   'Managing Director & CEO': 'المدير العام والرئيس التنفيذي',
+  'Owner, Managing Director & CEO': 'المالك والمدير العام والرئيس التنفيذي',
+  'Owner of Leading Trading Est': 'مالك مؤسسة ليدنج تريدنج',
   'Sets the company’s strategic direction, strengthens supplier relationships, and maintains the service, quality, and operating standards clients expect from LTE.':
     'يحدد التوجه الاستراتيجي للشركة، ويعزز علاقات الموردين، ويحافظ على معايير الخدمة والجودة والتشغيل التي يتوقعها العملاء من LTE.',
   'Accounts & HR': 'الحسابات والموارد البشرية',
@@ -399,6 +412,10 @@ export const AR_TRANSLATIONS = {
   'Brand visibility and customer communication': 'ظهور العلامة والتواصل مع العملاء',
   'Supports LTE’s digital presence, social channels, campaign communication, and product visibility so customers can discover the company and stay connected more easily.':
     'يدعم الحضور الرقمي لـ LTE وقنوات التواصل والحملات وظهور المنتجات حتى يتمكن العملاء من اكتشاف الشركة والبقاء على تواصل بسهولة أكبر.',
+  'A 10-11 person team model that aligns leadership, sales, accounts, IT, digital marketing, and delivery under one workflow':
+    'نموذج فريق من 10 إلى 11 شخصاً يوحد القيادة والمبيعات والحسابات وتقنية المعلومات والتسويق الرقمي والتسليم ضمن مسار عمل واحد',
+  'The company operates across medical, dental, and industrial categories, combining supplier access with practical coordination on pricing, quality, lead times, stock readiness, and delivery planning. This allows LTE to support both recurring demand and urgent procurement requirements with better control and clearer accountability from a full operating team rather than a small one-person desk.':
+    'تعمل الشركة ضمن فئات طبية وطب أسنان وصناعية، وتجمع بين الوصول إلى الموردين والتنسيق العملي في الأسعار والجودة ومدد التوريد وجاهزية المخزون وتخطيط التسليم. وهذا يسمح لـ LTE بدعم الطلب المتكرر واحتياجات الشراء العاجلة بضبط أوضح ومسؤولية أكبر من خلال فريق تشغيلي كامل وليس مكتباً صغيراً لشخص واحد.',
   'Quality commitment': 'الالتزام بالجودة',
   'Working relationship': 'علاقة العمل',
 };

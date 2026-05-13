@@ -1,14 +1,14 @@
 import { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import Seo from '../Common/Seo';
-import { buildBreadcrumbSchema, localBusinessSchema, organizationSchema } from '../../utils/seoSchemas';
+import { buildBreadcrumbSchema, buildFaqSchema, localBusinessSchema, organizationSchema, shahidMajeedSchema } from '../../utils/seoSchemas';
 import { useLanguage } from '../../context/LanguageContext';
 import { useScrollReveal } from '../../hooks/useScrollReveal';
 import './About.css';
 
 const teamUnits = [
   {
-    label: 'Managing Director & CEO',
+    label: 'Owner, Managing Director & CEO',
     title: 'Shahid Majeed',
     description:
       'Sets the company’s strategic direction, strengthens supplier relationships, and maintains the service, quality, and operating standards clients expect from LTE.',
@@ -49,7 +49,7 @@ const companyPillars = [
   'Medical, dental, and industrial sourcing managed through one accountable operating structure',
   'Supplier review guided by quality, suitability, reliability, and documentation discipline',
   'Procurement and delivery coordination organized around continuity, timing, and service accountability',
-  'A team model that aligns leadership, sales, accounts, and delivery under one workflow',
+  'A 10-11 person team model that aligns leadership, sales, accounts, IT, digital marketing, and delivery under one workflow',
 ];
 
 const workflowSteps = [
@@ -86,15 +86,28 @@ const About = () => {
   <main className="about-shell" ref={rootRef}>
     <Seo
       title="About Leading Trading Est | Bahrain Medical & Industrial Supply"
-      description="Learn about Leading Trading Est, a Bahrain-based medical, dental, industrial, and safety supply business focused on quality sourcing, international supplier relationships, ROMSONS and SMI sole-agent support, and dependable delivery."
+      description="Learn about Leading Trading Est, a Bahrain-based medical, dental, industrial, and safety supply business led by Shahid Majeed and supported by a 10-11 person team focused on quality sourcing, international supplier relationships, ROMSONS and SMI sole-agent support, and dependable delivery."
       canonicalPath="/about"
-      keywords="about Leading Trading Est, Bahrain medical supplier, Bahrain industrial supplier, healthcare sourcing Bahrain, medical distributors Bahrain, ROMSONS Bahrain, SMI Bahrain, LTE Bahrain company"
+      keywords="about Leading Trading Est, Shahid Majeed, Leading Trading Est owner, Leading Trading Est CEO, Bahrain medical supplier, Bahrain industrial supplier, healthcare sourcing Bahrain, medical distributors Bahrain, ROMSONS Bahrain, SMI Bahrain, LTE Bahrain company, Leading Trading Est team"
       structuredData={[
         organizationSchema,
         localBusinessSchema,
+        shahidMajeedSchema,
         buildBreadcrumbSchema([
           { name: 'Home', path: '/' },
           { name: 'About', path: '/about' },
+        ]),
+        buildFaqSchema([
+          {
+            question: 'Who owns and leads Leading Trading Est?',
+            answer:
+              'Leading Trading Est is owned and led by Shahid Majeed, Managing Director and CEO of the company in Bahrain.',
+          },
+          {
+            question: 'How large is the Leading Trading Est team?',
+            answer:
+              'Leading Trading Est is supported by a 10-11 person team across leadership, sales, accounts and HR, delivery, IT, and digital marketing.',
+          },
         ]),
         {
           '@context': 'https://schema.org',
@@ -110,7 +123,7 @@ const About = () => {
         <span className="about-eyebrow animate-on-scroll">{t('About Leading Trading Est')}</span>
         <h1 className="animate-on-scroll">{t('Supporting procurement in Bahrain with disciplined sourcing, quality assurance, and dependable delivery coordination.')}</h1>
         <p className="animate-on-scroll">
-          {t('Since 2012, Leading Trading Est has supported organizations in Bahrain across medical, dental, industrial, and safety requirements with a focus on product quality, service reliability, and professional execution.')}
+          {t('Since 2012, Leading Trading Est has supported organizations in Bahrain across medical, dental, industrial, and safety requirements under the leadership of Shahid Majeed, with a 10-11 person team focused on product quality, service reliability, and professional execution.')}
         </p>
         <div className="about-hero-actions animate-on-scroll">
           <Link className="btn primary" to="/contact">{t('Talk to Our Team')}</Link>
@@ -130,12 +143,12 @@ const About = () => {
             <span>{t('company foundation')}</span>
           </div>
           <div className="animate-on-scroll">
-            <strong>{t('Medical')}</strong>
-            <span>{t('clinical and equipment supply')}</span>
+            <strong>10-11</strong>
+            <span>{t('people across core operating teams')}</span>
           </div>
           <div className="animate-on-scroll">
-            <strong>{t('Industrial')}</strong>
-            <span>{t('safety and operational support')}</span>
+            <strong>{t('Medical')}</strong>
+            <span>{t('clinical and equipment supply')}</span>
           </div>
         </div>
       </div>
@@ -153,7 +166,7 @@ const About = () => {
             {t('Leading Trading Est serves hospitals, clinics, practices, and operational teams that require dependable access to the right products supported by a workflow that remains organized from sourcing through delivery. The company’s focus is not only on what is supplied, but also on whether the sourcing path, documentation, timing, and handling process are strong enough to support daily operations without unnecessary disruption.')}
           </p>
           <p>
-            {t('The company operates across medical, dental, and industrial categories, combining supplier access with practical coordination on pricing, quality, lead times, stock readiness, and delivery planning. This allows LTE to support both recurring demand and urgent procurement requirements with better control and clearer accountability.')}
+            {t('The company operates across medical, dental, and industrial categories, combining supplier access with practical coordination on pricing, quality, lead times, stock readiness, and delivery planning. This allows LTE to support both recurring demand and urgent procurement requirements with better control and clearer accountability from a full operating team rather than a small one-person desk.')}
           </p>
           <p>
             {t('LTE maintains international supplier and distributor relationships to support broader product access, brand continuity, and clearer procurement options for Bahrain customers. This includes dedicated brand support and sole-agent representation for ROMSONS and SMI in Bahrain.')}
@@ -232,6 +245,7 @@ const About = () => {
           <span className="about-card-kicker">{t('Message from leadership')}</span>
           <strong>Shahid Majeed</strong>
           <small>{t('Managing Director & CEO')}</small>
+          <small>{t('Owner of Leading Trading Est')}</small>
         </div>
 
         <div className="about-leadership-copy animate-on-scroll">
@@ -248,7 +262,7 @@ const About = () => {
     <section className="about-team">
       <div className="about-section-heading animate-stagger" data-stagger-step="100ms">
         <span className="about-eyebrow animate-on-scroll">{t('Team structure')}</span>
-        <h2 className="animate-on-scroll">{t('A team structure built around leadership, commercial coordination, administrative control, delivery execution, technology, and digital visibility.')}</h2>
+        <h2 className="animate-on-scroll">{t('A 10-11 person team structure built around leadership, commercial coordination, administrative control, delivery execution, technology, and digital visibility.')}</h2>
       </div>
 
       <div className="about-team-grid animate-stagger" data-stagger-step="110ms">

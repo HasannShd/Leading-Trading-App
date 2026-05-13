@@ -14,8 +14,10 @@ const websiteLinks = [
 
 const getDownloadFilename = (response, fallbackName = 'lte-full-export.xlsx') => {
   const header = response.headers.get('content-disposition') || '';
-  const match = header.match(/filename="([^"]+)"/i);
-  return match?.[1] || fallbackName;
+  const encodedMatch = header.match(/filename\*=UTF-8''([^;]+)/i);
+  if (encodedMatch?.[1]) return decodeURIComponent(encodedMatch[1].trim().replace(/^"|"$/g, ''));
+  const match = header.match(/filename="?([^";]+)"?/i);
+  return match?.[1]?.trim() || fallbackName;
 };
 
 const downloadBlobResponse = async (response, fallbackName) => {

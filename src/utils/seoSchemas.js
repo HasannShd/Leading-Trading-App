@@ -1,5 +1,22 @@
 export const SITE_ORIGIN = 'https://www.lte-bh.com';
 
+export const shahidMajeedSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  '@id': `${SITE_ORIGIN}/#shahid-majeed`,
+  name: 'Shahid Majeed',
+  jobTitle: ['Owner', 'Managing Director', 'Chief Executive Officer'],
+  worksFor: { '@id': `${SITE_ORIGIN}/#organization` },
+};
+
+export const teamSizeSchema = {
+  '@type': 'QuantitativeValue',
+  minValue: 10,
+  maxValue: 11,
+  unitText: 'people',
+  value: '10-11',
+};
+
 export const absoluteUrl = (value = '/') => {
   if (!value) return SITE_ORIGIN;
   if (/^https?:\/\//i.test(value)) return value;
@@ -15,7 +32,10 @@ export const organizationSchema = {
   url: SITE_ORIGIN,
   logo: `${SITE_ORIGIN}/company-logo.png`,
   description:
-    'Leading Trading Est is a Bahrain medical, dental, laboratory, safety, and industrial supplier providing structured sourcing, international supplier and distributor relationships, Medstar own-brand supply, ROMSONS and SMI sole-agent support, quotation support, and local service.',
+    'Leading Trading Est is a Bahrain medical, dental, laboratory, safety, and industrial supplier led by Shahid Majeed and supported by a 10-11 person team across leadership, sales, accounts, HR, IT, digital marketing, and delivery. The company provides structured sourcing, international supplier and distributor relationships, Medstar own-brand supply, ROMSONS and SMI sole-agent support, quotation support, and local service.',
+  founder: { '@id': `${SITE_ORIGIN}/#shahid-majeed` },
+  employee: [shahidMajeedSchema],
+  numberOfEmployees: teamSizeSchema,
   brand: [
     {
       '@type': 'Brand',
@@ -39,6 +59,13 @@ export const organizationSchema = {
     'https://www.linkedin.com/company/leading-trading-est/',
   ],
   foundingDate: '2012',
+  department: [
+    { '@type': 'Organization', name: 'Sales Department' },
+    { '@type': 'Organization', name: 'Accounts & HR' },
+    { '@type': 'Organization', name: 'Delivery Team' },
+    { '@type': 'Organization', name: 'IT Department' },
+    { '@type': 'Organization', name: 'Digital Marketing' },
+  ],
   areaServed: [
     { '@type': 'Country', name: 'Bahrain' },
     { '@type': 'Place', name: 'GCC' },
@@ -73,6 +100,9 @@ export const localBusinessSchema = {
   image: `${SITE_ORIGIN}/company-logo.png`,
   logo: `${SITE_ORIGIN}/company-logo.png`,
   description: organizationSchema.description,
+  founder: organizationSchema.founder,
+  employee: organizationSchema.employee,
+  numberOfEmployees: organizationSchema.numberOfEmployees,
   sameAs: organizationSchema.sameAs,
   telephone: '+97339939582',
   email: 'admin@lte-bh.com',

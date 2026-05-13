@@ -65,6 +65,10 @@ const SeoLandingPage = () => {
             items: [
               { name: page.categoryLabel, path: page.categoryPath },
               { name: 'Product catalog', path: `/shop?q=${encodeURIComponent(page.shopQuery)}` },
+              ...(page.catalogPicks || []).map((item) => ({
+                name: item.name,
+                path: `/shop?q=${encodeURIComponent(item.query || item.name)}`,
+              })),
               ...related.map((item) => ({ name: item.title, path: `/solutions/${item.slug}` })),
             ],
           }),
@@ -119,6 +123,29 @@ const SeoLandingPage = () => {
           <Link to="/contact?source=seo">Send requirement</Link>
         </aside>
       </section>
+
+      {!!page.catalogPicks?.length && (
+        <section className="seo-landing-shell seo-landing-products">
+          <div>
+            <span className="seo-landing-eyebrow">Catalogue Picks</span>
+            <h2>{page.catalogPicksTitle || 'Relevant catalogue items'}</h2>
+          </div>
+          <div className="seo-landing-product-grid">
+            {page.catalogPicks.map((item) => (
+              <Link
+                key={`${item.name}-${item.category}`}
+                className="seo-landing-product-card"
+                to={`/shop?q=${encodeURIComponent(item.query || item.name)}`}
+              >
+                <small>{item.category}</small>
+                <strong>{item.name}</strong>
+                <p>{item.useCase}</p>
+                <span>Search catalogue</span>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
 
       <section className="seo-landing-shell seo-landing-faq">
         <div>

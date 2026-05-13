@@ -290,10 +290,6 @@ const Header = () => {
             )}
           </div>
 
-          <NavLink to="/shop" onClick={() => setMobileNav(false)}>
-            {t('Products')}
-          </NavLink>
-
           <NavLink to="/catalog" onClick={() => setMobileNav(false)}>
             {t('Catalog')}
           </NavLink>
