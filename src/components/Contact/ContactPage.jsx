@@ -8,6 +8,39 @@ import './ContactPage.css';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY || '';
+const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || '';
+const GOOGLE_MAPS_MAP_ID = import.meta.env.VITE_GOOGLE_MAPS_MAP_ID || '';
+
+const STORE_LOCATOR_CONFIGURATION = {
+  locations: [
+    {
+      title: 'Leading Trading Est',
+      address1: 'Office 109, Building 658, Road 16, Block 616, Warehousing World',
+      address2: 'Um Al-Baidh, Sitra, Bahrain',
+      coords: { lat: 26.1151676, lng: 50.6307677 },
+      placeId: 'ChIJKzQkkBirST4RQLnYDx5O4Zc',
+    },
+  ],
+  mapOptions: {
+    center: { lat: 26.1151676, lng: 50.6307677 },
+    fullscreenControl: true,
+    mapTypeControl: false,
+    streetViewControl: false,
+    zoom: 15,
+    zoomControl: true,
+    maxZoom: 17,
+    mapId: GOOGLE_MAPS_MAP_ID,
+  },
+  mapsApiKey: GOOGLE_MAPS_API_KEY,
+  capabilities: {
+    input: true,
+    autocomplete: true,
+    directions: true,
+    distanceMatrix: true,
+    details: true,
+    actions: false,
+  },
+};
 
 const ContactPage = () => {
   const { t } = useLanguage();
@@ -39,6 +72,8 @@ const ContactPage = () => {
   const [turnstileToken, setTurnstileToken] = useState('');
   const turnstileRef = useRef(null);
   const turnstileWidgetIdRef = useRef(null);
+  const locatorRef = useRef(null);
+  const apiLoaderRef = useRef(null);
 
   const handleChange = (e) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -135,6 +170,42 @@ const ContactPage = () => {
         window.turnstile.remove(turnstileWidgetIdRef.current);
       }
       turnstileWidgetIdRef.current = null;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!GOOGLE_MAPS_API_KEY || !locatorRef.current || !apiLoaderRef.current) return undefined;
+
+    let cancelled = false;
+    apiLoaderRef.current.setAttribute('key', GOOGLE_MAPS_API_KEY);
+
+    const configureLocator = async () => {
+      if (typeof customElements === 'undefined' || !customElements.whenDefined) return;
+      await customElements.whenDefined('gmpx-store-locator');
+      if (cancelled || !locatorRef.current?.configureFromQuickBuilder) return;
+      locatorRef.current.configureFromQuickBuilder(STORE_LOCATOR_CONFIGURATION);
+    };
+
+    const loadScript = () => {
+      const existing = document.querySelector('script[data-google-store-locator="true"]');
+      if (existing) {
+        existing.addEventListener('load', configureLocator, { once: true });
+        configureLocator();
+        return;
+      }
+
+      const script = document.createElement('script');
+      script.type = 'module';
+      script.src = 'https://ajax.googleapis.com/ajax/libs/@googlemaps/extended-component-library/0.6.11/index.min.js';
+      script.dataset.googleStoreLocator = 'true';
+      script.addEventListener('load', configureLocator, { once: true });
+      document.head.appendChild(script);
+    };
+
+    loadScript();
+
+    return () => {
+      cancelled = true;
     };
   }, []);
 
@@ -290,14 +361,21 @@ const ContactPage = () => {
         </form>
       </div>
       <div className="contact-info-block">
-        <iframe
-          className="contact-map"
-          src={businessMapsEmbedUrl}
-          title="LTE Location"
-          allowFullScreen=""
-          loading="lazy"
-          referrerPolicy="no-referrer-when-downgrade"
-        ></iframe>
+        {GOOGLE_MAPS_API_KEY ? (
+          <div className="contact-store-locator">
+            <gmpx-api-loader ref={apiLoaderRef} solution-channel="GMP_QB_locatorplus_v11_cABCDE"></gmpx-api-loader>
+            <gmpx-store-locator ref={locatorRef} map-id={GOOGLE_MAPS_MAP_ID}></gmpx-store-locator>
+          </div>
+        ) : (
+          <iframe
+            className="contact-map"
+            src={businessMapsEmbedUrl}
+            title="LTE Location"
+            allowFullScreen=""
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+          ></iframe>
+        )}
         <div className="contact-info-details">
           <div className="contact-info-title">{t('Get in touch')}</div>
           <div><a href="tel:+97339939582">+97339939582</a></div>
