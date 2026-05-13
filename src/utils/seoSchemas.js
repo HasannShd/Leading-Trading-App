@@ -1,4 +1,4 @@
-import { BUSINESS_HOURS, businessAddress, businessContact } from './businessProfile.js';
+import { BUSINESS_HOURS, businessAddress, businessContact, businessMapsUrl } from './businessProfile.js';
 
 export const SITE_ORIGIN = 'https://www.lte-bh.com';
 
@@ -108,6 +108,7 @@ export const localBusinessSchema = {
   sameAs: organizationSchema.sameAs,
   telephone: businessContact.telephone,
   email: businessContact.email,
+  hasMap: businessMapsUrl,
   address: {
     '@type': 'PostalAddress',
     ...businessAddress,
@@ -137,6 +138,7 @@ export const medicalOrganizationSchema = {
   address: localBusinessSchema.address,
   telephone: localBusinessSchema.telephone,
   email: localBusinessSchema.email,
+  hasMap: localBusinessSchema.hasMap,
   openingHoursSpecification: localBusinessSchema.openingHoursSpecification,
   areaServed: localBusinessSchema.areaServed,
   sameAs: organizationSchema.sameAs,

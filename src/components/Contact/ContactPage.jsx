@@ -3,7 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import Seo from '../Common/Seo';
 import { buildBreadcrumbSchema, localBusinessSchema, medicalOrganizationSchema, organizationSchema } from '../../utils/seoSchemas';
 import { useLanguage } from '../../context/LanguageContext';
-import { BUSINESS_HOURS } from '../../utils/businessProfile';
+import { BUSINESS_HOURS, businessMapsEmbedUrl, businessMapsUrl } from '../../utils/businessProfile';
 import './ContactPage.css';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
@@ -292,7 +292,7 @@ const ContactPage = () => {
       <div className="contact-info-block">
         <iframe
           className="contact-map"
-          src="https://www.google.com/maps?q=Warehousing%20world%2C%20Um%20Al-Baidh%2C%20Sitra%2C%20Bahrain&output=embed"
+          src={businessMapsEmbedUrl}
           title="LTE Location"
           allowFullScreen=""
           loading="lazy"
@@ -308,7 +308,7 @@ const ContactPage = () => {
           </div>
           <div className="contact-info-title">{t('Location')}</div>
           <div>
-            <a href="https://maps.app.goo.gl/1Qw2Qw3Qw4Qw5Qw6A" target="_blank" rel="noopener noreferrer">
+            <a href={businessMapsUrl} target="_blank" rel="noopener noreferrer">
               Office 109, Building 658, Road 16, Block 616<br />
               Warehousing World, Um Al-Baidh<br />
               Sitra, Capital Governorate BH

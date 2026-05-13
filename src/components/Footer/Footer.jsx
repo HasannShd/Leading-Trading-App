@@ -1,6 +1,7 @@
 import { FaInstagram, FaLinkedinIn, FaLocationDot, FaPhone, FaRegClock } from 'react-icons/fa6';
 import { MdEmail } from 'react-icons/md';
 import { useLanguage } from '../../context/LanguageContext';
+import { businessMapsUrl } from '../../utils/businessProfile';
 import './Footer.css';
 
 // Footer: App-wide footer with contact info, location, hours, and social links
@@ -37,8 +38,10 @@ const Footer = () => {
           <div className="footer-col">
             <div className="footer-title"><FaLocationDot /> {t('Location')}</div>
             <div className="footer-text">
-              <a href="https://maps.app.goo.gl/1Qw2Qw3Qw4Qw5Qw6A" target="_blank" rel="noopener noreferrer">
-                Warehousing world, Um Al-Baidh<br />Sitra, Capital Governorate BH
+              <a href={businessMapsUrl} target="_blank" rel="noopener noreferrer">
+                Office 109, Building 658, Road 16, Block 616<br />
+                Warehousing World, Um Al-Baidh<br />
+                Sitra, Capital Governorate BH
               </a>
             </div>
           </div>
