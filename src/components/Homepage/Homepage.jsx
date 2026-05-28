@@ -463,9 +463,9 @@ const HomePage = () => {
           </div>
 
           <div className="seo-guide-strip animate-stagger" data-stagger-step="70ms">
+            <span className="seo-guide-strip__label animate-on-scroll">{t('Related guides')}</span>
             {seoLandingPages.map((page) => (
               <Link className="seo-guide-chip animate-on-scroll" key={page.slug} to={`/solutions/${page.slug}`}>
-                <small>{t('Guide')}</small>
                 <span>{page.shortTitle}</span>
               </Link>
             ))}
