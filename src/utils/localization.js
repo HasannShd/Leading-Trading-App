@@ -291,11 +291,15 @@ export const AR_TRANSLATIONS = {
   'NHRA approved | Bahrain supply partner': 'معتمد من الهيئة الوطنية لتنظيم المهن والخدمات الصحية | شريك توريد في البحرين',
   'Certified local sourcing for medical, dental, laboratory, PPE, safety, and industrial requirements, with clear quotation support and dependable delivery coordination.':
     'توريد محلي معتمد للاحتياجات الطبية وطب الأسنان والمختبرات ومعدات الوقاية والسلامة والصناعة، مع دعم واضح لعروض الأسعار وتنسيق موثوق للتسليم.',
+  'Local sourcing for medical, dental, laboratory, PPE, safety, and industrial requirements, with clear quotation support and dependable delivery coordination.':
+    'توريد محلي للاحتياجات الطبية وطب الأسنان والمختبرات ومعدات الوقاية والسلامة والصناعة، مع دعم واضح لعروض الأسعار وتنسيق موثوق للتسليم.',
   'NHRA approved and certified': 'معتمد ومرخص من الهيئة الوطنية لتنظيم المهن والخدمات الصحية',
   'Medical, dental, and PPE sourcing': 'توريد طبي وطب أسنان ومعدات وقاية',
   'Bahrain quotation support': 'دعم عروض الأسعار في البحرين',
   'Authorized operations app': 'تطبيق عمليات مخصص للمصرح لهم',
   'Company credential': 'اعتماد الشركة',
+  'Supply coverage': 'نطاق التوريد',
+  'Medical, dental & industrial sourcing': 'توريد طبي وطب أسنان وصناعي',
   'NHRA approved and certified company': 'شركة معتمدة ومرخصة من الهيئة الوطنية لتنظيم المهن والخدمات الصحية',
   'Supporting Bahrain healthcare and industrial buyers with structured sourcing, product review, quotation handling, and delivery follow-through.':
     'ندعم المشترين في القطاع الصحي والصناعي في البحرين من خلال توريد منظم ومراجعة المنتجات وإدارة عروض الأسعار ومتابعة التسليم.',

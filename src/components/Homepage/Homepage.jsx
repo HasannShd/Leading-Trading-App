@@ -118,7 +118,7 @@ const sectors = [
 ];
 
 const whyStats = [
-  { value: 'NHRA Approved', label: 'Certified company supporting regulated medical supply requirements in Bahrain' },
+  { value: 'NHRA approved', label: 'Certified company supporting regulated medical supply requirements in Bahrain' },
   { value: '2012', label: 'Established Bahrain supplier supporting healthcare and industrial buyers' },
   { value: 'Medical + Industrial', label: 'One operating structure supporting clinical, dental, safety, and utility requirements' },
   { value: 'Quality review', label: 'Supplier and product decisions guided by suitability, documentation, and continuity of supply' },
@@ -247,10 +247,10 @@ const HomePage = () => {
         <div className="home-shell home-hero__layout">
           <div className="home-hero__editorial">
             <div className="home-hero__copy animate-stagger" data-stagger-step="120ms">
-              <span className="home-eyebrow animate-on-scroll">{t('NHRA approved | Bahrain supply partner')}</span>
+              <span className="home-eyebrow animate-on-scroll">{t('Leading Trading Est. | Bahrain')}</span>
               <h1 className="animate-on-scroll">{t('Leading Trading Est')}</h1>
               <p className="home-hero__lead animate-on-scroll">
-                {t('Certified local sourcing for medical, dental, laboratory, PPE, safety, and industrial requirements, with clear quotation support and dependable delivery coordination.')}
+                {t('Local sourcing for medical, dental, laboratory, PPE, safety, and industrial requirements, with clear quotation support and dependable delivery coordination.')}
               </p>
               <div className="home-hero__actions animate-on-scroll">
                 <Link className="home-btn home-btn--primary" to="/contact?source=home">{t('Request a Quote')}</Link>
@@ -261,7 +261,6 @@ const HomePage = () => {
                 {t('Leading Trading Est is the official business website and operations app for Bahrain supply enquiries and authorized staff workflows. The website supports product browsing, quotation requests, procurement communication, and authorized catalog, order, client, attendance, message, notification, and backup workflows.')}
               </p>
               <div className="home-hero__notes animate-stagger" data-stagger-step="90ms">
-                <span className="animate-on-scroll">{t('NHRA approved and certified')}</span>
                 <span className="animate-on-scroll">{t('Medical, dental, and PPE sourcing')}</span>
                 <span className="animate-on-scroll">{t('Bahrain quotation support')}</span>
                 <span className="animate-on-scroll">{t('Authorized operations app')}</span>
@@ -275,8 +274,8 @@ const HomePage = () => {
                 <img src={`${baseUrl}company-logo.png`} alt="Leading Trading Est" loading="eager" decoding="async" />
               </div>
               <div>
-                <span>{t('Company credential')}</span>
-                <strong>{t('NHRA approved and certified company')}</strong>
+                <span>{t('Supply coverage')}</span>
+                <strong>{t('Medical, dental & industrial sourcing')}</strong>
               </div>
             </div>
             <p className="animate-on-scroll">
