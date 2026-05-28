@@ -118,8 +118,8 @@ const sectors = [
 ];
 
 const whyStats = [
+  { value: 'NHRA Approved', label: 'Certified company supporting regulated medical supply requirements in Bahrain' },
   { value: '2012', label: 'Established Bahrain supplier supporting healthcare and industrial buyers' },
-  { value: '10-11', label: 'People across leadership, sales, accounts, IT, digital marketing, and delivery' },
   { value: 'Medical + Industrial', label: 'One operating structure supporting clinical, dental, safety, and utility requirements' },
   { value: 'Quality review', label: 'Supplier and product decisions guided by suitability, documentation, and continuity of supply' },
 ];
@@ -209,7 +209,7 @@ const HomePage = () => {
     <main className="cinematic-home" ref={rootRef}>
       <Seo
         title="Leading Trading Est | Bahrain Medical & Industrial Supplies"
-        description="Leading Trading Est is the official business website and operations app for Bahrain supply enquiries, catalogs, orders, clients, staff workflows, messages, attendance, notifications, and backups."
+        description="Leading Trading Est is an NHRA approved and certified Bahrain supplier for medical, dental, laboratory, PPE, safety, and industrial supply enquiries, quotation support, and procurement coordination."
         canonicalPath="/"
         keywords="Leading Trading Est, Leading Trading Est Bahrain, medical suppliers in Bahrain, Bahrain medical supplier, Leading Trading Est owner, Shahid Majeed, LTE Bahrain, Medstar Bahrain, Medstar medical supplies, ROMSONS Bahrain, SMI Bahrain, medical distributors Bahrain, medical supplies Bahrain, dental supplies Bahrain, laboratory equipment Bahrain, industrial supplies Bahrain, safety supplies Bahrain, hospital supplies Bahrain, Bahrain procurement"
         structuredData={[
@@ -229,9 +229,9 @@ const HomePage = () => {
                 'Leading Trading Est is owned and led by Shahid Majeed, Managing Director and CEO of the company in Bahrain.',
             },
             {
-              question: 'How large is the Leading Trading Est team?',
+              question: 'Is Leading Trading Est NHRA approved?',
               answer:
-                'Leading Trading Est is supported by a 10-11 person team across leadership, sales, accounts and HR, delivery, IT, and digital marketing.',
+                'Leading Trading Est is an NHRA approved and certified company supporting regulated medical supply requirements and procurement enquiries in Bahrain.',
             },
             {
               question: 'Does Leading Trading Est supply medical products in Bahrain?',
@@ -244,30 +244,55 @@ const HomePage = () => {
       <section className="home-hero">
         <div className="home-hero__ambient" />
         <div className="home-hero__depth" aria-hidden="true" data-hero-parallax="bg" />
-        <div className="home-shell home-hero__editorial">
-          <div className="home-hero__copy animate-stagger" data-stagger-step="120ms">
-            <span className="home-eyebrow animate-on-scroll">{t('Leading Trading Est. | Bahrain')}</span>
-            <h1 className="animate-on-scroll">{t('Leading Trading Est')}</h1>
-            <div className="home-hero__meta">
-              <p className="animate-on-scroll">
-                {t('Leading Trading Est is the official business website and operations app for Bahrain supply enquiries and authorized staff workflows. It helps buyers browse products and request quotations while staff and admins manage catalog workflows, orders, clients, attendance, messages, notifications, and Google Drive backup operations.')}
-              </p>
-              <p className="home-hero__app-copy animate-on-scroll">
-                {t('The public website also supports Bahrain medical, dental, laboratory, safety, and industrial buyers with product browsing, quotation requests, and procurement communication.')}
+        <div className="home-shell home-hero__layout">
+          <div className="home-hero__editorial">
+            <div className="home-hero__copy animate-stagger" data-stagger-step="120ms">
+              <span className="home-eyebrow animate-on-scroll">{t('NHRA approved | Bahrain supply partner')}</span>
+              <h1 className="animate-on-scroll">{t('Leading Trading Est')}</h1>
+              <p className="home-hero__lead animate-on-scroll">
+                {t('Certified local sourcing for medical, dental, laboratory, PPE, safety, and industrial requirements, with clear quotation support and dependable delivery coordination.')}
               </p>
               <div className="home-hero__actions animate-on-scroll">
                 <Link className="home-btn home-btn--primary" to="/contact?source=home">{t('Request a Quote')}</Link>
                 <Link className="home-btn home-btn--ghost" to="/categories">{t('Explore Categories')}</Link>
-                <Link className="home-btn home-btn--ghost" to="/privacy">{t('Privacy Policy')}</Link>
+                <Link className="home-btn home-btn--text" to="/privacy">{t('Privacy Policy')}</Link>
+              </div>
+              <p className="home-hero__app-copy animate-on-scroll">
+                {t('Leading Trading Est is the official business website and operations app for Bahrain supply enquiries and authorized staff workflows. The website supports product browsing, quotation requests, procurement communication, and authorized catalog, order, client, attendance, message, notification, and backup workflows.')}
+              </p>
+              <div className="home-hero__notes animate-stagger" data-stagger-step="90ms">
+                <span className="animate-on-scroll">{t('NHRA approved and certified')}</span>
+                <span className="animate-on-scroll">{t('Medical, dental, and PPE sourcing')}</span>
+                <span className="animate-on-scroll">{t('Bahrain quotation support')}</span>
+                <span className="animate-on-scroll">{t('Authorized operations app')}</span>
               </div>
             </div>
-            <div className="home-hero__notes animate-stagger" data-stagger-step="90ms">
-              <span className="animate-on-scroll">{t('Official Leading Trading Est app')}</span>
-              <span className="animate-on-scroll">{t('Documentation Support')}</span>
-              <span className="animate-on-scroll">{t('Medical and industrial sourcing')}</span>
-              <span className="animate-on-scroll">{t('Dependable Bahrain-based support')}</span>
-            </div>
           </div>
+
+          <aside className="home-hero__credential-card animate-stagger" data-stagger-step="100ms" aria-label={t('Leading Trading Est credentials')}>
+            <div className="credential-card__top animate-on-scroll">
+              <div className="credential-card__seal">
+                <img src={`${baseUrl}company-logo.png`} alt="Leading Trading Est" loading="eager" decoding="async" />
+              </div>
+              <div>
+                <span>{t('Company credential')}</span>
+                <strong>{t('NHRA approved and certified company')}</strong>
+              </div>
+            </div>
+            <p className="animate-on-scroll">
+              {t('Supporting Bahrain healthcare and industrial buyers with structured sourcing, product review, quotation handling, and delivery follow-through.')}
+            </p>
+            <div className="credential-card__grid animate-stagger" data-stagger-step="70ms">
+              {['Medical supplies', 'Dental products', 'Laboratory items', 'Safety and industrial'].map((item) => (
+                <span className="animate-on-scroll" key={item}>{t(item)}</span>
+              ))}
+            </div>
+            <div className="credential-card__brands animate-on-scroll">
+              {mainBrands.slice(0, 4).map((brand) => (
+                <img src={`${baseUrl}${brand.logo}`} alt={brand.name} key={brand.name} loading="lazy" decoding="async" />
+              ))}
+            </div>
+          </aside>
         </div>
 
         <div className="home-shell home-hero__metrics animate-stagger" data-stagger-step="120ms">

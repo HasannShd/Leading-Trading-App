@@ -27,10 +27,10 @@
 .header-row {
   display: flex;
   align-items: center;
-  gap: 18px;
-  width: min(var(--page-max), calc(100% - 32px));
+  gap: 14px;
+  width: min(1500px, calc(100% - 44px));
   margin: 0 auto;
-  padding: 0 18px;
+  padding: 0 16px;
   max-width: none;
   min-height: 62px;
   position: relative;
@@ -42,12 +42,12 @@
 .brand {
   display: inline-flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
   color: #f8f3eb;
   text-decoration: none;
-  flex: 0 1 280px;
+  flex: 0 0 clamp(310px, 22vw, 390px);
   min-width: 0;
-  max-width: 300px;
+  max-width: 390px;
 }
 
 .header.scrolled .brand,
@@ -56,9 +56,10 @@
 }
 
 .brand-mark {
-  width: 50px;
-  height: 50px;
-  border-radius: 20px;
+  width: 46px;
+  height: 46px;
+  flex: 0 0 46px;
+  border-radius: 18px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -89,9 +90,9 @@
 }
 
 .brand-copy strong {
-  font-size: 1.02rem;
+  font-size: 0.96rem;
   line-height: 1.05;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.035em;
   text-transform: uppercase;
   white-space: nowrap;
   overflow: hidden;
@@ -99,8 +100,8 @@
 }
 
 .brand-copy span {
-  font-size: 0.72rem;
-  letter-spacing: 0.18em;
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   opacity: 0.72;
   white-space: nowrap;
@@ -112,8 +113,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  flex: 1 1 auto;
+  gap: 4px;
+  flex: 0 1 auto;
   min-width: 0;
   overflow: visible;
 }
@@ -121,11 +122,11 @@
 .nav a,
 .nav .nav-dropdown-toggle {
   color: rgba(248, 243, 235, 0.88);
-  font-size: 0.96rem;
+  font-size: 0.92rem;
   font-weight: 600;
   letter-spacing: 0.02em;
   text-decoration: none;
-  padding: 10px 16px;
+  padding: 9px 12px;
   border-radius: 999px;
   border: 1px solid transparent;
   transition: color 0.2s ease, background 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
@@ -425,13 +426,15 @@
 }
 
 .header-flex-spacer {
-  display: none;
+  display: block;
+  flex: 1 1 auto;
+  min-width: 8px;
 }
 
 .header-actions-desktop {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   flex-shrink: 0;
 }
 
@@ -440,8 +443,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 46px;
-  padding: 0 18px;
+  min-height: 42px;
+  padding: 0 15px;
   border-radius: 999px;
   border: 1px solid rgba(255, 255, 255, 0.16);
   background: rgba(255, 255, 255, 0.1);
@@ -450,7 +453,7 @@
 }
 
 .language-toggle {
-  min-width: 50px;
+  min-width: 46px;
   font-family: inherit;
   cursor: pointer;
 }
@@ -522,14 +525,14 @@
 @media (max-width: 1240px) {
   .header-row {
     gap: 10px;
-    width: min(100% - 24px, var(--page-max));
-    padding: 0 14px;
+    width: calc(100% - 24px);
+    padding: 0 12px;
   }
 
   .brand {
     gap: 10px;
-    flex-basis: 220px;
-    max-width: 230px;
+    flex: 0 0 300px;
+    max-width: 300px;
   }
 
   .brand-mark {
@@ -539,7 +542,7 @@
   }
 
   .brand-copy strong {
-    font-size: 0.88rem;
+    font-size: 0.84rem;
     letter-spacing: 0.025em;
   }
 
@@ -553,8 +556,8 @@
 
   .nav a,
   .nav .nav-dropdown-toggle {
-    padding: 9px 9px;
-    font-size: 0.88rem;
+    padding: 8px 8px;
+    font-size: 0.84rem;
     letter-spacing: 0.01em;
   }
 
@@ -565,25 +568,36 @@
   .language-toggle,
   .header-actions-desktop .btn {
     min-height: 40px;
-    padding: 0 12px;
+    padding: 0 11px;
+  }
+}
+
+@media (max-width: 1120px) {
+  .brand {
+    flex-basis: 286px;
+    max-width: 286px;
+  }
+
+  .header-actions-desktop a[href^='tel:'] {
+    display: none;
   }
 }
 
 @media (max-width: 980px) {
   .brand {
-    flex-basis: 190px;
-    max-width: 200px;
+    flex-basis: 266px;
+    max-width: 266px;
   }
 
   .nav a,
   .nav .nav-dropdown-toggle {
-    padding: 8px 8px;
-    font-size: 0.84rem;
+    padding: 8px 7px;
+    font-size: 0.8rem;
   }
 
   .header-actions-desktop .btn {
     min-height: 42px;
-    padding: 0 10px;
+    padding: 0 9px;
   }
 }
 
@@ -625,6 +639,10 @@
     margin-left: auto;
   }
 
+  .header-flex-spacer {
+    display: none;
+  }
+
   .nav {
     display: none !important;
   }
@@ -634,6 +652,7 @@
   }
 
   .brand {
+    flex: 1 1 auto;
     min-width: 0;
     max-width: calc(100vw - 74px);
   }
@@ -849,6 +868,7 @@
 
   .brand {
     gap: 10px;
+    flex: 1 1 auto;
     max-width: calc(100vw - 78px);
   }
 

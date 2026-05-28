@@ -74,7 +74,7 @@ const Footer = () => {
         <div className="footer-trust">
           <span>{t('Established 2012')}</span>
           <span>{t('Owner and Managing Director: Shahid Majeed')}</span>
-          <span>{t('10-11 person Bahrain team')}</span>
+          <span>{t('NHRA approved and certified company')}</span>
           <span>{t('Commercial and regulatory documents shared during qualified quotation review')}</span>
         </div>
       </div>

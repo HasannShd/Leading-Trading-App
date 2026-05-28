@@ -288,12 +288,22 @@ export const AR_TRANSLATIONS = {
     'توريد طبي وصناعي موثوق مع توريد منظم، وضمان جودة، ودعم محلي يعتمد عليه.',
   'Leading Trading Est. supports hospitals, clinics, practices, and operational teams across Bahrain with structured sourcing, established supplier relationships, and coordinated delivery execution.':
     'تدعم مؤسسة ليدنج تريدنج المستشفيات والعيادات والممارسات والفرق التشغيلية في البحرين من خلال توريد منظم وعلاقات موردين راسخة وتنفيذ منسق للتسليم.',
-  'Leading Trading Est. supports hospitals, clinics, practices, and operational teams across Bahrain with structured sourcing, established supplier relationships, a 10-11 person team, and coordinated delivery execution.':
-    'تدعم مؤسسة ليدنج تريدنج المستشفيات والعيادات والممارسات والفرق التشغيلية في البحرين من خلال توريد منظم وعلاقات موردين راسخة وفريق من 10 إلى 11 شخصاً وتنفيذ منسق للتسليم.',
-  'NHRA-Approved': 'معتمد من الهيئة الوطنية لتنظيم المهن والخدمات الصحية',
-  'Documentation Support': 'دعم المستندات',
-  'Medical and industrial sourcing': 'توريد طبي وصناعي',
-  'Dependable Bahrain-based support': 'دعم موثوق من البحرين',
+  'NHRA approved | Bahrain supply partner': 'معتمد من الهيئة الوطنية لتنظيم المهن والخدمات الصحية | شريك توريد في البحرين',
+  'Certified local sourcing for medical, dental, laboratory, PPE, safety, and industrial requirements, with clear quotation support and dependable delivery coordination.':
+    'توريد محلي معتمد للاحتياجات الطبية وطب الأسنان والمختبرات ومعدات الوقاية والسلامة والصناعة، مع دعم واضح لعروض الأسعار وتنسيق موثوق للتسليم.',
+  'NHRA approved and certified': 'معتمد ومرخص من الهيئة الوطنية لتنظيم المهن والخدمات الصحية',
+  'Medical, dental, and PPE sourcing': 'توريد طبي وطب أسنان ومعدات وقاية',
+  'Bahrain quotation support': 'دعم عروض الأسعار في البحرين',
+  'Authorized operations app': 'تطبيق عمليات مخصص للمصرح لهم',
+  'Company credential': 'اعتماد الشركة',
+  'NHRA approved and certified company': 'شركة معتمدة ومرخصة من الهيئة الوطنية لتنظيم المهن والخدمات الصحية',
+  'Supporting Bahrain healthcare and industrial buyers with structured sourcing, product review, quotation handling, and delivery follow-through.':
+    'ندعم المشترين في القطاع الصحي والصناعي في البحرين من خلال توريد منظم ومراجعة المنتجات وإدارة عروض الأسعار ومتابعة التسليم.',
+  'Medical supplies': 'مستلزمات طبية',
+  'Dental products': 'منتجات طب الأسنان',
+  'Laboratory items': 'مواد ومستلزمات المختبرات',
+  'Safety and industrial': 'السلامة والصناعة',
+  'Leading Trading Est credentials': 'اعتمادات مؤسسة ليدنج تريدنج',
   'How LTE creates value': 'كيف تقدم LTE القيمة',
   'Our business model combines supplier access, quality review, logistics planning, and customer follow-through.':
     'يجمع نموذج عملنا بين الوصول إلى الموردين ومراجعة الجودة وتخطيط الخدمات اللوجستية والمتابعة مع العملاء.',
@@ -330,7 +340,7 @@ export const AR_TRANSLATIONS = {
   'Led by Shahid Majeed, our operating model is designed for customers who need dependable communication, better commercial control, and a supply partner with real team depth across sourcing, accounts, technology, marketing, and delivery.':
     'بقيادة شاهد ماجد، تم تصميم نموذجنا التشغيلي للعملاء الذين يحتاجون إلى تواصل موثوق وضبط تجاري أفضل وشريك توريد يمتلك عمقاً حقيقياً في التوريد والحسابات والتقنية والتسويق والتسليم.',
   'Established Bahrain supplier supporting healthcare and industrial buyers': 'مورد بحريني قائم يدعم المشترين في القطاع الصحي والصناعي',
-  'People across leadership, sales, accounts, IT, digital marketing, and delivery': 'أشخاص ضمن القيادة والمبيعات والحسابات وتقنية المعلومات والتسويق الرقمي والتسليم',
+  'Certified company supporting regulated medical supply requirements in Bahrain': 'شركة معتمدة تدعم متطلبات التوريد الطبي المنظم في البحرين',
   'Next step': 'الخطوة التالية',
   'Learn More About LTE': 'اعرف المزيد عن LTE',
   'Category not available': 'الفئة غير متاحة',

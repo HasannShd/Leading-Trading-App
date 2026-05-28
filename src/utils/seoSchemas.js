@@ -12,12 +12,13 @@ export const shahidMajeedSchema = {
   worksFor: { '@id': `${SITE_ORIGIN}/#organization` },
 };
 
-export const teamSizeSchema = {
-  '@type': 'QuantitativeValue',
-  minValue: 10,
-  maxValue: 11,
-  unitText: 'people',
-  value: '10-11',
+export const companyCertificationSchema = {
+  '@type': 'Certification',
+  name: 'NHRA approved and certified company',
+  issuedBy: {
+    '@type': 'Organization',
+    name: 'National Health Regulatory Authority Bahrain',
+  },
 };
 
 export const absoluteUrl = (value = '/') => {
@@ -35,10 +36,11 @@ export const organizationSchema = {
   url: SITE_ORIGIN,
   logo: `${SITE_ORIGIN}/company-logo.png`,
   description:
-    'Leading Trading Est is a Bahrain medical, dental, laboratory, safety, and industrial supplier led by Shahid Majeed and supported by a 10-11 person team across leadership, sales, accounts, HR, IT, digital marketing, and delivery. The company provides structured sourcing, international supplier and distributor relationships, Medstar own-brand supply, ROMSONS and SMI sole-agent support, quotation support, and local service.',
+    'Leading Trading Est is an NHRA approved and certified Bahrain medical, dental, laboratory, safety, and industrial supplier led by Shahid Majeed. The company provides structured sourcing, international supplier and distributor relationships, Medstar own-brand supply, ROMSONS and SMI sole-agent support, quotation support, and local service.',
   founder: { '@id': `${SITE_ORIGIN}/#shahid-majeed` },
   employee: [shahidMajeedSchema],
-  numberOfEmployees: teamSizeSchema,
+  hasCredential: companyCertificationSchema,
+  award: 'NHRA approved and certified company',
   brand: [
     {
       '@type': 'Brand',
@@ -120,7 +122,8 @@ export const localBusinessSchema = {
   description: organizationSchema.description,
   founder: organizationSchema.founder,
   employee: organizationSchema.employee,
-  numberOfEmployees: organizationSchema.numberOfEmployees,
+  hasCredential: organizationSchema.hasCredential,
+  award: organizationSchema.award,
   sameAs: organizationSchema.sameAs,
   telephone: businessContact.telephone,
   email: businessContact.email,
