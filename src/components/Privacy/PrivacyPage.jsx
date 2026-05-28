@@ -1,17 +1,18 @@
 import Seo from '../Common/Seo';
-import { buildBreadcrumbSchema, organizationSchema, localBusinessSchema } from '../../utils/seoSchemas';
+import { buildBreadcrumbSchema, businessApplicationSchema, organizationSchema, localBusinessSchema } from '../../utils/seoSchemas';
 import './PrivacyPage.css';
 
 const PrivacyPage = () => (
   <main className="privacy-page">
     <Seo
       title="Privacy Policy | Leading Trading Est Bahrain"
-      description="Privacy policy for Leading Trading Est website enquiries, quotation requests, RFQ attachments, careers submissions, and business contact handling in Bahrain."
+      description="Privacy policy for Leading Trading Est website enquiries, quotation requests, RFQ attachments, careers submissions, portal access, backups, and business contact handling in Bahrain."
       canonicalPath="/privacy"
       keywords="Leading Trading Est privacy policy, LTE Bahrain data privacy, Bahrain RFQ privacy, medical supplier privacy policy"
       structuredData={[
         organizationSchema,
         localBusinessSchema,
+        businessApplicationSchema,
         buildBreadcrumbSchema([
           { name: 'Home', path: '/' },
           { name: 'Privacy Policy', path: '/privacy' },
@@ -19,12 +20,14 @@ const PrivacyPage = () => (
       ]}
     />
     <section className="privacy-shell">
-      <span className="privacy-eyebrow">Website Policy</span>
-      <h1>Privacy Policy</h1>
+      <span className="privacy-eyebrow">Leading Trading Est Website Policy</span>
+      <h1>Leading Trading Est Privacy Policy</h1>
       <p>
-        Leading Trading Est uses website forms to receive business enquiries, quotation requests, RFQ documents,
-        careers submissions, and support messages. The information is used only to review the request, respond to the
-        sender, prepare quotations, coordinate product availability, or evaluate a submitted career profile.
+        Leading Trading Est is the official business website and operations app for public supply enquiries,
+        quotation requests, staff, admin, catalog, backup, and business operations workflows. The company uses website
+        forms to receive business enquiries, quotation requests, RFQ documents, careers submissions, and support
+        messages. The information is used only to review the request, respond to the sender, prepare quotations,
+        coordinate product availability, manage internal operations, or evaluate a submitted career profile.
       </p>
 
       <div className="privacy-grid">
@@ -51,6 +54,22 @@ const PrivacyPage = () => (
             Optional RFQ attachments are restricted to common business document formats and are forwarded to the
             relevant LTE team for review. Upload validation is used to reduce unsafe file types and protect the enquiry
             workflow.
+          </p>
+        </article>
+        <article>
+          <h2>Portal Access</h2>
+          <p>
+            Staff and admin portal records may include account details, role information, attendance records, client
+            visits, orders, messages, notifications, and audit activity required to operate the business. Access is
+            limited to authorized Leading Trading Est users.
+          </p>
+        </article>
+        <article>
+          <h2>Google Drive Backup Access</h2>
+          <p>
+            If Leading Trading Est connects to Google Drive for backup operations, Google access is used only to
+            create, read, or manage business backup archives in the configured Leading Trading Est Drive folder. Google
+            Drive data is not sold, used for advertising, or shared outside the operational backup workflow.
           </p>
         </article>
         <article>

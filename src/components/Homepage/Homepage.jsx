@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Seo from '../Common/Seo';
-import { buildFaqSchema, localBusinessSchema, organizationSchema, webSiteSchema } from '../../utils/seoSchemas';
+import { buildFaqSchema, businessApplicationSchema, localBusinessSchema, organizationSchema, webSiteSchema } from '../../utils/seoSchemas';
 import { useLanguage } from '../../context/LanguageContext';
 import { normalizeImageSrc } from '../../utils/normalizeImageSrc';
 import { buildProductPath } from '../../utils/productUrls';
@@ -208,15 +208,21 @@ const HomePage = () => {
   return (
     <main className="cinematic-home" ref={rootRef}>
       <Seo
-        title="Medical Suppliers in Bahrain | Leading Trading Est"
-        description="Leading Trading Est is a Bahrain medical, dental, laboratory, safety, and industrial supplier led by Shahid Majeed and supported by a 10-11 person operating team. LTE supports clinics, hospitals, dental centers, and industrial buyers with Medstar own-brand supply, international supplier relationships, ROMSONS and SMI sole-agent support, quotation support, and dependable delivery coordination."
+        title="Leading Trading Est | Bahrain Medical & Industrial Supplies"
+        description="Leading Trading Est is the official business website and operations app for Bahrain supply enquiries, catalogs, orders, clients, staff workflows, messages, attendance, notifications, and backups."
         canonicalPath="/"
-        keywords="medical suppliers in Bahrain, Bahrain medical supplier, Leading Trading Est Bahrain, Leading Trading Est owner, Shahid Majeed, LTE Bahrain, Medstar Bahrain, Medstar medical supplies, ROMSONS Bahrain, SMI Bahrain, medical distributors Bahrain, medical supplies Bahrain, dental supplies Bahrain, laboratory equipment Bahrain, industrial supplies Bahrain, safety supplies Bahrain, hospital supplies Bahrain, Bahrain procurement"
+        keywords="Leading Trading Est, Leading Trading Est Bahrain, medical suppliers in Bahrain, Bahrain medical supplier, Leading Trading Est owner, Shahid Majeed, LTE Bahrain, Medstar Bahrain, Medstar medical supplies, ROMSONS Bahrain, SMI Bahrain, medical distributors Bahrain, medical supplies Bahrain, dental supplies Bahrain, laboratory equipment Bahrain, industrial supplies Bahrain, safety supplies Bahrain, hospital supplies Bahrain, Bahrain procurement"
         structuredData={[
           organizationSchema,
           localBusinessSchema,
+          businessApplicationSchema,
           webSiteSchema,
           buildFaqSchema([
+            {
+              question: 'What is the purpose of the Leading Trading Est website and app?',
+              answer:
+                'Leading Trading Est helps Bahrain buyers send supply enquiries and helps authorized staff and admins manage business operations including catalog workflows, orders, clients, attendance, messages, notifications, and backup coordination.',
+            },
             {
               question: 'Who owns and leads Leading Trading Est?',
               answer:
@@ -241,17 +247,22 @@ const HomePage = () => {
         <div className="home-shell home-hero__editorial">
           <div className="home-hero__copy animate-stagger" data-stagger-step="120ms">
             <span className="home-eyebrow animate-on-scroll">{t('Leading Trading Est. | Bahrain')}</span>
-            <h1 className="animate-on-scroll">{t('Reliable medical and industrial supply with disciplined sourcing, quality assurance, and dependable local support.')}</h1>
+            <h1 className="animate-on-scroll">{t('Leading Trading Est')}</h1>
             <div className="home-hero__meta">
               <p className="animate-on-scroll">
-                {t('Leading Trading Est. supports hospitals, clinics, practices, and operational teams across Bahrain with structured sourcing, established supplier relationships, a 10-11 person team, and coordinated delivery execution.')}
+                {t('Leading Trading Est is the official business website and operations app for Bahrain supply enquiries and authorized staff workflows. It helps buyers browse products and request quotations while staff and admins manage catalog workflows, orders, clients, attendance, messages, notifications, and Google Drive backup operations.')}
+              </p>
+              <p className="home-hero__app-copy animate-on-scroll">
+                {t('The public website also supports Bahrain medical, dental, laboratory, safety, and industrial buyers with product browsing, quotation requests, and procurement communication.')}
               </p>
               <div className="home-hero__actions animate-on-scroll">
                 <Link className="home-btn home-btn--primary" to="/contact?source=home">{t('Request a Quote')}</Link>
                 <Link className="home-btn home-btn--ghost" to="/categories">{t('Explore Categories')}</Link>
+                <Link className="home-btn home-btn--ghost" to="/privacy">{t('Privacy Policy')}</Link>
               </div>
             </div>
             <div className="home-hero__notes animate-stagger" data-stagger-step="90ms">
+              <span className="animate-on-scroll">{t('Official Leading Trading Est app')}</span>
               <span className="animate-on-scroll">{t('Documentation Support')}</span>
               <span className="animate-on-scroll">{t('Medical and industrial sourcing')}</span>
               <span className="animate-on-scroll">{t('Dependable Bahrain-based support')}</span>

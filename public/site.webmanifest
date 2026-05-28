@@ -1,7 +1,7 @@
 {
   "name": "Leading Trading Est",
-  "short_name": "LTE",
-  "description": "Leading Trading Est admin, staff, and catalog web app.",
+  "short_name": "Leading Trading Est",
+  "description": "Official Leading Trading Est website and business operations app for supply enquiries, catalogs, orders, clients, staff workflows, messages, attendance, notifications, and backups.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

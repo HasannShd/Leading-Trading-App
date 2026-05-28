@@ -94,6 +94,21 @@ export const organizationSchema = {
   ],
 };
 
+export const businessApplicationSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  '@id': `${SITE_ORIGIN}/#business-application`,
+  name: 'Leading Trading Est',
+  alternateName: ['Leading Trading Est staff portal', 'Leading Trading Est admin portal'],
+  applicationCategory: 'BusinessApplication',
+  operatingSystem: 'Web',
+  url: SITE_ORIGIN,
+  creator: { '@id': `${SITE_ORIGIN}/#organization` },
+  publisher: { '@id': `${SITE_ORIGIN}/#organization` },
+  description:
+    'Leading Trading Est is the official business website and operations app for authorized staff and admins to manage catalog workflows, orders, clients, attendance, messages, notifications, and backup coordination.',
+};
+
 export const localBusinessSchema = {
   '@context': 'https://schema.org',
   '@type': ['LocalBusiness', 'MedicalBusiness'],

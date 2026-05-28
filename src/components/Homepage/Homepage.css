@@ -168,6 +168,15 @@
   line-height: 1.84;
 }
 
+.home-hero__copy .home-hero__app-copy {
+  max-width: 56ch;
+  padding-left: 16px;
+  border-left: 2px solid rgba(212, 160, 103, 0.72);
+  color: rgba(248, 243, 235, 0.82);
+  font-size: 0.98rem;
+  line-height: 1.65;
+}
+
 .home-hero__actions,
 .final-cta__actions {
   display: flex;
