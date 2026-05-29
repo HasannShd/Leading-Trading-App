@@ -195,6 +195,10 @@ export const AR_TRANSLATIONS = {
     'أرسل احتياجك، أو اطلب مرجعاً من الكتالوج، أو تواصل مع فريق LTE لدعم التوفر والتوريد.',
   'Bahrain supply support': 'دعم توريد في البحرين',
   'Documents shared during quotation review': 'تتم مشاركة المستندات أثناء مراجعة عرض السعر',
+  'Google Maps': 'خرائط Google',
+  'Find Leading Trading Est at Warehousing World, Um Al-Baidh, Sitra.':
+    'اعثر على مؤسسة ليدنج تريدنج في Warehousing World، أم البيض، سترة.',
+  'Open Google Maps': 'فتح خرائط Google',
   'All rights reserved.': 'جميع الحقوق محفوظة.',
   'Email or Username': 'البريد الإلكتروني أو اسم المستخدم',
   'Enter your email or username': 'أدخل بريدك الإلكتروني أو اسم المستخدم',
@@ -333,6 +337,9 @@ export const AR_TRANSLATIONS = {
   'Sector focus': 'تركيز القطاعات',
   'One operating model supporting two sectors with different technical needs but the same requirement for dependable execution.':
     'نموذج تشغيلي واحد يدعم قطاعين باحتياجات فنية مختلفة، مع نفس الحاجة إلى تنفيذ موثوق.',
+  'Representative products from the LTE catalog.': 'منتجات تمثيلية من كتالوج LTE.',
+  'A quick preview of active product types, brands, and categories that buyers can use as a starting point for quotation requests.':
+    'معاينة سريعة لأنواع المنتجات والعلامات والفئات المتاحة ليستخدمها المشترون كنقطة بداية لطلبات عروض الأسعار.',
   'LTE serves medical and industrial buyers through the same standards of supplier assessment, quality review, logistics coordination, and local customer support.':
     'تخدم LTE المشترين في القطاعين الطبي والصناعي بنفس معايير تقييم الموردين ومراجعة الجودة وتنسيق اللوجستيات والدعم المحلي.',
   'Trusted brands and institutions': 'علامات ومؤسسات موثوقة',

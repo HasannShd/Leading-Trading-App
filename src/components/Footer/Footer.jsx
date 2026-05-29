@@ -1,7 +1,7 @@
 import { FaInstagram, FaLinkedinIn, FaLocationDot, FaPhone, FaRegClock } from 'react-icons/fa6';
 import { MdEmail } from 'react-icons/md';
 import { useLanguage } from '../../context/LanguageContext';
-import { businessMapsUrl } from '../../utils/businessProfile';
+import { businessMapsEmbedUrl, businessMapsUrl } from '../../utils/businessProfile';
 import './Footer.css';
 
 const Footer = () => {
@@ -76,6 +76,23 @@ const Footer = () => {
           <span>{t('Established 2012')}</span>
           <span>{t('Bahrain supply support')}</span>
           <span>{t('Documents shared during quotation review')}</span>
+        </div>
+
+        <div className="footer-map">
+          <div className="footer-map__copy">
+            <span className="footer-title"><FaLocationDot /> {t('Google Maps')}</span>
+            <p>{t('Find Leading Trading Est at Warehousing World, Um Al-Baidh, Sitra.')}</p>
+            <a href={businessMapsUrl} target="_blank" rel="noopener noreferrer">
+              {t('Open Google Maps')}
+            </a>
+          </div>
+          <iframe
+            title="Leading Trading Est Google Maps location"
+            src={businessMapsEmbedUrl}
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+            allowFullScreen
+          />
         </div>
       </div>
 

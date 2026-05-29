@@ -512,10 +512,12 @@ const HomePage = () => {
           {spotlightProducts.length > 0 ? (
             <div className="featured-showcase">
               <div className="featured-showcase__intro animate-stagger" data-stagger-step="110ms">
-                <span className="home-eyebrow home-eyebrow--ink animate-on-scroll">{t('Selected product highlights')}</span>
-                <h3 className="animate-on-scroll">{t('A focused look at representative products across the LTE catalog.')}</h3>
+                <div>
+                  <span className="home-eyebrow home-eyebrow--ink animate-on-scroll">{t('Selected product highlights')}</span>
+                  <h3 className="animate-on-scroll">{t('Representative products from the LTE catalog.')}</h3>
+                </div>
                 <p className="animate-on-scroll">
-                  {t('These highlights give a clearer sense of the products, categories, and practical use cases LTE supports across medical, dental, and industrial operations.')}
+                  {t('A quick preview of active product types, brands, and categories that buyers can use as a starting point for quotation requests.')}
                 </p>
               </div>
 
