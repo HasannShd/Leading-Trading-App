@@ -4,7 +4,6 @@ import { useLanguage } from '../../context/LanguageContext';
 import { businessMapsUrl } from '../../utils/businessProfile';
 import './Footer.css';
 
-// Footer: App-wide footer with contact info, location, hours, and social links
 const Footer = () => {
   const { t } = useLanguage();
 
@@ -21,17 +20,17 @@ const Footer = () => {
             </div>
             <div className="footer-brand-copy">
               <span className="footer-eyebrow">{t('Leading Trading Est')}</span>
-              <h2>{t('Supply support built for clinical, dental, and operational teams.')}</h2>
+              <h2>{t('Ready for the next quotation?')}</h2>
+              <p>
+                {t('Send a requirement, request a catalog reference, or contact the LTE team for availability and sourcing support.')}
+              </p>
             </div>
           </div>
-          <p className="footer-tagline">
-            {t('Trusted sourcing, dependable manufacturer access, and responsive account support for organizations across Bahrain.')}
-          </p>
           <div className="footer-cta-row">
             <a className="footer-cta" href="tel:+97317210665">{t('Call Us')}</a>
             <a className="footer-cta outline" href="https://wa.me/97317210665" target="_blank" rel="noopener noreferrer">{t('WhatsApp')}</a>
             <a className="footer-cta outline" href="/catalog">{t('Catalog')}</a>
-            <a className="footer-cta outline" href="/resources">{t('Resources')}</a>
+            <a className="footer-cta outline" href="/privacy">{t('Privacy Policy')}</a>
           </div>
         </div>
 
@@ -48,16 +47,9 @@ const Footer = () => {
           </div>
 
           <div className="footer-col">
-            <div className="footer-title"><MdEmail /> {t('Reach Out')}</div>
+            <div className="footer-title"><MdEmail /> {t('Contact')}</div>
             <div className="footer-text">
               <a href="mailto:admin@lte-bh.com">admin@lte-bh.com</a><br />
-              <a href="tel:+97317210665">+97317210665</a>
-            </div>
-          </div>
-
-          <div className="footer-col">
-            <div className="footer-title"><FaPhone /> {t('Direct')}</div>
-            <div className="footer-text">
               <a href="tel:+97317210665">{t('Office')}: +97317210665</a><br />
               <a href="https://wa.me/97317210665" target="_blank" rel="noopener noreferrer">{t('WhatsApp support')}</a>
             </div>
@@ -69,13 +61,21 @@ const Footer = () => {
               <div>{t('Sat – Thu: 8:00am – 4:00pm')}</div>
             </div>
           </div>
+
+          <div className="footer-col">
+            <div className="footer-title"><FaPhone /> {t('Resources')}</div>
+            <div className="footer-text">
+              <a href="/catalog">{t('Catalog')}</a><br />
+              <a href="/resources">{t('Resources')}</a><br />
+              <a href="/privacy">{t('Privacy Policy')}</a>
+            </div>
+          </div>
         </div>
 
         <div className="footer-trust">
           <span>{t('Established 2012')}</span>
-          <span>{t('Owner and Managing Director: Shahid Majeed')}</span>
-          <span>{t('NHRA approved and certified company')}</span>
-          <span>{t('Commercial and regulatory documents shared during qualified quotation review')}</span>
+          <span>{t('Bahrain supply support')}</span>
+          <span>{t('Documents shared during quotation review')}</span>
         </div>
       </div>
 

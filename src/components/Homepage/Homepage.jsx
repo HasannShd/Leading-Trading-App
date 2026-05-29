@@ -255,7 +255,6 @@ const HomePage = () => {
               <div className="home-hero__actions animate-on-scroll">
                 <Link className="home-btn home-btn--primary" to="/contact?source=home">{t('Request a Quote')}</Link>
                 <Link className="home-btn home-btn--ghost" to="/categories">{t('Explore Categories')}</Link>
-                <Link className="home-btn home-btn--text" to="/privacy">{t('Privacy Policy')}</Link>
               </div>
               <p className="home-hero__app-copy animate-on-scroll">
                 {t('Leading Trading Est is the official business website and operations app for Bahrain supply enquiries and authorized staff workflows. The website supports product browsing, quotation requests, procurement communication, and authorized catalog, order, client, attendance, message, notification, and backup workflows.')}
@@ -274,18 +273,22 @@ const HomePage = () => {
                 <img src={`${baseUrl}company-logo.png`} alt="Leading Trading Est" loading="eager" decoding="async" />
               </div>
               <div>
-                <span>{t('Supply coverage')}</span>
-                <strong>{t('Medical, dental & industrial sourcing')}</strong>
+                <span>{t('Quotation workflow')}</span>
+                <strong>{t('From requirement to delivery')}</strong>
               </div>
             </div>
             <p className="animate-on-scroll">
-              {t('Supporting Bahrain healthcare and industrial buyers with structured sourcing, product review, quotation handling, and delivery follow-through.')}
+              {t('A clearer route for product requests, availability checks, quotation handling, and delivery coordination.')}
             </p>
-            <div className="credential-card__grid animate-stagger" data-stagger-step="70ms">
-              {['Medical supplies', 'Dental products', 'Laboratory items', 'Safety and industrial'].map((item) => (
-                <span className="animate-on-scroll" key={item}>{t(item)}</span>
+            <ol className="credential-card__steps animate-stagger" data-stagger-step="70ms">
+              {['Requirement review', 'Product matching', 'Delivery coordination'].map((item, index) => (
+                <li className="animate-on-scroll" key={item}>
+                  <span>{String(index + 1).padStart(2, '0')}</span>
+                  {t(item)}
+                </li>
               ))}
-            </div>
+            </ol>
+            <span className="credential-card__brand-label animate-on-scroll">{t('Selected brand access')}</span>
             <div className="credential-card__brands animate-on-scroll">
               {mainBrands.slice(0, 4).map((brand) => (
                 <img src={`${baseUrl}${brand.logo}`} alt={brand.name} key={brand.name} loading="lazy" decoding="async" />

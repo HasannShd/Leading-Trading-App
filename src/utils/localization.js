@@ -190,6 +190,11 @@ export const AR_TRANSLATIONS = {
   'Sat – Thu: 8:00am – 4:00pm': 'السبت - الخميس: 8:00 صباحاً - 4:00 مساءً',
   'Supply support built for clinical, dental, and operational teams.': 'دعم توريد مصمم للفرق الطبية وفرق طب الأسنان والتشغيل.',
   'Trusted sourcing, dependable manufacturer access, and responsive account support for organizations across Bahrain.': 'توريد موثوق، ووصول إلى المصنعين، ودعم سريع للحسابات للمؤسسات في البحرين.',
+  'Ready for the next quotation?': 'جاهز لعرض السعر التالي؟',
+  'Send a requirement, request a catalog reference, or contact the LTE team for availability and sourcing support.':
+    'أرسل احتياجك، أو اطلب مرجعاً من الكتالوج، أو تواصل مع فريق LTE لدعم التوفر والتوريد.',
+  'Bahrain supply support': 'دعم توريد في البحرين',
+  'Documents shared during quotation review': 'تتم مشاركة المستندات أثناء مراجعة عرض السعر',
   'All rights reserved.': 'جميع الحقوق محفوظة.',
   'Email or Username': 'البريد الإلكتروني أو اسم المستخدم',
   'Enter your email or username': 'أدخل بريدك الإلكتروني أو اسم المستخدم',
@@ -300,6 +305,13 @@ export const AR_TRANSLATIONS = {
   'Company credential': 'اعتماد الشركة',
   'Supply coverage': 'نطاق التوريد',
   'Medical, dental & industrial sourcing': 'توريد طبي وطب أسنان وصناعي',
+  'From requirement to delivery': 'من الاحتياج إلى التسليم',
+  'A clearer route for product requests, availability checks, quotation handling, and delivery coordination.':
+    'مسار أوضح لطلبات المنتجات وفحص التوفر وإدارة عروض الأسعار وتنسيق التسليم.',
+  'Requirement review': 'مراجعة الاحتياج',
+  'Product matching': 'مطابقة المنتج',
+  'Delivery coordination': 'تنسيق التسليم',
+  'Selected brand access': 'وصول إلى علامات مختارة',
   'NHRA approved and certified company': 'شركة معتمدة ومرخصة من الهيئة الوطنية لتنظيم المهن والخدمات الصحية',
   'Supporting Bahrain healthcare and industrial buyers with structured sourcing, product review, quotation handling, and delivery follow-through.':
     'ندعم المشترين في القطاع الصحي والصناعي في البحرين من خلال توريد منظم ومراجعة المنتجات وإدارة عروض الأسعار ومتابعة التسليم.',
