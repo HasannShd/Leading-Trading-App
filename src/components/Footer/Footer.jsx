@@ -36,17 +36,6 @@ const Footer = () => {
 
         <div className="footer-grid">
           <div className="footer-col">
-            <div className="footer-title"><FaLocationDot /> {t('Location')}</div>
-            <div className="footer-text">
-              <a href={businessMapsUrl} target="_blank" rel="noopener noreferrer">
-                Office 109, Building 658, Road 16, Block 616<br />
-                Warehousing World, Um Al-Baidh<br />
-                Sitra, Capital Governorate BH
-              </a>
-            </div>
-          </div>
-
-          <div className="footer-col">
             <div className="footer-title"><MdEmail /> {t('Contact')}</div>
             <div className="footer-text">
               <a href="mailto:admin@lte-bh.com">admin@lte-bh.com</a><br />
