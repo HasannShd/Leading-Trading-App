@@ -1664,10 +1664,10 @@
 
 /* Refined headline — prominent but not overwhelming */
 .home-hero__editorial .home-hero__copy h1 {
-  font-size: clamp(3.2rem, 5.9vw, 6.45rem);
+  font-size: clamp(3.1rem, 5.65vw, 6.1rem);
   max-width: 13ch;
   letter-spacing: -0.052em;
-  line-height: 0.92;
+  line-height: 1.04;
   margin: 16px 0 0;
   text-shadow: 0 18px 42px rgba(4, 8, 18, 0.38);
 }
