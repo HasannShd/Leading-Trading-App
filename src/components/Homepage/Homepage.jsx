@@ -256,13 +256,13 @@ const HomePage = () => {
                 <Link className="home-btn home-btn--primary" to="/contact?source=home">{t('Request a Quote')}</Link>
                 <Link className="home-btn home-btn--ghost" to="/categories">{t('Explore Categories')}</Link>
               </div>
-              <p className="home-hero__app-copy animate-on-scroll">
-                {t('Leading Trading Est is the official business website and operations app for Bahrain supply enquiries and authorized staff workflows. The website supports product browsing, quotation requests, procurement communication, and authorized catalog, order, client, attendance, message, notification, and backup workflows.')}
+              <p className="home-hero__statement animate-on-scroll">
+                {t('Browse categories, check catalog coverage, and contact LTE for product sourcing, quotation support, and delivery coordination across Bahrain.')}
               </p>
               <div className="home-hero__notes animate-stagger" data-stagger-step="90ms">
-                <span className="animate-on-scroll">{t('Medical, dental, and PPE sourcing')}</span>
+                <span className="animate-on-scroll">{t('Medical and dental sourcing')}</span>
+                <span className="animate-on-scroll">{t('Laboratory and PPE support')}</span>
                 <span className="animate-on-scroll">{t('Bahrain quotation support')}</span>
-                <span className="animate-on-scroll">{t('Authorized operations app')}</span>
               </div>
             </div>
           </div>

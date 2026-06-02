@@ -107,10 +107,17 @@
 }
 
 .home-hero {
-  padding: 150px 0 132px;
+  position: relative;
+  padding: 138px 0 72px;
   min-height: calc(100vh - 72px);
+  min-height: calc(100dvh - 72px);
   display: grid;
-  align-content: center;
+  align-content: end;
+  overflow: hidden;
+  background:
+    linear-gradient(90deg, rgba(3, 8, 16, 0.92) 0%, rgba(6, 15, 28, 0.8) 34%, rgba(9, 24, 40, 0.34) 66%, rgba(9, 24, 40, 0.16) 100%),
+    linear-gradient(180deg, rgba(3, 8, 16, 0.48) 0%, rgba(3, 8, 16, 0.14) 46%, rgba(245, 241, 232, 0.82) 100%),
+    url('/lp.jpg') center / cover no-repeat;
 }
 
 .home-hero__ambient {
@@ -166,15 +173,6 @@
   color: rgba(239, 230, 217, 0.9);
   font-size: 1.08rem;
   line-height: 1.84;
-}
-
-.home-hero__copy .home-hero__app-copy {
-  max-width: 72ch;
-  padding-left: 16px;
-  border-left: 2px solid rgba(212, 160, 103, 0.62);
-  color: rgba(248, 243, 235, 0.68);
-  font-size: 0.92rem;
-  line-height: 1.72;
 }
 
 .home-hero__actions,
@@ -1661,15 +1659,15 @@
 
 .home-hero__editorial {
   width: 100%;
-  max-width: 900px;
+  max-width: 760px;
+  text-align: left;
 }
 
 /* Refined ambient — subtle gold warmth, soft vertical fade */
 .home-hero .home-hero__ambient {
   background:
-    radial-gradient(circle at 16% 18%, rgba(212, 160, 103, 0.17), transparent 28%),
-    radial-gradient(circle at 80% 26%, rgba(80, 134, 171, 0.15), transparent 30%),
-    linear-gradient(180deg, rgba(4, 10, 18, 0.95) 0%, rgba(8, 18, 32, 0.82) 45%, rgba(10, 22, 40, 0.1) 100%);
+    radial-gradient(circle at 18% 24%, rgba(212, 160, 103, 0.2), transparent 24%),
+    linear-gradient(180deg, rgba(4, 10, 18, 0.28), rgba(4, 10, 18, 0.04));
 }
 
 .home-hero__editorial .home-hero__copy {
@@ -1677,15 +1675,16 @@
 }
 
 .home-hero__editorial .home-eyebrow {
+  justify-content: flex-start;
   color: rgba(248, 243, 235, 0.88);
 }
 
 /* Refined headline — prominent but not overwhelming */
 .home-hero__editorial .home-hero__copy h1 {
-  font-size: clamp(2.85rem, 5.05vw, 5.35rem);
+  font-size: clamp(3.2rem, 6.1vw, 6.6rem);
   max-width: 11.8ch;
   letter-spacing: -0.032em;
-  line-height: 1.13;
+  line-height: 0.98;
   margin: 16px 0 0;
   text-shadow: 0 18px 42px rgba(4, 8, 18, 0.38);
   text-wrap: balance;
@@ -1696,29 +1695,25 @@
 }
 
 .home-hero__lead {
-  margin: 32px 0 0;
-  max-width: 68ch;
+  margin: 28px 0 0;
+  max-width: 54ch;
   color: rgba(239, 230, 217, 0.9);
   font-size: clamp(1.05rem, 1.45vw, 1.28rem);
   line-height: 1.75;
 }
 
-.home-hero__editorial .home-hero__copy .home-hero__app-copy {
-  margin-top: 48px;
-  max-width: 74ch;
-  padding: 24px 26px;
-  border: 1px solid rgba(248, 243, 235, 0.12);
-  border-left: 4px solid rgba(212, 160, 103, 0.72);
-  border-radius: 24px;
-  background: rgba(248, 243, 235, 0.065);
-  color: rgba(248, 243, 235, 0.74);
-  font-size: 0.96rem;
-  line-height: 1.82;
+.home-hero__statement {
+  margin-top: 30px;
+  max-width: 52ch;
+  color: rgba(248, 243, 235, 0.72);
+  font-size: 0.98rem;
+  line-height: 1.84;
 }
 
 .home-hero__actions {
-  margin-top: 44px;
+  margin-top: 36px;
   gap: 18px;
+  justify-content: flex-start;
 }
 
 .home-btn--text {
@@ -1739,26 +1734,36 @@
 
 /* Trust pills */
 .home-hero__editorial .home-hero__notes {
-  margin-top: 44px;
+  margin-top: 32px;
   gap: 14px;
+  justify-content: flex-start;
 }
 
 .home-hero__metrics {
-  margin-top: 84px;
-  gap: 22px;
-  max-width: 1120px;
+  margin-top: 64px;
+  gap: 0;
+  max-width: 1160px;
+  border-top: 1px solid rgba(248, 243, 235, 0.12);
+  border-bottom: 1px solid rgba(248, 243, 235, 0.09);
 }
 
 .hero-metric {
-  min-height: 150px;
+  min-height: 118px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background:
-    linear-gradient(180deg, rgba(248, 243, 235, 0.15), rgba(248, 243, 235, 0.07)),
-    rgba(9, 22, 36, 0.58);
-  border-color: rgba(248, 243, 235, 0.15);
-  box-shadow: 0 22px 44px rgba(3, 8, 16, 0.18), inset 0 1px 0 rgba(248, 243, 235, 0.08);
+  padding: 24px 28px;
+  border: 0;
+  border-right: 1px solid rgba(248, 243, 235, 0.1);
+  border-radius: 0;
+  color: #f8f3eb;
+  background: rgba(7, 17, 31, 0.2);
+  box-shadow: none;
+  backdrop-filter: blur(10px);
+}
+
+.hero-metric:last-child {
+  border-right: 0;
 }
 
 .hero-metric strong {
@@ -1792,13 +1797,15 @@
   }
 
   .home-hero {
-    padding: 104px 0 64px;
+    padding: 112px 0 72px;
     min-height: auto;
     align-content: start;
+    background-position: 58% center;
   }
 
   .home-hero__editorial {
-    width: min(100% - 24px, 520px);
+    width: 100%;
+    max-width: 520px;
   }
 
   .home-eyebrow {
@@ -1826,17 +1833,14 @@
   }
 
   .home-hero__lead,
-  .home-hero__app-copy {
+  .home-hero__statement {
     max-width: 100%;
     font-size: 0.93rem;
     line-height: 1.62;
   }
 
-  .home-hero__editorial .home-hero__copy .home-hero__app-copy {
+  .home-hero__statement {
     margin-top: 32px;
-    padding: 20px;
-    border-radius: 20px;
-    border-left-width: 2px;
   }
 
   .home-hero__actions {
@@ -1859,6 +1863,7 @@
     display: grid;
     grid-template-columns: 1fr;
     gap: 10px;
+    justify-content: stretch;
   }
 
   .home-hero__notes span {
@@ -1898,7 +1903,7 @@
   }
 
   .home-hero__lead,
-  .home-hero__app-copy {
+  .home-hero__statement {
     font-size: 0.9rem;
   }
 
