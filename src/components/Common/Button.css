@@ -12,6 +12,8 @@
   font-size: 0.96rem;
   cursor: pointer;
   white-space: nowrap;
+  max-width: 100%;
+  text-align: center;
   border: 1px solid rgba(19, 48, 78, 0.13);
   transition:
     transform 0.2s cubic-bezier(0.23, 1, 0.32, 1),
@@ -41,6 +43,13 @@
 .btn:active {
   transform: translateY(0) scale(0.98);
   box-shadow: 0 4px 12px rgba(7, 17, 31, 0.08);
+}
+
+.btn:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 3px rgba(168, 119, 68, 0.16),
+    0 0 0 6px rgba(168, 119, 68, 0.08);
 }
 
 /* ── Primary (gold) ─────────────────── */
@@ -75,4 +84,12 @@
   cursor: not-allowed;
   box-shadow: none;
   transform: none;
+}
+
+@media (max-width: 520px) {
+  .btn {
+    min-height: 48px;
+    white-space: normal;
+    line-height: 1.18;
+  }
 }

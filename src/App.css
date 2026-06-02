@@ -231,8 +231,8 @@ select:focus-visible {
 @media (max-width: 780px) {
   .mobile-action-bar {
     position: fixed;
-    left: 10px;
-    right: 10px;
+    left: max(10px, env(safe-area-inset-left));
+    right: max(10px, env(safe-area-inset-right));
     bottom: max(10px, env(safe-area-inset-bottom));
     z-index: 80;
     display: grid;
@@ -247,15 +247,36 @@ select:focus-visible {
   }
 
   .mobile-action-bar a {
-    min-height: 44px;
+    min-width: 0;
+    min-height: 48px;
     display: grid;
+    grid-template-rows: 18px auto;
     place-items: center;
+    gap: 3px;
     border-radius: 14px;
     color: #fffaf1;
     text-decoration: none;
-    font-size: 0.78rem;
+    font-size: 0.72rem;
     font-weight: 900;
+    line-height: 1;
     background: rgba(255, 255, 255, 0.08);
+  }
+
+  .mobile-action-bar a:active {
+    transform: scale(0.97);
+  }
+
+  .mobile-action-bar svg {
+    width: 17px;
+    height: 17px;
+    stroke-width: 2.4;
+  }
+
+  .mobile-action-bar span {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .mobile-action-bar a:nth-child(3) {

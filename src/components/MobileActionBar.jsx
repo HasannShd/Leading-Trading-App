@@ -1,4 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
+import { FiFileText, FiGrid, FiMessageCircle, FiPhone } from 'react-icons/fi';
 import { useLanguage } from '../context/LanguageContext';
 
 const MobileActionBar = () => {
@@ -8,6 +9,8 @@ const MobileActionBar = () => {
   if (
     pathname.startsWith('/admin') ||
     pathname.startsWith('/staff') ||
+    pathname.startsWith('/categories') ||
+    pathname.startsWith('/catalog/pdf') ||
     pathname.startsWith('/sign-in') ||
     pathname.startsWith('/sign-up') ||
     pathname.startsWith('/checkout')
@@ -17,10 +20,22 @@ const MobileActionBar = () => {
 
   return (
     <nav className="mobile-action-bar" aria-label="Quick actions">
-      <a href="tel:+97317210665">{t('Call')}</a>
-      <a href="https://wa.me/97317210665" target="_blank" rel="noreferrer">{t('WhatsApp')}</a>
-      <Link to="/contact?source=mobile-sticky">{t('Quote')}</Link>
-      <Link to="/categories">{t('Categories')}</Link>
+      <a href="tel:+97317210665">
+        <FiPhone aria-hidden="true" />
+        <span>{t('Call')}</span>
+      </a>
+      <a href="https://wa.me/97317210665" target="_blank" rel="noreferrer">
+        <FiMessageCircle aria-hidden="true" />
+        <span>{t('WhatsApp')}</span>
+      </a>
+      <Link to="/contact?source=mobile-sticky">
+        <FiFileText aria-hidden="true" />
+        <span>{t('Quote')}</span>
+      </Link>
+      <Link to="/categories">
+        <FiGrid aria-hidden="true" />
+        <span>{t('Categories')}</span>
+      </Link>
     </nav>
   );
 };

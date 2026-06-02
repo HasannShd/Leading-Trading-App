@@ -40,7 +40,7 @@
   margin: 18px 0 0;
   font-size: clamp(2.4rem, 4.2vw, 4.1rem);
   line-height: 0.98;
-  letter-spacing: -0.05em;
+  letter-spacing: 0;
   color: #f8f3eb;
 }
 
@@ -139,7 +139,7 @@
   color: var(--navy-900);
   font-size: 1.18rem;
   line-height: 1.24;
-  letter-spacing: -0.03em;
+  letter-spacing: 0;
 }
 
 .categories-guidance-card p {
@@ -371,19 +371,64 @@
 @media (max-width: 760px) {
   .categories-shell {
     width: min(1240px, calc(100% - 24px));
+    gap: 22px;
+    padding-bottom: 34px;
   }
 
   .categories-hero {
-    padding: 24px;
+    padding: 22px;
     border-radius: 24px;
   }
 
   .categories-hero-stats {
     grid-template-columns: 1fr;
   }
+
+  .categories-search {
+    font-size: 1rem;
+  }
+
+  .categories-stat {
+    padding: 18px 20px;
+    border-radius: 20px;
+  }
+
+  .categories-guidance {
+    gap: 14px;
+  }
+
+  .categories-guidance-card {
+    padding: 22px;
+    border-radius: 22px;
+  }
+
+  .categories-guidance-card strong {
+    font-size: 1.08rem;
+    line-height: 1.32;
+  }
+
+  .categories-guidance-card p {
+    font-size: 0.98rem;
+    line-height: 1.68;
+  }
 }
 
 @media (max-width: 620px) {
+  .categories-shell {
+    width: min(100% - 24px, 1240px);
+  }
+
+  .categories-title {
+    font-size: clamp(2.05rem, 10vw, 3rem);
+    line-height: 1.02;
+    letter-spacing: 0;
+  }
+
+  .categories-subtitle {
+    font-size: 1rem;
+    line-height: 1.62;
+  }
+
   .categories-grid {
     grid-template-columns: 1fr;
   }

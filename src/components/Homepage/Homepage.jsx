@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { FiArrowUpRight, FiBox, FiSearch, FiShield } from 'react-icons/fi';
 import Seo from '../Common/Seo';
 import { buildFaqSchema, businessApplicationSchema, localBusinessSchema, organizationSchema, webSiteSchema } from '../../utils/seoSchemas';
 import { useLanguage } from '../../context/LanguageContext';
@@ -273,21 +274,32 @@ const HomePage = () => {
                 <img src={`${baseUrl}company-logo.png`} alt="Leading Trading Est" loading="eager" decoding="async" />
               </div>
               <div>
-                <span>{t('Quotation workflow')}</span>
-                <strong>{t('From requirement to delivery')}</strong>
+                <span>{t('Supply desk')}</span>
+                <strong>{t('Built for sourcing clarity')}</strong>
               </div>
             </div>
             <p className="animate-on-scroll">
-              {t('A clearer route for product requests, availability checks, quotation handling, and delivery coordination.')}
+              {t('Open the right category, check brand access, and move faster toward the product information your team needs.')}
             </p>
-            <ol className="credential-card__steps animate-stagger" data-stagger-step="70ms">
-              {['Requirement review', 'Product matching', 'Delivery coordination'].map((item, index) => (
-                <li className="animate-on-scroll" key={item}>
-                  <span>{String(index + 1).padStart(2, '0')}</span>
-                  {t(item)}
-                </li>
+            <div className="credential-card__signals animate-stagger" data-stagger-step="70ms">
+              {[
+                { label: 'Category depth', value: 'Medical, dental, lab, PPE, and safety', Icon: FiSearch },
+                { label: 'Brand access', value: 'Medstar, ROMSONS, SMI, and partner supply', Icon: FiShield },
+                { label: 'Repeat supply', value: 'Structured support for recurring requirements', Icon: FiBox },
+              ].map((item) => (
+                <article className="animate-on-scroll" key={item.label}>
+                  <item.Icon aria-hidden="true" />
+                  <div>
+                    <span>{t(item.label)}</span>
+                    <strong>{t(item.value)}</strong>
+                  </div>
+                </article>
               ))}
-            </ol>
+            </div>
+            <Link className="credential-card__mini-link animate-on-scroll" to="/catalog">
+              <span>{t('Open catalog desk')}</span>
+              <FiArrowUpRight aria-hidden="true" />
+            </Link>
             <span className="credential-card__brand-label animate-on-scroll">{t('Selected brand access')}</span>
             <div className="credential-card__brands animate-on-scroll">
               {mainBrands.slice(0, 4).map((brand) => (

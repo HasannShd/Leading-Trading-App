@@ -111,6 +111,22 @@
   margin-top: 22px;
 }
 
+@media (max-width: 620px) {
+  .state-panel {
+    padding: 26px 22px;
+    border-radius: 22px;
+  }
+
+  .state-panel-eyebrow {
+    max-width: 100%;
+    line-height: 1.25;
+  }
+
+  .state-panel h3 {
+    letter-spacing: 0;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .state-panel--loading .state-panel-eyebrow::after {
     animation: none;

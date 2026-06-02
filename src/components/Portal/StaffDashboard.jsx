@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { FiBriefcase, FiCheckCircle, FiClock, FiFileText, FiMapPin, FiPackage } from 'react-icons/fi';
 import { portalApi } from '../../services/portalApi';
 import { formatPortalDateTime, formatPortalPrettyDate } from '../../utils/portalDate';
 import { useCountUp } from '../../hooks/useCountUp';
@@ -11,12 +12,12 @@ const AnimatedCount = ({ value }) => {
 };
 
 const quickLinks = [
-  { to: '/staff/attendance', label: 'Check In / Out' },
-  { to: '/staff/reports', label: 'Submit Report' },
-  { to: '/staff/orders', label: 'Submit Order' },
-  { to: '/staff/order-history', label: 'My Orders' },
-  { to: '/staff/visits', label: 'Log Visit' },
-  { to: '/staff/clients', label: 'Open Clients' },
+  { to: '/staff/attendance', label: 'Check In / Out', Icon: FiCheckCircle },
+  { to: '/staff/reports', label: 'Submit Report', Icon: FiFileText },
+  { to: '/staff/orders', label: 'Submit Order', Icon: FiPackage },
+  { to: '/staff/order-history', label: 'My Orders', Icon: FiClock },
+  { to: '/staff/visits', label: 'Log Visit', Icon: FiMapPin },
+  { to: '/staff/clients', label: 'Open Clients', Icon: FiBriefcase },
 ];
 
 const StaffDashboard = () => {
@@ -94,7 +95,8 @@ const StaffDashboard = () => {
       <div className="portal-actions portal-soft-actions">
         {quickLinks.map((link) => (
           <Link key={link.to} className="portal-button ghost portal-soft-action-button" to={link.to}>
-            {link.label}
+            <link.Icon aria-hidden="true" />
+            <span>{link.label}</span>
           </Link>
         ))}
       </div>

@@ -3,7 +3,7 @@ import { absoluteUrl, SITE_ORIGIN } from '../../utils/seoSchemas';
 
 const DEFAULT_TITLE = 'Leading Trading Est | Medical & Industrial Supplies Bahrain';
 const DEFAULT_DESCRIPTION =
-  'Leading Trading Est is a Bahrain medical, dental, laboratory, safety, and industrial supplier led by Shahid Majeed and supported by a 10-11 person team providing Medstar own-brand supply, quotation support, and local service.';
+  'Leading Trading Est supplies Bahrain medical, dental, laboratory, PPE, safety, and industrial buyers with sourcing, quotations, and delivery.';
 const DEFAULT_IMAGE = `${SITE_ORIGIN}/company-logo.png`;
 const DEFAULT_KEYWORDS =
   'Leading Trading Est, Shahid Majeed, Leading Trading Est owner, LTE Bahrain, medical supplies Bahrain, dental supplies Bahrain, laboratory equipment Bahrain, industrial safety supplies Bahrain, healthcare procurement Bahrain';
@@ -26,17 +26,6 @@ const upsertCanonical = (href) => {
   if (!element) {
     element = document.createElement('link');
     element.setAttribute('rel', 'canonical');
-    document.head.appendChild(element);
-  }
-  element.setAttribute('href', href);
-};
-
-const upsertAlternate = (hreflang, href) => {
-  let element = document.head.querySelector(`link[rel="alternate"][hreflang="${hreflang}"]`);
-  if (!element) {
-    element = document.createElement('link');
-    element.setAttribute('rel', 'alternate');
-    element.setAttribute('hreflang', hreflang);
     document.head.appendChild(element);
   }
   element.setAttribute('href', href);
@@ -75,9 +64,6 @@ export default function Seo({
     document.title = title;
     document.documentElement.lang = document.documentElement.lang || 'en';
     upsertCanonical(canonicalUrl);
-    upsertAlternate('en-BH', canonicalUrl);
-    upsertAlternate('ar-BH', canonicalUrl);
-    upsertAlternate('x-default', canonicalUrl);
     upsertMeta('meta[name="description"]', { name: 'description', content: description });
     upsertMeta('meta[name="keywords"]', { name: 'keywords', content: keywords });
     upsertMeta('meta[name="robots"]', { name: 'robots', content: robots });

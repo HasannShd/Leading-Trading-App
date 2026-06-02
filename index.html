@@ -8,6 +8,18 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <style>
+      #root > main[data-seo-fallback] {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        margin: -1px;
+        padding: 0;
+        overflow: hidden;
+        clip-path: inset(50%);
+        white-space: nowrap;
+      }
+    </style>
     <script>
       (function () {
         var path = window.location.pathname || '/';
@@ -189,7 +201,7 @@
   </head>
   <body>
     <div id="root">
-      <main>
+      <main data-seo-fallback>
         <h1>Leading Trading Est</h1>
         <p>
           Leading Trading Est is an NHRA approved and certified Bahrain supplier supporting medical, dental, laboratory, PPE, safety, and industrial supply enquiries with quotation support and procurement coordination.

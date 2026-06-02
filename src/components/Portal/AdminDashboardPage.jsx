@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { FiBriefcase, FiClock, FiFileText, FiMapPin, FiPackage, FiUsers } from 'react-icons/fi';
 import { portalApi } from '../../services/portalApi';
 import { AdminContext } from '../../context/AdminContext';
 import { useCountUp } from '../../hooks/useCountUp';
@@ -28,12 +29,12 @@ const AdminDashboardPage = () => {
   const metrics = data.metrics || {};
   const adminName = admin?.name || admin?.username || 'Admin';
   const operationsLinks = [
-    { label: 'Staff Team', to: '/admin/staff', meta: `${metrics.staffCount ?? 0} active`, icon: '◉' },
-    { label: 'Attendance', to: '/admin/attendance', meta: `${metrics.checkedInToday ?? 0} checked in`, icon: '◌' },
-    { label: 'Reports', to: '/admin/reports', meta: `${metrics.pendingReports ?? 0} pending`, icon: '▤' },
-    { label: 'Staff Orders', to: '/admin/orders', meta: `${metrics.pendingOrders ?? 0} pending`, icon: '▣' },
-    { label: 'Clients', to: '/admin/clients', meta: 'Shared list', icon: '◎' },
-    { label: 'Visits', to: '/admin/visits', meta: 'Field records', icon: '◍' },
+    { label: 'Staff Team', to: '/admin/staff', meta: `${metrics.staffCount ?? 0} active`, Icon: FiUsers },
+    { label: 'Attendance', to: '/admin/attendance', meta: `${metrics.checkedInToday ?? 0} checked in`, Icon: FiClock },
+    { label: 'Reports', to: '/admin/reports', meta: `${metrics.pendingReports ?? 0} pending`, Icon: FiFileText },
+    { label: 'Staff Orders', to: '/admin/orders', meta: `${metrics.pendingOrders ?? 0} pending`, Icon: FiPackage },
+    { label: 'Clients', to: '/admin/clients', meta: 'Shared list', Icon: FiBriefcase },
+    { label: 'Visits', to: '/admin/visits', meta: 'Field records', Icon: FiMapPin },
   ];
 
   const snapshotMetrics = [
@@ -80,7 +81,9 @@ const AdminDashboardPage = () => {
         <div className="portal-admin-module-grid operations">
           {operationsLinks.map((item) => (
             <Link key={item.to} to={item.to} className="portal-admin-module-card" style={{ textDecoration: 'none', color: 'inherit' }}>
-              <div className="portal-admin-module-icon" aria-hidden="true">{item.icon}</div>
+              <div className="portal-admin-module-icon" aria-hidden="true">
+                <item.Icon />
+              </div>
               <div className="portal-admin-module-copy">
                 <strong>{item.label}</strong>
                 <span>{item.meta}</span>

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { FiBookOpen, FiDownload, FiFileText } from 'react-icons/fi';
 import Seo from '../Common/Seo';
 import StatePanel from '../Common/StatePanel';
 import {
@@ -121,14 +122,17 @@ const CatalogPage = () => {
           </p>
         </div>
         <div className="catalog-hero-actions">
-          <button type="button" className="home-btn home-btn--primary" onClick={handlePrint}>
-            {t('Download / Print Catalog')}
+          <button type="button" className="catalog-hero-action catalog-hero-action--primary" onClick={handlePrint}>
+            <FiDownload aria-hidden="true" />
+            <span>{t('Download / Print Catalog')}</span>
           </button>
-          <Link className="home-btn home-btn--ghost" to="/catalog/pdf">
-            {t('Open PDF Catalogue')}
+          <Link className="catalog-hero-action" to="/catalog/pdf">
+            <FiBookOpen aria-hidden="true" />
+            <span>{t('Open PDF Catalogue')}</span>
           </Link>
-          <Link className="home-btn home-btn--ghost" to="/contact?source=catalog">
-            {t('Request Catalog Quote')}
+          <Link className="catalog-hero-action" to="/contact?source=catalog">
+            <FiFileText aria-hidden="true" />
+            <span>{t('Request Catalog Quote')}</span>
           </Link>
         </div>
       </section>

@@ -4,6 +4,7 @@
   --pdf-light: #e8f2fb;
   --pdf-line: #d8e2ec;
   --pdf-grey: #5d6b7a;
+  color-scheme: light;
   background: #edf2f7;
   padding: 28px 0 60px;
   color: #122033;
@@ -58,6 +59,7 @@
 
 .pdf-sheet {
   position: relative;
+  isolation: isolate;
   width: 210mm;
   height: 297mm;
   min-height: 297mm;
@@ -72,6 +74,11 @@
   break-after: page;
 }
 
+.pdf-sheet > * {
+  position: relative;
+  z-index: 1;
+}
+
 .pdf-sheet::before {
   content: '';
   position: absolute;
@@ -81,6 +88,7 @@
   height: 98mm;
   border-radius: 50%;
   background: rgba(43, 120, 184, 0.09);
+  z-index: 0;
 }
 
 .pdf-sheet-footer {
@@ -617,8 +625,16 @@
   html,
   body,
   #root {
-    width: 210mm;
+    width: 210mm !important;
+    min-width: 210mm !important;
+    margin: 0 !important;
+    overflow: visible !important;
     background: white !important;
+    color-scheme: light !important;
+  }
+
+  body::after {
+    display: none !important;
   }
 
   .header,
@@ -635,6 +651,14 @@
   .pdf-catalog {
     background: white !important;
     padding: 0 !important;
+    margin: 0 !important;
+    overflow: visible !important;
+  }
+
+  .pdf-catalog {
+    width: 210mm !important;
+    min-width: 210mm !important;
+    color-scheme: light !important;
   }
 
   .app:not(.hero-page) .app-main {
@@ -642,17 +666,38 @@
   }
 
   .pdf-sheet {
-    width: 210mm;
-    height: 297mm;
-    min-height: 297mm;
-    margin: 0;
+    width: 210mm !important;
+    min-width: 210mm !important;
+    max-width: none !important;
+    height: 297mm !important;
+    min-height: 297mm !important;
+    max-height: 297mm !important;
+    margin: 0 !important;
+    padding: 17mm 16mm 19mm !important;
+    overflow: hidden !important;
+    background:
+      linear-gradient(90deg, var(--pdf-navy) 0 6mm, transparent 6mm),
+      linear-gradient(180deg, #ffffff 0%, #f8fbfd 100%) !important;
+    color: #122033 !important;
     box-shadow: none;
     print-color-adjust: exact;
     -webkit-print-color-adjust: exact;
   }
+
+  .pdf-cover {
+    color: white !important;
+    background:
+      linear-gradient(135deg, rgba(10, 29, 51, 0.96), rgba(20, 64, 101, 0.92)),
+      radial-gradient(circle at 82% 18%, rgba(168, 213, 242, 0.22), transparent 28%) !important;
+  }
+
+  .pdf-sheet:last-child {
+    page-break-after: auto;
+    break-after: auto;
+  }
 }
 
-@media (max-width: 860px) {
+@media screen and (max-width: 860px) {
   .pdf-catalog {
     overflow-x: auto;
   }
