@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FiArrowUpRight, FiBox, FiSearch, FiShield } from 'react-icons/fi';
 import Seo from '../Common/Seo';
 import { buildFaqSchema, businessApplicationSchema, localBusinessSchema, organizationSchema, webSiteSchema } from '../../utils/seoSchemas';
 import { useLanguage } from '../../context/LanguageContext';
@@ -267,46 +266,6 @@ const HomePage = () => {
               </div>
             </div>
           </div>
-
-          <aside className="home-hero__credential-card animate-stagger" data-stagger-step="100ms" aria-label={t('Leading Trading Est credentials')}>
-            <div className="credential-card__top animate-on-scroll">
-              <div className="credential-card__seal">
-                <img src={`${baseUrl}company-logo.png`} alt="Leading Trading Est" loading="eager" decoding="async" />
-              </div>
-              <div>
-                <span>{t('Supply desk')}</span>
-                <strong>{t('Built for sourcing clarity')}</strong>
-              </div>
-            </div>
-            <p className="animate-on-scroll">
-              {t('Open the right category, check brand access, and move faster toward the product information your team needs.')}
-            </p>
-            <div className="credential-card__signals animate-stagger" data-stagger-step="70ms">
-              {[
-                { label: 'Category depth', value: 'Medical, dental, lab, PPE, and safety', Icon: FiSearch },
-                { label: 'Brand access', value: 'Medstar, ROMSONS, SMI, and partner supply', Icon: FiShield },
-                { label: 'Repeat supply', value: 'Structured support for recurring requirements', Icon: FiBox },
-              ].map((item) => (
-                <article className="animate-on-scroll" key={item.label}>
-                  <item.Icon aria-hidden="true" />
-                  <div>
-                    <span>{t(item.label)}</span>
-                    <strong>{t(item.value)}</strong>
-                  </div>
-                </article>
-              ))}
-            </div>
-            <Link className="credential-card__mini-link animate-on-scroll" to="/catalog">
-              <span>{t('Open catalog desk')}</span>
-              <FiArrowUpRight aria-hidden="true" />
-            </Link>
-            <span className="credential-card__brand-label animate-on-scroll">{t('Selected brand access')}</span>
-            <div className="credential-card__brands animate-on-scroll">
-              {mainBrands.slice(0, 4).map((brand) => (
-                <img src={`${baseUrl}${brand.logo}`} alt={brand.name} key={brand.name} loading="lazy" decoding="async" />
-              ))}
-            </div>
-          </aside>
         </div>
 
         <div className="home-shell home-hero__metrics animate-stagger" data-stagger-step="120ms">
