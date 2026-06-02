@@ -107,7 +107,7 @@
 }
 
 .home-hero {
-  padding: 142px 0 104px;
+  padding: 150px 0 132px;
   min-height: calc(100vh - 72px);
   display: grid;
   align-content: center;
@@ -1694,33 +1694,34 @@
 .home-hero__layout {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(360px, 0.44fr);
-  gap: clamp(48px, 6vw, 92px);
+  gap: clamp(58px, 7vw, 112px);
   align-items: center;
 }
 
 .home-hero__lead {
-  margin: 26px 0 0;
+  margin: 32px 0 0;
   max-width: 62ch;
   color: rgba(239, 230, 217, 0.9);
   font-size: clamp(1.05rem, 1.45vw, 1.28rem);
   line-height: 1.75;
 }
 
-.home-hero__app-copy {
-  margin-top: 34px;
-  max-width: 70ch;
-  padding: 18px 20px;
-  border: 1px solid rgba(248, 243, 235, 0.1);
-  border-left: 3px solid rgba(212, 160, 103, 0.7);
-  border-radius: 0 22px 22px 0;
-  background: rgba(248, 243, 235, 0.055);
-  color: rgba(248, 243, 235, 0.72);
-  font-size: 0.95rem;
-  line-height: 1.76;
+.home-hero__editorial .home-hero__copy .home-hero__app-copy {
+  margin-top: 48px;
+  max-width: 68ch;
+  padding: 24px 26px;
+  border: 1px solid rgba(248, 243, 235, 0.12);
+  border-left: 4px solid rgba(212, 160, 103, 0.72);
+  border-radius: 24px;
+  background: rgba(248, 243, 235, 0.065);
+  color: rgba(248, 243, 235, 0.74);
+  font-size: 0.96rem;
+  line-height: 1.82;
 }
 
 .home-hero__actions {
-  margin-top: 34px;
+  margin-top: 44px;
+  gap: 18px;
 }
 
 .home-btn--text {
@@ -1952,11 +1953,13 @@
 
 /* Trust pills */
 .home-hero__editorial .home-hero__notes {
-  margin-top: 30px;
+  margin-top: 44px;
+  gap: 14px;
 }
 
 .home-hero__metrics {
-  margin-top: 52px;
+  margin-top: 84px;
+  gap: 22px;
 }
 
 .hero-metric {
@@ -1985,7 +1988,7 @@
   .home-hero__layout {
     grid-template-columns: 1fr;
     align-items: start;
-    gap: 36px;
+    gap: 52px;
   }
 
   .home-hero__credential-card {
@@ -2011,7 +2014,7 @@
   }
 
   .home-hero {
-    padding: 98px 0 46px;
+    padding: 104px 0 64px;
     min-height: auto;
     align-content: start;
   }
@@ -2051,10 +2054,10 @@
     line-height: 1.62;
   }
 
-  .home-hero__app-copy {
-    margin-top: 24px;
-    padding: 16px;
-    border-radius: 18px;
+  .home-hero__editorial .home-hero__copy .home-hero__app-copy {
+    margin-top: 32px;
+    padding: 20px;
+    border-radius: 20px;
     border-left-width: 2px;
   }
 
@@ -2062,8 +2065,8 @@
     display: grid;
     grid-template-columns: 1fr;
     width: 100%;
-    gap: 10px;
-    margin-top: 22px;
+    gap: 14px;
+    margin-top: 32px;
   }
 
   .home-btn {
@@ -2074,10 +2077,10 @@
   }
 
   .home-hero__editorial .home-hero__notes {
-    margin-top: 16px;
+    margin-top: 30px;
     display: grid;
     grid-template-columns: 1fr;
-    gap: 7px;
+    gap: 10px;
   }
 
   .home-hero__notes span {
@@ -2090,8 +2093,8 @@
   }
 
   .home-hero__metrics {
-    margin-top: 28px;
-    gap: 8px;
+    margin-top: 44px;
+    gap: 14px;
   }
 
   .hero-metric {
