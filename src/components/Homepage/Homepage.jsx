@@ -272,8 +272,8 @@ const HomePage = () => {
               <img src={`${baseUrl}company-logo.png`} alt="" aria-hidden="true" />
               <div>
                 <span>{t('From')}</span>
-                <strong>{t('requirement')}</strong>
-                <span>{t('to delivery')}</span>
+                <strong>{t('Requirement')}</strong>
+                <span>{t('to Delivery')}</span>
               </div>
             </div>
             <p>{t('A focused route for product requests, availability checks, quotation handling, and delivery coordination.')}</p>
