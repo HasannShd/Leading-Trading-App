@@ -179,6 +179,7 @@ const Header = () => {
           <div
             className="nav-dropdown-wrapper"
             onMouseEnter={!isMobileViewport ? openDropdown : undefined}
+            onMouseLeave={!isMobileViewport ? () => setDropdown(false) : undefined}
           >
             {isMobileViewport ? (
               <button

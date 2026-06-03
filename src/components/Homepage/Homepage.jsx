@@ -244,7 +244,7 @@ const HomePage = () => {
       <section className="home-hero">
         <div className="home-hero__ambient" />
         <div className="home-hero__depth" aria-hidden="true" data-hero-parallax="bg" />
-        <div className="home-shell home-hero__layout">
+        <div className="home-shell home-hero__layout home-hero__grid">
           <div className="home-hero__editorial">
             <div className="home-hero__copy animate-stagger" data-stagger-step="120ms">
               <span className="home-eyebrow animate-on-scroll">{t('Leading Trading Est. | Bahrain')}</span>
@@ -266,6 +266,29 @@ const HomePage = () => {
               </div>
             </div>
           </div>
+          <aside className="home-hero__visual home-hero__procurement-card animate-on-scroll" aria-label="Sourcing workflow summary">
+            <div className="procurement-card__badge">{t('Sourcing workflow')}</div>
+            <div className="procurement-card__brand">
+              <img src={`${baseUrl}company-logo.png`} alt="" aria-hidden="true" />
+              <div>
+                <span>{t('From')}</span>
+                <strong>{t('requirement')}</strong>
+                <span>{t('to delivery')}</span>
+              </div>
+            </div>
+            <p>{t('A focused route for product requests, availability checks, quotation handling, and delivery coordination.')}</p>
+            <div className="procurement-card__steps">
+              <span>{t('Requirement review')}</span>
+              <span>{t('Product matching')}</span>
+              <span>{t('Delivery coordination')}</span>
+            </div>
+            <div className="procurement-card__chips">
+              <span>NHRA</span>
+              <span>Medstar</span>
+              <span>SMI</span>
+              <span>ROMSONS</span>
+            </div>
+          </aside>
         </div>
 
         <div className="home-shell home-hero__metrics animate-stagger" data-stagger-step="120ms">
