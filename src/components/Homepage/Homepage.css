@@ -2341,8 +2341,10 @@
   }
 
   .home-hero__editorial .home-hero__copy h1 {
-    max-width: 9.5ch;
-    font-size: clamp(2.65rem, 14vw, 4.8rem);
+    max-width: 100%;
+    font-size: clamp(2.2rem, 8.5vw, 3rem);
+    white-space: normal;
+    line-height: 1.08;
   }
 
   .home-hero__lead {
@@ -2461,6 +2463,11 @@
 @media (max-width: 430px) {
   .home-hero__layout {
     padding-top: 0;
+  }
+
+  .home-hero__editorial .home-hero__copy h1 {
+    font-size: clamp(2rem, 8.5vw, 2.5rem);
+    white-space: normal;
   }
 
   .home-hero__editorial .home-eyebrow {

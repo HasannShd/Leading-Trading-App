@@ -276,8 +276,8 @@ select:focus-visible {
   }
 
   .mobile-action-bar a:nth-child(3) {
-    background: linear-gradient(135deg, #c88949, #e0aa6d);
-    color: #07111f;
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 60%, #1e3a8a 100%);
+    color: #ffffff;
   }
 
   .footer {
