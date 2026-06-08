@@ -41,13 +41,13 @@ html, body, #root {
 }
 
 h1, h2, h3 {
-  font-family: 'Space Grotesk', 'Manrope', sans-serif;
+  font-family: 'Cormorant Garamond', Georgia, serif;
   letter-spacing: -0.03em;
   text-wrap: balance;
 }
 
 h4, h5, h6 {
-  font-family: 'Space Grotesk', 'Manrope', sans-serif;
+  font-family: 'Cormorant Garamond', Georgia, serif;
   letter-spacing: -0.02em;
 }
 

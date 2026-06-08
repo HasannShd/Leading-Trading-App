@@ -1995,10 +1995,7 @@
 .home-hero__layout {
   position: relative;
   z-index: 2;
-  display: grid;
-  grid-template-columns: minmax(0, 0.98fr) minmax(280px, 330px);
-  align-items: center;
-  gap: clamp(36px, 7vw, 108px);
+  display: block;
   min-height: 396px;
   padding-top: 0;
   padding-bottom: 22px;
