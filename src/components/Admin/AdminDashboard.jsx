@@ -267,23 +267,28 @@ const AdminDashboard = () => {
         </div>
 
         <div className="admin-content">
-          <div className="admin-overview-grid">
-            {overviewCards.map((card) => (
-              <div className="admin-card" key={card.title}>
-                <div className="admin-card-icon">{card.icon}</div>
-                <div className="admin-card-content">
-                  <div className="admin-card-metric">{card.value}</div>
-                  <h3>{card.title}</h3>
-                  <p className="admin-card-desc">{card.description}</p>
-                  <p className="admin-card-action">
-                    <button onClick={card.action}>{card.label} →</button>
-                  </p>
-                </div>
-              </div>
-            ))}
+          {/* ── Recent Activity (always first) ── */}
+          <div className="admin-page-header">
+            <h2>Recent Staff Activity</h2>
+          </div>
+          <div className="admin-info-box admin-info-box--accent" style={{ marginBottom: '1.5rem' }}>
+            {recentOpsActivity.length ? (
+              <ul>
+                {recentOpsActivity.slice(0, 8).map((item) => (
+                  <li key={item._id || `${item.action}-${item.createdAt}`}>
+                    <strong>{item.user?.name || item.user?.username || 'Staff'}</strong>
+                    {' '}·{' '}{item.action}
+                    {' '}·{' '}<span style={{ opacity: 0.65 }}>{new Date(item.createdAt).toLocaleString()}</span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p>No staff activity yet. Create or activate a <code>sales_staff</code> user to start logging activity.</p>
+            )}
           </div>
 
-          <div className="admin-page-header" style={{ marginTop: '2rem' }}>
+          {/* ── Staff Operations ── */}
+          <div className="admin-page-header">
             <h2>Staff Operations</h2>
           </div>
 
@@ -303,7 +308,29 @@ const AdminDashboard = () => {
             ))}
           </div>
 
-          <div className="admin-info-grid">
+          {/* ── Website / Catalog ── */}
+          <div className="admin-page-header" style={{ marginTop: '2rem' }}>
+            <h2>Website &amp; Catalog</h2>
+          </div>
+
+          <div className="admin-overview-grid">
+            {overviewCards.map((card) => (
+              <div className="admin-card" key={card.title}>
+                <div className="admin-card-icon">{card.icon}</div>
+                <div className="admin-card-content">
+                  <div className="admin-card-metric">{card.value}</div>
+                  <h3>{card.title}</h3>
+                  <p className="admin-card-desc">{card.description}</p>
+                  <p className="admin-card-action">
+                    <button onClick={card.action}>{card.label} →</button>
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* ── Info boxes ── */}
+          <div className="admin-info-grid" style={{ marginTop: '1.5rem' }}>
             <div className="admin-info-box">
               <h2>Priority Checklist</h2>
               <ul>
@@ -324,34 +351,6 @@ const AdminDashboard = () => {
                 <li>{opsMetrics.staffCount} field staff configured for the portal</li>
                 <li>{opsMetrics.checkedInToday} staff checked in today</li>
               </ul>
-            </div>
-          </div>
-
-          <div className="admin-info-grid" style={{ marginTop: '1.25rem' }}>
-            <div className="admin-info-box">
-              <h2>Staff Options Available</h2>
-              <ul>
-                <li>Create and activate staff users</li>
-                <li>Track check-in and check-out history</li>
-                <li>Assign schedules and review field reports</li>
-                <li>Review expenses, visits, collections, and submitted staff orders</li>
-                <li>Monitor notifications and activity logs from one admin workspace</li>
-              </ul>
-            </div>
-
-            <div className="admin-info-box admin-info-box--accent">
-              <h2>Recent Staff Activity</h2>
-              {recentOpsActivity.length ? (
-                <ul>
-                  {recentOpsActivity.slice(0, 5).map((item) => (
-                    <li key={item._id || `${item.action}-${item.createdAt}`}>
-                      {(item.user?.name || item.user?.username || 'Staff')} • {item.action} • {new Date(item.createdAt).toLocaleString()}
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p>No staff activity yet. Create or activate a `sales_staff` user, then let them sign in and start logging activity.</p>
-              )}
             </div>
           </div>
         </div>

@@ -2,6 +2,8 @@ import { NavLink, Outlet, useLocation } from 'react-router-dom';
 import { useContext, useEffect, useMemo, useState } from 'react';
 import { AdminContext } from '../../context/AdminContext';
 import { resetPageScroll, schedulePageScrollReset } from '../../utils/scrollReset';
+import { authFetch } from '../../services/authFetch';
+import AdminCommandPalette from '../Admin/AdminCommandPalette';
 import './PortalShell.css';
 
 const linkGroups = [
@@ -71,6 +73,9 @@ const AdminPortalLayout = () => {
   const { admin, logout } = useContext(AdminContext);
   const location = useLocation();
   const [navOpen, setNavOpen] = useState(false);
+  const [paletteOpen, setPaletteOpen] = useState(false);
+  const [statusCounts, setStatusCounts] = useState(null);
+
   const adminDisplayName = admin?.name || admin?.username || 'Admin';
   const initials = useMemo(() => getInitials(adminDisplayName), [adminDisplayName]);
   const breadcrumb = useMemo(() => getNavBreadcrumb(location.pathname), [location.pathname]);
@@ -89,6 +94,36 @@ const AdminPortalLayout = () => {
     return schedulePageScrollReset();
   }, [location.pathname]);
 
+  // Fetch live status counts once on mount
+  useEffect(() => {
+    let cancelled = false;
+    authFetch('/admin-portal/dashboard')
+      .then((r) => r.json())
+      .then((data) => {
+        if (!cancelled && data?.data?.metrics) {
+          const m = data.data.metrics;
+          setStatusCounts({
+            checkedIn: m.checkedInToday ?? 0,
+            pendingOrders: m.pendingOrders ?? 0,
+          });
+        }
+      })
+      .catch(() => {});
+    return () => { cancelled = true; };
+  }, []);
+
+  // ⌘K / Ctrl+K to open palette
+  useEffect(() => {
+    const handler = (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        setPaletteOpen((prev) => !prev);
+      }
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, []);
+
   return (
     <div className="portal-shell admin-shell">
       <header className="portal-topbar portal-admin-topbar">
@@ -97,7 +132,32 @@ const AdminPortalLayout = () => {
           <span className="portal-brand-title">Admin Control</span>
           <span className="portal-admin-date">{todayLabel}</span>
         </div>
+
+        {/* Live status chips */}
+        {statusCounts && (
+          <div className="portal-admin-status-bar">
+            <span className="portal-admin-status-count checked-in">
+              <span className="portal-admin-status-dot" aria-hidden="true" />
+              {statusCounts.checkedIn} in today
+            </span>
+            {statusCounts.pendingOrders > 0 && (
+              <span className="portal-admin-status-count pending-orders">
+                {statusCounts.pendingOrders} pending
+              </span>
+            )}
+          </div>
+        )}
+
         <div className="portal-topbar-meta portal-admin-topbar-meta">
+          <button
+            className="portal-admin-palette-trigger"
+            type="button"
+            onClick={() => setPaletteOpen(true)}
+            title="Open command palette (⌘K)"
+            aria-label="Open command palette"
+          >
+            <span>⌘K</span>
+          </button>
           <span className="portal-chip admin-user-chip">
             <span className="admin-avatar" aria-hidden="true">{initials}</span>
             {adminDisplayName}
@@ -172,6 +232,8 @@ const AdminPortalLayout = () => {
           </NavLink>
         ))}
       </div>
+
+      {paletteOpen && <AdminCommandPalette onClose={() => setPaletteOpen(false)} />}
     </div>
   );
 };
