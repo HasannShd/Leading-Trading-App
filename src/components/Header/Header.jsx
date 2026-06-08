@@ -143,7 +143,7 @@ const Header = () => {
     dropdownCloseTimer.current = window.setTimeout(() => {
       setDropdown(false);
       dropdownCloseTimer.current = null;
-    }, 360);
+    }, 120);
   };
 
   const toggleDropdown = () => {
