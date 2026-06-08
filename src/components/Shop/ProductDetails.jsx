@@ -398,19 +398,6 @@ const ProductDetails = () => {
               {product.description?.trim() || t('Contact our team for product specifications, availability, and commercial support.')}
             </p>
 
-            <div className="product-service-grid animate-stagger" data-stagger-step="100ms">
-              <article className="product-service-card animate-on-scroll">
-                <span>{t('Procurement use')}</span>
-                <strong>{t('Review the product structure before moving into quotation or quote-basket handling.')}</strong>
-                <p>{t('Where products depend on type, size, brand, or commercial fit, the detail page gives the clearest next step.')}</p>
-              </article>
-              <article className="product-service-card animate-on-scroll">
-                <span>{t('Support path')}</span>
-                <strong>{t('LTE can assist with specification fit, availability, and repeat-order planning.')}</strong>
-                <p>{t('Use WhatsApp, direct enquiry, or quotation handling when the requirement needs confirmation before purchase.')}</p>
-              </article>
-            </div>
-
             {notice && (
               <StatePanel
                 eyebrow={notice.type === 'success' ? t('Success') : t('Notice')}
