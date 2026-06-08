@@ -3,9 +3,6 @@ import { Link } from 'react-router-dom';
 import Seo from '../Common/Seo';
 import { buildFaqSchema, businessApplicationSchema, localBusinessSchema, organizationSchema, webSiteSchema } from '../../utils/seoSchemas';
 import { useLanguage } from '../../context/LanguageContext';
-import { normalizeImageSrc } from '../../utils/normalizeImageSrc';
-import { buildProductPath } from '../../utils/productUrls';
-import { seoLandingPages } from '../../utils/seoLandingPages';
 import { useHomepageScroll } from './useHomepageScroll';
 import './Homepage.css';
 
@@ -199,9 +196,6 @@ const HomePage = () => {
 
   useHomepageScroll(rootRef, true);
 
-  const leadProduct = featuredProducts[0] || null;
-  const secondaryProducts = featuredProducts.slice(1, 5);
-  const spotlightProducts = [leadProduct, ...secondaryProducts].filter(Boolean);
   const marqueeBrands = useMemo(() => [...mainBrands, ...mainBrands], []);
   const marqueeClients = useMemo(() => [...clients, ...clients], []);
 
