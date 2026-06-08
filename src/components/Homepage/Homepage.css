@@ -1686,7 +1686,7 @@
 
 .home-hero__editorial {
   width: 100%;
-  max-width: 760px;
+  max-width: none;
   text-align: left;
 }
 
@@ -2001,7 +2001,7 @@
 }
 
 .home-hero__editorial {
-  max-width: 610px;
+  max-width: none;
 }
 
 .home-hero__editorial .home-hero__copy {
