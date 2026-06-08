@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import Seo from '../Common/Seo';
 import StatePanel from '../Common/StatePanel';
-import { buildBreadcrumbSchema, buildCollectionSchema, localBusinessSchema, organizationSchema } from '../../utils/seoSchemas';
+import { buildBreadcrumbSchema, buildCollectionSchema, localBusinessSchema, organizationSchema } from '../../services/../utils/seoSchemas';
 import { fetchCategories } from '../../services/categoriesService';
 import { fetchProducts } from '../../services/productsService';
 import { buildProductPath } from '../../utils/productUrls';
@@ -10,26 +10,30 @@ import { buildCategoryTree, getCategoryId, getCategoryParentId } from '../../uti
 import './PdfCatalogPage.css';
 
 const COPYRIGHT_NOTICE =
-  '© Leading Trading Est. All rights reserved. This catalogue is intended for informational and business use only. Product images, descriptions, layout, and company branding are the property of Leading Trading Est. or their respective brand owners. Unauthorized copying, reproduction, editing, redistribution, or commercial use of this catalogue without written permission is prohibited.';
+  '© Leading Trading Est. All rights reserved. This catalogue is for informational and business use only. Unauthorised reproduction or redistribution is prohibited.';
 
 const AVAILABILITY_NOTICE =
-  'Product availability, specifications, packaging, and branding may vary. Please contact Leading Trading Est. for the latest product details and quotations.';
+  'Product availability, specifications, packaging, and branding may vary. Contact LTE for current details and quotations.';
 
 const serviceSteps = [
-  ['Requirement Review', 'LTE reviews the requested product, department, specification, brand preference, and quantity context.'],
-  ['Sourcing & Availability', 'The team checks suitable options, stock, supplier access, documentation, and expected timing.'],
-  ['Quotation Support', 'A clear quotation path is prepared with available product details and commercial follow-up.'],
-  ['Order Coordination', 'Sales, accounts, and delivery coordinate order handling, confirmation, and customer communication.'],
-  ['Delivery & Repeat Support', 'Orders are handed over with local support and repeat procurement planning when needed.'],
+  ['Requirement Review', 'LTE reviews the requested product, department, specification, brand preference, and quantity context to ensure the correct product scope is understood before sourcing begins.'],
+  ['Sourcing & Availability', 'The team checks suitable product options, stock levels, supplier access, certification documentation, and expected lead times from relevant supply channels.'],
+  ['Quotation Support', 'A structured quotation is prepared with available product details, pricing indicators, and commercial follow-up so buyers can make informed purchasing decisions.'],
+  ['Order Coordination', 'Sales, accounts, and delivery teams coordinate order handling, confirmation, invoicing, and customer communication through a single accountable workflow.'],
+  ['Delivery & Repeat Support', 'Orders are fulfilled with local coordination and ongoing repeat procurement support to maintain consistent supply for ongoing operational needs.'],
 ];
 
-const whyChoose = [
-  'Bahrain-based medical, dental, laboratory, PPE, safety, and industrial supply support.',
-  'Medstar own-brand supply backed by local accountability and repeat procurement support.',
-  'International supplier and distributor relationships with dedicated ROMSONS and SMI sole-agent support in Bahrain.',
-  'Structured sourcing workflow for clinics, hospitals, laboratories, dental centers, and industrial buyers.',
-  'Supplier relationships, quotation handling, and delivery coordination through one accountable team.',
-  'Product-focused communication that helps buyers confirm availability, specifications, and fit before purchase.',
+const catalogueBrands = [
+  { name: 'Medstar', logo: 'Brands/medstar.jpg', note: 'LTE own-brand for routine healthcare procurement.' },
+  { name: 'Rogin', logo: 'Brands/rogin.png', note: 'Dental and clinical supply products.' },
+  { name: 'SMI', logo: 'Brands/Smi.png', note: 'Sole-agent support in Bahrain.' },
+  { name: 'ROMSONS', logo: 'Brands/romsons.png', note: 'Sole-agent support in Bahrain.' },
+  { name: 'Hermann Meditech', logo: 'Brands/Hermann.png', note: 'Surgical and diagnostic instruments.' },
+  { name: 'Zogear', logo: 'Brands/Zogear.png', note: 'Laboratory and clinical accessories.' },
+  { name: 'ADC', logo: 'Brands/adc.png', note: 'Diagnostic devices.' },
+  { name: 'Osseous', logo: 'Brands/osseous.png', note: 'Orthopaedic and rehabilitation supply.' },
+  { name: 'Berger', logo: 'Brands/berger.jpg', note: 'Safety and industrial supply.' },
+  { name: 'Bastos-Viegas', logo: 'Brands/bastosviegas.webp', note: 'Wound care and consumables.' },
 ];
 
 const contactRows = [
@@ -38,94 +42,77 @@ const contactRows = [
   ['Email', 'admin@lte-bh.com'],
   ['Website', 'www.lte-bh.com'],
   ['Location', 'Warehousing World, Um Al-Baidh, Sitra, Bahrain'],
-  ['Social', 'Instagram: @leadingtradingest | LinkedIn: Leading Trading Est.'],
-];
-
-const catalogueBrands = [
-  { name: 'Medstar', logo: 'Brands/medstar.jpg', note: 'LTE own-brand support for routine healthcare procurement.' },
-  { name: 'Rogin', logo: 'Brands/rogin.png' },
-  { name: 'SMI', logo: 'Brands/Smi.png', note: 'Sole-agent support in Bahrain.' },
-  { name: 'ROMSONS', logo: 'Brands/romsons.png', note: 'Sole-agent support in Bahrain.' },
-  { name: 'Hermann Meditech', logo: 'Brands/Hermann.png' },
-  { name: 'Zogear', logo: 'Brands/Zogear.png' },
-  { name: 'ADC', logo: 'Brands/adc.png' },
-  { name: 'Osseous', logo: 'Brands/osseous.png' },
-  { name: 'Berger', logo: 'Brands/berger.jpg' },
-  { name: 'Bastos-Viegas', logo: 'Brands/bastosviegas.webp' },
+  ['Social', 'Instagram: @leadingtradingest  |  LinkedIn: Leading Trading Est.'],
 ];
 
 const chunk = (items, size) => {
   const pages = [];
-  for (let index = 0; index < items.length; index += size) {
-    pages.push(items.slice(index, index + size));
-  }
+  for (let i = 0; i < items.length; i += size) pages.push(items.slice(i, i + size));
   return pages;
 };
 
-const clean = (value) => String(value || '').trim();
+const clean = (v) => String(v || '').trim();
 
 const buildSpecText = (product) => {
   const variantSizes = (product.variants || [])
-    .flatMap((variant) => variant.sizes || [])
-    .map((size) => [size.size, size.inches, size.color].filter(Boolean).join(' / '))
+    .flatMap((v) => v.sizes || [])
+    .map((s) => [s.size, s.inches, s.color].filter(Boolean).join(' / '))
     .filter(Boolean);
   const specRows = (product.specs || [])
-    .map((spec) => [spec.label, spec.value].filter(Boolean).join(': '))
+    .map((s) => [s.label, s.value].filter(Boolean).join(': '))
     .filter(Boolean);
   return [...variantSizes, ...specRows].slice(0, 3).join(' | ');
 };
 
 const findPacking = (product) => {
-  const match = (product.specs || []).find((spec) => /pack|packing|box|carton|unit/i.test(`${spec.label} ${spec.value}`));
+  const match = (product.specs || []).find((s) => /pack|packing|box|carton|unit/i.test(`${s.label} ${s.value}`));
   return match ? [match.label, match.value].filter(Boolean).join(': ') : '';
 };
 
 const buildCategoryPath = (product) =>
-  [product.categorySlug?.parent?.name, product.categorySlug?.name].filter(Boolean).join(' > ') ||
-  product.categorySlug?.name ||
-  'Catalog';
+  [product.categorySlug?.parent?.name, product.categorySlug?.name].filter(Boolean).join(' › ') ||
+  product.categorySlug?.name || 'Catalog';
 
 const ProductCard = ({ product }) => {
   const image = product.image || product.images?.[0] || '';
   const details = [
-    ['Category', buildCategoryPath(product)],
     ['Brand', product.brand],
-    ['Code / SKU', product.sku || product.variants?.find((variant) => variant.sku)?.sku],
-    ['Size / Specification', buildSpecText(product)],
+    ['SKU', product.sku || product.variants?.find((v) => v.sku)?.sku],
+    ['Spec', buildSpecText(product)],
     ['Packing', findPacking(product)],
-  ].filter(([, value]) => clean(value));
+  ].filter(([, v]) => clean(v));
 
   return (
     <article className="pdf-product-card">
       <div className="pdf-product-media">
-        {image ? (
-          <img src={normalizeImageSrc(image, { width: 360 })} alt={product.name} loading="lazy" decoding="async" />
-        ) : (
-          <span>{product.name?.[0] || 'P'}</span>
-        )}
+        {image
+          ? <img src={normalizeImageSrc(image, { width: 400 })} alt={product.name} loading="lazy" decoding="async" />
+          : <span>{product.name?.[0] || 'P'}</span>}
       </div>
       <div className="pdf-product-copy">
+        <p className="pdf-product-cat">{buildCategoryPath(product)}</p>
         <h3>{product.name}</h3>
-        <dl>
-          {details.map(([label, value]) => (
-            <div key={label}>
-              <dt>{label}</dt>
-              <dd>{value}</dd>
-            </div>
-          ))}
-        </dl>
-        {product.description ? <p>{product.description}</p> : null}
+        {details.length > 0 && (
+          <dl>
+            {details.map(([label, value]) => (
+              <div key={label}><dt>{label}</dt><dd>{value}</dd></div>
+            ))}
+          </dl>
+        )}
+        {product.description && !details.length ? <p className="pdf-product-desc">{product.description}</p> : null}
       </div>
     </article>
   );
 };
 
-const PdfPage = ({ children, className = '' }) => (
+const PdfPage = ({ children, className = '', section: _section = '', pageNum = '' }) => (
   <section className={`pdf-sheet ${className}`}>
     {children}
     <footer className="pdf-sheet-footer">
-      <span>Leading Trading Est. | Quality. Reliability. Trust.</span>
-      <span>{AVAILABILITY_NOTICE}</span>
+      <span className="pdf-sheet-pagenum">{pageNum}</span>
+      <div className="pdf-sheet-right">
+        <span className="pdf-sheet-notice">{AVAILABILITY_NOTICE}</span>
+      </div>
     </footer>
   </section>
 );
@@ -138,92 +125,109 @@ const PdfCatalogPage = () => {
 
   useEffect(() => {
     let alive = true;
-
-    const loadCatalogueData = async () => {
+    const load = async () => {
       setLoading(true);
       setError('');
       try {
-        /*
-          Catalogue data source:
-          - categories come from /api/categories via fetchCategories()
-          - products come from /api/products via fetchProducts(), paged until all active products are loaded
-          Export:
-          - open /catalog/pdf in the browser
-          - use the "Export PDF" button or Ctrl/Cmd+P
-          - choose "Save as PDF" with A4 paper size and background graphics enabled
-        */
         const categoryData = await fetchCategories();
-        const collectedProducts = [];
+        const collected = [];
         const limit = 200;
         let page = 1;
-
         for (;;) {
           const data = await fetchProducts({ page: String(page), limit: String(limit) });
           const items = Array.isArray(data) ? data : data.items || [];
-          collectedProducts.push(...items);
-          const total = Array.isArray(data) ? collectedProducts.length : Number(data.total || collectedProducts.length);
-          if (!items.length || collectedProducts.length >= total) break;
+          collected.push(...items);
+          const total = Array.isArray(data) ? collected.length : Number(data.total || collected.length);
+          if (!items.length || collected.length >= total) break;
           page += 1;
         }
-
         if (!alive) return;
         setCategories(Array.isArray(categoryData) ? categoryData : []);
-        setProducts(collectedProducts);
+        setProducts(collected);
       } catch (err) {
         if (alive) setError(err.message || 'Catalogue data could not be loaded.');
       } finally {
         if (alive) setLoading(false);
       }
     };
-
-    loadCatalogueData();
-    return () => {
-      alive = false;
-    };
+    load();
+    return () => { alive = false; };
   }, []);
 
-  const topCategories = useMemo(() => categories.filter((category) => !category.parent), [categories]);
+  const topCategories = useMemo(() => categories.filter((c) => !c.parent), [categories]);
   const categoryTree = useMemo(() => buildCategoryTree(categories), [categories]);
   const categoryById = useMemo(() => {
     const map = new Map();
-    categories.forEach((category) => map.set(getCategoryId(category), category));
+    categories.forEach((c) => map.set(getCategoryId(c), c));
     return map;
   }, [categories]);
 
   const productSections = useMemo(() => {
     const map = new Map();
     products.forEach((product) => {
-      const category = product.categorySlug || {};
-      const categoryId = getCategoryId(category);
-      const parentId = getCategoryParentId(category);
-      const parent = parentId ? categoryById.get(parentId) || category.parent : null;
-      const rootName = parent?.name || category.name || 'Catalog';
-      const subcategoryName = parent ? category.name : rootName;
-      const key = `${rootName}::${subcategoryName}`;
-      if (!map.has(key)) {
-        map.set(key, {
-          rootName,
-          subcategoryName,
-          categoryId,
-          products: [],
-        });
-      }
+      const cat = product.categorySlug || {};
+      const parentId = getCategoryParentId(cat);
+      const parent = parentId ? categoryById.get(parentId) || cat.parent : null;
+      const rootName = parent?.name || cat.name || 'Catalog';
+      const subName = parent ? cat.name : rootName;
+      const key = `${rootName}::${subName}`;
+      if (!map.has(key)) map.set(key, { rootName, subName, products: [] });
       map.get(key).products.push(product);
     });
     return Array.from(map.values()).sort((a, b) =>
-      `${a.rootName} ${a.subcategoryName}`.localeCompare(`${b.rootName} ${b.subcategoryName}`)
+      `${a.rootName} ${a.subName}`.localeCompare(`${b.rootName} ${b.subName}`)
     );
   }, [categoryById, products]);
 
   const productPages = useMemo(() => {
     const pages = [];
     productSections.forEach((section) => {
-      chunk(section.products, 6).forEach((group, index) => {
-        pages.push({ ...section, products: group, part: index + 1 });
+      chunk(section.products, 8).forEach((group, i) => {
+        pages.push({ ...section, products: group, part: i + 1 });
       });
     });
     return pages;
   }, [productSections]);
+
+  const tocEntries = useMemo(() => {
+    const fixed = [
+      { num: '01', label: 'Company Profile', type: 'section' },
+      { num: '02', label: 'Category Overview', type: 'section' },
+    ];
+    const rootNames = [...new Set(productSections.map((s) => s.rootName))];
+    const productSectionEntries = rootNames.map((name, i) => ({
+      num: String(i + 3).padStart(2, '0'),
+      label: name,
+      type: 'product',
+      count: productSections
+        .filter((s) => s.rootName === name)
+        .reduce((total, s) => total + s.products.length, 0),
+    }));
+    const appendix = [
+      { num: 'A', label: 'Order Workflow', type: 'appendix' },
+      { num: 'B', label: 'Brand Directory', type: 'appendix' },
+      { num: 'C', label: 'Contact & Quotation Support', type: 'appendix' },
+    ];
+    return { fixed, productSectionEntries, appendix };
+  }, [productSections]);
+
+  const sectionNumMap = useMemo(() => {
+    const map = new Map();
+    const rootNames = [...new Set(productSections.map((s) => s.rootName))];
+    rootNames.forEach((name, i) => map.set(name, String(i + 3).padStart(2, '0')));
+    return map;
+  }, [productSections]);
+
+  // Page numbers: cover = 1 (no PdfPage), toc = 2, profile = 3, catoverview = 4,
+  // products = 5 … 4+productPages.length, appendix A/B/C after that
+  const pn = useMemo(() => ({
+    toc: 2,
+    profile: 3,
+    categoryOverview: 4,
+    appendixA: 5 + productPages.length,
+    appendixB: 6 + productPages.length,
+    appendixC: 7 + productPages.length,
+  }), [productPages.length]);
 
   const handlePrint = () => window.print();
 
@@ -247,9 +251,9 @@ const PdfCatalogPage = () => {
     <main className="pdf-catalog">
       <Seo
         title="PDF Product Catalogue | Leading Trading Est Bahrain"
-        description="Professional PDF-ready product catalogue for Leading Trading Est. using live product and category data."
+        description="Professional PDF-ready product catalogue for Leading Trading Est."
         canonicalPath="/catalog/pdf"
-        keywords="Leading Trading Est PDF catalogue, Bahrain medical supplies catalogue, dental supplies catalogue Bahrain, ROMSONS Bahrain, SMI Bahrain, LTE product catalogue"
+        keywords="Leading Trading Est PDF catalogue, Bahrain medical supplies catalogue"
         structuredData={[
           organizationSchema,
           localBusinessSchema,
@@ -260,13 +264,14 @@ const PdfCatalogPage = () => {
           ]),
           buildCollectionSchema({
             name: 'Leading Trading Est PDF Product Catalogue',
-            description: 'PDF-ready product catalogue for medical, dental, laboratory, PPE, sterile consumable, and industrial supply buyers.',
+            description: 'PDF-ready product catalogue for medical, dental, laboratory, PPE, and industrial supply buyers.',
             path: '/catalog/pdf',
-            items: products.slice(0, 24).map((product) => ({ name: product.name, path: buildProductPath(product) })),
+            items: products.slice(0, 24).map((p) => ({ name: p.name, path: buildProductPath(p) })),
           }),
         ]}
       />
 
+      {/* Toolbar */}
       <div className="pdf-toolbar">
         <div>
           <strong>PDF Catalogue Preview</strong>
@@ -275,80 +280,141 @@ const PdfCatalogPage = () => {
         <button type="button" onClick={handlePrint}>Export PDF</button>
       </div>
 
-      <PdfPage className="pdf-cover">
-        <div className="pdf-cover-logo">
-          <img src={`${import.meta.env.BASE_URL}company-logo.png`} alt="Leading Trading Est." />
+      {/* ── Page 1: Cover ── */}
+      <section className="pdf-sheet pdf-cover">
+        <div className="pdf-cover-top">
+          <div className="pdf-cover-logo">
+            <img src={`${import.meta.env.BASE_URL}company-logo.png`} alt="Leading Trading Est." />
+          </div>
+          <div className="pdf-cover-badge">Professional Product Catalogue</div>
         </div>
         <div className="pdf-cover-copy">
-          <span>Professional Product Catalogue</span>
-          <h1>Leading Trading Est.</h1>
-          <p>Quality. Reliability. Trust.</p>
+          <p className="pdf-cover-year">{new Date().getFullYear()}</p>
+          <h1>Leading<br />Trading Est.</h1>
+          <p className="pdf-cover-tagline">Quality. Reliability. Trust.</p>
+          <div className="pdf-cover-rule" />
+          <p className="pdf-cover-sectors-line">Medical · Dental · Laboratory · PPE · Surgical · Industrial</p>
         </div>
         <div className="pdf-cover-meta">
-          <strong>Medical | Dental | Laboratory | PPE | Industrial Supply</strong>
           <span>Bahrain-based procurement and quotation support</span>
+          <span>www.lte-bh.com · admin@lte-bh.com · +973 17210665</span>
         </div>
-      </PdfPage>
+      </section>
 
-      <PdfPage>
+      {/* ── Page 2: Table of Contents ── */}
+      <PdfPage className="pdf-toc-page" section="Table of Contents" pageNum={pn.toc}>
         <div className="pdf-page-heading">
-          <span>Company Introduction</span>
-          <h2>Structured supply support for healthcare and industrial buyers.</h2>
+          <span className="pdf-eyebrow">Contents</span>
+          <h2>Table of Contents</h2>
         </div>
-        <div className="pdf-intro-grid">
-          <p>
-            Leading Trading Est. supports hospitals, clinics, laboratories, dental centers, and industrial clients across Bahrain with medical, dental, laboratory, PPE, sterile consumable, and operational supply requirements.
-          </p>
-          <p>
-            The company combines international supplier access, distributor relationships, quotation handling, local coordination, Medstar own-brand support, and dedicated ROMSONS and SMI sole-agent support in Bahrain to help customers review suitable products and move requirements into clear purchasing decisions.
-          </p>
-        </div>
-        <div className="pdf-intro-brands">
-          <div className="pdf-intro-brands-copy">
-            <strong>Brand portfolio</strong>
-            <p>
-              LTE represents and supplies products across Medstar, Rogin, SMI, ROMSONS, Hermann Meditech, Zogear, ADC, Osseous, Berger, and Bastos-Viegas. ROMSONS and SMI are supported through sole-agent representation in Bahrain, with availability and specifications confirmed during quotation.
-            </p>
+        <div className="pdf-toc">
+          <div className="pdf-toc-group">
+            <p className="pdf-toc-group-label">Introduction</p>
+            {tocEntries.fixed.map((entry) => (
+              <div key={entry.num} className="pdf-toc-row">
+                <span className="pdf-toc-label">{entry.label}</span>
+                <span className="pdf-toc-dots" />
+                <span className="pdf-toc-num">§ {entry.num}</span>
+              </div>
+            ))}
           </div>
-          <div className="pdf-intro-brand-logos">
-            {catalogueBrands.map((brand) => (
-              <div key={brand.name}>
-                <img src={`${import.meta.env.BASE_URL}${brand.logo}`} alt={brand.name} />
-                <span>{brand.name}</span>
-                {brand.note ? <small>{brand.note}</small> : null}
+          <div className="pdf-toc-group">
+            <p className="pdf-toc-group-label">Product Listings</p>
+            {tocEntries.productSectionEntries.map((entry) => (
+              <div key={entry.num} className="pdf-toc-row">
+                <span className="pdf-toc-label">{entry.label}</span>
+                <span className="pdf-toc-count">{entry.count} products</span>
+                <span className="pdf-toc-dots" />
+                <span className="pdf-toc-num">§ {entry.num}</span>
+              </div>
+            ))}
+          </div>
+          <div className="pdf-toc-group">
+            <p className="pdf-toc-group-label">Appendix</p>
+            {tocEntries.appendix.map((entry) => (
+              <div key={entry.num} className="pdf-toc-row pdf-toc-row--appendix">
+                <span className="pdf-toc-label">{entry.label}</span>
+                <span className="pdf-toc-dots" />
+                <span className="pdf-toc-num">App. {entry.num}</span>
               </div>
             ))}
           </div>
         </div>
-        <div className="pdf-stats-row">
-          <article><strong>{topCategories.length}</strong><span>main category groups</span></article>
-          <article><strong>{products.length}</strong><span>active products loaded</span></article>
-          <article><strong>Medstar</strong><span>own-brand support</span></article>
-          <article><strong>ROMSONS & SMI</strong><span>sole-agent Bahrain support</span></article>
+      </PdfPage>
+
+      {/* ── Section 01: Company Profile ── */}
+      <PdfPage section="§ 01 — Company Profile" pageNum={pn.profile}>
+        <div className="pdf-page-heading">
+          <span className="pdf-eyebrow">Section 01 — Company Profile</span>
+          <h2>Structured supply support for healthcare and industrial buyers.</h2>
+        </div>
+        <div className="pdf-profile-statement">
+          <p>
+            Leading Trading Est. supports hospitals, clinics, laboratories, dental centers, and industrial clients across Bahrain with medical, dental, laboratory, PPE, sterile consumable, and operational supply requirements.
+          </p>
+          <p>
+            The company combines international supplier access, distributor relationships, quotation handling, and local coordination to help customers move requirements into clear purchasing decisions.
+          </p>
+        </div>
+        <div className="pdf-profile-stats">
+          <article>
+            <strong>2012</strong>
+            <span>Established in Bahrain</span>
+          </article>
+          <article>
+            <strong>{topCategories.length}</strong>
+            <span>Supply categories</span>
+          </article>
+          <article>
+            <strong>{products.length}</strong>
+            <span>Active products</span>
+          </article>
+          <article>
+            <strong>Sitra</strong>
+            <span>Warehousing World, Bahrain</span>
+          </article>
+        </div>
+        <div className="pdf-profile-supply">
+          <p className="pdf-profile-supply-label">Supply sectors</p>
+          <div className="pdf-profile-sectors">
+            {['Medical Equipment', 'Dental Supply', 'Laboratory', 'PPE & Safety', 'Sterile Consumables', 'Surgical Instruments', 'Hospital Furniture', 'Industrial Supply'].map((s) => (
+              <span key={s}>{s}</span>
+            ))}
+          </div>
+        </div>
+        <div className="pdf-profile-contact-strip">
+          <span>admin@lte-bh.com</span>
+          <span>+973 17210665</span>
+          <span>www.lte-bh.com</span>
+          <span>Warehousing World, Sitra, Bahrain</span>
         </div>
       </PdfPage>
 
-      <PdfPage>
+      {/* ── Section 02: Category Overview ── */}
+      <PdfPage section="§ 02 — Category Overview" pageNum={pn.categoryOverview}>
         <div className="pdf-page-heading">
-          <span>Category Overview</span>
+          <span className="pdf-eyebrow">Section 02 — Category Overview</span>
           <h2>Catalogue sections by procurement area.</h2>
         </div>
         <div className="pdf-category-toc">
           {categoryTree.map((category) => (
             <article key={category._id}>
-              <div>
+              <div className="pdf-cat-header">
                 <strong>{category.name}</strong>
                 <span>
                   {productSections
-                    .filter((section) => section.rootName === category.name)
-                    .reduce((total, section) => total + section.products.length, 0)} products
+                    .filter((s) => s.rootName === category.name)
+                    .reduce((t, s) => t + s.products.length, 0)}{' '}
+                  products
                 </span>
               </div>
               {category.description ? <p>{category.description}</p> : null}
               {category.children?.length ? (
                 <ul>
                   {category.children.map((child) => {
-                    const count = productSections.find((section) => section.rootName === category.name && section.subcategoryName === child.name)?.products.length || 0;
+                    const count = productSections.find(
+                      (s) => s.rootName === category.name && s.subName === child.name
+                    )?.products.length || 0;
                     return (
                       <li key={child._id}>
                         <span>{child.name}</span>
@@ -363,56 +429,80 @@ const PdfCatalogPage = () => {
         </div>
       </PdfPage>
 
-      {productPages.map((page, pageIndex) => (
-        <PdfPage key={`${page.rootName}-${page.subcategoryName}-${page.part}-${pageIndex}`}>
-          <div className="pdf-page-heading pdf-product-heading">
-            <span>{page.subcategoryName === page.rootName ? 'Product Listings' : page.rootName}</span>
-            <h2>{page.subcategoryName}</h2>
-            {page.part > 1 ? <p>Continued product listing, part {page.part}.</p> : null}
-          </div>
-          <div className="pdf-product-grid">
-            {page.products.map((product) => (
-              <ProductCard key={product._id} product={product} />
-            ))}
-          </div>
-        </PdfPage>
-      ))}
+      {/* ── Product listing pages ── */}
+      {productPages.map((page, pageIndex) => {
+        const secNum = sectionNumMap.get(page.rootName) || '--';
+        const isSubcat = page.subName !== page.rootName;
+        const sectionLabel = isSubcat
+          ? `§ ${secNum} — ${page.rootName} › ${page.subName}`
+          : `§ ${secNum} — ${page.rootName}`;
+        return (
+          <PdfPage
+            key={`${page.rootName}-${page.subName}-${page.part}-${pageIndex}`}
+            section={sectionLabel}
+            pageNum={5 + pageIndex}
+          >
+            <div className="pdf-page-heading pdf-product-heading">
+              <span className="pdf-eyebrow">
+                {isSubcat ? `${page.rootName} — Section ${secNum}` : `Product Listings — Section ${secNum}`}
+              </span>
+              <h2>{page.subName}</h2>
+              {page.part > 1 ? <p className="pdf-continued">Continued — part {page.part}</p> : null}
+            </div>
+            <div className="pdf-product-grid">
+              {page.products.map((product) => (
+                <ProductCard key={product._id} product={product} />
+              ))}
+            </div>
+          </PdfPage>
+        );
+      })}
 
-      <PdfPage>
+      {/* ── Appendix A: Order Workflow ── */}
+      <PdfPage section="Appendix A — Order Workflow" pageNum={pn.appendixA}>
         <div className="pdf-page-heading">
-          <span>Order Workflow</span>
+          <span className="pdf-eyebrow">Appendix A — Order Workflow</span>
           <h2>How Leading Trading Est. handles customer requirements.</h2>
         </div>
         <div className="pdf-workflow">
-          {serviceSteps.map(([title, body], index) => (
+          {serviceSteps.map(([title, body], i) => (
             <article key={title}>
-              <span>{String(index + 1).padStart(2, '0')}</span>
-              <strong>{title}</strong>
-              <p>{body}</p>
+              <span className="pdf-workflow-num">{String(i + 1).padStart(2, '0')}</span>
+              <div>
+                <strong>{title}</strong>
+                <p>{body}</p>
+              </div>
             </article>
           ))}
         </div>
       </PdfPage>
 
-      <PdfPage>
+      {/* ── Appendix B: Brand Directory ── */}
+      <PdfPage section="Appendix B — Brand Directory" pageNum={pn.appendixB}>
         <div className="pdf-page-heading">
-          <span>Why Choose Leading Trading Est.</span>
-          <h2>Practical reasons customers rely on LTE for repeat procurement.</h2>
+          <span className="pdf-eyebrow">Appendix B — Brand Directory</span>
+          <h2>Brands and suppliers represented by LTE.</h2>
         </div>
-        <div className="pdf-why-list">
-          {whyChoose.map((item) => (
-            <article key={item}>
-              <span>✓</span>
-              <p>{item}</p>
-            </article>
+        <div className="pdf-brand-directory">
+          {catalogueBrands.map((brand) => (
+            <div key={brand.name} className="pdf-brand-item">
+              <div className="pdf-brand-logo-wrap">
+                <img src={`${import.meta.env.BASE_URL}${brand.logo}`} alt={brand.name} />
+              </div>
+              <div className="pdf-brand-copy">
+                <strong>{brand.name}</strong>
+                {brand.note ? <p>{brand.note}</p> : null}
+              </div>
+            </div>
           ))}
         </div>
       </PdfPage>
 
-      <PdfPage className="pdf-contact-page">
+      {/* ── Appendix C: Contact ── */}
+      <PdfPage className="pdf-contact-page" section="Appendix C — Contact & Quotation" pageNum={pn.appendixC}>
         <div className="pdf-page-heading">
-          <span>Contact</span>
-          <h2>Contact Leading Trading Est. for latest product details and quotations.</h2>
+          <span className="pdf-eyebrow">Appendix C — Contact & Quotation Support</span>
+          <h2>Contact Leading Trading Est. for product details and quotations.</h2>
         </div>
         <div className="pdf-contact-grid">
           {contactRows.map(([label, value]) => (
@@ -427,6 +517,7 @@ const PdfCatalogPage = () => {
           <p>{COPYRIGHT_NOTICE}</p>
         </div>
       </PdfPage>
+
     </main>
   );
 };

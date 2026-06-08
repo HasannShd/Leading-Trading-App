@@ -335,9 +335,7 @@ const Header = () => {
             {t('Careers')}
           </NavLink>
 
-          <NavLink to="/cart" onClick={() => setMobileNav(false)}>
-            {t('Quote Basket')}
-          </NavLink>
+          {/* Quote Basket hidden temporarily */}
 
           {user && (
             <NavLink to="/orders" onClick={() => setMobileNav(false)}>
@@ -372,7 +370,7 @@ const Header = () => {
                   <button className="btn" onClick={logout}>{t('Logout')}</button>
                 </>
               ) : (
-                <Link className="btn" to="/sign-in">{t('Sign In')}</Link>
+                {/* Sign In hidden temporarily */}
               )}
             </div>
           )}
@@ -401,9 +399,8 @@ const Header = () => {
           </a>
           {user ? (
             <button className="btn" onClick={logout}>{t('Logout')}</button>
-          ) : (
-            <Link className="btn" to="/sign-in">{t('Sign In')}</Link>
-          )}
+          ) : null}
+          {/* Sign In hidden temporarily */}
         </div>
       </div>
     </header>
