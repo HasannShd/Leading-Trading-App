@@ -23,6 +23,7 @@ const Header = () => {
   );
 
   const navRef = useRef(null);
+  const dropdownCloseTimer = useRef(null);
   const isHome = location.pathname === '/';
   const isCategoriesActive = location.pathname === '/categories' || location.pathname.startsWith('/categories/');
   const categoryTree = useMemo(() => buildCategoryTree(categories), [categories]);
@@ -48,6 +49,10 @@ const Header = () => {
 
     function handleClick(e) {
       if (navRef.current && !navRef.current.contains(e.target)) {
+        if (dropdownCloseTimer.current) {
+          window.clearTimeout(dropdownCloseTimer.current);
+          dropdownCloseTimer.current = null;
+        }
         setMobileNav(false);
         setDropdown(false);
         setExpandedCategoryGroups({});
@@ -80,6 +85,10 @@ const Header = () => {
     setMobileNav(false);
     setDropdown(false);
     setExpandedCategoryGroups({});
+    if (dropdownCloseTimer.current) {
+      window.clearTimeout(dropdownCloseTimer.current);
+      dropdownCloseTimer.current = null;
+    }
   }, [location.pathname]);
 
   useEffect(() => {
@@ -95,6 +104,12 @@ const Header = () => {
     };
   }, [mobileNav]);
 
+  useEffect(() => () => {
+    if (dropdownCloseTimer.current) {
+      window.clearTimeout(dropdownCloseTimer.current);
+    }
+  }, []);
+
   const toggleMobileNav = () => {
     setMobileNav((open) => {
       if (open) setDropdown(false);
@@ -104,16 +119,38 @@ const Header = () => {
   };
 
   const closeMenus = () => {
+    if (dropdownCloseTimer.current) {
+      window.clearTimeout(dropdownCloseTimer.current);
+      dropdownCloseTimer.current = null;
+    }
     setDropdown(false);
     setMobileNav(false);
     setExpandedCategoryGroups({});
   };
 
   const openDropdown = () => {
+    if (dropdownCloseTimer.current) {
+      window.clearTimeout(dropdownCloseTimer.current);
+      dropdownCloseTimer.current = null;
+    }
     setDropdown(true);
   };
 
+  const closeDropdownSoon = () => {
+    if (dropdownCloseTimer.current) {
+      window.clearTimeout(dropdownCloseTimer.current);
+    }
+    dropdownCloseTimer.current = window.setTimeout(() => {
+      setDropdown(false);
+      dropdownCloseTimer.current = null;
+    }, 360);
+  };
+
   const toggleDropdown = () => {
+    if (dropdownCloseTimer.current) {
+      window.clearTimeout(dropdownCloseTimer.current);
+      dropdownCloseTimer.current = null;
+    }
     setDropdown((open) => !open);
   };
 
@@ -179,7 +216,7 @@ const Header = () => {
           <div
             className="nav-dropdown-wrapper"
             onMouseEnter={!isMobileViewport ? openDropdown : undefined}
-            onMouseLeave={!isMobileViewport ? () => setDropdown(false) : undefined}
+            onMouseLeave={!isMobileViewport ? closeDropdownSoon : undefined}
           >
             {isMobileViewport ? (
               <button
@@ -222,7 +259,7 @@ const Header = () => {
                   className="nav-dropdown-item nav-dropdown-item-all"
                   onClick={closeMenus}
                 >
-                  {t('Browse All Categories')}
+                  {isMobileViewport ? t('Browse All Categories') : t('All')}
                 </Link>
                 {isMobileViewport && (
                   <Link
@@ -234,9 +271,8 @@ const Header = () => {
                   </Link>
                 )}
                 {categoryTree.map((parent) => {
-                  const isConsumablesGroup = (parent.slug || '').toLowerCase() === 'consumables-disposables';
                   const hasChildren = Boolean(parent.children?.length);
-                  const childrenExpanded = !isConsumablesGroup || expandedCategoryGroups[parent._id];
+                  const childrenExpanded = expandedCategoryGroups[parent._id];
 
                   return (
                   <div key={parent._id} className="nav-dropdown-group">
@@ -249,7 +285,7 @@ const Header = () => {
                         {categoryName(parent.name)}
                       </Link>
                     </div>
-                    {isConsumablesGroup && hasChildren && !childrenExpanded ? (
+                    {hasChildren && !childrenExpanded ? (
                       <button
                         type="button"
                         className="nav-dropdown-child-hint"
@@ -259,9 +295,9 @@ const Header = () => {
                           toggleCategoryGroup(parent._id);
                         }}
                       >
-                        {t('Open PPE, gowns, dressings, tapes, first aid, and sutures.')}
+                        {t('Open subcategories')}
                       </button>
-                    ) : isConsumablesGroup && hasChildren ? (
+                    ) : hasChildren ? (
                       <button
                         type="button"
                         className="nav-dropdown-child-hint nav-dropdown-child-hint-compact"
@@ -271,7 +307,7 @@ const Header = () => {
                           toggleCategoryGroup(parent._id);
                         }}
                       >
-                        {t('Hide consumables subcategories')}
+                        {t('Hide subcategories')}
                       </button>
                     ) : null}
                     {childrenExpanded ? parent.children?.map((child) => (
