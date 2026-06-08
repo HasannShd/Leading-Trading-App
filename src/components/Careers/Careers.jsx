@@ -24,7 +24,7 @@ const whyItems = [
   {
     index: '01',
     title: 'Focused work environment',
-    body: 'A lean 10-person team means your contribution is visible and directly tied to the company\'s delivery performance.',
+    body: 'A lean, focused team means your contribution is visible and directly tied to the company\'s delivery performance.',
   },
   {
     index: '02',
@@ -134,7 +134,7 @@ const Careers = () => {
               <li>{t('Accountability and follow-through')}</li>
               <li>{t('Clear, professional communication')}</li>
               <li>{t('Comfort working in a structured, lean team')}</li>
-              <li>{t('Interest in medical, dental, or industrial supply')}</li>
+              <li>{t('Interest in the healthcare & industrial sector')}</li>
             </ul>
           </div>
         </section>
