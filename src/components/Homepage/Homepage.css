@@ -1719,6 +1719,7 @@
 
 .home-hero__layout {
   display: block;
+  width: min(1440px, calc(100% - 48px));
 }
 
 .home-hero__lead {
