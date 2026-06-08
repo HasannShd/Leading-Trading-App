@@ -113,7 +113,8 @@
   min-height: calc(100dvh - 72px);
   display: grid;
   align-content: end;
-  overflow: hidden;
+  overflow-x: clip;
+  overflow-y: hidden;
   background:
     linear-gradient(90deg, rgba(3, 8, 16, 0.92) 0%, rgba(6, 15, 28, 0.8) 34%, rgba(9, 24, 40, 0.34) 66%, rgba(9, 24, 40, 0.16) 100%),
     linear-gradient(180deg, rgba(3, 8, 16, 0.48) 0%, rgba(3, 8, 16, 0.14) 46%, rgba(245, 241, 232, 0.82) 100%);
@@ -1950,7 +1951,8 @@
   padding: clamp(86px, 11vh, 112px) 0 30px;
   display: grid;
   align-content: end;
-  overflow: hidden;
+  overflow-x: clip;
+  overflow-y: hidden;
   color: #ffffff;
   background:
     radial-gradient(circle at 14% 22%, rgba(169, 122, 73, 0.09), transparent 28%),
@@ -2494,8 +2496,10 @@
   flex-wrap: nowrap;
   gap: 8px;
   margin-top: 28px;
+  max-width: 100%;
   overflow-x: auto;
   scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
 }
 
 .home-hero__cats::-webkit-scrollbar {
