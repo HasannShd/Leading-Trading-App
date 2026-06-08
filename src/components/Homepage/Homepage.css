@@ -2491,9 +2491,15 @@
 /* ── Hero category chips ─────────────────────────────── */
 .home-hero__cats {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 8px;
   margin-top: 28px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.home-hero__cats::-webkit-scrollbar {
+  display: none;
 }
 
 .home-hero__cat-chip {

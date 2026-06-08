@@ -10,30 +10,6 @@ const Footer = () => {
   return (
     <footer className="footer">
       <div className="footer-shell">
-        <div className="footer-intro">
-          <div className="footer-brand">
-            <div className="footer-logo">
-              <img
-                src={`${import.meta.env.BASE_URL}company-logo.png`}
-                alt="Leading Trading Est"
-              />
-            </div>
-            <div className="footer-brand-copy">
-              <span className="footer-eyebrow">{t('Leading Trading Est')}</span>
-              <h2>{t('Ready for the next quotation?')}</h2>
-              <p>
-                {t('Send a requirement, request a catalog reference, or contact the LTE team for availability and sourcing support.')}
-              </p>
-            </div>
-          </div>
-          <div className="footer-cta-row">
-            <a className="footer-cta" href="tel:+97317210665">{t('Call Us')}</a>
-            <a className="footer-cta outline" href="https://wa.me/97317210665" target="_blank" rel="noopener noreferrer">{t('WhatsApp')}</a>
-            <a className="footer-cta outline" href="/catalog">{t('Catalog')}</a>
-            <a className="footer-cta outline" href="/privacy">{t('Privacy Policy')}</a>
-          </div>
-        </div>
-
         <div className="footer-grid">
           <div className="footer-col">
             <div className="footer-title"><MdEmail /> {t('Contact')}</div>
