@@ -175,7 +175,7 @@
 }
 
 .home-hero__actions,
-.final-cta__actions {
+.final-cta-centered__actions {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
@@ -340,8 +340,7 @@
 }
 
 .section-heading h2,
-.final-cta__panel h2,
-.credibility-stage__statement h2 {
+.why-lte-editorial__statement h2 {
   margin: 18px 0 0;
   font-size: clamp(2.1rem, 3.9vw, 4rem);
   line-height: 0.98;
@@ -350,8 +349,7 @@
 }
 
 .section-heading p,
-.final-cta__panel p,
-.credibility-stage__statement p,
+.why-lte-editorial__statement p,
 .pillar-card p,
 .sector-shot__copy p,
 .trust-stage__copy p,
@@ -376,12 +374,11 @@
 .pillar-card,
 .category-card,
 .featured-band,
-.credibility-stat,
-.final-cta__panel {
+.why-lte-pillar {
   border-radius: 30px;
   border: 1px solid rgba(19, 48, 78, 0.08);
   background:
-    radial-gradient(circle at top right, rgba(198, 145, 89, 0.12), transparent 28%),
+    radial-gradient(circle at top right, rgba(37, 99, 235, 0.06), transparent 28%),
     linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(244, 240, 232, 0.9));
   box-shadow: 0 24px 44px rgba(7, 17, 31, 0.08);
 }
@@ -1316,183 +1313,205 @@
 
 /* ── Why LTE / Credibility section ─────────────────────── */
 
-.credibility-stage__grid {
-  margin-top: 24px;
+/* ── Why LTE Editorial ─────────────────────────────────────── */
+.why-lte-editorial {
+  padding-top: 92px;
+  padding-bottom: 0;
 }
 
-/* Full dark cinematic panel */
-.credibility-stage__panel {
+.why-lte-editorial__card {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(320px, 0.88fr);
+  grid-template-columns: 200px minmax(0, 1fr);
   gap: 0;
-  padding: 0;
-  border-radius: 34px;
-  background:
-    radial-gradient(circle at 8% 80%, rgba(198, 145, 89, 0.18), transparent 32%),
-    radial-gradient(circle at 92% 10%, rgba(29, 70, 111, 0.22), transparent 30%),
-    linear-gradient(135deg, #08121e 0%, #0e2237 52%, #152d46 100%);
-  border: 1px solid rgba(248, 243, 235, 0.08);
-  box-shadow: 0 32px 64px rgba(7, 17, 31, 0.2);
-  align-items: stretch;
+  border-radius: 28px;
+  background: linear-gradient(160deg, #f8f4ee 0%, #f2ece3 100%);
+  border: 1px solid rgba(19, 48, 78, 0.07);
+  box-shadow: 0 24px 48px rgba(7, 17, 31, 0.07);
   overflow: hidden;
-  color: #f8f3eb;
+  align-items: stretch;
 }
 
-/* Left: statement */
-.credibility-stage__statement {
-  padding: 48px 44px;
+.why-lte-editorial__year {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 44px 28px;
+  border-right: 1px solid rgba(19, 48, 78, 0.09);
+  gap: 4px;
+}
+
+.why-lte-editorial__year-num {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(3.2rem, 5vw, 5.4rem);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--navy-900);
+}
+
+.why-lte-editorial__year-sub {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.why-lte-editorial__statement {
+  padding: 44px 48px;
   display: flex;
   flex-direction: column;
   gap: 0;
   justify-content: center;
-  border-right: 1px solid rgba(248, 243, 235, 0.07);
 }
 
-.credibility-stage__statement .home-eyebrow {
-  color: rgba(236, 214, 191, 0.86);
+.why-lte-editorial__statement h2 {
+  margin: 14px 0 0;
+  font-size: clamp(1.55rem, 2.4vw, 2.5rem);
+  line-height: 1.08;
+  letter-spacing: -0.04em;
+  color: var(--navy-900);
+  max-width: 38ch;
 }
 
-.credibility-stage__statement .home-eyebrow::before {
-  background: linear-gradient(90deg, rgba(198, 145, 89, 0.9), rgba(198, 145, 89, 0));
+.why-lte-editorial__statement p {
+  margin: 16px 0 0;
+  color: var(--muted);
+  line-height: 1.84;
+  max-width: 52ch;
 }
 
-/* Override the shared h2 rule for dark bg */
-.credibility-stage__statement h2 {
-  margin: 18px 0 0;
-  font-size: clamp(1.9rem, 2.8vw, 3.2rem);
-  line-height: 1.06;
-  letter-spacing: -0.045em;
-  color: #f8f3eb;
-  max-width: 18ch;
-}
-
-.credibility-stage__statement p {
-  margin: 18px 0 0;
-  color: rgba(231, 218, 201, 0.74);
-  line-height: 1.82;
-  max-width: 46ch;
-}
-
-/* Right: dark glass cards */
-.credibility-stage__support {
+.why-lte-editorial__pillars {
   display: grid;
-  gap: 0;
-  align-content: stretch;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: 18px;
 }
 
-.credibility-support-card {
-  position: relative;
-  padding: 36px 32px 32px 36px;
-  overflow: hidden;
-  transition: background 0.26s ease;
+.why-lte-pillar {
+  padding: 32px 28px;
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-/* Divider between cards */
-.credibility-support-card + .credibility-support-card {
-  border-top: 1px solid rgba(248, 243, 235, 0.07);
-}
-
-/* Gold left accent bar */
-.credibility-support-card::before {
-  content: '';
-  position: absolute;
-  inset: 24px auto 24px 0;
-  width: 3px;
-  border-radius: 0 2px 2px 0;
-  background: linear-gradient(180deg, rgba(211, 157, 99, 0.9), rgba(168, 119, 68, 0.15));
-}
-
-@media (pointer: fine) {
-  .credibility-support-card:hover {
-    background: rgba(248, 243, 235, 0.04);
-  }
-}
-
-.credibility-support-card span {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  color: rgba(211, 157, 99, 0.9);
-  font-size: 0.75rem;
+.why-lte-pillar__index {
+  font-size: 0.7rem;
   font-weight: 800;
   letter-spacing: 0.16em;
   text-transform: uppercase;
+  color: #2563eb;
 }
 
-.credibility-support-card p {
-  margin: 14px 0 0;
-  color: rgba(231, 218, 201, 0.76);
-  line-height: 1.82;
-}
-
-/* Stats row below the panel */
-.credibility-stage__stats {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 18px;
-}
-
-.credibility-stat {
-  min-height: 200px;
-  padding: 28px 24px;
-}
-
-.credibility-stat strong {
-  display: block;
-  margin-bottom: 14px;
-  font-size: clamp(1.6rem, 2.6vw, 2.6rem);
-  line-height: 1.02;
-  letter-spacing: -0.05em;
+.why-lte-pillar h3 {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
   color: var(--navy-900);
 }
 
-.credibility-stat span {
+.why-lte-pillar p {
+  margin: 0;
   color: var(--muted);
-  line-height: 1.8;
+  line-height: 1.82;
+  font-size: 0.93rem;
 }
 
-.final-cta {
+/* ── Final CTA Centered ────────────────────────────────────── */
+.final-cta-centered {
   padding-top: 92px;
   padding-bottom: 96px;
 }
 
-.final-cta__panel {
+.final-cta-centered__panel {
   position: relative;
-  padding: clamp(30px, 4vw, 42px);
+  padding: clamp(52px, 6vw, 80px) clamp(28px, 5vw, 64px);
   overflow: hidden;
+  border-radius: 34px;
+  text-align: center;
   background:
-    radial-gradient(circle at top right, rgba(198, 145, 89, 0.26), transparent 28%),
-    linear-gradient(140deg, rgba(8, 19, 33, 0.99) 0%, rgba(12, 28, 46, 0.98) 56%, rgba(20, 43, 66, 0.98) 100%);
-  border-color: rgba(248, 243, 235, 0.12);
-  box-shadow: 0 32px 64px rgba(7, 17, 31, 0.2);
+    radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.22), transparent 50%),
+    linear-gradient(160deg, #07111d 0%, #0b1a2e 52%, #0e2237 100%);
+  border: 1px solid rgba(59, 130, 246, 0.14);
+  box-shadow: 0 40px 80px rgba(7, 17, 31, 0.28);
 }
 
-.final-cta__panel h2 {
-  max-width: 22ch;
-  font-size: clamp(2.1rem, 4vw, 3.45rem);
-  line-height: 1.04;
-  letter-spacing: -0.045em;
-}
-
-.final-cta__panel::after {
+.final-cta-centered__panel::after {
   content: '';
   position: absolute;
-  inset: auto -12% -120px auto;
-  width: 320px;
-  height: 320px;
+  inset: -40% 20% auto;
+  width: 60%;
+  height: 60%;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(198, 145, 89, 0.34), rgba(198, 145, 89, 0) 70%);
-  filter: blur(20px);
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.18), transparent 70%);
+  filter: blur(40px);
   pointer-events: none;
 }
 
-.final-cta__panel h2,
-.final-cta__panel p {
-  color: #f8f3eb;
+.final-cta-centered__eyebrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-bottom: 28px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(148, 163, 184, 0.9);
 }
 
-.final-cta__panel p {
-  color: rgba(244, 237, 229, 0.88);
+.final-cta-centered__rule {
+  display: block;
+  width: 36px;
+  height: 1px;
+  background: rgba(148, 163, 184, 0.4);
+}
+
+.final-cta-centered__panel h2 {
+  margin: 0 auto;
+  max-width: 18ch;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(2.4rem, 4.2vw, 4.8rem);
+  font-weight: 600;
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  color: #f8f4ee;
+}
+
+.final-cta-centered__panel p {
+  margin: 22px auto 0;
+  max-width: 52ch;
+  color: rgba(203, 213, 225, 0.82);
+  line-height: 1.84;
+}
+
+.final-cta-centered__actions {
+  justify-content: center;
+  margin-top: 36px;
+}
+
+.final-cta-centered__trust {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 32px;
+}
+
+.final-cta-centered__trust span {
+  padding: 6px 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  font-size: 0.67rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(148, 163, 184, 0.72);
 }
 
 @keyframes logo-marquee {
@@ -1509,8 +1528,21 @@
   .home-hero__grid,
   .workflow-stage__grid,
   .sector-shot,
-  .credibility-stage__panel {
+  .why-lte-editorial__card {
     grid-template-columns: 1fr;
+  }
+
+  .why-lte-editorial__year {
+    border-right: none;
+    border-bottom: 1px solid rgba(19, 48, 78, 0.09);
+    flex-direction: row;
+    justify-content: flex-start;
+    padding: 28px 36px;
+    gap: 12px;
+  }
+
+  .why-lte-editorial__statement {
+    padding: 32px 36px;
   }
 
   .medstar-spotlight {
@@ -1524,7 +1556,7 @@
 
   .pillar-grid,
   .category-grid,
-  .credibility-stage__stats {
+  .why-lte-editorial__pillars {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
@@ -1580,7 +1612,7 @@
   .medstar-spotlight__points,
   .pillar-grid,
   .category-grid,
-  .credibility-stage__stats,
+  .why-lte-editorial__pillars,
   .featured-grid {
     grid-template-columns: 1fr;
   }
@@ -1628,7 +1660,6 @@
   }
 
   .sector-shot__frame,
-  .final-cta__panel,
   .medstar-spotlight,
   .pillar-card,
   .featured-band,
@@ -1638,15 +1669,12 @@
     padding: 24px;
   }
 
-  /* Credibility panel — stacked: swap border direction, reduce padding */
-  .credibility-stage__statement {
-    padding: 32px 28px;
-    border-right: none;
-    border-bottom: 1px solid rgba(248, 243, 235, 0.07);
+  .final-cta-centered__panel {
+    padding: 44px 24px;
   }
 
-  .credibility-support-card {
-    padding: 28px 24px 24px 28px;
+  .final-cta-centered__panel h2 {
+    font-size: clamp(2rem, 7vw, 3.2rem);
   }
 
   .home-btn {

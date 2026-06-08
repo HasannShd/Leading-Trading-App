@@ -552,51 +552,54 @@ const HomePage = () => {
         </div>
       </section>
 
-      <section className="home-section credibility-stage">
-        <div className="home-shell credibility-stage__panel">
-          <div className="credibility-stage__statement animate-stagger" data-stagger-step="110ms">
-            <span className="home-eyebrow animate-on-scroll">{t('Why LTE')}</span>
-            <h2 className="animate-on-scroll">{t('LTE is structured around accountable teams, disciplined sourcing, and support that stays clear from enquiry through delivery.')}</h2>
-            <p className="animate-on-scroll">
-              {t('Led by Shahid Majeed, our operating model is designed for customers who need dependable communication, better commercial control, and a supply partner with real team depth across sourcing, accounts, technology, marketing, and delivery.')}
-            </p>
+      <section className="home-section why-lte-editorial">
+        <div className="home-shell">
+          <div className="why-lte-editorial__card animate-stagger" data-stagger-step="110ms">
+            <div className="why-lte-editorial__year animate-on-scroll">
+              <span className="why-lte-editorial__year-num">2012</span>
+              <span className="why-lte-editorial__year-sub">{t('Est. Bahrain')}</span>
+            </div>
+            <div className="why-lte-editorial__statement animate-on-scroll">
+              <span className="home-eyebrow home-eyebrow--ink">{t('Why LTE')}</span>
+              <h2>{t('A Bahrain supply partner structured for accountability, quality control, and follow-through from enquiry to delivery.')}</h2>
+              <p>{t("Led by Shahid Majeed, LTE operates with coordinated teams across sourcing, accounts, logistics, and delivery — so support doesn't end at the quotation stage.")}</p>
+            </div>
           </div>
 
-          <div className="credibility-stage__support animate-stagger" data-stagger-step="120ms">
-            {credibilityPillars.map((pillar) => (
-              <article className="credibility-support-card animate-on-scroll" key={pillar.title}>
-                <span>{t(pillar.title)}</span>
+          <div className="why-lte-editorial__pillars animate-stagger" data-stagger-step="120ms">
+            {credibilityPillars.map((pillar, i) => (
+              <article className="why-lte-pillar animate-on-scroll" key={pillar.title}>
+                <span className="why-lte-pillar__index">{`0${i + 1}`}</span>
+                <h3>{t(pillar.title)}</h3>
                 <p>{t(pillar.body)}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-
-        <div className="home-shell credibility-stage__grid">
-          <div className="credibility-stage__stats animate-stagger" data-stagger-step="120ms">
-            {whyStats.map((item) => (
-              <article className="credibility-stat animate-on-scroll" key={item.label}>
-                <strong>{item.value}</strong>
-                <span>{t(item.label)}</span>
               </article>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="home-section final-cta">
-        <div className="home-shell final-cta__panel">
-          <div className="animate-stagger" data-stagger-step="110ms">
-            <span className="home-eyebrow animate-on-scroll">{t('Next step')}</span>
-            <h2 className="animate-on-scroll">{t('Discuss your requirement with the LTE team responsible for sourcing, coordination, and delivery support.')}</h2>
+      <section className="home-section final-cta-centered">
+        <div className="home-shell">
+          <div className="final-cta-centered__panel animate-stagger" data-stagger-step="110ms">
+            <div className="final-cta-centered__eyebrow animate-on-scroll">
+              <span className="final-cta-centered__rule" />
+              <span>{t('Next Step')}</span>
+              <span className="final-cta-centered__rule" />
+            </div>
+            <h2 className="animate-on-scroll">{t('Ready to source with a partner that follows through?')}</h2>
             <p className="animate-on-scroll">
-              {t('For quotations, category guidance, account support, or project enquiries, our team is available to provide a clear and practical next step.')}
+              {t('Send a requirement, request a catalog reference, or contact the LTE team for availability, quotation support, and delivery coordination across Bahrain.')}
             </p>
-          </div>
-
-          <div className="final-cta__actions animate-stagger" data-stagger-step="120ms">
-            <Link className="home-btn home-btn--primary animate-on-scroll" to="/contact?source=home">{t('Request a Quote')}</Link>
-            <Link className="home-btn home-btn--ghost-light animate-on-scroll" to="/about">{t('Learn More About LTE')}</Link>
+            <div className="final-cta-centered__actions animate-stagger" data-stagger-step="100ms">
+              <Link className="home-btn home-btn--primary animate-on-scroll" to="/contact?source=home">{t('Request a Quote')}</Link>
+              <Link className="home-btn home-btn--ghost-light animate-on-scroll" to="/categories">{t('Explore Categories')}</Link>
+              <Link className="home-btn home-btn--ghost-light animate-on-scroll" to="/catalog">{t('Open Catalog')}</Link>
+            </div>
+            <div className="final-cta-centered__trust animate-on-scroll">
+              <span>{t('NHRA Certified')}</span>
+              <span>{t('Since 2012')}</span>
+              <span>{t('Bahrain-Based')}</span>
+            </div>
           </div>
         </div>
       </section>
