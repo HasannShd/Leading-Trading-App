@@ -1813,6 +1813,7 @@
     font-size: clamp(2.45rem, 9.2vw, 3.45rem);
     letter-spacing: -0.018em;
     line-height: 1.15;
+    white-space: normal;
   }
 
 }
@@ -2033,6 +2034,7 @@
   display: block;
   margin: 0;
   max-width: none;
+  white-space: nowrap;
   color: #f8f3eb;
   font-family: 'Cormorant Garamond', Georgia, serif;
   font-size: clamp(3.4rem, 6.5vw, 7.4rem);
