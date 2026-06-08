@@ -2041,7 +2041,6 @@
   display: block;
   margin: 0;
   max-width: none;
-  white-space: nowrap;
   color: #f8f3eb;
   font-family: 'Cormorant Garamond', Georgia, serif;
   font-size: clamp(3.4rem, 6.5vw, 7.4rem);
@@ -2050,6 +2049,12 @@
   letter-spacing: -0.02em;
   text-shadow: 0 16px 36px rgba(0, 0, 0, 0.28);
   animation: fadeUp 0.7s ease 0.18s both;
+}
+
+@media (min-width: 769px) {
+  .home-hero__editorial .home-hero__copy h1 {
+    white-space: nowrap;
+  }
 }
 
 .home-hero__lead {
@@ -2318,7 +2323,7 @@
     height: auto;
     min-height: auto;
     padding-top: 94px;
-    overflow: visible;
+    overflow: hidden;
     background:
       radial-gradient(ellipse 680px 520px at 70% 12%, rgba(26, 51, 70, 0.62), transparent 68%),
       linear-gradient(160deg, #151412 0%, #07111d 44%, #0b1e31 100%);
