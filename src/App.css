@@ -40,15 +40,11 @@ html, body, #root {
   /* scroll-behavior handled by Lenis on desktop; native on touch */
 }
 
-h1, h2, h3 {
+h1, h2, h3, h4, h5, h6 {
   font-family: 'Cormorant Garamond', Georgia, serif;
+  font-weight: 600;
   letter-spacing: -0.03em;
   text-wrap: balance;
-}
-
-h4, h5, h6 {
-  font-family: 'Cormorant Garamond', Georgia, serif;
-  letter-spacing: -0.02em;
 }
 
 p {
