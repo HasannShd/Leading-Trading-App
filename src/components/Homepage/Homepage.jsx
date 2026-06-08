@@ -123,12 +123,6 @@ const sectors = [
   },
 ];
 
-const whyStats = [
-  { value: 'NHRA approved', label: 'Certified company supporting regulated medical supply requirements in Bahrain' },
-  { value: '2012', label: 'Established Bahrain supplier supporting healthcare and industrial buyers' },
-  { value: 'Medical + Industrial', label: 'One operating structure supporting clinical, dental, safety, and utility requirements' },
-  { value: 'Quality review', label: 'Supplier and product decisions guided by suitability, documentation, and continuity of supply' },
-];
 
 const credibilityPillars = [
   {
