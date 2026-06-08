@@ -27,9 +27,8 @@ const Categories = () => {
     try {
       const response = await fetch(`${API_URL}/categories`);
       const data = await response.json();
-      const nextCategories = asCategoryArray(data);
-      setCategories(nextCategories);
-    } catch (err) {
+      setCategories(asCategoryArray(data));
+    } catch {
       setError('We could not load the category catalog right now.');
     } finally {
       setLoading(false);
@@ -60,8 +59,6 @@ const Categories = () => {
       : tree;
   }, [deferredQuery, categories, categoryName, categoryDescription]);
 
-  const withDescriptions = categories.filter((category) => category.description?.trim()).length;
-
   return (
     <main>
       <Seo
@@ -86,32 +83,29 @@ const Categories = () => {
         ]}
       />
       <section className="categories-shell" ref={rootRef}>
-        <section className="categories-hero">
+
+        {/* ── Hero ── */}
+        <section className="categories-hero animate-stagger" data-stagger-step="110ms">
           <div className="categories-hero-copy animate-stagger" data-stagger-step="110ms">
             <span className="categories-eyebrow animate-on-scroll">{t('Our Categories')}</span>
             <h1 className="categories-title animate-on-scroll">{t("Browse LTE's medical, dental, and industrial categories.")}</h1>
             <p className="categories-subtitle animate-on-scroll">
-              {t('Review the main groups first, then open the relevant category to find the right department or supply area faster.')}
+              {t('Open a main category to browse the products available inside that operating group.')}
             </p>
           </div>
-
-          <div className="categories-hero-tools animate-stagger" data-stagger-step="120ms">
+          <div className="categories-hero-search animate-on-scroll">
             <Input
-              className="categories-search animate-on-scroll"
+              className="categories-search"
               placeholder={t('Search categories, departments, or supply types')}
               value={q}
               onChange={(e) => setQ(e.target.value)}
             />
-            <div className="categories-hero-stats animate-stagger" data-stagger-step="120ms">
-              <div className="categories-stat animate-on-scroll">
-                <strong>{categories.length}</strong>
-                <span>{t('active categories')}</span>
+            {!loading && (
+              <div className="categories-hero-meta">
+                <span><strong>{categories.length}</strong> {t('categories')}</span>
+                {q.trim() && <span><strong>{list.length}</strong> {t('matched')}</span>}
               </div>
-              <div className="categories-stat animate-on-scroll">
-                <strong>{withDescriptions}</strong>
-                <span>{t('with descriptions')}</span>
-              </div>
-            </div>
+            )}
           </div>
         </section>
 
@@ -119,7 +113,7 @@ const Categories = () => {
           <StatePanel
             eyebrow={t('Loading')}
             title={t('Preparing the category catalog')}
-            description={t('We’re pulling the current category structure and matching assets.')}
+            description={t("We're pulling the current category structure and matching assets.")}
             variant="loading"
           />
         ) : error ? (
@@ -140,85 +134,60 @@ const Categories = () => {
             action={q.trim() ? <button className="btn" onClick={() => setQ('')}>{t('Clear Search')}</button> : null}
           />
         ) : (
-          <>
-            <section className="categories-guidance animate-stagger" data-stagger-step="100ms">
-              <article className="categories-guidance-card animate-on-scroll">
-                <span>{t('Structured browsing')}</span>
-                <strong>{t('Start with the main operating group, then open the relevant category directly.')}</strong>
-                <p>{t('The catalog now stays at the main-category level so visitors can move into the right department faster.')}</p>
-              </article>
-              <article className="categories-guidance-card animate-on-scroll">
-                <span>{t('Practical filtering')}</span>
-                <strong>{t('Use the search bar to narrow by department, supply type, or procurement purpose.')}</strong>
-                <p>{t('Searches look across the full category catalog, making it easier to locate the correct supply path.')}</p>
-              </article>
-              <article className="categories-guidance-card animate-on-scroll">
-                <span>{t('Quotation support')}</span>
-                <strong>{t('Open a category to review its products, then contact LTE for sourcing guidance.')}</strong>
-                <p>{t('When you need help choosing the right section, the team can guide the next step directly.')}</p>
-              </article>
-            </section>
+          <div className="categories-grid animate-stagger" data-stagger-step="80ms">
+            {list.map((c) => {
+              const categoryKey = (c.slug || c.name || '')
+                .toLowerCase()
+                .replace(/[^a-z0-9]+/g, '-')
+                .replace(/(^-|-$)+/g, '');
 
-            <div className="categories-results-bar animate-on-scroll">
-              <span>{list.length} {t('available')}</span>
-              <p>{t('Select a main category to review the products available inside that operating group.')}</p>
-            </div>
-
-            <div className="categories-grid animate-stagger" data-stagger-step="100ms">
-              {list.map((c) => {
-                const categoryKey = (c.slug || c.name || '')
-                  .toLowerCase()
-                  .replace(/[^a-z0-9]+/g, '-')
-                  .replace(/(^-|-$)+/g, '');
-
-                return (
-                  <Link
-                    key={c._id}
-                    to={`/categories/${c.slug || c._id}`}
-                    className="categories-card-link animate-on-scroll"
-                    aria-label={`${t('Open')} ${categoryName(c.name)}`}
-                  >
-                    <Card className="categories-card">
-                      <div className="categories-card-image" data-category={categoryKey}>
-                        {c.image ? (
-                          <img
-                            className={`categories-card-img${categoryKey ? ` categories-card-img--${categoryKey}` : ''}`}
-                            src={
-                              c.image.startsWith('http')
-                                ? c.image
-                                : `${import.meta.env.BASE_URL}${c.image.replace(/^\//, '')}`
-                            }
-                            alt={c.name}
-                            loading="lazy"
-                          />
-                        ) : (
-                          <span>{categoryName(c.name)[0]}</span>
-                        )}
+              return (
+                <Link
+                  key={c._id}
+                  to={`/categories/${c.slug || c._id}`}
+                  className="categories-card-link animate-on-scroll"
+                  aria-label={`${t('Open')} ${categoryName(c.name)}`}
+                >
+                  <Card className="categories-card">
+                    <div className="categories-card-image" data-category={categoryKey}>
+                      {c.image ? (
+                        <img
+                          className={`categories-card-img${categoryKey ? ` categories-card-img--${categoryKey}` : ''}`}
+                          src={
+                            c.image.startsWith('http')
+                              ? c.image
+                              : `${import.meta.env.BASE_URL}${c.image.replace(/^\//, '')}`
+                          }
+                          alt={c.name}
+                          loading="lazy"
+                        />
+                      ) : (
+                        <span>{categoryName(c.name)[0]}</span>
+                      )}
+                    </div>
+                    <div className="categories-card-content">
+                      <div className="categories-card-topline">
+                        <span>{t('Category')}</span>
+                        <strong>{t('Open')}</strong>
                       </div>
-                      <div className="categories-card-content">
-                        <div className="categories-card-topline">
-                          <span>{t('Main Category')}</span>
-                          <strong>{t('Open')}</strong>
+                      <h3 className="categories-card-title">{categoryName(c.name)}</h3>
+                      <p className="categories-card-desc">
+                        {categoryDescription(c.description?.trim()) || t('Browse the products available inside this main category.')}
+                      </p>
+                      {c.children?.length ? (
+                        <div className="categories-card-children">
+                          {c.children.slice(0, 3).map((child) => (
+                            <span key={child._id}>{categoryName(child.name)}</span>
+                          ))}
+                          {c.children.length > 3 ? <strong>+{c.children.length - 3}</strong> : null}
                         </div>
-                        <h3 className="categories-card-title">{categoryName(c.name)}</h3>
-                        <p className="categories-card-desc">
-                          {categoryDescription(c.description?.trim()) || t('Browse the products available inside this main category.')}
-                        </p>
-                        {c.children?.length ? (
-                          <div className="categories-card-children">
-                            {c.children.slice(0, 4).map((child) => (
-                              <span key={child._id}>{categoryName(child.name)}</span>
-                            ))}
-                            {c.children.length > 4 ? <strong>+{c.children.length - 4} {t('more')}</strong> : null}
-                          </div>
-                        ) : null}
-                      </div>
-                    </Card>
-                  </Link>
-                );
-              })}
-            </div>
-          </>
+                      ) : null}
+                    </div>
+                  </Card>
+                </Link>
+              );
+            })}
+          </div>
         )}
       </section>
     </main>
