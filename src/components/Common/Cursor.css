@@ -32,7 +32,7 @@
 .cursor-dot {
   width: 6px;
   height: 6px;
-  background: #c69159;
+  background: #3b82f6;
   transition: opacity 0.2s ease, width 0.2s ease, height 0.2s ease, background 0.2s ease;
 }
 
@@ -46,7 +46,7 @@
 .cursor-ring {
   width: 34px;
   height: 34px;
-  border: 1.5px solid rgba(198, 145, 89, 0.7);
+  border: 1.5px solid rgba(59, 130, 246, 0.7);
   background: transparent;
   transition:
     opacity 0.3s ease,
@@ -59,13 +59,13 @@
 .cursor-ring.cursor-ring--hover {
   width: 52px;
   height: 52px;
-  border-color: rgba(198, 145, 89, 0.45);
-  background: rgba(198, 145, 89, 0.06);
+  border-color: rgba(59, 130, 246, 0.45);
+  background: rgba(59, 130, 246, 0.06);
 }
 
 .cursor-ring.cursor-ring--click {
   width: 26px;
   height: 26px;
-  border-color: rgba(198, 145, 89, 0.9);
-  background: rgba(198, 145, 89, 0.12);
+  border-color: rgba(59, 130, 246, 0.9);
+  background: rgba(59, 130, 246, 0.12);
 }

@@ -13,7 +13,7 @@
   grid-template-columns: minmax(0, 1.15fr) minmax(300px, 0.85fr);
   gap: 26px;
   background:
-    radial-gradient(circle at top right, rgba(198, 145, 89, 0.22), transparent 28%),
+    radial-gradient(circle at top right, rgba(59, 130, 246, 0.22), transparent 28%),
     linear-gradient(135deg, #0a1424 0%, #11283f 48%, #16324d 100%);
   color: #f8f3eb;
   box-shadow: 0 26px 52px rgba(7, 17, 31, 0.16);
@@ -34,7 +34,7 @@
   content: '';
   width: 38px;
   height: 1px;
-  background: linear-gradient(90deg, rgba(198, 145, 89, 0.9), rgba(198, 145, 89, 0));
+  background: linear-gradient(90deg, rgba(59, 130, 246, 0.9), rgba(59, 130, 246, 0));
 }
 
 .about-hero-copy h1 {
@@ -132,11 +132,11 @@
 }
 
 .about-section-heading .about-eyebrow {
-  color: #875625;
+  color: #1d4ed8;
 }
 
 .about-section-heading .about-eyebrow::before {
-  background: linear-gradient(90deg, rgba(168, 119, 68, 0.9), rgba(168, 119, 68, 0));
+  background: linear-gradient(90deg, rgba(37, 99, 235, 0.9), rgba(37, 99, 235, 0));
 }
 
 .about-section-heading h2 {
@@ -195,7 +195,7 @@
   align-items: center;
   justify-content: center;
   background:
-    radial-gradient(circle at top left, rgba(198, 145, 89, 0.16), transparent 34%),
+    radial-gradient(circle at top left, rgba(59, 130, 246, 0.16), transparent 34%),
     rgba(255, 255, 255, 0.72);
   border: 1px solid rgba(19, 48, 78, 0.08);
 }
@@ -233,8 +233,8 @@
   width: 9px;
   height: 9px;
   border-radius: 999px;
-  background: linear-gradient(135deg, #d39d63 0%, #b57b43 58%, #875625 100%);
-  box-shadow: 0 0 0 6px rgba(168, 119, 68, 0.12);
+  background: linear-gradient(135deg, #60a5fa 0%, #2563eb 58%, #1d4ed8 100%);
+  box-shadow: 0 0 0 6px rgba(37, 99, 235, 0.12);
 }
 
 .about-pillar-list {
@@ -260,8 +260,8 @@
   width: 10px;
   height: 10px;
   border-radius: 999px;
-  background: linear-gradient(135deg, #d39d63 0%, #b57b43 58%, #875625 100%);
-  box-shadow: 0 0 0 6px rgba(168, 119, 68, 0.12);
+  background: linear-gradient(135deg, #60a5fa 0%, #2563eb 58%, #1d4ed8 100%);
+  box-shadow: 0 0 0 6px rgba(37, 99, 235, 0.12);
 }
 
 .about-workflow-grid {
@@ -313,7 +313,7 @@
   padding: 22px;
   border-radius: 24px;
   background:
-    radial-gradient(circle at top right, rgba(198, 145, 89, 0.16), transparent 34%),
+    radial-gradient(circle at top right, rgba(59, 130, 246, 0.16), transparent 34%),
     linear-gradient(135deg, #0b1626 0%, #10253c 50%, #14314c 100%);
   box-shadow: 0 22px 44px rgba(7, 17, 31, 0.14);
 }
@@ -368,7 +368,7 @@
   align-items: center;
   width: fit-content;
   margin-top: 18px;
-  color: #875625;
+  color: #1d4ed8;
   font-weight: 800;
   text-decoration: none;
 }
@@ -473,7 +473,7 @@
 }
 
 .director-timeline-card small {
-  color: #875625;
+  color: #1d4ed8;
   font-weight: 900;
   letter-spacing: 0.12em;
   text-transform: uppercase;

@@ -28,7 +28,7 @@ html, body, #root {
   overflow-x: clip;
   max-width: 100%;
   background:
-    radial-gradient(920px 540px at 12% -10%, rgba(168, 119, 68, 0.12), transparent 60%),
+    radial-gradient(920px 540px at 12% -10%, rgba(37, 99, 235, 0.12), transparent 60%),
     radial-gradient(820px 500px at 88% 0%, rgba(23, 51, 77, 0.12), transparent 60%),
     #f5f0e8;
   color: #091525;

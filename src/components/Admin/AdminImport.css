@@ -40,7 +40,7 @@
 
 .admin-import-kicker {
   margin: 0 0 10px;
-  color: #b57b43;
+  color: #2563eb;
   text-transform: uppercase;
   letter-spacing: 0.16em;
   font-size: 0.8rem;
@@ -54,8 +54,8 @@
   min-height: 42px;
   padding: 0 16px;
   border-radius: 999px;
-  background: rgba(198, 145, 89, 0.12);
-  border: 1px solid rgba(198, 145, 89, 0.18);
+  background: rgba(59, 130, 246, 0.12);
+  border: 1px solid rgba(59, 130, 246, 0.18);
   color: #8a5c2c;
   font-weight: 700;
   white-space: nowrap;

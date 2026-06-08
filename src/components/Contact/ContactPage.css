@@ -31,12 +31,12 @@
 .contact-form-accent {
   width: 42px;
   height: 1px;
-  background: linear-gradient(90deg, rgba(168, 119, 68, 0.9), rgba(168, 119, 68, 0));
+  background: linear-gradient(90deg, rgba(37, 99, 235, 0.9), rgba(37, 99, 235, 0));
   border-radius: 0;
 }
 
 .contact-form-title {
-  color: #875625;
+  color: #1d4ed8;
   font-weight: 700;
   font-size: 0.82rem;
   letter-spacing: 0.18em;
@@ -64,12 +64,12 @@
   margin-bottom: 18px;
   padding: 14px 16px;
   border-radius: 16px;
-  background: rgba(168, 119, 68, 0.09);
-  border: 1px solid rgba(168, 119, 68, 0.18);
+  background: rgba(37, 99, 235, 0.09);
+  border: 1px solid rgba(37, 99, 235, 0.18);
 }
 
 .contact-quote-context span {
-  color: #875625;
+  color: #1d4ed8;
   font-size: 0.76rem;
   font-weight: 800;
   text-transform: uppercase;
@@ -116,7 +116,7 @@
 .contact-form input[type="file"]:hover,
 .contact-form select:hover,
 .contact-form textarea:hover {
-  border-color: rgba(168, 119, 68, 0.28);
+  border-color: rgba(37, 99, 235, 0.28);
   background: rgba(255, 255, 255, 0.96);
 }
 
@@ -126,9 +126,9 @@
 .contact-form input[type="file"]:focus,
 .contact-form select:focus,
 .contact-form textarea:focus {
-  border-color: rgba(168, 119, 68, 0.5);
+  border-color: rgba(37, 99, 235, 0.5);
   background: #ffffff;
-  box-shadow: 0 0 0 3px rgba(168, 119, 68, 0.14), 0 1px 4px rgba(168, 119, 68, 0.08);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14), 0 1px 4px rgba(37, 99, 235, 0.08);
 }
 
 .contact-form textarea {
@@ -190,20 +190,20 @@
 .contact-form-submit {
   width: 100%;
   min-height: 52px;
-  background: linear-gradient(135deg, #d39d63 0%, #b57b43 58%, #875625 100%);
+  background: linear-gradient(135deg, #60a5fa 0%, #2563eb 58%, #1d4ed8 100%);
   color: #fff;
-  border: 1px solid rgba(211, 157, 99, 0.34);
+  border: 1px solid rgba(96, 165, 250, 0.34);
   font-weight: 700;
   border-radius: 999px;
   font-size: 1.04rem;
-  box-shadow: 0 16px 30px rgba(135, 86, 37, 0.22);
+  box-shadow: 0 16px 30px rgba(29, 78, 216, 0.22);
   cursor: pointer;
   transition: transform 0.22s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.22s ease, background 0.22s ease;
 }
 
 .contact-form-submit:hover {
   background: linear-gradient(135deg, #dba76a 0%, #be824b 58%, #905f2e 100%);
-  box-shadow: 0 22px 42px rgba(135, 86, 37, 0.32);
+  box-shadow: 0 22px 42px rgba(29, 78, 216, 0.32);
   transform: translateY(-2px);
 }
 

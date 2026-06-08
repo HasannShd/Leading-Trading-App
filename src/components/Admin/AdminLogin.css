@@ -114,13 +114,13 @@
 
 .admin-form-input:focus {
   outline: none;
-  border-color: rgba(168, 119, 68, 0.45);
-  box-shadow: 0 0 0 3px rgba(168, 119, 68, 0.14);
+  border-color: rgba(37, 99, 235, 0.45);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14);
 }
 
 .admin-login-button {
   padding: 14px 24px;
-  background: linear-gradient(135deg, #d39d63 0%, #c1823f 58%, #9c6430 100%);
+  background: linear-gradient(135deg, #60a5fa 0%, #2563eb 58%, #1d4ed8 100%);
   color: white;
   border: none;
   border-radius: 999px;

@@ -32,12 +32,12 @@
 
 .btn:hover {
   background: #ffffff;
-  border-color: rgba(168, 119, 68, 0.18);
+  border-color: rgba(37, 99, 235, 0.18);
   transform: translateY(-2px);
   box-shadow:
     0 1px 0 rgba(255, 255, 255, 0.9) inset,
     0 16px 30px rgba(7, 17, 31, 0.1),
-    0 0 0 3px rgba(168, 119, 68, 0.05);
+    0 0 0 3px rgba(37, 99, 235, 0.05);
 }
 
 .btn:active {
@@ -48,34 +48,34 @@
 .btn:focus-visible {
   outline: none;
   box-shadow:
-    0 0 0 3px rgba(168, 119, 68, 0.16),
-    0 0 0 6px rgba(168, 119, 68, 0.08);
+    0 0 0 3px rgba(37, 99, 235, 0.16),
+    0 0 0 6px rgba(37, 99, 235, 0.08);
 }
 
-/* ── Primary (gold) ─────────────────── */
+/* ── Primary (blue) ─────────────────── */
 .btn.primary {
-  background: linear-gradient(135deg, #d4a067 0%, #b57b43 55%, #875625 100%);
-  border-color: rgba(212, 160, 103, 0.36);
+  background: linear-gradient(135deg, #60a5fa 0%, #2563eb 55%, #1d4ed8 100%);
+  border-color: rgba(96, 165, 250, 0.36);
   color: #fffdf8;
   box-shadow:
     0 1px 0 rgba(255, 255, 255, 0.18) inset,
-    0 16px 32px rgba(135, 86, 37, 0.22);
+    0 16px 32px rgba(29, 78, 216, 0.22);
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
 }
 
 .btn.primary:hover {
   background: linear-gradient(135deg, #dba96e 0%, #be844b 55%, #905d2f 100%);
-  border-color: rgba(212, 160, 103, 0.44);
+  border-color: rgba(96, 165, 250, 0.44);
   box-shadow:
     0 1px 0 rgba(255, 255, 255, 0.2) inset,
-    0 20px 40px rgba(135, 86, 37, 0.28),
-    0 0 0 4px rgba(168, 119, 68, 0.1);
+    0 20px 40px rgba(29, 78, 216, 0.28),
+    0 0 0 4px rgba(37, 99, 235, 0.1);
 }
 
 .btn.primary:active {
   transform: translateY(0) scale(0.98);
-  box-shadow: 0 8px 18px rgba(135, 86, 37, 0.2);
+  box-shadow: 0 8px 18px rgba(29, 78, 216, 0.2);
 }
 
 /* ── Disabled ───────────────────────── */

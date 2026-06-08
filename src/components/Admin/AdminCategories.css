@@ -40,9 +40,9 @@
 
 .admin-add-btn,
 .admin-btn-primary {
-  background: linear-gradient(135deg, #d39d63 0%, #b57b43 58%, #875625 100%);
+  background: linear-gradient(135deg, #60a5fa 0%, #2563eb 58%, #1d4ed8 100%);
   color: white;
-  box-shadow: 0 16px 28px rgba(135, 86, 37, 0.18);
+  box-shadow: 0 16px 28px rgba(29, 78, 216, 0.18);
 }
 
 .admin-btn-secondary {
@@ -136,7 +136,7 @@
   padding: 10px 16px;
   border: none;
   border-radius: 999px;
-  background: linear-gradient(135deg, #d39d63 0%, #b57b43 58%, #875625 100%);
+  background: linear-gradient(135deg, #60a5fa 0%, #2563eb 58%, #1d4ed8 100%);
   color: #ffffff;
   font-weight: 700;
   cursor: pointer;
@@ -146,8 +146,8 @@
 .admin-form-group textarea:focus,
 .admin-form-group select:focus {
   outline: none;
-  border-color: rgba(168, 119, 68, 0.45);
-  box-shadow: 0 0 0 3px rgba(168, 119, 68, 0.14);
+  border-color: rgba(37, 99, 235, 0.45);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14);
 }
 
 .admin-form-group small,
@@ -276,7 +276,7 @@
 }
 
 .btn-edit {
-  background: rgba(198, 145, 89, 0.16);
+  background: rgba(59, 130, 246, 0.16);
   color: #7f5425;
 }
 
@@ -786,8 +786,8 @@
 }
 
 .admin-category-tile.active {
-  border-color: rgba(198, 145, 89, 0.28);
-  background: rgba(198, 145, 89, 0.14);
+  border-color: rgba(59, 130, 246, 0.28);
+  background: rgba(59, 130, 246, 0.14);
 }
 
 .admin-category-name {

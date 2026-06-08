@@ -59,8 +59,8 @@
 }
 
 .admin-search-control:focus-within {
-  border-color: rgba(198, 145, 89, 0.32);
-  box-shadow: 0 0 0 3px rgba(198, 145, 89, 0.12);
+  border-color: rgba(59, 130, 246, 0.32);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
 }
 
 .admin-search-clear {
@@ -369,7 +369,7 @@
   min-height: 30px;
   padding: 0 13px;
   border-radius: 999px;
-  background: linear-gradient(135deg, #d39d63 0%, #b57b43 58%, #875625 100%);
+  background: linear-gradient(135deg, #60a5fa 0%, #2563eb 58%, #1d4ed8 100%);
   color: #fff;
   font-weight: 800;
   font-size: 0.82rem;

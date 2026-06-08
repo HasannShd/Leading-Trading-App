@@ -335,10 +335,6 @@ const Header = () => {
             {t('Careers')}
           </NavLink>
 
-          <NavLink to="/contact" onClick={() => setMobileNav(false)}>
-            {t('Contact')}
-          </NavLink>
-
           <NavLink to="/cart" onClick={() => setMobileNav(false)}>
             {t('Quote Basket')}
           </NavLink>

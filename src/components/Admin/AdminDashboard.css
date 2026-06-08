@@ -176,7 +176,7 @@
   border-radius: 999px;
   font-size: 0.9rem;
   font-weight: 600;
-  border: 1px solid rgba(198, 145, 89, 0.18);
+  border: 1px solid rgba(59, 130, 246, 0.18);
 }
 
 .admin-content {
@@ -237,7 +237,7 @@
 }
 
 .admin-card-action button {
-  background: linear-gradient(135deg, #d39d63 0%, #b57b43 58%, #875625 100%);
+  background: linear-gradient(135deg, #60a5fa 0%, #2563eb 58%, #1d4ed8 100%);
   color: white;
   border: none;
   padding: 10px 16px;
