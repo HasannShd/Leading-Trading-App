@@ -2506,16 +2506,18 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 7px 14px;
-  border-radius: 12px;
-  border: 1px solid rgba(248, 243, 235, 0.12);
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(248, 243, 235, 0.14);
   background: rgba(248, 243, 235, 0.06);
-  color: rgba(248, 243, 235, 0.72);
-  font-size: 0.82rem;
+  color: rgba(248, 243, 235, 0.78);
+  font-size: 0.8rem;
   font-weight: 500;
+  white-space: nowrap;
   text-decoration: none;
   transition: background 0.18s, border-color 0.18s, color 0.18s;
   backdrop-filter: blur(8px);
+  flex-shrink: 0;
 }
 
 .home-hero__cat-icon {
