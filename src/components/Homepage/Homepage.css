@@ -2458,3 +2458,111 @@
     animation: none;
   }
 }
+
+/* ── Hero category chips ─────────────────────────────── */
+.home-hero__cats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 28px;
+}
+
+.home-hero__cat-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 7px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(248, 243, 235, 0.12);
+  background: rgba(248, 243, 235, 0.06);
+  color: rgba(248, 243, 235, 0.72);
+  font-size: 0.82rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background 0.18s, border-color 0.18s, color 0.18s;
+  backdrop-filter: blur(8px);
+}
+
+.home-hero__cat-chip:hover {
+  background: rgba(37, 99, 235, 0.16);
+  border-color: rgba(59, 130, 246, 0.3);
+  color: #93c5fd;
+}
+
+/* ── Hero since / NHRA bar ───────────────────────────── */
+.home-hero__since {
+  display: flex;
+  align-items: center;
+  gap: clamp(18px, 3.5vw, 44px);
+  flex-wrap: wrap;
+  margin-top: 32px;
+}
+
+.home-hero__since-block {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.home-hero__since-num {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(2.4rem, 3.8vw, 3.8rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: #ffffff;
+}
+
+.home-hero__since-label {
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.home-hero__since-divider {
+  width: 1px;
+  height: 44px;
+  background: rgba(255, 255, 255, 0.16);
+  flex-shrink: 0;
+}
+
+.home-hero__since-cert {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.home-hero__since-cert-v {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.home-hero__cert-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #60a5fa;
+  animation: cert-pulse 2.4s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+@keyframes cert-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.2; }
+}
+
+.home-hero__since-cert-l {
+  font-size: 0.74rem;
+  color: rgba(255, 255, 255, 0.42);
+}
+
+/* h1 italic & for the ampersand */
+.home-hero__editorial .home-hero__copy h1 em {
+  font-style: italic;
+  color: rgba(248, 243, 235, 0.72);
+}

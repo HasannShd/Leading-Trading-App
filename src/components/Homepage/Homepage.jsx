@@ -244,60 +244,41 @@ const HomePage = () => {
       <section className="home-hero">
         <div className="home-hero__ambient" />
         <div className="home-hero__depth" aria-hidden="true" data-hero-parallax="bg" />
-        <div className="home-shell home-hero__layout home-hero__grid">
+        <div className="home-shell home-hero__layout">
           <div className="home-hero__editorial">
             <div className="home-hero__copy animate-stagger" data-stagger-step="120ms">
               <span className="home-eyebrow animate-on-scroll">{t('Leading Trading Est. | Bahrain')}</span>
-              <h1 className="animate-on-scroll">{t('Leading Trading Est')}</h1>
+              <h1 className="animate-on-scroll">Medical, Dental <em>&amp;</em> Industrial Supply.</h1>
               <p className="home-hero__lead animate-on-scroll">
-                {t('Local sourcing for medical, dental, laboratory, PPE, safety, and industrial requirements, with clear quotation support and dependable delivery coordination.')}
+                {t('Local sourcing for medical, dental, laboratory, PPE, safety, and industrial requirements — structured quotation support and dependable delivery coordination across Bahrain.')}
               </p>
               <div className="home-hero__actions animate-on-scroll">
                 <Link className="home-btn home-btn--primary" to="/contact?source=home">{t('Request a Quote')}</Link>
                 <Link className="home-btn home-btn--ghost" to="/categories">{t('Explore Categories')}</Link>
               </div>
-              <p className="home-hero__statement animate-on-scroll">
-                {t('Browse categories, check catalog coverage, and contact LTE for product sourcing, quotation support, and delivery coordination across Bahrain.')}
-              </p>
-              <div className="home-hero__notes animate-stagger" data-stagger-step="90ms">
-                <span className="animate-on-scroll">{t('Medical and dental sourcing')}</span>
-                <span className="animate-on-scroll">{t('Laboratory and PPE support')}</span>
-                <span className="animate-on-scroll">{t('Bahrain quotation support')}</span>
+              <div className="home-hero__cats animate-on-scroll">
+                {homepageCategories.map((cat) => (
+                  <Link key={cat.slug} className="home-hero__cat-chip" to={`/categories/${cat.slug}`}>
+                    {categoryName(cat.name)}
+                  </Link>
+                ))}
+              </div>
+              <div className="home-hero__since animate-on-scroll">
+                <div className="home-hero__since-block">
+                  <span className="home-hero__since-num">2012</span>
+                  <span className="home-hero__since-label">{t('Since')}</span>
+                </div>
+                <div className="home-hero__since-divider" />
+                <div className="home-hero__since-cert">
+                  <span className="home-hero__since-cert-v">
+                    <span className="home-hero__cert-dot" />
+                    {t('NHRA Certified')}
+                  </span>
+                  <span className="home-hero__since-cert-l">{t('National Health Regulatory Authority — Bahrain')}</span>
+                </div>
               </div>
             </div>
           </div>
-          <aside className="home-hero__visual home-hero__procurement-card animate-on-scroll" aria-label="Sourcing workflow summary">
-            <div className="procurement-card__badge">{t('Sourcing workflow')}</div>
-            <div className="procurement-card__brand">
-              <img src={`${baseUrl}company-logo.png`} alt="" aria-hidden="true" />
-              <div>
-                <span>{t('From')}</span>
-                <strong>{t('Requirement')}</strong>
-                <span>{t('to Delivery')}</span>
-              </div>
-            </div>
-            <p>{t('A focused route for product requests, availability checks, quotation handling, and delivery coordination.')}</p>
-            <div className="procurement-card__steps">
-              <span>{t('Requirement review')}</span>
-              <span>{t('Product matching')}</span>
-              <span>{t('Delivery coordination')}</span>
-            </div>
-            <div className="procurement-card__chips">
-              <span>NHRA</span>
-              <span>Medstar</span>
-              <span>SMI</span>
-              <span>ROMSONS</span>
-            </div>
-          </aside>
-        </div>
-
-        <div className="home-shell home-hero__metrics animate-stagger" data-stagger-step="120ms">
-          {whyStats.slice(0, 3).map((item) => (
-            <article className="hero-metric animate-on-scroll" key={item.label}>
-              <strong>{item.value}</strong>
-              <span>{t(item.label)}</span>
-            </article>
-          ))}
         </div>
       </section>
 
