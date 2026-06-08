@@ -182,7 +182,7 @@ const PdfCatalogPage = () => {
   const productPages = useMemo(() => {
     const pages = [];
     productSections.forEach((section) => {
-      chunk(section.products, 8).forEach((group, i) => {
+      chunk(section.products, 10).forEach((group, i) => {
         pages.push({ ...section, products: group, part: i + 1 });
       });
     });

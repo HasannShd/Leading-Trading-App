@@ -515,7 +515,7 @@
 }
 
 /* ── Product pages ───────────────────────────────── */
-.pdf-product-heading { margin-bottom: 5mm; }
+.pdf-product-heading { margin-bottom: 4mm; }
 
 .pdf-continued {
   margin: 2mm 0 0;
@@ -523,18 +523,21 @@
   font-size: 8.5pt;
 }
 
+/* Grid fills all remaining page height — heading ~21mm, so grid gets ~240mm */
 .pdf-product-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 3mm;
+  grid-template-rows: repeat(5, 1fr);
+  gap: 2.5mm;
+  height: 238mm;
 }
 
-/* ── Product Card (image on top, compact for 8/page) ─ */
+/* ── Product Card — flex column so image is fixed, content stretches ── */
 .pdf-product-card {
-  display: grid;
-  grid-template-rows: 22mm 1fr;
+  display: flex;
+  flex-direction: column;
   border: 1px solid var(--pdf-line);
-  border-radius: 3.5mm;
+  border-radius: 3mm;
   background: #ffffff;
   overflow: hidden;
   break-inside: avoid;
@@ -543,7 +546,8 @@
 
 .pdf-product-media {
   width: 100%;
-  height: 22mm;
+  flex: 0 0 24mm;
+  height: 24mm;
   display: grid;
   place-items: center;
   background: linear-gradient(160deg, #f3f8fc 0%, #e8f2fb 100%);
@@ -553,7 +557,7 @@
 
 .pdf-product-media img {
   max-width: 86%;
-  max-height: 18mm;
+  max-height: 20mm;
   object-fit: contain;
 }
 
@@ -565,10 +569,12 @@
 }
 
 .pdf-product-copy {
-  padding: 2.5mm 3.5mm 2.5mm;
-  display: grid;
-  align-content: start;
+  flex: 1;
+  padding: 2.5mm 3.5mm;
+  display: flex;
+  flex-direction: column;
   gap: 1mm;
+  overflow: hidden;
 }
 
 .pdf-product-cat {
@@ -598,6 +604,7 @@
   margin: 0;
   padding-top: 1.2mm;
   border-top: 1px solid rgba(211, 223, 233, 0.7);
+  overflow: hidden;
 }
 
 .pdf-product-copy dl div {
