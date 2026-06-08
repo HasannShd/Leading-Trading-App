@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useMemo, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import Seo from '../Common/Seo';
 import { buildFaqSchema, businessApplicationSchema, localBusinessSchema, organizationSchema, webSiteSchema } from '../../utils/seoSchemas';
@@ -159,41 +159,9 @@ const clients = [
 ];
 
 const HomePage = () => {
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
   const baseUrl = import.meta.env.BASE_URL;
   const { t, categoryName } = useLanguage();
   const rootRef = useRef(null);
-  const [featuredProducts, setFeaturedProducts] = useState([]);
-
-  useEffect(() => {
-    const controller = new AbortController();
-    const fetchFeatured = async () => {
-      try {
-        const response = await fetch(`${API_URL}/products?featured=true&limit=5`, { signal: controller.signal, cache: 'no-store' });
-        const data = await response.json();
-        const items = Array.isArray(data) ? data : data.items || [];
-        setFeaturedProducts(items);
-      } catch (error) {
-        if (error.name === 'AbortError') return;
-        console.error('Failed to load featured products', error);
-      }
-    };
-
-    let idleId;
-    if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
-      idleId = window.requestIdleCallback(fetchFeatured, { timeout: 1200 });
-    } else {
-      fetchFeatured();
-    }
-
-    return () => {
-      controller.abort();
-      if (idleId && 'cancelIdleCallback' in window) {
-        window.cancelIdleCallback(idleId);
-      }
-    };
-  }, [API_URL]);
-
   useHomepageScroll(rootRef, true);
 
   const marqueeBrands = useMemo(() => [...mainBrands, ...mainBrands], []);
