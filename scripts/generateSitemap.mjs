@@ -17,6 +17,7 @@ const staticRoutes = [
   { path: '/catalog/pdf', changefreq: 'weekly', priority: '0.78' },
   { path: '/categories', changefreq: 'daily', priority: '0.9' },
   { path: '/about', changefreq: 'monthly', priority: '0.7' },
+  { path: '/about/director', changefreq: 'monthly', priority: '0.68' },
   { path: '/careers', changefreq: 'weekly', priority: '0.6' },
   { path: '/contact', changefreq: 'monthly', priority: '0.6' },
   { path: '/privacy', changefreq: 'yearly', priority: '0.4' },

@@ -1925,9 +1925,9 @@
   overflow: hidden;
   color: #ffffff;
   background:
-    radial-gradient(ellipse 620px 440px at 73% 22%, rgba(42, 80, 110, 0.46), transparent 66%),
-    radial-gradient(ellipse 760px 330px at 76% 100%, rgba(202, 210, 207, 0.28), transparent 70%),
-    linear-gradient(115deg, #070b12 0%, #0a1420 46%, #102537 100%);
+    radial-gradient(circle at 14% 22%, rgba(169, 122, 73, 0.09), transparent 28%),
+    radial-gradient(circle at 88% 8%, rgba(18, 44, 70, 0.28), transparent 36%),
+    linear-gradient(180deg, #07111d 0%, #0b1a2e 55%, #0d2034 78%, #0f2540 100%);
   isolation: isolate;
 }
 
@@ -1937,8 +1937,7 @@
   inset: 0;
   z-index: 0;
   background:
-    linear-gradient(90deg, rgba(3, 7, 14, 0.9) 0%, rgba(5, 10, 18, 0.62) 44%, rgba(5, 10, 18, 0.12) 76%),
-    linear-gradient(180deg, rgba(7, 10, 18, 0) 0%, rgba(7, 10, 18, 0.06) 62%, rgba(216, 220, 216, 0.5) 100%);
+    linear-gradient(90deg, rgba(3, 7, 14, 0.6) 0%, rgba(5, 10, 18, 0.3) 60%, transparent 100%);
   pointer-events: none;
 }
 
@@ -2000,19 +1999,20 @@
   width: 32px;
   height: 2px;
   flex: 0 0 32px;
-  background: #c9922a;
+  background: linear-gradient(90deg, rgba(96, 165, 250, 0.9), rgba(96, 165, 250, 0));
 }
 
 .home-hero__editorial .home-hero__copy h1 {
   display: block;
   margin: 0;
   max-width: 10.5ch;
-  color: #ffffff;
-  font-size: clamp(2.95rem, 4.55vw, 4.75rem);
-  font-weight: 850;
-  line-height: 0.92;
-  letter-spacing: 0;
-  text-shadow: 0 16px 36px rgba(0, 0, 0, 0.32);
+  color: #f8f3eb;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(2.8rem, 4.8vw, 5.6rem);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  text-shadow: 0 16px 36px rgba(0, 0, 0, 0.28);
   animation: fadeUp 0.7s ease 0.18s both;
 }
 
@@ -2042,10 +2042,10 @@
 }
 
 .home-btn--primary {
-  background: #c9922a;
-  border: 1.5px solid #c9922a;
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 56%, #1e3a8a 100%);
+  border: 1.5px solid rgba(59, 130, 246, 0.5);
   color: #ffffff;
-  box-shadow: 0 18px 36px rgba(201, 146, 42, 0.24);
+  box-shadow: 0 18px 36px rgba(29, 78, 216, 0.28);
 }
 
 .home-btn--ghost,

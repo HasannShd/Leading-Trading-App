@@ -469,9 +469,10 @@
 }
 
 .header-actions-desktop .btn.primary {
-  background: linear-gradient(135deg, #c69159 0%, #a87744 60%, #84592d 100%);
-  border-color: rgba(198, 145, 89, 0.4);
-  color: #fffdf9;
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 60%, #1e3a8a 100%);
+  border-color: rgba(59, 130, 246, 0.5);
+  color: #ffffff;
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.32);
 }
 
 .header.scrolled .language-toggle,
@@ -486,9 +487,9 @@
 
 .header.scrolled .header-actions-desktop .btn.primary,
 .app:not(.hero-page) .header-actions-desktop .btn.primary {
-  background: linear-gradient(135deg, #c69159 0%, #a87744 60%, #84592d 100%);
-  border-color: rgba(168, 119, 68, 0.34);
-  color: #fffdf8;
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 60%, #1e3a8a 100%);
+  border-color: rgba(29, 78, 216, 0.4);
+  color: #ffffff;
 }
 
 .nav-mobile-overlay,

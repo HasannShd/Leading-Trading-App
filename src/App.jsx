@@ -29,6 +29,7 @@ const CategoryDetails = lazy(() => import('./components/Categories/CategoryDetai
 const ContactPage = lazy(() => import('./components/Contact/ContactPage'));
 const Categories = lazy(() => import('./components/Categories/Categories'));
 const About = lazy(() => import('./components/About/About'));
+const DirectorHeritagePage = lazy(() => import('./components/About/DirectorHeritagePage'));
 const Shop = lazy(() => import('./components/Shop/Shop'));
 const ProductDetails = lazy(() => import('./components/Shop/ProductDetails'));
 const SeoLandingPage = lazy(() => import('./components/SeoLanding/SeoLandingPage'));
@@ -127,6 +128,7 @@ const AppShell = () => {
             <Route path="/resources/:slug" element={<ResourceArticlePage />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/about" element={<About />} />
+            <Route path="/about/director" element={<DirectorHeritagePage />} />
             <Route path="/careers" element={<Careers />} />
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/privacy" element={<PrivacyPage />} />

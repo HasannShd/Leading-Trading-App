@@ -128,6 +128,7 @@ const About = () => {
         <div className="about-hero-actions animate-on-scroll">
           <Link className="btn primary" to="/contact">{t('Talk to Our Team')}</Link>
           <Link className="btn" to="/categories">{t('Explore Categories')}</Link>
+          <Link className="btn" to="/about/director">{t('Director Heritage')}</Link>
         </div>
       </div>
 
@@ -255,6 +256,9 @@ const About = () => {
           <p>
             {t('Our growth has been built on trust, consistency, and a team structure that supports execution from enquiry to delivery. We continue to strengthen international supplier relationships, maintain service standards, and support customers with solutions that remain dependable in practice as well as on paper.')}
           </p>
+          <Link className="about-inline-action" to="/about/director">
+            {t('Read the director heritage')}
+          </Link>
         </div>
       </div>
     </section>
