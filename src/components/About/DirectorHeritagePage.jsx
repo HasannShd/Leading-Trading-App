@@ -171,7 +171,7 @@ const DirectorHeritagePage = () => {
         <div className="about-leadership-card animate-stagger" data-stagger-step="100ms">
           <div className="about-leadership-signature animate-on-scroll">
             <span className="about-card-kicker">{t('The blueprint of values')}</span>
-            <strong>{t('Wood and wrenches to advanced medical technology')}</strong>
+            <strong>{t('Wood and wrenches to healthcare solutions and partnerships')}</strong>
             <small>{t('Innovation changes across generations, but foundational values do not.')}</small>
           </div>
 
