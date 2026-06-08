@@ -13,36 +13,42 @@ const homepageCategories = [
   {
     name: 'Medical Equipment',
     slug: 'medical-equipment',
+    icon: '+',
     label: 'Clinical systems',
     description: 'Diagnostic and treatment support equipment for hospitals, clinics, and operational care environments.',
   },
   {
     name: 'Anesthesia & Respiratory',
     slug: 'anesthesia-respiratory',
+    icon: '▲',
     label: 'Airway and respiratory care',
     description: 'Products selected for respiratory support, airway control, and procedure-critical environments.',
   },
   {
     name: 'Dental',
     slug: 'dental',
+    icon: '◆',
     label: 'Practice continuity',
     description: 'Dental consumables and specialist tools that keep practices supplied without disrupting workflow.',
   },
   {
     name: 'Consumables & Disposables',
     slug: 'consumables-disposables',
+    icon: '●',
     label: 'Recurring essentials',
     description: 'High-rotation products that support daily care, infection control, and procedure readiness.',
   },
   {
     name: 'Industrial & Safety',
     slug: 'industrial-safety',
+    icon: '◉',
     label: 'Operational protection',
     description: 'Industrial and safety sourcing for disciplined operations where reliability and availability matter.',
   },
   {
     name: 'Hospital Furniture & Utilities',
     slug: 'hospital-furniture-utilities',
+    icon: '⌂',
     label: 'Facility support',
     description: 'Furniture, transport, and utility items that support day-to-day movement, care, and storage.',
   },
@@ -253,12 +259,13 @@ const HomePage = () => {
                 {t('Local sourcing for medical, dental, laboratory, PPE, safety, and industrial requirements — structured quotation support and dependable delivery coordination across Bahrain.')}
               </p>
               <div className="home-hero__actions animate-on-scroll">
-                <Link className="home-btn home-btn--primary" to="/contact?source=home">{t('Request a Quote')}</Link>
+                <Link className="home-btn home-btn--primary" to="/contact?source=home">→ {t('Request a Quote')}</Link>
                 <Link className="home-btn home-btn--ghost" to="/categories">{t('Explore Categories')}</Link>
               </div>
               <div className="home-hero__cats animate-on-scroll">
                 {homepageCategories.map((cat) => (
                   <Link key={cat.slug} className="home-hero__cat-chip" to={`/categories/${cat.slug}`}>
+                    <span className="home-hero__cat-icon" aria-hidden="true">{cat.icon}</span>
                     {categoryName(cat.name)}
                   </Link>
                 ))}
