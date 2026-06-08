@@ -876,9 +876,9 @@
   }
 
   .nav-mobile-actions .btn.primary {
-    background: linear-gradient(135deg, #c69159 0%, #a87744 60%, #84592d 100%);
-    border-color: rgba(198, 145, 89, 0.34);
-    color: #fffdf8;
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 60%, #1e3a8a 100%);
+    border-color: rgba(59, 130, 246, 0.4);
+    color: #ffffff;
   }
 }
 
@@ -1042,13 +1042,14 @@
 
 .header.header-home .header-actions-desktop .btn.primary,
 .header.header-home.scrolled .header-actions-desktop .btn.primary {
-  background: #c9922a;
-  border-color: #c9922a;
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 60%, #1e3a8a 100%);
+  border-color: rgba(59, 130, 246, 0.5);
   color: #ffffff;
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.32);
 }
 
 .header.header-home .header-actions-desktop .btn.primary:hover {
-  box-shadow: 0 0 20px rgba(201, 146, 42, 0.3);
+  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.42);
 }
 
 .header.header-home .header-hamburger-bar,
