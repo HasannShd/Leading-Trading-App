@@ -71,17 +71,15 @@ const CatalogPage = () => {
     return Array.from(groups.entries()).slice(0, 10);
   }, [products]);
 
-  const handlePrint = () => {
-    window.print();
-  };
+  const handlePrint = () => window.print();
 
   return (
     <main className="catalog-page">
       <Seo
         title="Medical and Industrial Supply Catalog Bahrain | Leading Trading Est"
-        description="Browse the Leading Trading Est procurement catalog for Bahrain medical, dental, laboratory, PPE, surgical, sterile consumable, and industrial supply requirements, including Medstar own-brand products and ROMSONS and SMI sole-agent brand support."
+        description="Browse the Leading Trading Est procurement catalog for Bahrain medical, dental, laboratory, PPE, surgical, sterile consumable, and industrial supply requirements."
         canonicalPath="/catalog"
-        keywords="Bahrain medical supply catalog, dental supplies catalog Bahrain, PPE catalog Bahrain, laboratory supplies Bahrain, surgical consumables Bahrain, ROMSONS Bahrain, SMI Bahrain, Leading Trading Est catalog"
+        keywords="Bahrain medical supply catalog, dental supplies catalog Bahrain, PPE catalog Bahrain, laboratory supplies Bahrain, surgical consumables Bahrain, Leading Trading Est catalog"
         structuredData={[
           organizationSchema,
           localBusinessSchema,
@@ -101,87 +99,63 @@ const CatalogPage = () => {
           buildFaqSchema([
             {
               question: 'Can buyers download the LTE catalog?',
-              answer:
-                'Yes. Buyers can use the catalog page print button to save a clean PDF copy from the browser, then contact LTE for quotation support.',
-            },
-            {
-              question: 'What catalog template does LTE use?',
-              answer:
-                'The catalog uses a procurement-first template with category sections, representative product cards, brand signals, and quote paths instead of a decorative brochure format.',
+              answer: 'Yes. Buyers can use the catalog page print button to save a clean PDF copy, then contact LTE for quotation support.',
             },
           ]),
         ]}
       />
 
+      {/* ── Hero ── */}
       <section className="catalog-hero">
-        <div>
-          <span>LTE procurement catalog</span>
+        <div className="catalog-hero-copy">
+          <span className="catalog-eyebrow">{t('LTE Procurement Catalog')}</span>
           <h1>{t('Medical, dental, laboratory, PPE, and industrial supply catalog for Bahrain buyers.')}</h1>
-          <p>
-            {t('This catalog uses a procurement-first template: category overview, representative products, brand cues, international supplier access, and direct quote paths so buyers can move from browsing to inquiry quickly.')}
-          </p>
-        </div>
-        <div className="catalog-hero-actions">
-          <button type="button" className="catalog-hero-action catalog-hero-action--primary" onClick={handlePrint}>
-            <FiDownload aria-hidden="true" />
-            <span>{t('Download / Print Catalog')}</span>
-          </button>
-          <Link className="catalog-hero-action" to="/catalog/pdf">
-            <FiBookOpen aria-hidden="true" />
-            <span>{t('Open PDF Catalogue')}</span>
-          </Link>
-          <Link className="catalog-hero-action" to="/contact?source=catalog">
-            <FiFileText aria-hidden="true" />
-            <span>{t('Request Catalog Quote')}</span>
-          </Link>
+          <p>{t('Browse by category, review representative products, and contact LTE directly for sourcing and quotation support.')}</p>
+          <div className="catalog-hero-actions">
+            <button type="button" className="catalog-hero-action catalog-hero-action--primary" onClick={handlePrint}>
+              <FiDownload aria-hidden="true" />
+              <span>{t('Download / Print Catalog')}</span>
+            </button>
+            <Link className="catalog-hero-action" to="/catalog/pdf">
+              <FiBookOpen aria-hidden="true" />
+              <span>{t('Open PDF Catalogue')}</span>
+            </Link>
+            <Link className="catalog-hero-action" to="/contact?source=catalog">
+              <FiFileText aria-hidden="true" />
+              <span>{t('Request a Quote')}</span>
+            </Link>
+          </div>
         </div>
       </section>
 
       {loading ? (
-        <StatePanel eyebrow={t('Loading')} title={t('Preparing catalog')} description={t('We are loading the latest active products and categories.')} variant="loading" />
+        <StatePanel eyebrow={t('Loading')} title={t('Preparing catalog')} description={t('Loading the latest products and categories.')} variant="loading" />
       ) : error ? (
         <StatePanel eyebrow={t('Unavailable')} title={t('Catalog unavailable')} description={error} variant="error" />
       ) : (
         <>
-          <section className="catalog-summary">
-            <article>
-              <strong>{topCategories.length}</strong>
-              <span>{t('main catalog sections')}</span>
-            </article>
-            <article>
-              <strong>{products.length}</strong>
-              <span>{t('active products sampled')}</span>
-            </article>
-            <article>
-              <strong>Medstar</strong>
-              <span>{t('own-brand supply support')}</span>
-            </article>
-            <article>
-              <strong>ROMSONS & SMI</strong>
-              <span>{t('sole-agent support in Bahrain')}</span>
-            </article>
-          </section>
-
+          {/* ── Category index ── */}
           <section className="catalog-section">
             <div className="catalog-section-head">
-              <span>{t('Category index')}</span>
-              <h2>{t('Start with the buyer department, then open the detailed product list.')}</h2>
+              <span className="catalog-eyebrow catalog-eyebrow--ink">{t('Category index')}</span>
+              <h2>{t('Browse by supply department.')}</h2>
             </div>
             <div className="catalog-category-grid">
               {topCategories.map((category) => (
                 <Link key={category._id} to={`/categories/${category.slug || category._id}`} className="catalog-category-card">
-                  <span>{t('Catalog section')}</span>
+                  <span className="catalog-card-kicker">{t('Open section')}</span>
                   <strong>{categoryName(category.name)}</strong>
-                  <p>{categoryDescription(category.description) || t('Open this section for products, specifications, and quote support.')}</p>
+                  <p>{categoryDescription(category.description) || t('Browse products, specifications, and quote support.')}</p>
                 </Link>
               ))}
             </div>
           </section>
 
+          {/* ── Products ── */}
           <section className="catalog-section">
             <div className="catalog-section-head">
-              <span>{t('Representative products')}</span>
-              <h2>{t('A practical product sample for fast procurement review.')}</h2>
+              <span className="catalog-eyebrow catalog-eyebrow--ink">{t('Representative products')}</span>
+              <h2>{t('A product sample for fast procurement review.')}</h2>
             </div>
             <div className="catalog-product-groups">
               {groupedProducts.map(([group, items]) => (
