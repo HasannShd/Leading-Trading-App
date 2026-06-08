@@ -217,6 +217,7 @@ const HomePage = () => {
               <div className="home-hero__actions animate-on-scroll">
                 <Link className="home-btn home-btn--primary" to="/contact?source=home">→ {t('Request a Quote')}</Link>
                 <Link className="home-btn home-btn--ghost" to="/categories">{t('Explore Categories')}</Link>
+                <Link className="home-btn home-btn--text" to="/about">{t('About Us')} →</Link>
               </div>
               <div className="home-hero__cats animate-on-scroll">
                 {homepageCategories.map((cat) => (
