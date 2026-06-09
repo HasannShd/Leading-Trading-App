@@ -369,9 +369,7 @@ const Header = () => {
                   <Link className="btn" to="/orders">{t('Orders')}</Link>
                   <button className="btn" onClick={logout}>{t('Logout')}</button>
                 </>
-              ) : (
-                {/* Sign In hidden temporarily */}
-              )}
+              ) : null}
             </div>
           )}
         </nav>
