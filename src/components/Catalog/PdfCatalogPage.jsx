@@ -105,7 +105,7 @@ const ProductCard = ({ product }) => {
   );
 };
 
-const PdfPage = ({ children, className = '', section: _section = '', pageNum = '' }) => (
+const PdfPage = ({ children, className = '', pageNum = '' }) => (
   <section className={`pdf-sheet ${className}`}>
     {children}
     <footer className="pdf-sheet-footer">

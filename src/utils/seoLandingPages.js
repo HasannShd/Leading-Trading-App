@@ -1,5 +1,68 @@
 export const seoLandingPages = [
   {
+    slug: 'medical-supplies-bahrain',
+    title: 'Medical Supplies Bahrain',
+    shortTitle: 'Medical supplies',
+    description:
+      'Leading Trading Est supports Bahrain hospitals, clinics, dental centers, laboratories, and procurement teams with medical supplies, consumables, PPE, diagnostic items, quotation handling, and local delivery coordination.',
+    keywords:
+      'medical supplies Bahrain, Bahrain medical supplies, medical supply company Bahrain, hospital medical supplies Bahrain, clinic supplies Bahrain, medical consumables Bahrain, PPE supplier Bahrain, Leading Trading Est Bahrain',
+    categoryPath: '/categories/medical-equipment',
+    categoryLabel: 'Medical Equipment',
+    shopQuery: 'medical supplies',
+    buyerTerms: ['Medical supplies Bahrain', 'Clinic consumables', 'Hospital procurement', 'Quote support'],
+    sections: [
+      {
+        title: 'Medical supplies for Bahrain healthcare buyers',
+        body:
+          'Buyers searching for medical supplies in Bahrain usually need a clear path from product requirement to quotation. LTE supports that process across routine consumables, PPE, diagnostic support items, equipment-related requirements, and mixed purchasing lists from hospitals, clinics, dental centers, and laboratories.',
+      },
+      {
+        title: 'Built around quotation handling, not retail checkout',
+        body:
+          'Many medical supply requirements need quantity review, specification matching, brand preference, documentation checks, and delivery timing before a reliable quote can be prepared. LTE keeps the buyer requirement connected from category browsing through contact follow-up.',
+      },
+      {
+        title: 'Local follow-up across Bahrain',
+        body:
+          'Leading Trading Est operates from Bahrain with local sales, account, and delivery coordination. That matters for procurement teams that need repeat supply, clear communication, and dependable follow-through after the enquiry is submitted.',
+      },
+    ],
+    faqs: [
+      {
+        question: 'Does LTE supply medical supplies in Bahrain?',
+        answer:
+          'Yes. Leading Trading Est supports Bahrain healthcare buyers with medical supplies, consumables, PPE, dental, laboratory, diagnostic, and related procurement enquiries.',
+      },
+      {
+        question: 'Can buyers send a mixed medical supply list?',
+        answer:
+          'Yes. Buyers can send mixed requirements with product names, quantities, brand preferences, and delivery needs so LTE can review the quotation path.',
+      },
+    ],
+    catalogPicksTitle: 'Common medical supply search paths',
+    catalogPicks: [
+      {
+        name: 'Medical Equipment',
+        category: 'Clinical sourcing',
+        useCase: 'Browse equipment and clinical support categories before sending a quotation requirement.',
+        query: 'medical equipment',
+      },
+      {
+        name: 'Consumables & Disposables',
+        category: 'Routine procurement',
+        useCase: 'Review recurring clinical consumables, PPE, dressings, tapes, first aid, and disposable items.',
+        query: 'consumables',
+      },
+      {
+        name: 'Diagnostic Devices',
+        category: 'Monitoring and testing',
+        useCase: 'Search diagnostic and monitoring items used by clinics, hospitals, and healthcare teams.',
+        query: 'diagnostic',
+      },
+    ],
+  },
+  {
     slug: 'medical-suppliers-bahrain',
     title: 'Medical Suppliers in Bahrain',
     shortTitle: 'Medical suppliers',
@@ -38,6 +101,132 @@ export const seoLandingPages = [
         question: 'Can buyers request quotations online?',
         answer:
           'Yes. Buyers can request quotations through product pages, category pages, or the contact form so the LTE team receives the requirement context.',
+      },
+    ],
+  },
+  {
+    slug: 'medical-equipment-supplier-bahrain',
+    title: 'Medical Equipment Supplier Bahrain',
+    shortTitle: 'Medical equipment supplier',
+    description:
+      'Medical equipment supplier support in Bahrain for clinics, hospitals, specialist centers, and procurement teams needing equipment sourcing, product review, quotation handling, and local follow-up.',
+    keywords:
+      'medical equipment supplier Bahrain, medical equipment Bahrain, hospital equipment Bahrain, clinic equipment Bahrain, medical device supplier Bahrain, diagnostic equipment Bahrain, Leading Trading Est',
+    categoryPath: '/categories/medical-equipment',
+    categoryLabel: 'Medical Equipment',
+    shopQuery: 'medical equipment',
+    buyerTerms: ['Medical equipment supplier', 'Clinic equipment', 'Hospital equipment', 'Specification review'],
+    sections: [
+      {
+        title: 'Equipment enquiries need specification clarity',
+        body:
+          'Medical equipment buying usually depends on exact product type, model references, accessories, clinical use, delivery expectations, and documentation needs. LTE helps Bahrain buyers move from a broad equipment search into a quotation request with useful context.',
+      },
+      {
+        title: 'Connected to diagnostic, respiratory, furniture, and utility categories',
+        body:
+          'Equipment requirements can sit across several sections of the catalog, including diagnostic devices, anesthesia and respiratory support, hospital furniture, and clinical utilities. LTE links these categories into one procurement route for easier review.',
+      },
+      {
+        title: 'Local supplier follow-up for Bahrain teams',
+        body:
+          'As a Bahrain-based supplier, LTE can support product review, availability checks, and quotation follow-up for healthcare teams that need a dependable point of contact rather than a generic product listing.',
+      },
+    ],
+    faqs: [
+      {
+        question: 'Can LTE support medical equipment enquiries in Bahrain?',
+        answer:
+          'Yes. LTE supports medical equipment and related clinical supply enquiries with sourcing, product review, quotation handling, and local follow-up.',
+      },
+      {
+        question: 'What details help with equipment quotations?',
+        answer:
+          'Product type, model reference, quantity, intended department, preferred brand, delivery timing, and any technical schedule or RFQ file help the LTE team review the requirement.',
+      },
+    ],
+  },
+  {
+    slug: 'hospital-supplies-bahrain',
+    title: 'Hospital Supplies Bahrain',
+    shortTitle: 'Hospital supplies',
+    description:
+      'Hospital supply sourcing support in Bahrain for medical consumables, equipment, PPE, sterile surgical consumables, diagnostic devices, furniture, utilities, and procurement quotation workflows.',
+    keywords:
+      'hospital supplies Bahrain, hospital supplier Bahrain, hospital consumables Bahrain, hospital equipment Bahrain, healthcare supplies Bahrain, medical procurement Bahrain, Leading Trading Est',
+    categoryPath: '/categories/medical-equipment',
+    categoryLabel: 'Medical Equipment',
+    shopQuery: 'hospital',
+    buyerTerms: ['Hospital supplies', 'Healthcare procurement', 'Clinical consumables', 'Delivery coordination'],
+    sections: [
+      {
+        title: 'Hospital procurement often spans multiple departments',
+        body:
+          'Hospital supply requests can include clinical consumables, diagnostic items, PPE, sterile surgical consumables, furniture, utilities, and department-specific equipment. LTE helps organize mixed requirements into a clearer quotation workflow.',
+      },
+      {
+        title: 'Useful for recurring and urgent requirements',
+        body:
+          'Procurement teams need dependable follow-up for both planned purchasing and urgent replenishment. LTE supports local quotation handling, supplier coordination, delivery planning, and repeat-order continuity across Bahrain.',
+      },
+      {
+        title: 'Structured around accountability',
+        body:
+          'The LTE workflow keeps sales, accounts, sourcing, and delivery aligned so hospital buyers have a practical route from enquiry to quotation and fulfilment support.',
+      },
+    ],
+    faqs: [
+      {
+        question: 'Does LTE support hospital supply enquiries?',
+        answer:
+          'Yes. LTE supports hospitals and healthcare buyers in Bahrain with medical, dental, laboratory, PPE, sterile consumable, equipment, and safety supply enquiries.',
+      },
+      {
+        question: 'Can hospital buyers attach RFQ files?',
+        answer:
+          'Yes. Buyers can use the quote form to share requirement context and upload supported RFQ files for review.',
+      },
+    ],
+  },
+  {
+    slug: 'ppe-supplier-bahrain',
+    title: 'PPE Supplier Bahrain',
+    shortTitle: 'PPE supplier',
+    description:
+      'PPE supplier support in Bahrain for medical gloves, face masks, shields, gowns, drapes, covers, disposable protection, and safety procurement requirements.',
+    keywords:
+      'PPE supplier Bahrain, PPE supplies Bahrain, medical PPE Bahrain, gloves supplier Bahrain, face masks Bahrain, PPE masks Bahrain, safety supplies Bahrain, disposable PPE Bahrain',
+    categoryPath: '/categories/consumables-disposables',
+    categoryLabel: 'Consumables & Disposables',
+    shopQuery: 'PPE',
+    buyerTerms: ['PPE supplier Bahrain', 'Gloves and masks', 'Disposable protection', 'Safety procurement'],
+    sections: [
+      {
+        title: 'PPE buying depends on material, use case, and repeat demand',
+        body:
+          'PPE enquiries may include nitrile, latex, vinyl, and examination gloves, medical masks, face shields, gowns, drapes, covers, and general disposable protection. LTE helps buyers clarify product type, quantity, and usage context before quotation follow-up.',
+      },
+      {
+        title: 'Healthcare, dental, lab, and industrial PPE support',
+        body:
+          'PPE requirements often cross departments and sectors. LTE supports Bahrain healthcare, dental, laboratory, and industrial buyers with a single route to review PPE categories and send a quotation request.',
+      },
+      {
+        title: 'Connected to the wider consumables catalog',
+        body:
+          'PPE procurement is often ordered alongside dressings, tapes, first aid, sterile consumables, and other recurring supply items. LTE keeps those paths connected for faster buyer review.',
+      },
+    ],
+    faqs: [
+      {
+        question: 'Does LTE support PPE supply in Bahrain?',
+        answer:
+          'Yes. LTE supports PPE enquiries in Bahrain including gloves, masks, shields, gowns, covers, and related disposable protection requirements.',
+      },
+      {
+        question: 'Can buyers request PPE for healthcare and industrial use?',
+        answer:
+          'Yes. LTE supports PPE requirements across healthcare, dental, laboratory, and industrial safety workflows.',
       },
     ],
   },

@@ -132,6 +132,29 @@ const credibilityPillars = [
   },
 ];
 
+const supplySearchGuides = [
+  {
+    label: 'Medical Supplies Bahrain',
+    to: '/solutions/medical-supplies-bahrain',
+    text: 'Medical consumables, PPE, diagnostic support, and quotation handling for Bahrain buyers.',
+  },
+  {
+    label: 'Medical Equipment Supplier Bahrain',
+    to: '/solutions/medical-equipment-supplier-bahrain',
+    text: 'Equipment sourcing, product review, and specification-led procurement support.',
+  },
+  {
+    label: 'Hospital Supplies Bahrain',
+    to: '/solutions/hospital-supplies-bahrain',
+    text: 'Hospital consumables, equipment, sterile supplies, and delivery coordination.',
+  },
+  {
+    label: 'PPE Supplier Bahrain',
+    to: '/solutions/ppe-supplier-bahrain',
+    text: 'Gloves, masks, shields, gowns, disposable protection, and safety supply support.',
+  },
+];
+
 const mainBrands = [
   { name: 'Medstar', logo: 'Brands/medstar.jpg' },
   { name: 'Rogin', logo: 'Brands/rogin.png' },
@@ -291,6 +314,28 @@ const HomePage = () => {
                   <p>{t(step.body)}</p>
                 </div>
               </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="home-section search-guides">
+        <div className="home-shell">
+          <div className="section-heading animate-stagger" data-stagger-step="110ms">
+            <span className="home-eyebrow home-eyebrow--ink animate-on-scroll">{t('Bahrain supply search paths')}</span>
+            <h2 className="animate-on-scroll">{t('Focused pages for buyers searching medical supplies, equipment, hospital supplies, and PPE in Bahrain.')}</h2>
+            <p className="animate-on-scroll">
+              {t('These guides connect common Google searches to the right LTE category, product search, and quotation path without changing the existing catalog workflow.')}
+            </p>
+          </div>
+
+          <div className="search-guides__grid animate-stagger" data-stagger-step="100ms">
+            {supplySearchGuides.map((guide) => (
+              <Link className="search-guide-card animate-on-scroll" to={guide.to} key={guide.to}>
+                <strong>{t(guide.label)}</strong>
+                <p>{t(guide.text)}</p>
+                <span>{t('Open guide')} →</span>
+              </Link>
             ))}
           </div>
         </div>

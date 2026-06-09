@@ -4,6 +4,13 @@ import { useLanguage } from '../../context/LanguageContext';
 import { businessMapsEmbedUrl, businessMapsUrl } from '../../utils/businessProfile';
 import './Footer.css';
 
+const supplyGuideLinks = [
+  { label: 'Medical Supplies Bahrain', to: '/solutions/medical-supplies-bahrain' },
+  { label: 'Medical Equipment Supplier Bahrain', to: '/solutions/medical-equipment-supplier-bahrain' },
+  { label: 'Hospital Supplies Bahrain', to: '/solutions/hospital-supplies-bahrain' },
+  { label: 'PPE Supplier Bahrain', to: '/solutions/ppe-supplier-bahrain' },
+];
+
 const Footer = () => {
   const { t } = useLanguage();
 
@@ -44,6 +51,12 @@ const Footer = () => {
               <Link to="/resources">{t('Resources')}</Link>
               <Link to="/about">{t('About')}</Link>
               <Link to="/careers">{t('Careers')}</Link>
+            </div>
+            <div className="footer-info-group footer-info-group--guides">
+              <p className="footer-info-label">{t('Supply Guides')}</p>
+              {supplyGuideLinks.map((item) => (
+                <Link key={item.to} to={item.to}>{t(item.label)}</Link>
+              ))}
             </div>
           </div>
 
