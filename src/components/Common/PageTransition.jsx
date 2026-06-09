@@ -10,17 +10,34 @@ export default function PageTransition() {
   const overlayRef = useRef(null);
   const frameRef = useRef(0);
   const location = useLocation();
+  const previousPathRef = useRef(location.pathname);
 
   useEffect(() => {
     const overlay = overlayRef.current;
     if (!overlay) return;
+    const previousPath = previousPathRef.current;
+    previousPathRef.current = location.pathname;
+
+    const resetOverlay = () => {
+      overlay.classList.remove('page-transition--reveal');
+      overlay.style.opacity = '0';
+      overlay.style.visibility = 'hidden';
+    };
+
+    const isProductPath = (path = '') => path.startsWith('/product/');
+    if (previousPath !== location.pathname && isProductPath(previousPath) && isProductPath(location.pathname)) {
+      resetOverlay();
+      return undefined;
+    }
 
     try {
-      overlay.classList.remove('page-transition--reveal');
+      resetOverlay();
       cancelAnimationFrame(frameRef.current);
       frameRef.current = window.requestAnimationFrame(() => {
         if (!overlayRef.current?.isConnected) return;
         void overlayRef.current.offsetHeight;
+        overlayRef.current.style.opacity = '1';
+        overlayRef.current.style.visibility = 'visible';
         overlayRef.current.classList.add('page-transition--reveal');
       });
     } catch (error) {
@@ -28,15 +45,19 @@ export default function PageTransition() {
       return undefined;
     }
 
+    const handleAnimationEnd = () => resetOverlay();
+    overlay.addEventListener('animationend', handleAnimationEnd, { once: true });
+
     const id = setTimeout(() => {
       try {
-        overlayRef.current?.classList.remove('page-transition--reveal');
+        resetOverlay();
       } catch (error) {
         console.error('Page transition cleanup failed', error);
       }
-    }, 700);
+    }, 800);
 
     return () => {
+      overlay.removeEventListener('animationend', handleAnimationEnd);
       clearTimeout(id);
       cancelAnimationFrame(frameRef.current);
     };

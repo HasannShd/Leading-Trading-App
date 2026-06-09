@@ -18,10 +18,10 @@ const readEnvApiUrl = async () => {
   }
 };
 
-const check = async (label, url, expectedStatus = 200) => {
-  const response = await fetch(url, { redirect: 'manual' });
+const check = async (label, url, expectedStatus = 200, redirect = 'follow') => {
+  const response = await fetch(url, { redirect });
   const ok = response.status === expectedStatus;
-  console.log(`${ok ? 'ok' : 'fail'} ${label}: ${response.status} ${url}`);
+  console.log(`${ok ? 'ok' : 'fail'} ${label}: ${response.status} ${response.url}`);
   if (!ok) {
     throw new Error(`${label} returned ${response.status}, expected ${expectedStatus}`);
   }
@@ -46,7 +46,7 @@ const main = async () => {
   await check('shop', `${baseUrl}/shop`);
   await check('contact quote params', `${baseUrl}/contact?source=product&product=test&productName=Smoke%20Test&sku=LTE-SMOKE`);
   await check('category route', `${baseUrl}/categories/medical-equipment`);
-  await check('legacy products redirect', `${baseUrl}/products`, 301);
+  await check('legacy products redirect', `${baseUrl}/products`, 301, 'manual');
 
   if (apiUrl) {
     await checkJson('categories api', `${apiUrl}/categories`, (data) => Array.isArray(data) && data.length > 0);

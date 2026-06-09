@@ -135,11 +135,6 @@ const Categories = () => {
         ) : (
           <div className="categories-grid animate-stagger" data-stagger-step="80ms">
             {list.map((c) => {
-              const categoryKey = (c.slug || c.name || '')
-                .toLowerCase()
-                .replace(/[^a-z0-9]+/g, '-')
-                .replace(/(^-|-$)+/g, '');
-
               return (
                 <Link
                   key={c._id}

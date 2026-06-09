@@ -3,6 +3,21 @@ import { buildProductPath } from './productUrls.js';
 
 export const SITE_ORIGIN = 'https://www.lte-bh.com';
 
+export const normalizeCanonicalPath = (value = '/') => {
+  if (!value) return '/';
+  if (/^https?:\/\//i.test(value)) return value;
+
+  const normalized = value.startsWith('/') ? value : `/${value}`;
+  const [pathWithQuery, hash = ''] = normalized.split('#');
+  const [pathname, query = ''] = pathWithQuery.split('?');
+
+  if (pathname === '/' || pathname.endsWith('/') || /\.[a-z0-9]+$/i.test(pathname)) {
+    return `${pathname}${query ? `?${query}` : ''}${hash ? `#${hash}` : ''}`;
+  }
+
+  return `${pathname}/${query ? `?${query}` : ''}${hash ? `#${hash}` : ''}`;
+};
+
 export const shahidMajeedSchema = {
   '@context': 'https://schema.org',
   '@type': 'Person',
@@ -190,7 +205,7 @@ export const buildBreadcrumbSchema = (items = []) => ({
     '@type': 'ListItem',
     position: index + 1,
     name: item.name,
-    item: absoluteUrl(item.path),
+    item: absoluteUrl(normalizeCanonicalPath(item.path)),
   })),
 });
 
@@ -253,7 +268,7 @@ export const buildProductSchema = (product, { image, categoryName } = {}) => {
     brand: product?.brand ? { '@type': 'Brand', name: product.brand } : { '@type': 'Brand', name: 'Leading Trading Est' },
     sku: product?.sku || product?._id,
     category: categoryName || product?.categorySlug?.name,
-    url: absoluteUrl(productPath),
+    url: absoluteUrl(normalizeCanonicalPath(productPath)),
     offers: {
       '@type': 'Offer',
       url: absoluteUrl(`/contact?source=product&product=${product?._id || ''}`),

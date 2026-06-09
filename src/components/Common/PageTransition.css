@@ -3,7 +3,10 @@
   inset: 0;
   z-index: 9990;
   pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
   background: linear-gradient(135deg, #07111f 0%, #0d2236 60%, #0a1a2e 100%);
+  will-change: transform, opacity;
 
   /* Resting state: hidden above the viewport */
   transform: scaleY(0);
@@ -17,10 +20,12 @@
 
 @keyframes curtain-lift {
   0% {
+    opacity: 1;
     transform: scaleY(1);
     transform-origin: bottom center;
   }
   100% {
+    opacity: 0;
     transform: scaleY(0);
     transform-origin: bottom center;
   }

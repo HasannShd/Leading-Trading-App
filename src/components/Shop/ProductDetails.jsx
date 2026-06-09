@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, useCallback, startTransition, useRef } from 'react';
+import { useEffect, useMemo, useState, startTransition, useRef } from 'react';
 import { useParams, useNavigate, Link, useLocation } from 'react-router-dom';
 import StatePanel from '../Common/StatePanel';
 import Seo from '../Common/Seo';
@@ -35,6 +35,9 @@ const getSizePrice = (entry) => {
   return Number.isFinite(priceValue) && priceValue > 0 ? priceValue : null;
 };
 
+const productDetailCache = new Map();
+const relatedProductsCache = new Map();
+
 const ProductDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -53,18 +56,15 @@ const ProductDetails = () => {
   const [loading, setLoading] = useState(false);
   const [notice, setNotice] = useState(null);
   const rootRef = useRef(null);
+  const requestIdRef = useRef(0);
 
   useScrollReveal(rootRef, Boolean(product) && !loading);
+  useEffect(() => {
+    const controller = new AbortController();
+    const requestId = requestIdRef.current + 1;
+    requestIdRef.current = requestId;
 
-  const fetchProduct = useCallback(async () => {
-    setLoading(true);
-    setNotice(null);
-    try {
-      const response = await fetch(`${API_URL}/products/${id}`);
-      const data = await response.json().catch(() => ({}));
-      if (!response.ok || !data?._id) {
-        throw new Error(data?.message || 'Product could not be loaded.');
-      }
+    const applyProductState = (data) => {
       setProduct(data);
 
       const variants = data?.variants || [];
@@ -82,39 +82,84 @@ const ProductDetails = () => {
       const uniqueGallery = Array.from(new Set(gallery));
       setActiveImage(uniqueGallery[0] || '');
       setBrokenImages([]);
-      setBrokenRelatedImages({});
+    };
 
-      const categoryId = data?.categorySlug?._id || data?.categorySlug;
-      if (categoryId) {
-        const relatedRes = await fetch(`${API_URL}/products?category=${categoryId}&limit=4`);
-        const relatedData = await relatedRes.json();
-        const relatedItems = Array.isArray(relatedData) ? relatedData : (relatedData.items || []);
-        setRelatedProducts(relatedItems.filter((item) => item._id !== data._id).slice(0, 3));
-      } else {
-        setRelatedProducts([]);
+    const loadProduct = async () => {
+      let productReady = false;
+      const cachedProduct = productDetailCache.get(String(id));
+
+      setLoading(true);
+      setNotice(null);
+      setRelatedProducts([]);
+      setBrokenRelatedImages({});
+      setQty(1);
+
+      if (cachedProduct) {
+        applyProductState(cachedProduct);
+        productReady = true;
+        setLoading(false);
       }
-    } catch (err) {
-      setNotice({
-        type: 'error',
-        title: t('Product unavailable'),
-        description: t('We could not load the selected product right now.'),
-      });
-    } finally {
-      setLoading(false);
-    }
+
+      try {
+        const response = await fetch(`${API_URL}/products/${id}`, { signal: controller.signal });
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok || !data?._id) {
+          throw new Error(data?.message || 'Product could not be loaded.');
+        }
+        if (controller.signal.aborted || requestId !== requestIdRef.current) return;
+
+        productDetailCache.set(String(id), data);
+        applyProductState(data);
+        productReady = true;
+        setLoading(false);
+
+        const categoryId = data?.categorySlug?._id || data?.categorySlug;
+        if (!categoryId) {
+          setRelatedProducts([]);
+          return;
+        }
+
+        const relatedCacheKey = String(categoryId);
+        const cachedRelated = relatedProductsCache.get(relatedCacheKey);
+        if (cachedRelated) {
+          setRelatedProducts(cachedRelated.filter((item) => item._id !== data._id).slice(0, 3));
+        }
+
+        const relatedRes = await fetch(`${API_URL}/products?category=${categoryId}&limit=4`, { signal: controller.signal });
+        const relatedData = await relatedRes.json().catch(() => ({}));
+        if (controller.signal.aborted || requestId !== requestIdRef.current) return;
+
+        const relatedItems = Array.isArray(relatedData) ? relatedData : (relatedData.items || []);
+        relatedProductsCache.set(relatedCacheKey, relatedItems);
+        setRelatedProducts(relatedItems.filter((item) => item._id !== data._id).slice(0, 3));
+      } catch (err) {
+        if (controller.signal.aborted || requestId !== requestIdRef.current) return;
+        setNotice({
+          type: 'error',
+          title: t('Product unavailable'),
+          description: t('We could not load the selected product right now.'),
+        });
+      } finally {
+        if (!productReady && !controller.signal.aborted && requestId === requestIdRef.current) {
+          setLoading(false);
+        }
+      }
+    };
+
+    loadProduct();
+
+    return () => {
+      controller.abort();
+    };
   }, [API_URL, id, t]);
 
   useEffect(() => {
-    fetchProduct();
-  }, [fetchProduct]);
-
-  useEffect(() => {
-    if (!product?._id) return;
+    if (!product?._id || String(product._id) !== String(id)) return;
     const expectedPath = buildProductPath(product);
     if (location.pathname !== expectedPath) {
       navigate(`${expectedPath}${location.search}`, { replace: true });
     }
-  }, [location.pathname, location.search, navigate, product]);
+  }, [id, location.pathname, location.search, navigate, product]);
 
   const variants = product?.variants || [];
   const selectedVariant = variants.find((v) => v._id === variantId);
@@ -271,7 +316,7 @@ const ProductDetails = () => {
     }
   };
 
-  if (loading) {
+  if (loading && !product) {
     return (
       <main>
         <section className="product-details-shell">

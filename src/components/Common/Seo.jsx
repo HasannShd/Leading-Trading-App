@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { absoluteUrl, SITE_ORIGIN } from '../../utils/seoSchemas';
+import { absoluteUrl, normalizeCanonicalPath, SITE_ORIGIN } from '../../utils/seoSchemas';
 
 const DEFAULT_TITLE = 'Leading Trading Est | Medical & Industrial Supplies Bahrain';
 const DEFAULT_DESCRIPTION =
@@ -58,7 +58,7 @@ export default function Seo({
   keywords = DEFAULT_KEYWORDS,
 }) {
   useEffect(() => {
-    const canonicalUrl = absoluteUrl(canonicalPath);
+    const canonicalUrl = absoluteUrl(normalizeCanonicalPath(canonicalPath));
     const imageUrl = absoluteUrl(image);
 
     document.title = title;

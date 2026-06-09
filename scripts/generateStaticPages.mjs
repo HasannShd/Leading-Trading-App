@@ -17,6 +17,7 @@ import { existsSync } from 'node:fs';
 import { seoLandingPages } from '../src/utils/seoLandingPages.js';
 import { resourceGuides } from '../src/utils/resourceGuides.js';
 import { buildProductPath } from '../src/utils/productUrls.js';
+import { normalizeCanonicalPath } from '../src/utils/seoSchemas.js';
 
 const SITE = 'https://www.lte-bh.com';
 const root  = resolve(new URL('..', import.meta.url).pathname);
@@ -162,7 +163,7 @@ const faqSchema = (faqs) => ({
 
 const genProduct = (product, catMap, viteHead, viteBody) => {
   const path      = buildProductPath(product);
-  const canonical = `${SITE}${path}`;
+  const canonical = `${SITE}${normalizeCanonicalPath(path)}`;
   const cat       = catMap[product.category] || catMap[product.categoryId] || null;
   const catName   = cat ? getName(cat.name) : 'Medical Supplies';
   const catSlug   = cat?.slug || null;
@@ -178,9 +179,9 @@ const genProduct = (product, catMap, viteHead, viteBody) => {
   const schemas = [
     productSchema(product, catName, canonical),
     breadcrumb([
-      { name: 'Home', url: SITE },
-      { name: 'Categories', url: `${SITE}/categories` },
-      ...(cat ? [{ name: catName, url: `${SITE}/categories/${catSlug || cat._id}` }] : []),
+      { name: 'Home', url: `${SITE}/` },
+      { name: 'Categories', url: `${SITE}/categories/` },
+      ...(cat ? [{ name: catName, url: `${SITE}${normalizeCanonicalPath(`/categories/${catSlug || cat._id}`)}` }] : []),
       { name: product.name, url: canonical },
     ]),
   ];
@@ -201,7 +202,7 @@ const genProduct = (product, catMap, viteHead, viteBody) => {
 
 const genCategory = (category, viteHead, viteBody) => {
   const slug      = category.slug || category._id;
-  const canonical = `${SITE}/categories/${slug}`;
+  const canonical = `${SITE}${normalizeCanonicalPath(`/categories/${slug}`)}`;
   const name      = getName(category.name) || 'Category';
 
   const title       = `${name} | Leading Trading Est — Bahrain`;
@@ -213,8 +214,8 @@ const genCategory = (category, viteHead, viteBody) => {
 
   const schemas = [
     breadcrumb([
-      { name: 'Home', url: SITE },
-      { name: 'Categories', url: `${SITE}/categories` },
+      { name: 'Home', url: `${SITE}/` },
+      { name: 'Categories', url: `${SITE}/categories/` },
       { name: name, url: canonical },
     ]),
   ];
@@ -232,14 +233,14 @@ const genCategory = (category, viteHead, viteBody) => {
 };
 
 const genSolution = (landingPage, viteHead, viteBody) => {
-  const canonical = `${SITE}/solutions/${landingPage.slug}`;
+  const canonical = `${SITE}${normalizeCanonicalPath(`/solutions/${landingPage.slug}`)}`;
 
   const schemas = [];
   if (landingPage.faqs?.length) schemas.push(faqSchema(landingPage.faqs));
   schemas.push(
     breadcrumb([
-      { name: 'Home', url: SITE },
-      { name: 'Solutions', url: `${SITE}/solutions` },
+      { name: 'Home', url: `${SITE}/` },
+      { name: 'Solutions', url: `${SITE}/solutions/` },
       { name: landingPage.title, url: canonical },
     ])
   );
@@ -277,11 +278,11 @@ const genSolution = (landingPage, viteHead, viteBody) => {
 };
 
 const genResourceGuide = (guide, viteHead, viteBody) => {
-  const canonical = `${SITE}/resources/${guide.slug}`;
+  const canonical = `${SITE}${normalizeCanonicalPath(`/resources/${guide.slug}`)}`;
   const schemas   = [
     breadcrumb([
-      { name: 'Home', url: SITE },
-      { name: 'Resources', url: `${SITE}/resources` },
+      { name: 'Home', url: `${SITE}/` },
+      { name: 'Resources', url: `${SITE}/resources/` },
       { name: guide.title, url: canonical },
     ]),
   ];
@@ -317,68 +318,68 @@ const STATIC_ROUTES = [
     title: 'Product Categories | Leading Trading Est — Bahrain',
     description: 'Browse all product categories from Leading Trading Est — NHRA approved medical, dental, laboratory, PPE, and industrial supplier in Bahrain.',
     keywords: 'product categories Bahrain, medical supplies Bahrain, Leading Trading Est categories',
-    crumbs: [{ name: 'Home', url: SITE }, { name: 'Categories', url: `${SITE}/categories` }],
+    crumbs: [{ name: 'Home', url: `${SITE}/` }, { name: 'Categories', url: `${SITE}/categories/` }],
   },
   {
     path: '/shop',
     title: 'Search Products | Leading Trading Est — Bahrain',
     description: 'Search the full product catalogue from Leading Trading Est, NHRA approved supplier of medical, dental, laboratory, PPE, and industrial supplies in Bahrain.',
     keywords: 'search products Bahrain, medical products Bahrain, Leading Trading Est shop',
-    crumbs: [{ name: 'Home', url: SITE }, { name: 'Shop', url: `${SITE}/shop` }],
+    crumbs: [{ name: 'Home', url: `${SITE}/` }, { name: 'Shop', url: `${SITE}/shop/` }],
   },
   {
     path: '/catalog',
     title: 'Product Catalog | Leading Trading Est — Bahrain',
     description: 'Download or browse the Leading Trading Est product catalog — medical, dental, laboratory, PPE, safety, and industrial supplies available in Bahrain.',
     keywords: 'product catalog Bahrain, medical catalog Bahrain, Leading Trading Est catalog',
-    crumbs: [{ name: 'Home', url: SITE }, { name: 'Catalog', url: `${SITE}/catalog` }],
+    crumbs: [{ name: 'Home', url: `${SITE}/` }, { name: 'Catalog', url: `${SITE}/catalog/` }],
   },
   {
     path: '/about',
     title: 'About Leading Trading Est | Bahrain Medical & Industrial Supplier',
     description: 'Leading Trading Est is an NHRA approved Bahrain supplier of medical, dental, laboratory, and industrial supplies. Learn about the company, its history, and team.',
     keywords: 'about Leading Trading Est, LTE Bahrain, NHRA approved supplier Bahrain',
-    crumbs: [{ name: 'Home', url: SITE }, { name: 'About', url: `${SITE}/about` }],
+    crumbs: [{ name: 'Home', url: `${SITE}/` }, { name: 'About', url: `${SITE}/about/` }],
   },
   {
     path: '/about/director',
     title: 'Director — Shahid Majeed | Leading Trading Est Bahrain',
     description: 'Shahid Majeed is the owner and managing director of Leading Trading Est, Bahrain\'s NHRA certified medical and industrial supply company.',
     keywords: 'Shahid Majeed, Leading Trading Est director, LTE Bahrain owner',
-    crumbs: [{ name: 'Home', url: SITE }, { name: 'About', url: `${SITE}/about` }, { name: 'Director', url: `${SITE}/about/director` }],
+    crumbs: [{ name: 'Home', url: `${SITE}/` }, { name: 'About', url: `${SITE}/about/` }, { name: 'Director', url: `${SITE}/about/director/` }],
   },
   {
     path: '/contact',
     title: 'Contact & Quote Request | Leading Trading Est — Bahrain',
     description: 'Contact Leading Trading Est to request a quotation for medical, dental, laboratory, PPE, and industrial supplies in Bahrain. Call, WhatsApp, or email.',
     keywords: 'contact Leading Trading Est, medical supplies quote Bahrain, LTE Bahrain contact',
-    crumbs: [{ name: 'Home', url: SITE }, { name: 'Contact', url: `${SITE}/contact` }],
+    crumbs: [{ name: 'Home', url: `${SITE}/` }, { name: 'Contact', url: `${SITE}/contact/` }],
   },
   {
     path: '/careers',
     title: 'Careers at Leading Trading Est | Bahrain',
     description: 'Explore career opportunities at Leading Trading Est, a growing NHRA approved medical and industrial supplier based in Bahrain.',
     keywords: 'careers Leading Trading Est, jobs Bahrain, LTE Bahrain careers',
-    crumbs: [{ name: 'Home', url: SITE }, { name: 'Careers', url: `${SITE}/careers` }],
+    crumbs: [{ name: 'Home', url: `${SITE}/` }, { name: 'Careers', url: `${SITE}/careers/` }],
   },
   {
     path: '/resources',
     title: 'Procurement Resources | Leading Trading Est — Bahrain',
     description: 'Guides and resources for Bahrain healthcare and industrial procurement. Written by Leading Trading Est to help buyers plan and source effectively.',
     keywords: 'procurement resources Bahrain, medical procurement guides, Leading Trading Est resources',
-    crumbs: [{ name: 'Home', url: SITE }, { name: 'Resources', url: `${SITE}/resources` }],
+    crumbs: [{ name: 'Home', url: `${SITE}/` }, { name: 'Resources', url: `${SITE}/resources/` }],
   },
   {
     path: '/privacy',
     title: 'Privacy Policy | Leading Trading Est',
     description: 'Privacy policy for Leading Trading Est — how we collect, use, and protect personal information submitted through our website.',
     keywords: 'Leading Trading Est privacy policy',
-    crumbs: [{ name: 'Home', url: SITE }, { name: 'Privacy', url: `${SITE}/privacy` }],
+    crumbs: [{ name: 'Home', url: `${SITE}/` }, { name: 'Privacy', url: `${SITE}/privacy/` }],
   },
 ];
 
 const genStaticRoute = (route, viteHead, viteBody) => {
-  const canonical = `${SITE}${route.path}`;
+  const canonical = `${SITE}${normalizeCanonicalPath(route.path)}`;
   const schemas   = [breadcrumb(route.crumbs)];
   const fallback  = `<h1>${esc(route.title.split(' | ')[0])}</h1><p>${esc(route.description)}</p><nav><a href="/">Home</a></nav>`;
 

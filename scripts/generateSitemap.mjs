@@ -5,6 +5,7 @@ const cacheFile = resolve(new URL('..', import.meta.url).pathname, 'scripts/seo-
 import { seoLandingRoutes } from '../src/utils/seoLandingPages.js';
 import { buildProductPath } from '../src/utils/productUrls.js';
 import { resourceGuideRoutes } from '../src/utils/resourceGuides.js';
+import { normalizeCanonicalPath } from '../src/utils/seoSchemas.js';
 
 const root = resolve(new URL('..', import.meta.url).pathname);
 const envPath = resolve(root, '.env');
@@ -134,7 +135,7 @@ const renderSitemap = (routes) => {
 ${uniqueRoutes
   .map(
     (route) => `  <url>
-    <loc>${escapeXml(`${siteUrl}${route.path}`)}</loc>
+    <loc>${escapeXml(`${siteUrl}${normalizeCanonicalPath(route.path)}`)}</loc>
     <lastmod>${route.lastmod || today}</lastmod>
     <changefreq>${route.changefreq}</changefreq>
     <priority>${route.priority}</priority>

@@ -165,64 +165,6 @@ const credibilityPillars = [
   },
 ];
 
-const supplySearchGuides = [
-  {
-    label: 'Medical Supplies Bahrain',
-    to: '/solutions/medical-supplies-bahrain',
-    text: 'Medical consumables, PPE, diagnostic support, and quotation handling for Bahrain buyers.',
-  },
-  {
-    label: 'Medical Equipment Supplier Bahrain',
-    to: '/solutions/medical-equipment-supplier-bahrain',
-    text: 'Equipment sourcing, product review, and specification-led procurement support.',
-  },
-  {
-    label: 'Hospital Supplies Bahrain',
-    to: '/solutions/hospital-supplies-bahrain',
-    text: 'Hospital consumables, equipment, sterile supplies, and delivery coordination.',
-  },
-  {
-    label: 'PPE Supplier Bahrain',
-    to: '/solutions/ppe-supplier-bahrain',
-    text: 'Gloves, masks, shields, gowns, disposable protection, and safety supply support.',
-  },
-  {
-    label: 'Dental Supplier Bahrain',
-    to: '/solutions/dental-supplier-bahrain',
-    text: 'Dental consumables, materials, equipment, and repeat clinic procurement support.',
-  },
-  {
-    label: 'Laboratory Equipment Supplier Bahrain',
-    to: '/solutions/laboratory-equipment-supplier-bahrain',
-    text: 'Lab equipment, diagnostics, consumables, and specification-led quotation review.',
-  },
-  {
-    label: 'Orthopedic Supplies Bahrain',
-    to: '/solutions/orthopedic-supplies-bahrain',
-    text: 'Casting, padding, rehabilitation, support products, and related clinic requirements.',
-  },
-  {
-    label: 'Surgical Instruments Bahrain',
-    to: '/solutions/surgical-instruments-bahrain',
-    text: 'Clinical and surgical instrument sourcing, specification review, and quotation support.',
-  },
-  {
-    label: 'Anesthesia & Respiratory Supplies',
-    to: '/solutions/anesthesia-respiratory-bahrain',
-    text: 'Airway, breathing circuit, oxygen therapy, and OT consumable sourcing for Bahrain hospitals.',
-  },
-  {
-    label: 'Disposable Consumables Bahrain',
-    to: '/solutions/disposable-consumables-bahrain',
-    text: 'Routine gloves, masks, swabs, syringes, tapes, and disposable clinical supply.',
-  },
-  {
-    label: 'Beauty Care Supplies Bahrain',
-    to: '/solutions/beauty-care-supplies-bahrain',
-    text: 'Clinic-grade gloves, cotton, razors, skin-prep, and salon consumables for beauty professionals.',
-  },
-];
-
 const mainBrands = [
   { name: 'Medstar', logo: 'Brands/medstar.jpg' },
   { name: 'Rogin', logo: 'Brands/rogin.png' },
@@ -313,7 +255,7 @@ const HomePage = () => {
           <div className="home-hero__editorial">
             <div className="home-hero__copy animate-stagger" data-stagger-step="120ms">
               <span className="home-eyebrow animate-on-scroll">{t('Leading Trading Est. | Bahrain')}</span>
-              <h1 className="animate-on-scroll">Medical, Dental <em>&amp;</em> Industrial Supply.</h1>
+              <h1 className="animate-on-scroll">Medical, Dental &amp; Industrial Supply.</h1>
               <p className="home-hero__lead animate-on-scroll">
                 {t('Local sourcing for medical, dental, laboratory, PPE, safety, and industrial requirements — structured quotation support and dependable delivery coordination across Bahrain.')}
               </p>
