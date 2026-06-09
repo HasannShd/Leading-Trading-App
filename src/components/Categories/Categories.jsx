@@ -1,6 +1,5 @@
 import { useState, useMemo, useEffect, useCallback, useDeferredValue, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import Card from '../Common/Card';
 import Input from '../Common/Input';
 import StatePanel from '../Common/StatePanel';
 import Seo from '../Common/Seo';
@@ -148,42 +147,38 @@ const Categories = () => {
                   className="categories-card-link animate-on-scroll"
                   aria-label={`${t('Open')} ${categoryName(c.name)}`}
                 >
-                  <Card className="categories-card">
-                    <div className="categories-card-image" data-category={categoryKey}>
-                      {c.image ? (
-                        <img
-                          className={`categories-card-img${categoryKey ? ` categories-card-img--${categoryKey}` : ''}`}
-                          src={
-                            c.image.startsWith('http')
-                              ? c.image
-                              : `${import.meta.env.BASE_URL}${c.image.replace(/^\//, '')}`
-                          }
-                          alt={c.name}
-                          loading="lazy"
-                        />
-                      ) : (
+                  <article className="categories-tile">
+                    {c.image ? (
+                      <img
+                        className="categories-tile__img"
+                        src={
+                          c.image.startsWith('http')
+                            ? c.image
+                            : `${import.meta.env.BASE_URL}${c.image.replace(/^\//, '')}`
+                        }
+                        alt={c.name}
+                        loading="lazy"
+                      />
+                    ) : (
+                      <div className="categories-tile__fallback">
                         <span>{categoryName(c.name)[0]}</span>
-                      )}
-                    </div>
-                    <div className="categories-card-content">
-                      <div className="categories-card-topline">
-                        <span>{t('Category')}</span>
-                        <strong>{t('Open')}</strong>
                       </div>
-                      <h3 className="categories-card-title">{categoryName(c.name)}</h3>
-                      <p className="categories-card-desc">
-                        {categoryDescription(c.description?.trim()) || t('Browse the products available inside this main category.')}
-                      </p>
+                    )}
+                    <div className="categories-tile__overlay" aria-hidden="true" />
+                    <div className="categories-tile__content">
+                      <span className="categories-tile__kicker">{t('Category')}</span>
+                      <h3 className="categories-tile__title">{categoryName(c.name)}</h3>
                       {c.children?.length ? (
-                        <div className="categories-card-children">
+                        <div className="categories-tile__subs">
                           {c.children.slice(0, 3).map((child) => (
                             <span key={child._id}>{categoryName(child.name)}</span>
                           ))}
                           {c.children.length > 3 ? <strong>+{c.children.length - 3}</strong> : null}
                         </div>
                       ) : null}
+                      <span className="categories-tile__open">{t('Open')} →</span>
                     </div>
-                  </Card>
+                  </article>
                 </Link>
               );
             })}

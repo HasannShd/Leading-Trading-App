@@ -907,6 +907,395 @@ export const seoLandingPages = [
     ],
   },
   {
+    slug: 'industrial-safety-supplies-bahrain',
+    title: 'Industrial & Safety Supplies Bahrain',
+    shortTitle: 'Industrial & safety supplies',
+    description:
+      'Industrial and safety supply sourcing for Bahrain operations teams, facilities, contractors, and procurement buyers reviewing PPE, safety equipment, first aid, and operational supply requirements.',
+    keywords:
+      'industrial supplies Bahrain, safety supplies Bahrain, industrial safety Bahrain, PPE industrial Bahrain, safety equipment Bahrain, industrial PPE supplier Bahrain, safety supplier Bahrain, Leading Trading Est industrial',
+    categoryPath: '/categories/industrial-safety',
+    categoryLabel: 'Industrial & Safety',
+    shopQuery: 'industrial safety',
+    buyerTerms: ['Industrial PPE', 'Safety equipment', 'Operational supply', 'Facilities procurement'],
+    sections: [
+      {
+        title: 'Industrial and safety supply for Bahrain operations',
+        body:
+          'Industrial buyers in Bahrain need reliable access to safety PPE, protective equipment, first aid supplies, and operational consumables across facilities, construction, manufacturing, and logistics environments. LTE supports these requirements with local sourcing, quotation review, and delivery follow-up.',
+      },
+      {
+        title: 'The same procurement discipline as healthcare',
+        body:
+          'LTE applies the same structured approach to industrial supply that it uses for healthcare procurement — supplier assessment, availability review, specification matching, and coordinated delivery — so operational buyers get dependable follow-through rather than fragmented vendor management.',
+      },
+      {
+        title: 'PPE and safety consumables for high-demand environments',
+        body:
+          'Safety consumables repeat regularly in industrial settings. LTE supports Bahrain operations teams with consistent availability, local account management, and quotation handling for both planned procurement and urgent replenishment.',
+      },
+    ],
+    faqs: [
+      {
+        question: 'Does LTE supply industrial safety products in Bahrain?',
+        answer:
+          'Yes. Leading Trading Est supports Bahrain operations teams, facilities, and industrial buyers with safety PPE, protective equipment, first aid supplies, and operational consumables.',
+      },
+      {
+        question: 'Can industrial buyers send mixed supply lists?',
+        answer:
+          'Yes. Buyers can send combined industrial safety, PPE, first aid, and operational supply requirements for LTE to review and quote.',
+      },
+      {
+        question: 'Does LTE support repeat industrial procurement?',
+        answer:
+          'Yes. LTE supports recurring industrial supply orders with local account follow-up and delivery coordination across Bahrain.',
+      },
+    ],
+    catalogPicksTitle: 'Industrial and safety items in the LTE catalog',
+    catalogPicks: [
+      {
+        name: 'Nitrile Gloves',
+        category: 'Industrial PPE',
+        useCase: 'Chemical handling, assembly, and general industrial hand protection.',
+        query: 'Nitrile Gloves',
+      },
+      {
+        name: 'Face Mask',
+        category: 'Industrial PPE',
+        useCase: 'Dust, particle, and respiratory protection for industrial and site environments.',
+        query: 'Face Mask',
+      },
+      {
+        name: 'Face Mask with Eye Shield',
+        category: 'Industrial PPE',
+        useCase: 'Combined facial and eye splash protection for industrial and maintenance workflows.',
+        query: 'Face Mask with Eye Shield',
+      },
+      {
+        name: 'First Aid Kit',
+        category: 'First Aid',
+        useCase: 'Site and facility first response readiness for industrial and operational environments.',
+        query: 'First Aid Kit',
+      },
+      {
+        name: 'Alcohol Swab Pad',
+        category: 'First Aid',
+        useCase: 'Wound cleaning and surface sanitization for site first aid and maintenance tasks.',
+        query: 'Alcohol Swab Pad',
+      },
+      {
+        name: 'Sterile Gauze Swab',
+        category: 'Wound Care',
+        useCase: 'Minor wound absorption and dressing support in industrial first aid settings.',
+        query: 'Sterile Gauze Swab',
+      },
+      {
+        name: 'Microporous Surgical Tape Non-Woven',
+        category: 'Medical Tapes',
+        useCase: 'Securing dressings and covers on minor industrial injuries.',
+        query: 'Microporous Surgical Tape Non-Woven',
+      },
+      {
+        name: 'Sharp Containers',
+        category: 'Safety Disposal',
+        useCase: 'Safe disposal of sharps and hazardous waste in industrial and maintenance environments.',
+        query: 'Sharp Containers',
+      },
+    ],
+  },
+  {
+    slug: 'anesthesia-respiratory-bahrain',
+    title: 'Anesthesia & Respiratory Supplies Bahrain',
+    shortTitle: 'Anesthesia & respiratory',
+    description:
+      'Anesthesia and respiratory supply sourcing for Bahrain hospitals, clinics, operating theatres, and procurement teams reviewing airway, breathing support, and related clinical consumables.',
+    keywords:
+      'anesthesia supplies Bahrain, respiratory supplies Bahrain, airway supplies Bahrain, anesthesia consumables Bahrain, oxygen mask Bahrain, breathing circuit Bahrain, anesthesia equipment Bahrain',
+    categoryPath: '/categories/anesthesia-respiratory',
+    categoryLabel: 'Anesthesia & Respiratory',
+    shopQuery: 'anesthesia respiratory',
+    buyerTerms: ['Anesthesia consumables', 'Airway and breathing', 'OT and ICU supply', 'Quotation support'],
+    sections: [
+      {
+        title: 'Anesthesia and respiratory supply for Bahrain clinical teams',
+        body:
+          'Anesthesia and respiratory procurement requires careful product matching across airway devices, breathing circuits, masks, oxygen therapy consumables, and procedure-support items. LTE supports Bahrain hospitals, operating theatres, ICU teams, and clinics with sourcing review and quotation follow-up.',
+      },
+      {
+        title: 'Built for specification-led procurement',
+        body:
+          'Buyers in this category often need to confirm product type, compatibility, sterility, brand, and availability before a quotation can move forward. LTE routes these requirements through a focused review and follow-up process.',
+      },
+      {
+        title: 'Connected to sterile consumables and surgical supply',
+        body:
+          'Anesthesia and respiratory requirements often sit alongside sterile surgical consumables, PPE, and equipment-related procurement. LTE keeps these paths connected for more complete enquiry handling.',
+      },
+    ],
+    faqs: [
+      {
+        question: 'Does LTE support anesthesia and respiratory supply in Bahrain?',
+        answer:
+          'Yes. LTE supports hospitals, clinics, and operating theatre teams in Bahrain with anesthesia and respiratory consumables, airway supplies, and quotation follow-up.',
+      },
+      {
+        question: 'Can buyers send mixed anesthesia and surgical requirements?',
+        answer:
+          'Yes. Buyers can send anesthesia, respiratory, sterile surgical, and related clinical requirements together for review.',
+      },
+    ],
+    catalogPicksTitle: 'Relevant items for anesthesia and respiratory procurement',
+    catalogPicks: [
+      {
+        name: 'Oxygen Mask',
+        category: 'Anesthesia & Respiratory',
+        useCase: 'Oxygen delivery for patient support in clinical and post-procedure settings.',
+        query: 'oxygen mask',
+      },
+      {
+        name: 'Nebulizer Mask',
+        category: 'Anesthesia & Respiratory',
+        useCase: 'Medication delivery through inhaled aerosol for respiratory therapy.',
+        query: 'nebulizer mask',
+      },
+      {
+        name: 'Suction Catheter',
+        category: 'Anesthesia & Respiratory',
+        useCase: 'Airway clearance and secretion management in clinical and OT workflows.',
+        query: 'suction catheter',
+      },
+      {
+        name: 'Disposable Syringes',
+        category: 'Injection & IV Disposable',
+        useCase: 'Drug delivery and fluid management alongside anesthesia support workflows.',
+        query: 'Disposable Syringes',
+      },
+      {
+        name: 'I.V Cannula',
+        category: 'Injection & IV Disposable',
+        useCase: 'Venous access for pre- and intra-procedure drug and fluid administration.',
+        query: 'I.V cannula',
+      },
+      {
+        name: 'Sterile Surgical Gloves',
+        category: 'Sterile Surgical Consumables',
+        useCase: 'Hand protection for OT and procedure-room airway and anesthesia workflows.',
+        query: 'Sterile Surgical Gloves',
+      },
+    ],
+  },
+  {
+    slug: 'disposable-consumables-bahrain',
+    title: 'Disposable Consumables Supplier Bahrain',
+    shortTitle: 'Disposable consumables',
+    description:
+      'Disposable medical consumables sourcing for Bahrain clinics, hospitals, dental centers, laboratories, and procurement teams reviewing routine disposables, PPE, examination items, and recurring supply requirements.',
+    keywords:
+      'disposable consumables Bahrain, medical disposables Bahrain, clinical consumables Bahrain, disposable medical supplies Bahrain, examination consumables Bahrain, routine disposables Bahrain',
+    categoryPath: '/categories/consumables-disposables',
+    categoryLabel: 'Consumables & Disposables',
+    shopQuery: 'disposable consumables',
+    buyerTerms: ['Routine disposables', 'Clinical consumables', 'Examination supplies', 'Recurring procurement'],
+    sections: [
+      {
+        title: 'Disposable consumables support daily clinical workflow',
+        body:
+          'Routine disposables — examination gloves, face masks, syringes, swabs, dressings, tapes, and related items — sit at the heart of clinical supply continuity. LTE supports Bahrain buyers with catalog visibility and quotation follow-up for both one-time and repeat requirements.',
+      },
+      {
+        title: 'Organized for mixed procurement lists',
+        body:
+          'Disposable consumable orders often combine multiple categories and quantities. LTE keeps the enquiry path practical so buyers can send a mixed list and receive organized quotation review.',
+      },
+      {
+        title: 'Connected to PPE, sterile, and infection control supply',
+        body:
+          'Disposable needs often overlap with PPE, sterile surgical items, wound care, and infection-control consumables. LTE keeps those paths connected for faster buyer review.',
+      },
+    ],
+    faqs: [
+      {
+        question: 'Does LTE supply disposable consumables in Bahrain?',
+        answer:
+          'Yes. LTE supports Bahrain clinics, hospitals, dental centers, and laboratories with disposable consumable sourcing, quotation handling, and local follow-up.',
+      },
+      {
+        question: 'Can buyers send a full disposable supply list?',
+        answer:
+          'Yes. Buyers can send mixed disposable requirement lists with product names, quantities, brand preferences, and delivery needs for LTE review.',
+      },
+    ],
+    catalogPicksTitle: 'Common disposable consumables in the LTE catalog',
+    catalogPicks: [
+      {
+        name: 'Nitrile Gloves',
+        category: 'PPE Gloves',
+        useCase: 'High-use examination glove for clinics, dental, lab, and general clinical work.',
+        query: 'Nitrile Gloves',
+      },
+      {
+        name: 'Face Mask',
+        category: 'PPE Masks & Shields',
+        useCase: 'Routine respiratory barrier for patient-facing and procedure-support workflows.',
+        query: 'Face Mask',
+      },
+      {
+        name: 'Alcohol Swab Pad',
+        category: 'Skin Prep & First Aid',
+        useCase: 'Skin preparation before injections, blood draws, and routine clinical procedures.',
+        query: 'Alcohol Swab Pad',
+      },
+      {
+        name: 'Disposable Syringes',
+        category: 'Injection & IV Disposable',
+        useCase: 'Single-use syringes for medication delivery, fluid management, and clinical support.',
+        query: 'Disposable Syringes',
+      },
+      {
+        name: 'Sterile Gauze Swab',
+        category: 'Wound Dressings & Gauze',
+        useCase: 'Wound cleaning, absorption, and sterile procedure support.',
+        query: 'Sterile Gauze Swab',
+      },
+      {
+        name: 'Microporous Surgical Tape Non-Woven',
+        category: 'Medical Tapes & Bandages',
+        useCase: 'Securing dressings and wound covers in routine clinical use.',
+        query: 'Microporous Surgical Tape Non-Woven',
+      },
+      {
+        name: 'Disposable Razors',
+        category: 'Examination & General Disposable',
+        useCase: 'Pre-procedure site preparation across clinical and examination workflows.',
+        query: 'Disposable Razors',
+      },
+      {
+        name: 'Sharp Containers',
+        category: 'Miscellaneous',
+        useCase: 'Safe clinical disposal of needles, blades, and sharps.',
+        query: 'Sharp Containers',
+      },
+    ],
+  },
+  {
+    slug: 'beauty-care-supplies-bahrain',
+    title: 'Beauty Care Supplies Bahrain',
+    shortTitle: 'Beauty care supplies',
+    description:
+      'Beauty salon, beauty clinic, and aesthetic care supply sourcing in Bahrain — disposable consumables, PPE, skin-prep items, and salon-grade tools from the LTE medical and clinical catalog.',
+    keywords:
+      'beauty supplies Bahrain, beauty salon supplies Bahrain, beauty care products Bahrain, salon consumables Bahrain, beauty clinic supplies Bahrain, aesthetic care supplies Bahrain, nail salon supplies Bahrain',
+    categoryPath: '/categories/consumables-disposables',
+    categoryLabel: 'Consumables & Disposables',
+    shopQuery: 'beauty care',
+    buyerTerms: ['Beauty salons', 'Aesthetic clinics', 'Salon consumables', 'Disposable care supplies'],
+    sections: [
+      {
+        title: 'Clinical-grade consumables for beauty and salon use',
+        body:
+          'Beauty salons, nail studios, aesthetic clinics, and spa facilities share many of the same consumable needs as clinical environments — disposable gloves, protective masks, cotton, skin-prep items, razors, and hygiene supplies. LTE stocks clinic-grade versions of these products for buyers who need consistent quality and repeat availability.',
+      },
+      {
+        title: 'PPE and hygiene items for client-facing environments',
+        body:
+          'Gloves, face masks, aprons, and disposable covers protect staff and clients during beauty services. LTE supports Bahrain beauty and salon buyers with quotation review across nitrile, vinyl, and examination gloves, masks, and related PPE.',
+      },
+      {
+        title: 'A reliable supply path for routine salon stock',
+        body:
+          'Beauty consumables repeat regularly and consistency matters. LTE supports Bahrain salon and beauty clinic buyers with a sourcing route and local follow-up for recurring disposable and hygiene supply needs.',
+      },
+    ],
+    faqs: [
+      {
+        question: 'Does LTE supply beauty and salon consumables in Bahrain?',
+        answer:
+          'Yes. LTE stocks clinic-grade gloves, masks, cotton, skin-prep items, disposable razors, and related consumables that are also used by beauty salons and aesthetic clinics in Bahrain.',
+      },
+      {
+        question: 'Can beauty salons request quotations from LTE?',
+        answer:
+          'Yes. Beauty salons, nail studios, aesthetic clinics, and spas can send supply lists through the contact or quote form and LTE will review availability and pricing.',
+      },
+    ],
+    catalogPicksTitle: 'Catalog items suitable for beauty and salon use',
+    catalogPicks: [
+      {
+        name: 'Nitrile Gloves',
+        category: 'PPE Gloves',
+        useCase: 'Nail services, chemical treatments, hair coloring, and general client-contact protection.',
+        query: 'Nitrile Gloves',
+      },
+      {
+        name: 'Vinyl Gloves',
+        category: 'PPE Gloves',
+        useCase: 'Light-touch beauty services and general salon hygiene protection.',
+        query: 'vinyl gloves',
+      },
+      {
+        name: 'Examination Glove',
+        category: 'PPE Gloves',
+        useCase: 'Multi-purpose disposable hand protection across salon and beauty clinic tasks.',
+        query: 'Examination Glove',
+      },
+      {
+        name: 'Face Mask',
+        category: 'PPE Masks & Shields',
+        useCase: 'Staff and client respiratory protection during chemical, spray, and product-application services.',
+        query: 'Face Mask',
+      },
+      {
+        name: 'Disposable Razors',
+        category: 'Examination & General Disposable',
+        useCase: 'Single-use shaving and hair-removal prep before waxing, treatment, or skin services.',
+        query: 'Disposable Razors',
+      },
+      {
+        name: 'Gauze/Cotton Balls',
+        category: 'Wound Dressings & Gauze',
+        useCase: 'Product application, nail prep, toner, remover, and general skin-care use.',
+        query: 'Gauze/Cotton Balls',
+      },
+      {
+        name: 'Alcohol Swab Pad',
+        category: 'Skin Prep & First Aid',
+        useCase: 'Surface cleaning, sanitization, and skin prep before facial and beauty treatments.',
+        query: 'Alcohol Swab Pad',
+      },
+      {
+        name: 'Sterile Gauze Swab',
+        category: 'Wound Dressings & Gauze',
+        useCase: 'Gentle absorption and skin application during facials and clinical beauty treatments.',
+        query: 'Sterile Gauze Swab',
+      },
+      {
+        name: 'Tongue Depressors',
+        category: 'Examination & General Disposable',
+        useCase: 'Wax spatula alternative and product-mixing tool for salon and skin-care workflows.',
+        query: 'Tongue Depressors',
+      },
+      {
+        name: 'Microporous Surgical Tape Non-Woven',
+        category: 'Medical Tapes & Bandages',
+        useCase: 'Securing skin covers, eye pads, and post-treatment dressings in beauty clinic use.',
+        query: 'Microporous Surgical Tape Non-Woven',
+      },
+      {
+        name: 'Examination Couch',
+        category: 'Hospital Furniture & Utilities',
+        useCase: 'Treatment beds for facials, waxing, body wraps, and aesthetic clinic procedures.',
+        query: 'Examination Couch',
+      },
+      {
+        name: 'Sharp Containers',
+        category: 'Miscellaneous',
+        useCase: 'Safe disposal of needles, lancets, and used blades for aesthetic and beauty clinics.',
+        query: 'Sharp Containers',
+      },
+    ],
+  },
+  {
     slug: 'sterile-surgical-consumables-bahrain',
     title: 'Sterile Surgical Consumables Supplier in Bahrain',
     shortTitle: 'Sterile surgical consumables',

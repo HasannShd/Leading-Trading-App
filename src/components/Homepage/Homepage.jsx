@@ -1,6 +1,8 @@
-import { useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Seo from '../Common/Seo';
+import { normalizeImageSrc } from '../../utils/normalizeImageSrc';
+import { buildProductPath } from '../../utils/productUrls';
 import { buildFaqSchema, businessApplicationSchema, localBusinessSchema, organizationSchema, webSiteSchema } from '../../utils/seoSchemas';
 import { useLanguage } from '../../context/LanguageContext';
 import { useHomepageScroll } from './useHomepageScroll';
@@ -56,21 +58,45 @@ const valuePillars = [
     title: 'Vendor Relations',
     body: 'Supplier relationships are developed around continuity, access, and dependable repeat supply rather than short-term opportunistic buying.',
     detail: 'Established manufacturer and vendor network',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <circle cx="8" cy="12" r="3"/><circle cx="16" cy="8" r="3"/><circle cx="16" cy="16" r="3"/>
+        <line x1="10.8" y1="10.8" x2="13.2" y2="9.2"/><line x1="10.8" y1="13.2" x2="13.2" y2="14.8"/>
+      </svg>
+    ),
   },
   {
     title: 'Quality Assurance',
     body: 'Product suitability, documentation, and specification control are reviewed before quotation and fulfillment decisions are made.',
     detail: 'Specification and documentation discipline',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <path d="M12 3L4 7v5c0 4.4 3.4 8.5 8 9.5 4.6-1 8-5.1 8-9.5V7l-8-4z"/>
+        <polyline points="9 12 11 14 15 10"/>
+      </svg>
+    ),
   },
   {
     title: 'Logistics',
     body: 'Orders move through a structured path with inventory awareness, delivery coordination, and clearer visibility on timing.',
     detail: 'Inventory and delivery coordination',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 5v4h-7V8z"/>
+        <circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>
+      </svg>
+    ),
   },
   {
     title: 'Customer Commitment',
     body: 'Sales, accounts, and delivery remain aligned so customer support continues beyond quotation and procurement.',
     detail: 'Commercial follow-through and local support',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+      </svg>
+    ),
   },
 ];
 
@@ -105,8 +131,14 @@ const sectors = [
     body: 'LTE supports regulated medical environments with disciplined sourcing, dependable availability, and close attention to product suitability, timing, and documentation.',
     points: ['Hospitals and specialist centers', 'Clinics and outpatient facilities', 'Routine and urgent replenishment'],
     image: 'Stethescope.webp',
-    visualTitle: 'Medical procurement with operational discipline',
-    visualBody: 'Clinical supply decisions require more than stock visibility. They depend on specification fit, supplier confidence, and dependable execution.',
+    guides: [
+      { label: 'Medical Supplies', to: '/solutions/medical-supplies-bahrain' },
+      { label: 'Hospital Supplies', to: '/solutions/hospital-supplies-bahrain' },
+      { label: 'Surgical Instruments', to: '/solutions/surgical-instruments-bahrain' },
+      { label: 'Anesthesia & Respiratory', to: '/solutions/anesthesia-respiratory-bahrain' },
+      { label: 'Sterile Consumables', to: '/solutions/sterile-surgical-consumables-bahrain' },
+      { label: 'Laboratory Equipment', to: '/solutions/laboratory-equipment-supplier-bahrain' },
+    ],
   },
   {
     key: 'industrial',
@@ -115,8 +147,9 @@ const sectors = [
     body: 'The same disciplined workflow extends into industrial and safety sourcing, giving buyers a more dependable path from request to delivery.',
     points: ['Safety and utility products', 'Operational supply continuity', 'Consistent delivery planning'],
     image: 'industrial.png',
-    visualTitle: 'Industrial continuity backed by reliable coordination',
-    visualBody: 'Operational teams need dependable product flow, practical coordination, and local follow-through that supports day-to-day performance.',
+    guides: [
+      { label: 'Industrial Supplies Bahrain', to: '/solutions/industrial-safety-supplies-bahrain' },
+    ],
   },
 ];
 
@@ -168,6 +201,26 @@ const supplySearchGuides = [
     to: '/solutions/orthopedic-supplies-bahrain',
     text: 'Casting, padding, rehabilitation, support products, and related clinic requirements.',
   },
+  {
+    label: 'Surgical Instruments Bahrain',
+    to: '/solutions/surgical-instruments-bahrain',
+    text: 'Clinical and surgical instrument sourcing, specification review, and quotation support.',
+  },
+  {
+    label: 'Anesthesia & Respiratory Supplies',
+    to: '/solutions/anesthesia-respiratory-bahrain',
+    text: 'Airway, breathing circuit, oxygen therapy, and OT consumable sourcing for Bahrain hospitals.',
+  },
+  {
+    label: 'Disposable Consumables Bahrain',
+    to: '/solutions/disposable-consumables-bahrain',
+    text: 'Routine gloves, masks, swabs, syringes, tapes, and disposable clinical supply.',
+  },
+  {
+    label: 'Beauty Care Supplies Bahrain',
+    to: '/solutions/beauty-care-supplies-bahrain',
+    text: 'Clinic-grade gloves, cotton, razors, skin-prep, and salon consumables for beauty professionals.',
+  },
 ];
 
 const mainBrands = [
@@ -198,9 +251,21 @@ const clients = [
 
 const HomePage = () => {
   const baseUrl = import.meta.env.BASE_URL;
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
   const { t, categoryName } = useLanguage();
   const rootRef = useRef(null);
   useHomepageScroll(rootRef, true);
+
+  const [featuredProducts, setFeaturedProducts] = useState([]);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    fetch(`${API_URL}/products?featured=true&limit=6`, { signal: controller.signal, cache: 'no-store' })
+      .then((r) => r.json())
+      .then((data) => setFeaturedProducts(Array.isArray(data) ? data : data.products || []))
+      .catch(() => {});
+    return () => controller.abort();
+  }, [API_URL]);
 
   const marqueeBrands = useMemo(() => [...mainBrands, ...mainBrands], []);
   const marqueeClients = useMemo(() => [...clients, ...clients], []);
@@ -259,8 +324,8 @@ const HomePage = () => {
               </div>
               <div className="home-hero__cats animate-on-scroll">
                 {homepageCategories.map((cat) => (
-                  <Link key={cat.slug} className="home-hero__cat-chip" to={`/categories/${cat.slug}`}>
-                    <span className="home-hero__cat-icon" aria-hidden="true">{cat.icon}</span>
+                  <Link key={cat.slug} className={`home-hero__cat-chip home-hero__cat-chip--${cat.slug}`} to={`/categories/${cat.slug}`}>
+                    <span className="home-hero__cat-dot" aria-hidden="true" />
                     {categoryName(cat.name)}
                   </Link>
                 ))}
@@ -284,6 +349,21 @@ const HomePage = () => {
         </div>
       </section>
 
+      {/* ── Credibility strip ── */}
+      <div className="home-cred-strip animate-on-scroll">
+        <div className="home-shell">
+          <div className="home-cred-strip__inner">
+            <span>200+ Products</span>
+            <span className="home-cred-strip__dot" aria-hidden="true" />
+            <span>15+ Manufacturers</span>
+            <span className="home-cred-strip__dot" aria-hidden="true" />
+            <span>Bahrain-based since 2012</span>
+            <span className="home-cred-strip__dot" aria-hidden="true" />
+            <span>NHRA Licensed</span>
+          </div>
+        </div>
+      </div>
+
       <section className="home-section business-model">
         <div className="home-shell">
           <div className="section-heading animate-stagger" data-stagger-step="110ms">
@@ -297,64 +377,80 @@ const HomePage = () => {
           <div className="pillar-grid animate-stagger" data-stagger-step="120ms">
             {valuePillars.map((pillar, index) => (
               <article className="pillar-card animate-on-scroll" key={pillar.title}>
-                <span className="pillar-card__index">{`0${index + 1}`}</span>
+                <div className="pillar-card__top">
+                  <span className="pillar-card__icon">{pillar.icon}</span>
+                  <span className="pillar-card__num">{`0${index + 1}`}</span>
+                </div>
                 <h3>{t(pillar.title)}</h3>
                 <p>{t(pillar.body)}</p>
-                <strong>{t(pillar.detail)}</strong>
+                <span className="pillar-card__detail">{t(pillar.detail)}</span>
               </article>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="home-section workflow-stage">
-        <div className="home-shell workflow-stage__grid">
-          <div className="workflow-stage__intro animate-stagger" data-stagger-step="110ms">
-            <span className="home-eyebrow home-eyebrow--ink animate-on-scroll">{t('Workflow')}</span>
-            <h2 className="animate-on-scroll">{t('A clear operating workflow supports every enquiry, quotation, procurement decision, and delivery commitment.')}</h2>
-            <p className="animate-on-scroll">
-              {t('Each requirement moves through review, sourcing, procurement alignment, logistics coordination, and delivery support so the customer receives a more dependable service path.')}
-            </p>
-            <div className="workflow-stage__line">
-              <span className="workflow-stage__line-fill" />
-            </div>
-          </div>
-
-          <div className="workflow-stage__steps animate-stagger" data-stagger-step="140ms">
-            {workflowSteps.map((step, index) => (
-              <article className="workflow-step animate-on-scroll" key={step.title}>
-                <span className="workflow-step__index">{`0${index + 1}`}</span>
-                <div>
-                  <h3>{t(step.title)}</h3>
-                  <p>{t(step.body)}</p>
-                </div>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="home-section search-guides">
+      <section className="home-section home-section--alt workflow-stage">
         <div className="home-shell">
           <div className="section-heading animate-stagger" data-stagger-step="110ms">
-            <span className="home-eyebrow home-eyebrow--ink animate-on-scroll">{t('Bahrain supply search paths')}</span>
-            <h2 className="animate-on-scroll">{t('Focused pages for buyers searching medical, dental, laboratory, orthopedic, hospital, and PPE suppliers in Bahrain.')}</h2>
-            <p className="animate-on-scroll">
-              {t('These guides connect common Google searches to the right LTE category, product search, and quotation path without changing the existing catalog workflow.')}
-            </p>
+            <span className="home-eyebrow home-eyebrow--ink animate-on-scroll">{t('Workflow')}</span>
+            <h2 className="animate-on-scroll">{t('A clear operating workflow supports every enquiry, quotation, procurement decision, and delivery commitment.')}</h2>
           </div>
-
-          <div className="search-guides__grid animate-stagger" data-stagger-step="100ms">
-            {supplySearchGuides.map((guide) => (
-              <Link className="search-guide-card animate-on-scroll" to={guide.to} key={guide.to}>
-                <strong>{t(guide.label)}</strong>
-                <p>{t(guide.text)}</p>
-                <span>{t('Open guide')} →</span>
-              </Link>
+          <div className="workflow-timeline animate-stagger" data-stagger-step="100ms">
+            <div className="workflow-timeline__track" aria-hidden="true">
+              <div className="workflow-timeline__line"><span className="workflow-timeline__fill" /></div>
+              {workflowSteps.map((_, i) => (
+                <div className="workflow-timeline__node" key={i}>
+                  <span>{`0${i + 1}`}</span>
+                </div>
+              ))}
+            </div>
+            {workflowSteps.map((step, index) => (
+              <article className="workflow-node animate-on-scroll" key={step.title} data-index={`0${index + 1}`}>
+                <h3>{t(step.title)}</h3>
+                <p>{t(step.body)}</p>
+              </article>
             ))}
           </div>
         </div>
       </section>
+
+      {featuredProducts.length > 0 && (
+        <section className="home-section fast-movers">
+          <div className="home-shell">
+            <div className="fast-movers__head animate-stagger" data-stagger-step="110ms">
+              <div>
+                <span className="home-eyebrow home-eyebrow--ink animate-on-scroll">{t('Active catalog')}</span>
+                <h2 className="animate-on-scroll">{t('Products in demand.')}</h2>
+              </div>
+              <Link className="fast-movers__all animate-on-scroll" to="/catalog">{t('Browse full catalog')} →</Link>
+            </div>
+            <div className="fast-movers__rail animate-stagger" data-stagger-step="80ms">
+              {featuredProducts.map((product) => (
+                <Link className="fast-mover-card animate-on-scroll" key={product._id} to={buildProductPath(product)}>
+                  <div className="fast-mover-card__media">
+                    {product.image ? (
+                      <img src={normalizeImageSrc(product.image)} alt={product.name} loading="lazy" decoding="async" />
+                    ) : (
+                      <span className="fast-mover-card__fallback">{product.name?.[0] || 'P'}</span>
+                    )}
+                  </div>
+                  <div className="fast-mover-card__body">
+                    {product.brand && <span className="fast-mover-card__brand">{product.brand}</span>}
+                    <h3 className="fast-mover-card__name">{product.name}</h3>
+                    {product.categorySlug?.name && (
+                      <span className="fast-mover-card__cat">{categoryName(product.categorySlug.name)}</span>
+                    )}
+                  </div>
+                  <span className="fast-mover-card__cta" aria-hidden="true">→</span>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+
 
       <section className="home-section sector-sequence">
         <div className="home-shell">
@@ -382,18 +478,22 @@ const HomePage = () => {
                       <li key={point}>{t(point)}</li>
                     ))}
                   </ul>
+                  {sector.guides && (
+                    <div className="sector-shot__guides">
+                      <span className="sector-shot__guides-label">{t('Supply paths')}</span>
+                      <div className="sector-shot__guide-chips">
+                        {sector.guides.map((g) => (
+                          <Link key={g.to} to={g.to} className="sector-guide-chip">{t(g.label)}</Link>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 <div className="sector-shot__visual animate-on-scroll" data-parallax={sector.key === 'medical' ? 'soft' : 'lift'}>
-                  <div className="sector-shot__frame">
-                    <div className="sector-shot__frame-copy">
-                      <span>{t(sector.eyebrow)}</span>
-                      <strong>{t(sector.visualTitle)}</strong>
-                      <p>{t(sector.visualBody)}</p>
-                    </div>
-                    <div className="sector-shot__media">
-                      <img src={`${baseUrl}${sector.image}`} alt={sector.eyebrow} loading="lazy" decoding="async" />
-                    </div>
+                  <div className="sector-shot__img-fill">
+                    <img src={`${baseUrl}${sector.image}`} alt={sector.eyebrow} loading="lazy" decoding="async" />
+                    <span className="sector-shot__img-label">{t(sector.eyebrow)}</span>
                   </div>
                 </div>
               </article>
@@ -402,43 +502,44 @@ const HomePage = () => {
         </div>
       </section>
 
-      <section className="home-section trust-stage">
+      <section className="home-section home-section--alt trust-stage">
         <div className="home-shell">
-          <div className="section-heading animate-stagger" data-stagger-step="110ms">
-            <span className="home-eyebrow home-eyebrow--ink animate-on-scroll">{t('Trusted brands and institutions')}</span>
-            <h2 className="animate-on-scroll">{t('Our supplier network and institutional customer base reflect the standards we are expected to maintain.')}</h2>
-            <p className="animate-on-scroll">
-              {t('LTE works with selected manufacturers and supports institutions that require reliability, product quality, and professional service standards.')}
-            </p>
+
+          <div className="trust-stage__intro animate-stagger" data-stagger-step="110ms">
+            <div className="trust-stage__intro-heading animate-on-scroll">
+              <span className="home-eyebrow home-eyebrow--ink">{t('Trusted brands and institutions')}</span>
+              <h2>{t('The network behind every order.')}</h2>
+            </div>
+            <div className="trust-stage__intro-body animate-on-scroll">
+              <p>{t('LTE works with selected manufacturers and supports institutions that require reliability, product quality, and professional service standards — including sole-agent representation for ROMSONS and SMI in Bahrain.')}</p>
+              <div className="trust-stage__badges">
+                <span>ROMSONS</span>
+                <span>SMI</span>
+                <span>{t('Sole Agent — Bahrain')}</span>
+              </div>
+            </div>
           </div>
 
-          <div className="trust-stage__copy animate-on-scroll">
-            <p>
-              {t('Our relationships with established brands, international suppliers, distributors, and respected institutions demonstrate the level of trust placed in our sourcing, coordination, and delivery performance. LTE also supports dedicated brand representation, including sole-agent support for ROMSONS and SMI in Bahrain.')}
-            </p>
-          </div>
-
-          <div className="medstar-spotlight animate-stagger" data-stagger-step="100ms">
-            <div className="medstar-spotlight__brand animate-on-scroll">
-              <img src={`${baseUrl}Brands/medstar.jpg`} alt="Medstar" loading="lazy" decoding="async" />
+          <div className="medstar-dark animate-stagger" data-stagger-step="100ms">
+            <div className="medstar-dark__left animate-on-scroll">
+              <div className="medstar-dark__logo-wrap">
+                <img src={`${baseUrl}Brands/medstar.jpg`} alt="Medstar" loading="lazy" decoding="async" />
+              </div>
+              <div className="medstar-dark__chips animate-stagger" data-stagger-step="60ms">
+                {[
+                  t('Local accountability'),
+                  t('Routine supply'),
+                  t('LTE-backed delivery'),
+                ].map((chip) => (
+                  <span className="medstar-dark__chip animate-on-scroll" key={chip}>{chip}</span>
+                ))}
+              </div>
             </div>
-
-            <div className="medstar-spotlight__copy animate-on-scroll">
-              <span className="home-eyebrow home-eyebrow--ink">{t('Our own brand')}</span>
-              <h3>{t('Medstar is LTE’s own trusted medical supply brand, built around consistency, practical quality, and dependable market confidence.')}</h3>
-              <p>
-                {t('Medstar supports day-to-day clinical purchasing with products selected for routine healthcare use, repeat procurement, and the service expectations of Bahrain medical and dental buyers.')}
-              </p>
-            </div>
-
-            <div className="medstar-spotlight__points animate-stagger" data-stagger-step="80ms">
-              {[
-                'LTE-owned brand with local accountability',
-                'Recognized by buyers for dependable routine supply',
-                'Supported by LTE supplier access, brand relationships, and delivery workflow',
-              ].map((point) => (
-                <span className="animate-on-scroll" key={point}>{t(point)}</span>
-              ))}
+            <div className="medstar-dark__body animate-on-scroll">
+              <span className="medstar-dark__eyebrow">{t('Our own brand')}</span>
+              <h3>{t("Medstar is LTE's own trusted medical supply brand, built around consistency, practical quality, and dependable market confidence.")}</h3>
+              <p>{t('Medstar supports day-to-day clinical purchasing with products selected for routine healthcare use, repeat procurement, and the service expectations of Bahrain medical and dental buyers.')}</p>
+              <Link className="medstar-dark__cta animate-on-scroll" to="/catalog">{t('Browse Medstar products')} →</Link>
             </div>
           </div>
 
@@ -465,7 +566,7 @@ const HomePage = () => {
       </section>
 
 
-      <section className="home-section why-lte-editorial">
+      <section className="home-section home-section--alt why-lte-editorial">
         <div className="home-shell">
           <div className="why-lte-editorial__card animate-stagger" data-stagger-step="110ms">
             <div className="why-lte-editorial__year animate-on-scroll">

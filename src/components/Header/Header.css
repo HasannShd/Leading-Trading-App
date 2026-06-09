@@ -163,7 +163,9 @@
 .header.scrolled .nav .nav-dropdown-toggle,
 .app:not(.hero-page) .nav a,
 .app:not(.hero-page) .nav .nav-dropdown-toggle {
-  color: rgba(7, 17, 31, 0.72);
+  color: rgba(7, 17, 31, 0.66);
+  font-size: 13px;
+  font-weight: 600;
 }
 
 .nav a:hover,
@@ -974,158 +976,263 @@
   }
 }
 
-/* Premium homepage navigation — floating pill */
+/* ══════════════════════════════════════════════════════════════════
+   HOMEPAGE NAVBAR — three floating islands
+   Brand island (left) · Nav island (center, absolute) · Actions island (right)
+   Each segment is its own glass capsule; the row is transparent.
+   ══════════════════════════════════════════════════════════════════ */
 .header.header-home {
-  padding: 14px 0;
+  padding: 18px 0;
   background: transparent;
   border-bottom: none;
   box-shadow: none;
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
-  animation: slideDown 0.5s ease both;
+  animation: slideDown 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .header.header-home.scrolled {
-  padding: 10px 0;
-  background: transparent;
-  border-bottom: none;
-  box-shadow: none;
+  padding: 12px 0;
 }
 
-/* The row itself becomes the floating pill */
+/* ── Row is purely a flex container — no unified background ── */
 .header.header-home .header-row,
 .header.header-home.scrolled .header-row {
-  background: rgba(8, 14, 26, 0.78);
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  backdrop-filter: blur(22px);
-  -webkit-backdrop-filter: blur(22px);
-  box-shadow:
-    0 2px 0 rgba(255, 255, 255, 0.04) inset,
-    0 16px 48px rgba(0, 0, 0, 0.32),
-    0 1px 0 rgba(0, 0, 0, 0.6);
-  border-radius: 34px;
-  min-height: 58px;
-  padding: 0 10px 0 14px;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-radius: 0;
+  min-height: auto;
+  padding: 0;
+  gap: 10px;
+  align-items: center;
 }
 
-.header.header-home.scrolled .header-row {
-  background: rgba(6, 12, 22, 0.92);
-  border-color: rgba(255, 255, 255, 0.1);
-  box-shadow:
-    0 2px 0 rgba(255, 255, 255, 0.04) inset,
-    0 22px 52px rgba(0, 0, 0, 0.38);
-}
-
-/* Nav links cluster — subtle inner container */
-.header.header-home .nav {
-  background: rgba(255, 255, 255, 0.045);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 999px;
-  padding: 4px 6px;
-}
-
+/* Shared glass base for all three islands */
 .header.header-home .brand,
-.header.header-home.scrolled .brand {
+.header.header-home .nav,
+.header.header-home .header-actions-desktop {
+  background: rgba(5, 10, 20, 0.76);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-top-color: rgba(160, 210, 255, 0.18);
+  backdrop-filter: blur(30px) saturate(1.5);
+  -webkit-backdrop-filter: blur(30px) saturate(1.5);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.055) inset,
+    0 16px 44px rgba(0, 0, 0, 0.3),
+    0 1px 0 rgba(0, 0, 0, 0.5);
+  border-radius: 999px;
+  transition: background 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+/* Scrolled — slightly more opaque */
+.header.header-home.scrolled .brand,
+.header.header-home.scrolled .nav,
+.header.header-home.scrolled .header-actions-desktop {
+  background: rgba(4, 8, 18, 0.9);
+  border-color: rgba(255, 255, 255, 0.09);
+  border-top-color: rgba(100, 170, 255, 0.15);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.04) inset,
+    0 20px 56px rgba(0, 0, 0, 0.42);
+}
+
+/* ── Island 1 — Brand ── */
+.header.header-home .brand {
   color: #ffffff;
+  flex: 0 0 auto;
+  max-width: none;
+  padding: 7px 18px 7px 7px;
+  gap: 10px;
+  text-decoration: none;
 }
 
 .header.header-home .brand-mark,
 .header.header-home.scrolled .brand-mark {
-  width: 44px;
-  height: 44px;
-  flex-basis: 44px;
+  width: 40px;
+  height: 40px;
+  flex-basis: 40px;
+  flex-shrink: 0;
   border-radius: 999px;
   background: #ffffff;
-  border-color: rgba(255, 255, 255, 0.45);
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22);
+  border: 1.5px solid rgba(255, 255, 255, 0.55);
+  box-shadow: 0 0 0 2.5px rgba(59, 130, 246, 0.16), 0 6px 16px rgba(0,0,0,0.2);
 }
 
 .header.header-home .brand-mark img {
   object-fit: contain;
 }
 
+.header.header-home .brand-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
 .header.header-home .brand-copy strong {
-  color: #ffffff;
-  font-size: 14px;
-  font-weight: 800;
-  letter-spacing: 0.02em;
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .header.header-home .brand-copy span {
-  color: rgba(255, 255, 255, 0.52);
-  font-size: 11px;
-  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.38);
+  font-size: 9.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
   opacity: 1;
+  white-space: nowrap;
+}
+
+/* ── Island 2 — Nav links (already absolute-centered) ── */
+.header.header-home .nav {
+  padding: 5px 6px;
+  gap: 2px;
+  /* absolute + transform already defined in base .nav rule */
 }
 
 .header.header-home .nav a,
 .header.header-home .nav .nav-dropdown-toggle,
 .header.header-home.scrolled .nav a,
 .header.header-home.scrolled .nav .nav-dropdown-toggle {
-  color: rgba(255, 255, 255, 0.62);
-  font-size: 13.5px;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 13px;
   font-weight: 600;
-  opacity: 1;
-  transition: all 0.2s ease;
+  letter-spacing: 0.01em;
+  padding: 8px 13px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease;
 }
 
 .header.header-home .nav a:hover,
 .header.header-home .nav .nav-dropdown-toggle:hover,
-.header.header-home .nav a.active,
-.header.header-home .nav .nav-dropdown-toggle.active,
 .header.header-home.scrolled .nav a:hover,
-.header.header-home.scrolled .nav .nav-dropdown-toggle:hover,
-.header.header-home.scrolled .nav a.active,
-.header.header-home.scrolled .nav .nav-dropdown-toggle.active {
-  color: #ffffff;
-  background: rgba(255, 255, 255, 0.13);
-  border-color: rgba(255, 255, 255, 0.08);
+.header.header-home.scrolled .nav .nav-dropdown-toggle:hover {
+  color: rgba(255, 255, 255, 0.94);
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(255, 255, 255, 0.06);
   transform: none;
+}
+
+/* Active: solid blue capsule inside nav island */
+.header.header-home .nav a.active,
+.header.header-home.scrolled .nav a.active {
+  color: #ffffff;
+  background: rgba(37, 99, 235, 0.32);
+  border-color: rgba(96, 165, 250, 0.3);
 }
 
 .header.header-home .nav a.active::after,
 .header.header-home.scrolled .nav a.active::after {
-  background: #3b82f6;
+  display: none;
 }
 
-/* Action buttons */
+/* ── Island 3 — Actions ── */
+.header.header-home .header-flex-spacer {
+  flex: 1 1 auto;
+  min-width: 4px;
+}
+
+.header.header-home .header-actions-desktop,
+.header.header-home.scrolled .header-actions-desktop {
+  padding: 6px 6px 6px 8px;
+  gap: 6px;
+}
+
 .header.header-home .language-toggle,
 .header.header-home .header-actions-desktop .btn,
 .header.header-home.scrolled .language-toggle,
 .header.header-home.scrolled .header-actions-desktop .btn {
-  min-height: 38px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.07);
-  color: rgba(255, 255, 255, 0.78);
+  min-height: 34px;
+  padding: 0 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.7);
   box-shadow: none;
-  transition: all 0.2s ease;
-  font-size: 13.5px;
+  transition: all 0.15s ease;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 999px;
 }
 
 .header.header-home .language-toggle:hover,
-.header.header-home .header-actions-desktop .btn:hover {
-  border-color: rgba(255, 255, 255, 0.22);
-  background: rgba(255, 255, 255, 0.12);
+.header.header-home .header-actions-desktop .btn:hover,
+.header.header-home.scrolled .language-toggle:hover,
+.header.header-home.scrolled .header-actions-desktop .btn:hover {
+  border-color: rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.1);
   color: #ffffff;
   transform: none;
 }
 
+/* WhatsApp CTA — the prominent blue button */
 .header.header-home .header-actions-desktop .btn.primary,
 .header.header-home.scrolled .header-actions-desktop .btn.primary {
-  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 60%, #1e3a8a 100%);
-  border-color: rgba(59, 130, 246, 0.4);
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 50%, #1e3a8a 100%);
+  border-color: rgba(99, 155, 255, 0.45);
   color: #ffffff;
-  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.36);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.01em;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.14) inset,
+    0 4px 18px rgba(37, 99, 235, 0.46);
 }
 
-.header.header-home .header-actions-desktop .btn.primary:hover {
-  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.46);
+.header.header-home .header-actions-desktop .btn.primary:hover,
+.header.header-home.scrolled .header-actions-desktop .btn.primary:hover {
+  background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 50%, #2563eb 100%);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.16) inset,
+    0 6px 24px rgba(37, 99, 235, 0.58);
+  border-color: rgba(130, 185, 255, 0.5);
   color: #ffffff;
 }
 
 .header.header-home .header-hamburger-bar,
 .header.header-home.scrolled .header-hamburger-bar {
   background: #ffffff;
+}
+
+/* ── Mobile: collapse back to single pill ── */
+@media (max-width: 780px) {
+  .header.header-home .header-row,
+  .header.header-home.scrolled .header-row {
+    background: rgba(5, 10, 20, 0.86);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(26px) saturate(1.4);
+    -webkit-backdrop-filter: blur(26px) saturate(1.4);
+    box-shadow: 0 1px 0 rgba(255,255,255,0.05) inset, 0 18px 44px rgba(0,0,0,0.32);
+    border-radius: 36px;
+    min-height: 62px;
+    padding: 0 14px;
+  }
+
+  /* Reset island backgrounds on mobile so single pill works */
+  .header.header-home .brand,
+  .header.header-home .header-actions-desktop {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border-radius: 0;
+    padding: 0;
+  }
+
+  .header.header-home .brand-copy span {
+    display: none;
+  }
+
+  .header.header-home .brand-copy strong {
+    font-size: 12px;
+  }
 }
 
 @keyframes slideDown {

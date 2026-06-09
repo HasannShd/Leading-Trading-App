@@ -5,9 +5,9 @@
   padding: 0 20px 0;
   overflow: hidden;
   background:
-    radial-gradient(circle at 8% 14%, rgba(37, 99, 235, 0.09), transparent 28%),
-    radial-gradient(circle at 88% 8%, rgba(29, 70, 111, 0.16), transparent 26%),
-    linear-gradient(180deg, rgba(10, 20, 36, 0) 0%, #0c1829 8%, #0b1422 100%);
+    radial-gradient(circle at 8% 14%, rgba(37, 99, 235, 0.1), transparent 28%),
+    radial-gradient(circle at 88% 8%, rgba(29, 70, 111, 0.18), transparent 26%),
+    linear-gradient(180deg, rgba(8, 18, 34, 0) 0%, #081c35 8%, #0b1929 100%);
 }
 
 .footer-shell {
@@ -95,15 +95,14 @@
 /* ── Body: info + map ────────────────────────────── */
 .footer-body {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(340px, 0.72fr);
-  gap: 24px;
-  padding: 36px 0;
-  border-bottom: 1px solid rgba(248, 243, 235, 0.08);
+  grid-template-columns: minmax(0, 1fr) minmax(360px, 0.8fr);
+  gap: 28px;
+  padding: 36px 0 28px;
 }
 
 .footer-info {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 24px;
   align-content: start;
 }
@@ -139,9 +138,10 @@
 /* ── Map ─────────────────────────────────────────── */
 .footer-map {
   position: relative;
-  border-radius: 22px;
+  border-radius: 20px;
   overflow: hidden;
-  border: 1px solid rgba(248, 243, 235, 0.08);
+  border: 1px solid rgba(248, 243, 235, 0.1);
+  box-shadow: 0 20px 48px rgba(4, 10, 22, 0.36);
 }
 
 .footer-map-open {
@@ -151,29 +151,83 @@
   z-index: 10;
   display: inline-flex;
   align-items: center;
+  gap: 6px;
   min-height: 34px;
   padding: 0 14px;
   border-radius: 999px;
-  background: rgba(9, 19, 31, 0.82);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  backdrop-filter: blur(10px);
+  background: rgba(9, 19, 31, 0.86);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(12px);
   color: #ffffff;
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   font-weight: 700;
   text-decoration: none;
-  transition: background 0.18s;
+  transition: background 0.18s, border-color 0.18s;
+}
+
+.footer-map-open svg {
+  flex-shrink: 0;
+  color: #60a5fa;
 }
 
 .footer-map-open:hover {
-  background: rgba(37, 99, 235, 0.88);
+  background: rgba(37, 99, 235, 0.9);
+  border-color: rgba(59, 130, 246, 0.4);
 }
 
 .footer-map iframe {
   display: block;
   width: 100%;
-  height: 220px;
+  height: 280px;
   border: 0;
-  filter: saturate(0.72) contrast(0.9) brightness(0.96);
+  filter: saturate(0.65) contrast(0.88) brightness(0.9) hue-rotate(200deg);
+}
+
+/* ── Supply guides strip ─────────────────────────── */
+.footer-guides {
+  display: flex;
+  align-items: baseline;
+  gap: 20px;
+  padding: 20px 0 24px;
+  border-top: 1px solid rgba(248, 243, 235, 0.07);
+  flex-wrap: wrap;
+}
+
+.footer-guides__label {
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(231, 218, 201, 0.36);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.footer-guides__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.footer-guide-chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0 11px;
+  border-radius: 999px;
+  border: 1px solid rgba(248, 243, 235, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(231, 218, 201, 0.52);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.18s, border-color 0.18s, color 0.18s;
+}
+
+.footer-guide-chip:hover {
+  background: rgba(59, 130, 246, 0.14);
+  border-color: rgba(96, 165, 250, 0.28);
+  color: #93c5fd;
 }
 
 /* ── Bottom bar ──────────────────────────────────── */
@@ -237,7 +291,7 @@
   }
 
   .footer-map iframe {
-    height: 240px;
+    height: 260px;
   }
 }
 
@@ -271,12 +325,17 @@
   }
 
   .footer-info {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 20px;
   }
 
   .footer-map iframe {
-    height: 200px;
+    height: 220px;
+  }
+
+  .footer-guides {
+    flex-direction: column;
+    gap: 12px;
   }
 
   .footer-bottom {

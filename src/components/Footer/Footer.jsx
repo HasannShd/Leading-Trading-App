@@ -12,6 +12,11 @@ const supplyGuideLinks = [
   { label: 'Dental Supplier Bahrain', to: '/solutions/dental-supplier-bahrain' },
   { label: 'Laboratory Equipment Supplier Bahrain', to: '/solutions/laboratory-equipment-supplier-bahrain' },
   { label: 'Orthopedic Supplies Bahrain', to: '/solutions/orthopedic-supplies-bahrain' },
+  { label: 'Surgical Instruments Bahrain', to: '/solutions/surgical-instruments-bahrain' },
+  { label: 'Anesthesia & Respiratory Supplies', to: '/solutions/anesthesia-respiratory-bahrain' },
+  { label: 'Disposable Consumables Bahrain', to: '/solutions/disposable-consumables-bahrain' },
+  { label: 'Beauty Care Supplies Bahrain', to: '/solutions/beauty-care-supplies-bahrain' },
+  { label: 'Industrial Supplies Bahrain', to: '/solutions/industrial-safety-supplies-bahrain' },
 ];
 
 const Footer = () => {
@@ -55,16 +60,13 @@ const Footer = () => {
               <Link to="/about">{t('About')}</Link>
               <Link to="/careers">{t('Careers')}</Link>
             </div>
-            <div className="footer-info-group footer-info-group--guides">
-              <p className="footer-info-label">{t('Supply Guides')}</p>
-              {supplyGuideLinks.map((item) => (
-                <Link key={item.to} to={item.to}>{t(item.label)}</Link>
-              ))}
-            </div>
           </div>
 
           <div className="footer-map">
-            <a className="footer-map-open" href={businessMapsUrl} target="_blank" rel="noopener noreferrer">{t('Open in Maps')} ↗</a>
+            <a className="footer-map-open" href={businessMapsUrl} target="_blank" rel="noopener noreferrer">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 21s-8-6.5-8-12a8 8 0 0 1 16 0c0 5.5-8 12-8 12z"/><circle cx="12" cy="9" r="2.5"/></svg>
+              {t('Open in Maps')}
+            </a>
             <iframe
               title="Leading Trading Est location"
               src={businessMapsEmbedUrl}
@@ -72,6 +74,16 @@ const Footer = () => {
               referrerPolicy="no-referrer-when-downgrade"
               allowFullScreen
             />
+          </div>
+        </div>
+
+        {/* ── Supply guides strip ── */}
+        <div className="footer-guides">
+          <span className="footer-guides__label">{t('Supply Guides')}</span>
+          <div className="footer-guides__chips">
+            {supplyGuideLinks.map((item) => (
+              <Link key={item.to} to={item.to} className="footer-guide-chip">{t(item.label)}</Link>
+            ))}
           </div>
         </div>
 
