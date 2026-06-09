@@ -153,6 +153,21 @@ const supplySearchGuides = [
     to: '/solutions/ppe-supplier-bahrain',
     text: 'Gloves, masks, shields, gowns, disposable protection, and safety supply support.',
   },
+  {
+    label: 'Dental Supplier Bahrain',
+    to: '/solutions/dental-supplier-bahrain',
+    text: 'Dental consumables, materials, equipment, and repeat clinic procurement support.',
+  },
+  {
+    label: 'Laboratory Equipment Supplier Bahrain',
+    to: '/solutions/laboratory-equipment-supplier-bahrain',
+    text: 'Lab equipment, diagnostics, consumables, and specification-led quotation review.',
+  },
+  {
+    label: 'Orthopedic Supplies Bahrain',
+    to: '/solutions/orthopedic-supplies-bahrain',
+    text: 'Casting, padding, rehabilitation, support products, and related clinic requirements.',
+  },
 ];
 
 const mainBrands = [
@@ -323,7 +338,7 @@ const HomePage = () => {
         <div className="home-shell">
           <div className="section-heading animate-stagger" data-stagger-step="110ms">
             <span className="home-eyebrow home-eyebrow--ink animate-on-scroll">{t('Bahrain supply search paths')}</span>
-            <h2 className="animate-on-scroll">{t('Focused pages for buyers searching medical supplies, equipment, hospital supplies, and PPE in Bahrain.')}</h2>
+            <h2 className="animate-on-scroll">{t('Focused pages for buyers searching medical, dental, laboratory, orthopedic, hospital, and PPE suppliers in Bahrain.')}</h2>
             <p className="animate-on-scroll">
               {t('These guides connect common Google searches to the right LTE category, product search, and quotation path without changing the existing catalog workflow.')}
             </p>

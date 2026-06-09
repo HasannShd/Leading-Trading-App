@@ -263,6 +263,48 @@ export const seoLandingPages = [
     ],
   },
   {
+    slug: 'dental-supplier-bahrain',
+    title: 'Dental Supplier Bahrain',
+    shortTitle: 'Dental supplier',
+    description:
+      'Dental supplier support in Bahrain for dental clinics, specialist centers, and procurement teams sourcing dental consumables, materials, equipment, disposables, and repeat quotation requirements.',
+    keywords:
+      'dental supplier Bahrain, dental supplies Bahrain, dental equipment supplier Bahrain, dental consumables Bahrain, dental clinic supplies Bahrain, dental materials Bahrain, Leading Trading Est dental',
+    categoryPath: '/categories/dental',
+    categoryLabel: 'Dental',
+    shopQuery: 'dental',
+    buyerTerms: ['Dental supplier Bahrain', 'Dental consumables', 'Clinic materials', 'Repeat procurement'],
+    sections: [
+      {
+        title: 'Dental supplier support for Bahrain clinics',
+        body:
+          'Dental buyers often need recurring consumables, disposable items, materials, equipment, and product-specific preferences handled through one clear quotation path. LTE helps dental clinics and procurement teams organize requirements before sourcing and follow-up.',
+      },
+      {
+        title: 'Built for clinic continuity',
+        body:
+          'Dental purchasing can depend on repeat order patterns, brand preference, item size, product compatibility, and delivery timing. LTE keeps those details connected from category browsing through enquiry and quotation handling.',
+      },
+      {
+        title: 'A local route from product search to quote',
+        body:
+          'The dental category gives Bahrain buyers a direct path into the LTE catalog while the contact workflow preserves requirement details for the sales team.',
+      },
+    ],
+    faqs: [
+      {
+        question: 'Does LTE support dental supply enquiries in Bahrain?',
+        answer:
+          'Yes. LTE supports Bahrain dental clinics and procurement teams with dental consumables, materials, equipment, disposable items, and quotation follow-up.',
+      },
+      {
+        question: 'Can dental clinics request repeat supply support?',
+        answer:
+          'Yes. Buyers can send product names, quantities, preferred brands, and recurring requirements so LTE can review the quotation path.',
+      },
+    ],
+  },
+  {
     slug: 'medical-distributors-bahrain',
     title: 'Medical Distributors in Bahrain',
     shortTitle: 'Medical distributors',
@@ -328,6 +370,90 @@ export const seoLandingPages = [
         question: 'Can LTE source laboratory products in Bahrain?',
         answer:
           'Yes. LTE supports laboratory product enquiries with category browsing, specification review, and quotation handling.',
+      },
+    ],
+  },
+  {
+    slug: 'laboratory-equipment-supplier-bahrain',
+    title: 'Laboratory Equipment Supplier Bahrain',
+    shortTitle: 'Laboratory equipment supplier',
+    description:
+      'Laboratory equipment supplier support in Bahrain for clinical laboratories, clinics, hospitals, and procurement teams reviewing lab equipment, diagnostics, consumables, and specification-led quotation requirements.',
+    keywords:
+      'laboratory equipment supplier Bahrain, laboratory supplies Bahrain, lab equipment Bahrain, laboratory consumables Bahrain, diagnostic equipment Bahrain, medical lab supplies Bahrain, clinic laboratory supplies Bahrain',
+    categoryPath: '/categories/laboratory',
+    categoryLabel: 'Laboratory',
+    shopQuery: 'laboratory equipment',
+    buyerTerms: ['Laboratory equipment', 'Diagnostic support', 'Lab consumables', 'Specification review'],
+    sections: [
+      {
+        title: 'Laboratory equipment enquiries need technical detail',
+        body:
+          'Laboratory buyers often need to confirm product type, technical specification, intended workflow, consumable compatibility, and documentation needs before a quote is useful. LTE supports Bahrain lab teams with a specification-led enquiry route.',
+      },
+      {
+        title: 'Connected to diagnostics and routine lab supply',
+        body:
+          'Lab requirements may include diagnostic devices, sample handling items, testing consumables, equipment support, and recurring procurement lists. LTE keeps these related search paths connected for faster review.',
+      },
+      {
+        title: 'Local follow-up for clinical and operational labs',
+        body:
+          'Bahrain laboratories and clinics can use this guide to move from product search to quotation with enough context for availability, specification, and delivery follow-up.',
+      },
+    ],
+    faqs: [
+      {
+        question: 'Can LTE support laboratory equipment enquiries?',
+        answer:
+          'Yes. LTE supports Bahrain laboratory equipment, diagnostic, consumable, and specification-led quotation enquiries.',
+      },
+      {
+        question: 'What helps with laboratory quotations?',
+        answer:
+          'Product type, expected usage, technical specification, quantity, brand preference, and delivery timing help LTE review the requirement.',
+      },
+    ],
+  },
+  {
+    slug: 'orthopedic-supplies-bahrain',
+    title: 'Orthopedic Supplies Bahrain',
+    shortTitle: 'Orthopedic supplies',
+    description:
+      'Orthopedic and rehabilitation supply support in Bahrain for clinics, hospitals, physiotherapy teams, and procurement buyers reviewing casting, padding, support, rehabilitation, and related medical supply requirements.',
+    keywords:
+      'orthopedic supplies Bahrain, ortho supplies Bahrain, orthopedic supplier Bahrain, rehabilitation supplies Bahrain, orthopedic casting Bahrain, orthopedic padding Bahrain, physiotherapy supplies Bahrain',
+    categoryPath: '/categories/orthopedic-rehabilitation',
+    categoryLabel: 'Orthopedic & Rehabilitation',
+    shopQuery: 'orthopedic',
+    buyerTerms: ['Orthopedic supplies', 'Rehabilitation support', 'Casting and padding', 'Clinic procurement'],
+    sections: [
+      {
+        title: 'Orthopedic and rehabilitation supply support',
+        body:
+          'Orthopedic and rehabilitation buyers may need casting materials, padding, support products, clinic utilities, and related medical consumables. LTE helps Bahrain teams route those requirements through a focused quotation path.',
+      },
+      {
+        title: 'Useful for clinics, hospitals, and physiotherapy teams',
+        body:
+          'Ortho and rehabilitation procurement often depends on size, material, usage context, stock continuity, and department preference. LTE keeps the enquiry connected to category browsing and local follow-up.',
+      },
+      {
+        title: 'Connected to wider medical supply needs',
+        body:
+          'Orthopedic requirements can overlap with wound care, PPE, tapes, dressings, hospital furniture, and general medical consumables. LTE keeps related categories visible so buyers can submit a complete requirement.',
+      },
+    ],
+    faqs: [
+      {
+        question: 'Does LTE support orthopedic supply enquiries in Bahrain?',
+        answer:
+          'Yes. LTE supports orthopedic and rehabilitation supply enquiries including casting, padding, support, and related medical procurement requirements.',
+      },
+      {
+        question: 'Can clinics send ortho and medical supplies together?',
+        answer:
+          'Yes. Buyers can send orthopedic, rehabilitation, PPE, dressing, tape, and general medical requirements together for review.',
       },
     ],
   },

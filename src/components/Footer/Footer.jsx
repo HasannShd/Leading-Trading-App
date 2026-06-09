@@ -9,6 +9,9 @@ const supplyGuideLinks = [
   { label: 'Medical Equipment Supplier Bahrain', to: '/solutions/medical-equipment-supplier-bahrain' },
   { label: 'Hospital Supplies Bahrain', to: '/solutions/hospital-supplies-bahrain' },
   { label: 'PPE Supplier Bahrain', to: '/solutions/ppe-supplier-bahrain' },
+  { label: 'Dental Supplier Bahrain', to: '/solutions/dental-supplier-bahrain' },
+  { label: 'Laboratory Equipment Supplier Bahrain', to: '/solutions/laboratory-equipment-supplier-bahrain' },
+  { label: 'Orthopedic Supplies Bahrain', to: '/solutions/orthopedic-supplies-bahrain' },
 ];
 
 const Footer = () => {
