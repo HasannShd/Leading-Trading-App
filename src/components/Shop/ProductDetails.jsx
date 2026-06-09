@@ -90,7 +90,6 @@ const ProductDetails = () => {
 
       setLoading(true);
       setNotice(null);
-      setRelatedProducts([]);
       setBrokenRelatedImages({});
       setQty(1);
 

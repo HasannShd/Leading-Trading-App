@@ -3,6 +3,7 @@
   margin: 0 auto;
   display: grid;
   gap: 24px;
+  min-height: calc(100vh - 180px);
   padding-bottom: 80px;
 }
 
@@ -376,6 +377,7 @@
 .product-related {
   padding: 32px;
   border-radius: 30px;
+  min-height: 420px;
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.97), rgba(244, 240, 232, 0.93));
   border: 1px solid rgba(19, 48, 78, 0.08);
   box-shadow: 0 18px 40px rgba(7, 17, 31, 0.06);
