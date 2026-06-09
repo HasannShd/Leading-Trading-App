@@ -1,5 +1,7 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
+
+const cacheFile = resolve(new URL('..', import.meta.url).pathname, 'scripts/seo-data-cache.json');
 import { seoLandingRoutes } from '../src/utils/seoLandingPages.js';
 import { buildProductPath } from '../src/utils/productUrls.js';
 import { resourceGuideRoutes } from '../src/utils/resourceGuides.js';
@@ -70,11 +72,14 @@ const fetchJson = async (url) => {
 
 const collectDynamicRoutes = async (apiUrl) => {
   const routes = [];
+  const allCategories = [];
+  const allProducts = [];
 
   const categories = await fetchJson(`${apiUrl}/categories`);
   if (Array.isArray(categories)) {
     categories.forEach((category) => {
       if (!category?.slug && !category?._id) return;
+      allCategories.push(category);
       routes.push({
         path: `/categories/${category.slug || category._id}`,
         changefreq: 'weekly',
@@ -90,6 +95,7 @@ const collectDynamicRoutes = async (apiUrl) => {
     const items = Array.isArray(data) ? data : data.items || [];
     items.forEach((product) => {
       if (!product?._id) return;
+      allProducts.push(product);
       routes.push({
         path: buildProductPath(product),
         changefreq: 'weekly',
@@ -100,6 +106,14 @@ const collectDynamicRoutes = async (apiUrl) => {
     const total = Array.isArray(data) ? items.length : Number(data.total || items.length);
     if (!items.length || page * limit >= total) break;
     page += 1;
+  }
+
+  // Save for generateStaticPages.mjs (runs after vite build)
+  try {
+    await writeFile(cacheFile, JSON.stringify({ categories: allCategories, products: allProducts }), 'utf8');
+    console.log(`[sitemap] Saved ${allCategories.length} categories + ${allProducts.length} products to cache.`);
+  } catch (err) {
+    console.warn(`[sitemap] Could not write cache: ${err.message}`);
   }
 
   return routes;

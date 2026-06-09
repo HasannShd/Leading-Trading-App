@@ -48,7 +48,11 @@
     />
     <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1" />
     <meta name="googlebot" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1" />
-    <link rel="canonical" href="https://www.lte-bh.com/" />
+    <!--
+      No static canonical here — each page sets its own via the Seo component.
+      A hardcoded canonical pointing to "/" caused 18+ pages to be treated as
+      "alternative pages with proper canonical" and excluded from Google's index.
+    -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Leading Trading Est" />
     <meta property="og:title" content="Leading Trading Est | Bahrain Medical & Industrial Supplies" />
@@ -58,6 +62,7 @@
     />
     <meta property="og:url" content="https://www.lte-bh.com/" />
     <meta property="og:image" content="https://www.lte-bh.com/company-logo.png" />
+    <meta property="og:locale" content="en_BH" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Leading Trading Est | Bahrain Medical & Industrial Supplies" />
     <meta

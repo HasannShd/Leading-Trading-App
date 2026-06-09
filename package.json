@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "sitemap": "node scripts/generateSitemap.mjs",
-    "build": "node scripts/generateSitemap.mjs && vite build",
+    "build": "node scripts/generateSitemap.mjs && vite build && node scripts/generateStaticPages.mjs",
     "lint": "eslint .",
     "qa": "npm run lint && npm run build",
     "qa:smoke": "node scripts/qa-smoke.mjs",

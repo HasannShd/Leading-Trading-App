@@ -16,7 +16,6 @@ Disallow: /admin
 Disallow: /staff
 Disallow: /api/
 Disallow: /search?*
-Disallow: /*?lightbox=
 Disallow: /.well-known/
 
 Sitemap: https://www.lte-bh.com/sitemap.xml
