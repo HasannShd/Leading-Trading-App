@@ -86,7 +86,7 @@ const ProductCard = ({ product }) => {
     <article className="pdf-product-card">
       <div className="pdf-product-media">
         {image
-          ? <img src={normalizeImageSrc(image, { width: 400 })} alt={product.name} loading="lazy" decoding="async" />
+          ? <img src={normalizeImageSrc(image, { width: 400 })} alt={product.name} loading="eager" decoding="sync" />
           : <span>{product.name?.[0] || 'P'}</span>}
       </div>
       <div className="pdf-product-copy">
@@ -229,7 +229,17 @@ const PdfCatalogPage = () => {
     appendixC: 7 + productPages.length,
   }), [productPages.length]);
 
-  const handlePrint = () => window.print();
+  const handlePrint = () => {
+    const imgs = Array.from(document.querySelectorAll('.pdf-catalog img'));
+    const pending = imgs.filter((img) => !img.complete);
+    if (!pending.length) { window.print(); return; }
+    let done = 0;
+    const tryPrint = () => { if (++done >= pending.length) window.print(); };
+    pending.forEach((img) => {
+      img.addEventListener('load', tryPrint, { once: true });
+      img.addEventListener('error', tryPrint, { once: true });
+    });
+  };
 
   if (loading) {
     return (
