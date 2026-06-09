@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FiBookOpen, FiDownload, FiFileText } from 'react-icons/fi';
+import { FiBookOpen, FiFileText } from 'react-icons/fi';
 import Seo from '../Common/Seo';
 import StatePanel from '../Common/StatePanel';
 import {
@@ -71,7 +71,6 @@ const CatalogPage = () => {
     return Array.from(groups.entries()).slice(0, 10);
   }, [products]);
 
-  const handlePrint = () => window.print();
 
   return (
     <main className="catalog-page">
@@ -112,11 +111,7 @@ const CatalogPage = () => {
           <h1>{t('Medical, dental, laboratory, PPE, and industrial supply catalog for Bahrain buyers.')}</h1>
           <p>{t('Browse by category, review representative products, and contact LTE directly for sourcing and quotation support.')}</p>
           <div className="catalog-hero-actions">
-            <button type="button" className="catalog-hero-action catalog-hero-action--primary" onClick={handlePrint}>
-              <FiDownload aria-hidden="true" />
-              <span>{t('Download / Print Catalog')}</span>
-            </button>
-            <Link className="catalog-hero-action" to="/catalog/pdf">
+            <Link className="catalog-hero-action catalog-hero-action--primary" to="/catalog/pdf">
               <FiBookOpen aria-hidden="true" />
               <span>{t('Open PDF Catalogue')}</span>
             </Link>
