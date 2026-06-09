@@ -415,8 +415,12 @@ const HomePage = () => {
         </div>
       </section>
 
-      {featuredProducts.length > 0 && (
-        <section className="home-section fast-movers">
+      {/* Reserve space even before products load to prevent CLS from section appearing */}
+      <section
+        className="home-section fast-movers"
+        style={featuredProducts.length === 0 ? { minHeight: 420, visibility: 'hidden' } : undefined}
+      >
+        {featuredProducts.length > 0 && (
           <div className="home-shell">
             <div className="fast-movers__head animate-stagger" data-stagger-step="110ms">
               <div>
@@ -447,8 +451,8 @@ const HomePage = () => {
               ))}
             </div>
           </div>
-        </section>
-      )}
+        )}
+      </section>
 
 
 
@@ -492,7 +496,27 @@ const HomePage = () => {
 
                 <div className="sector-shot__visual animate-on-scroll" data-parallax={sector.key === 'medical' ? 'soft' : 'lift'}>
                   <div className="sector-shot__img-fill">
-                    <img src={`${baseUrl}${sector.image}`} alt={sector.eyebrow} loading="lazy" decoding="async" />
+                    {index === 0 ? (
+                      <img
+                        src={`${baseUrl}Stethescope-1600.webp`}
+                        srcSet={`${baseUrl}Stethescope-900.webp 900w, ${baseUrl}Stethescope-1600.webp 1600w`}
+                        sizes="(max-width: 780px) 100vw, 52vw"
+                        width="1600"
+                        height="1067"
+                        alt={sector.eyebrow}
+                        fetchPriority="high"
+                        decoding="async"
+                      />
+                    ) : (
+                      <img
+                        src={`${baseUrl}${sector.image}`}
+                        width="1600"
+                        height="1067"
+                        alt={sector.eyebrow}
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    )}
                     <span className="sector-shot__img-label">{t(sector.eyebrow)}</span>
                   </div>
                 </div>

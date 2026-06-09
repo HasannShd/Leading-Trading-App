@@ -35,6 +35,16 @@
     <link rel="dns-prefetch" href="https://res.cloudinary.com" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Fonts as <link> (not @import) so the browser can fetch in parallel with CSS parsing -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Manrope:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" />
+    <!-- Preload LCP image (Stethescope — first above-fold sector image, mobile-optimised) -->
+    <link
+      rel="preload"
+      as="image"
+      href="/Stethescope-900.webp"
+      imagesrcset="/Stethescope-900.webp 900w, /Stethescope-1600.webp 1600w"
+      imagesizes="(max-width: 780px) 100vw, 52vw"
+    />
     <meta name="theme-color" content="#0c1d32" />
     <meta name="google-site-verification" content="WiG5IDwXpxX-hfhW6D2F5JxZ9KKA9HoomDSOyNWnZqY" />
     <title>Leading Trading Est | Bahrain Medical & Industrial Supplies</title>
