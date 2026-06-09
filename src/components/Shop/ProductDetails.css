@@ -225,6 +225,16 @@
   max-width: 52ch;
 }
 
+.product-solution-link {
+  margin: 0.25rem 0 0;
+  font-size: 0.82rem;
+}
+.product-solution-link a {
+  color: #1d4ed8;
+  font-weight: 500;
+}
+.product-solution-link a:hover { text-decoration: underline; }
+
 .product-notice { margin-top: 2px; }
 .product-notice .state-panel { padding: 20px; }
 

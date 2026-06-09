@@ -11,6 +11,23 @@ import { useScrollReveal } from '../../hooks/useScrollReveal';
 import { authFetch } from '../../services/authFetch';
 import './ProductDetails.css';
 
+const CATEGORY_SOLUTION_MAP = {
+  'medical-equipment': 'medical-equipment-supplier-bahrain',
+  'anesthesia-respiratory': 'anesthesia-respiratory-bahrain',
+  'dental': 'dental-supplies-bahrain',
+  'consumables-disposables': 'disposable-consumables-bahrain',
+  'industrial-safety': 'industrial-safety-supplies-bahrain',
+  'hospital-furniture-utilities': 'hospital-supplies-bahrain',
+  'laboratory': 'laboratory-equipment-supplier-bahrain',
+  'ppe-gloves': 'gloves-bahrain',
+  'ppe-masks-shields': 'face-masks-bahrain',
+  'sutures': 'sutures-bahrain',
+  'surgical-instruments': 'surgical-instruments-bahrain',
+  'orthopedic-rehabilitation': 'orthopedic-supplies-bahrain',
+  'diagnostic-devices': 'diagnostic-devices-bahrain',
+  'cssd': 'sterile-surgical-consumables-bahrain',
+};
+
 const buildSizeLabel = (entry) => [entry.size, entry.inches, entry.color].filter(Boolean).join(' / ');
 
 const getSizePrice = (entry) => {
@@ -43,7 +60,7 @@ const ProductDetails = () => {
     setLoading(true);
     setNotice(null);
     try {
-      const response = await fetch(`${API_URL}/products/${id}`, { cache: 'no-store' });
+      const response = await fetch(`${API_URL}/products/${id}`);
       const data = await response.json().catch(() => ({}));
       if (!response.ok || !data?._id) {
         throw new Error(data?.message || 'Product could not be loaded.');
@@ -69,7 +86,7 @@ const ProductDetails = () => {
 
       const categoryId = data?.categorySlug?._id || data?.categorySlug;
       if (categoryId) {
-        const relatedRes = await fetch(`${API_URL}/products?category=${categoryId}&limit=4`, { cache: 'no-store' });
+        const relatedRes = await fetch(`${API_URL}/products?category=${categoryId}&limit=4`);
         const relatedData = await relatedRes.json();
         const relatedItems = Array.isArray(relatedData) ? relatedData : (relatedData.items || []);
         setRelatedProducts(relatedItems.filter((item) => item._id !== data._id).slice(0, 3));
@@ -397,6 +414,19 @@ const ProductDetails = () => {
             <p className="product-desc animate-on-scroll">
               {product.description?.trim() || t('Contact our team for product specifications, availability, and commercial support.')}
             </p>
+
+            {(() => {
+              const catSlug = product.categorySlug?.slug;
+              const solutionSlug = catSlug && CATEGORY_SOLUTION_MAP[catSlug];
+              if (!solutionSlug) return null;
+              return (
+                <p className="product-solution-link animate-on-scroll">
+                  <Link to={`/solutions/${solutionSlug}`}>
+                    {t('Bahrain supply guide')} →
+                  </Link>
+                </p>
+              );
+            })()}
 
             {notice && (
               <StatePanel

@@ -156,8 +156,9 @@ const Categories = () => {
                             ? c.image
                             : `${import.meta.env.BASE_URL}${c.image.replace(/^\//, '')}`
                         }
-                        alt={c.name}
+                        alt={categoryName(c.name)}
                         loading="lazy"
+                        decoding="async"
                       />
                     ) : (
                       <div className="categories-tile__fallback">
@@ -184,6 +185,30 @@ const Categories = () => {
             })}
           </div>
         )}
+        <section className="categories-guides animate-stagger" data-stagger-step="80ms">
+          <span className="categories-eyebrow animate-on-scroll">{t('Supply Guides')}</span>
+          <h2 className="animate-on-scroll">{t('Bahrain procurement guides by supply type')}</h2>
+          <div className="categories-guides-grid">
+            {[
+              { label: t('Medical Equipment Supplier Bahrain'), to: '/solutions/medical-equipment-supplier-bahrain' },
+              { label: t('Dental Supplies Bahrain'), to: '/solutions/dental-supplies-bahrain' },
+              { label: t('Laboratory Equipment Bahrain'), to: '/solutions/laboratory-equipment-supplier-bahrain' },
+              { label: t('PPE Supplier Bahrain'), to: '/solutions/ppe-supplier-bahrain' },
+              { label: t('Gloves Bahrain'), to: '/solutions/gloves-bahrain' },
+              { label: t('Face Masks Bahrain'), to: '/solutions/face-masks-bahrain' },
+              { label: t('Sutures Bahrain'), to: '/solutions/sutures-bahrain' },
+              { label: t('Surgical Instruments Bahrain'), to: '/solutions/surgical-instruments-bahrain' },
+              { label: t('Anesthesia & Respiratory Bahrain'), to: '/solutions/anesthesia-respiratory-bahrain' },
+              { label: t('Orthopedic Supplies Bahrain'), to: '/solutions/orthopedic-supplies-bahrain' },
+              { label: t('Industrial Safety Supplies Bahrain'), to: '/solutions/industrial-safety-supplies-bahrain' },
+              { label: t('Disposable Consumables Bahrain'), to: '/solutions/disposable-consumables-bahrain' },
+            ].map((g) => (
+              <Link key={g.to} to={g.to} className="categories-guide-chip animate-on-scroll">
+                {g.label} →
+              </Link>
+            ))}
+          </div>
+        </section>
       </section>
     </main>
   );

@@ -333,3 +333,42 @@
     aspect-ratio: 3 / 2;
   }
 }
+
+/* ── Solution guides section ── */
+.categories-guides {
+  margin-top: 4rem;
+  padding-top: 3rem;
+  border-top: 1px solid rgba(9,21,37,0.08);
+}
+
+.categories-guides h2 {
+  font-size: clamp(1.3rem, 3vw, 1.7rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin: 0.5rem 0 1.5rem;
+  color: #091525;
+}
+
+.categories-guides-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.categories-guide-chip {
+  display: inline-block;
+  padding: 0.45rem 0.9rem;
+  border: 1px solid rgba(9,21,37,0.15);
+  border-radius: 6px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: #091525;
+  background: rgba(9,21,37,0.03);
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.categories-guide-chip:hover {
+  background: rgba(37,99,235,0.07);
+  border-color: rgba(37,99,235,0.3);
+  color: #1d4ed8;
+}

@@ -260,7 +260,7 @@ const HomePage = () => {
 
   useEffect(() => {
     const controller = new AbortController();
-    fetch(`${API_URL}/products?featured=true&limit=6`, { signal: controller.signal, cache: 'no-store' })
+    fetch(`${API_URL}/products?featured=true&limit=6`, { signal: controller.signal })
       .then((r) => r.json())
       .then((data) => setFeaturedProducts(Array.isArray(data) ? data : data.products || []))
       .catch(() => {});
