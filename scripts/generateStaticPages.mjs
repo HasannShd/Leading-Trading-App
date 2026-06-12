@@ -128,26 +128,40 @@ const breadcrumb = (items) => ({
   })),
 });
 
-const productSchema = (product, categoryName, canonicalUrl) => ({
-  '@context': 'https://schema.org',
-  '@type': 'Product',
-  name: product.name,
-  ...(product.description ? { description: product.description } : {}),
-  ...(product.sku ? { sku: product.sku } : {}),
-  ...(product.brand ? { brand: { '@type': 'Brand', name: product.brand } } : {}),
-  ...(product.image
-    ? { image: [product.image.startsWith('http') ? product.image : `${SITE}${product.image}`] }
-    : {}),
-  category: categoryName,
-  url: canonicalUrl,
-  offers: {
-    '@type': 'Offer',
-    priceCurrency: 'BHD',
-    availability: 'https://schema.org/InStock',
+const productSchema = (product, categoryName, canonicalUrl) => {
+  const priceValue = Number(
+    product?.price || product?.basePrice || product?.variants?.[0]?.price || product?.variants?.[0]?.sizes?.[0]?.price || 0,
+  );
+  const hasPrice = Number.isFinite(priceValue) && priceValue > 0;
+  const productSku = product?.sku || product?._id;
+  const schema = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: product.name,
+    ...(product.description ? { description: product.description } : {}),
+    ...(productSku ? { sku: productSku, mpn: productSku } : {}),
+    brand: { '@type': 'Brand', name: product.brand || 'Leading Trading Est' },
+    ...(product.image
+      ? { image: [product.image.startsWith('http') ? product.image : `${SITE}${product.image}`] }
+      : {}),
+    category: categoryName,
     url: canonicalUrl,
-    seller: { '@type': 'Organization', name: 'Leading Trading Est', url: SITE },
-  },
-});
+  };
+
+  if (hasPrice) {
+    schema.offers = {
+      '@type': 'Offer',
+      price: priceValue.toFixed(3),
+      priceCurrency: 'BHD',
+      availability: 'https://schema.org/InStock',
+      itemCondition: 'https://schema.org/NewCondition',
+      url: canonicalUrl,
+      seller: { '@type': 'Organization', name: 'Leading Trading Est', url: SITE },
+    };
+  }
+
+  return schema;
+};
 
 const faqSchema = (faqs) => ({
   '@context': 'https://schema.org',

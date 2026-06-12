@@ -254,8 +254,10 @@ export const buildFaqSchema = (questions = []) => {
 
 export const buildProductSchema = (product, { image, categoryName } = {}) => {
   const priceValue = Number(product?.price || product?.basePrice || product?.variants?.[0]?.price || product?.variants?.[0]?.sizes?.[0]?.price || 0);
-  const offerPrice = Number.isFinite(priceValue) && priceValue > 0 ? priceValue.toFixed(3) : '0.000';
+  const hasPrice = Number.isFinite(priceValue) && priceValue > 0;
   const productPath = buildProductPath(product);
+  const productUrl = absoluteUrl(normalizeCanonicalPath(productPath));
+  const productSku = product?.sku || product?._id;
   const schema = {
     '@context': 'https://schema.org',
     '@type': 'Product',
@@ -266,18 +268,23 @@ export const buildProductSchema = (product, { image, categoryName } = {}) => {
       `Request specifications and quotation support for ${product?.name || 'this product'} from Leading Trading Est Bahrain.`,
     image: [image || product?.image || product?.images?.[0]].filter(Boolean).map(absoluteUrl),
     brand: product?.brand ? { '@type': 'Brand', name: product.brand } : { '@type': 'Brand', name: 'Leading Trading Est' },
-    sku: product?.sku || product?._id,
+    sku: productSku,
+    mpn: productSku,
     category: categoryName || product?.categorySlug?.name,
-    url: absoluteUrl(normalizeCanonicalPath(productPath)),
-    offers: {
+    url: productUrl,
+  };
+
+  if (hasPrice) {
+    schema.offers = {
       '@type': 'Offer',
-      url: absoluteUrl(`/contact?source=product&product=${product?._id || ''}`),
+      url: productUrl,
       availability: 'https://schema.org/InStock',
-      price: offerPrice,
+      itemCondition: 'https://schema.org/NewCondition',
+      price: priceValue.toFixed(3),
       priceCurrency: 'BHD',
       seller: { '@id': `${SITE_ORIGIN}/#organization` },
-    },
-  };
+    };
+  }
 
   return schema;
 };

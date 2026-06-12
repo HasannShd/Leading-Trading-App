@@ -6,16 +6,10 @@ Allow: /shop
 Allow: /categories/
 Allow: /catalog
 
-# Keep private, user-specific, and admin paths out of search.
-Disallow: /cart
-Disallow: /checkout
-Disallow: /orders
-Disallow: /sign-in
-Disallow: /sign-up
+# Keep internal systems and technical endpoints out of search.
 Disallow: /admin
 Disallow: /staff
 Disallow: /api/
-Disallow: /search?*
 Disallow: /.well-known/
 
 Sitemap: https://www.lte-bh.com/sitemap.xml
