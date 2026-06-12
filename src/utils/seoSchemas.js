@@ -126,6 +126,26 @@ export const businessApplicationSchema = {
     'Leading Trading Est is the official business website and operations app for authorized staff and admins to manage catalog workflows, orders, clients, attendance, messages, notifications, and backup coordination.',
 };
 
+export const warehousingWorldSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Place',
+  '@id': `${SITE_ORIGIN}/solutions/warehousing-world-bahrain/#place`,
+  name: 'Warehousing World Bahrain',
+  alternateName: ['Warehouse World Bahrain', 'Warehousing World Sitra'],
+  description:
+    'Warehousing World in Um Al-Baidh, Sitra, Bahrain, is the business location containing the Leading Trading Est office.',
+  hasMap: businessMapsUrl,
+  geo: {
+    '@type': 'GeoCoordinates',
+    latitude: 26.1151676,
+    longitude: 50.6307677,
+  },
+  address: {
+    '@type': 'PostalAddress',
+    ...businessAddress,
+  },
+};
+
 export const localBusinessSchema = {
   '@context': 'https://schema.org',
   '@type': ['LocalBusiness', 'MedicalBusiness'],
@@ -143,6 +163,7 @@ export const localBusinessSchema = {
   telephone: businessContact.telephone,
   email: businessContact.email,
   hasMap: businessMapsUrl,
+  containedInPlace: { '@id': warehousingWorldSchema['@id'] },
   geo: {
     '@type': 'GeoCoordinates',
     latitude: 26.1151676,

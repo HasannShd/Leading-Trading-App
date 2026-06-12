@@ -1327,6 +1327,65 @@ export const seoLandingPages = [
       },
     ],
   },
+  {
+    slug: 'warehousing-world-bahrain',
+    title: 'Leading Trading Est at Warehousing World Bahrain',
+    shortTitle: 'Warehousing World location',
+    description:
+      'Find Leading Trading Est at Office 109, Building 658, Road 16, Block 616, inside Warehousing World, Um Al-Baidh, Sitra, Bahrain. Contact LTE for medical, dental, laboratory, safety, and industrial supply enquiries.',
+    keywords:
+      'Warehousing World Bahrain, Warehouse World Bahrain, Warehousing World Sitra, companies in Warehousing World Bahrain, Leading Trading Est location, Leading Trading Est Sitra, medical supplier Sitra Bahrain',
+    categoryPath: '/contact',
+    categoryLabel: 'Leading Trading Est location',
+    shopQuery: 'medical supplies',
+    locationPage: true,
+    buyerTerms: ['Warehousing World Bahrain', 'Office 109', 'Um Al-Baidh, Sitra', 'Leading Trading Est'],
+    sections: [
+      {
+        title: 'Visit Leading Trading Est in Warehousing World',
+        body:
+          'The LTE office is located at Office 109, Building 658, Road 16, Block 616, Warehousing World, Um Al-Baidh, Sitra, Bahrain. The location supports customer enquiries, procurement coordination, quotations, accounts, and business follow-up.',
+      },
+      {
+        title: 'Medical, dental, laboratory, safety, and industrial supply support',
+        body:
+          'Leading Trading Est serves Bahrain buyers across healthcare and operational supply categories. Customers can browse the online catalog before contacting the Warehousing World office with product names, quantities, specifications, or RFQ documents.',
+      },
+    ],
+    faqs: [
+      {
+        question: 'Where is Leading Trading Est located in Bahrain?',
+        answer:
+          'Leading Trading Est is located at Office 109, Building 658, Road 16, Block 616, inside Warehousing World, Um Al-Baidh, Sitra, Bahrain.',
+      },
+      {
+        question: 'Is Leading Trading Est inside Warehousing World Bahrain?',
+        answer:
+          'Yes. The Leading Trading Est office is located inside Warehousing World in Um Al-Baidh, Sitra, Bahrain.',
+      },
+    ],
+    catalogPicksTitle: 'Browse LTE supply categories',
+    catalogPicks: [
+      {
+        name: 'Medical Equipment',
+        category: 'Healthcare supply',
+        useCase: 'Review medical equipment and clinical product requirements before contacting the LTE office.',
+        query: 'medical equipment',
+      },
+      {
+        name: 'Dental Supplies',
+        category: 'Dental procurement',
+        useCase: 'Browse dental consumables and equipment available for quotation support in Bahrain.',
+        query: 'dental',
+      },
+      {
+        name: 'Industrial Safety',
+        category: 'Operational supply',
+        useCase: 'Review safety and industrial products supported by the Warehousing World office.',
+        query: 'safety',
+      },
+    ],
+  },
 ];
 
 export const seoLandingRoutes = seoLandingPages.map((page) => ({

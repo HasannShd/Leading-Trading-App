@@ -42,6 +42,14 @@ const productDescription = (product, category, categoryName, t) => {
   return t('Contact LTE for specifications, availability, and quotation support for this catalog item.');
 };
 
+const productMatchesSearch = (product, search = '') => {
+  const term = String(search).toLowerCase().trim();
+  if (!term) return false;
+  return [product?.name, product?.description, product?.brand, product?.sku]
+    .filter(Boolean)
+    .some((field) => String(field).toLowerCase().includes(term));
+};
+
 const CategoryDetails = () => {
   const { slug } = useParams();
   const navigate = useNavigate();
@@ -54,6 +62,7 @@ const CategoryDetails = () => {
   const [error, setError] = useState(null);
   const [brokenImages, setBrokenImages] = useState({});
   const rootRef = useRef(null);
+  const productsSectionRef = useRef(null);
 
   const deferredQuery = useDeferredValue(q);
 
@@ -153,14 +162,39 @@ const CategoryDetails = () => {
     return `/contact?${params.toString()}`;
   }, [category]);
   const seoCategoryLabel = category?.name ? categoryName(category.name) : '';
-  const seoCategoryText = [
+  const categoryProfileText = [
+    category?.slug,
     seoCategoryLabel,
-    category?.description,
     category?.parent?.name,
+  ].filter(Boolean).join(' ');
+  const seoCategoryText = [
+    categoryProfileText,
+    category?.description,
     ...products.slice(0, 8).map((product) => product.name),
   ].filter(Boolean).join(' ');
-  const commonRequests = buildCommonRequests(seoCategoryText);
-  const seoContent = buildSeoContent(seoCategoryText);
+  const commonRequests = useMemo(() => {
+    const configured = buildCommonRequests(categoryProfileText)
+      .filter((request) => request.search && products.some((product) => productMatchesSearch(product, request.search)));
+    const seenSearches = new Set(configured.map((request) => request.search.toLowerCase()));
+    const productRequests = products
+      .filter((product) => product?.name && !seenSearches.has(product.name.toLowerCase()))
+      .slice(0, Math.max(0, 5 - configured.length))
+      .map((product) => ({ label: product.name, search: product.name }));
+    return [...configured, ...productRequests].slice(0, 5);
+  }, [categoryProfileText, products]);
+  const matchedSeoContent = buildSeoContent(categoryProfileText);
+  const seoContent = matchedSeoContent || (category ? {
+    pageTitle: `${seoCategoryLabel} Supplier in Bahrain`,
+    pageDescription: `Browse ${seoCategoryLabel} products and request specification and quotation support from Leading Trading Est Bahrain.`,
+    guidanceTitle: `${seoCategoryLabel} sourcing guide for Bahrain buyers`,
+    guidanceBody: category.description?.trim()
+      || `Review the products available in ${seoCategoryLabel}, compare relevant specifications, and send the exact requirement to LTE for quotation follow-up.`,
+    points: [
+      `${products.length} listed ${seoCategoryLabel.toLowerCase()} products`,
+      'Product-specific specification and availability review',
+      'Bahrain-based quotation and procurement follow-up',
+    ],
+  } : null);
   const categorySeoDescription = category?.description?.trim()
     ? categoryDescription(category.description.trim())
     : seoContent?.pageDescription || `Browse ${seoCategoryLabel || 'category'} products from Leading Trading Est with quotation and sourcing support in Bahrain.`;
@@ -169,6 +203,13 @@ const CategoryDetails = () => {
     : category?.name
       ? `${categoryName(category.name)} Products | Leading Trading Est Bahrain`
       : 'Category Products | Leading Trading Est Bahrain';
+
+  const applyQuickFilter = (search) => {
+    setQ(search);
+    window.requestAnimationFrame(() => {
+      productsSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  };
 
   if (!loading && !category) {
     return (
@@ -338,7 +379,7 @@ const CategoryDetails = () => {
                       key={request.label}
                       type="button"
                       className="category-details-seo-tag animate-on-scroll"
-                      onClick={() => setQ(request.search || '')}
+                      onClick={() => applyQuickFilter(request.search)}
                     >
                       {request.label}
                     </button>
@@ -347,7 +388,7 @@ const CategoryDetails = () => {
               </section>
             ) : null}
 
-            <div className="category-details-products-header animate-stagger" data-stagger-step="110ms">
+            <div ref={productsSectionRef} className="category-details-products-header animate-stagger" data-stagger-step="110ms">
               <div className="animate-on-scroll">
                 <h2 className="category-details-products-title">
                   {category.children?.length ? t('Products across this main category') : t('Products in this category')}

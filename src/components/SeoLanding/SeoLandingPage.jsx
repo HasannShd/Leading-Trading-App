@@ -7,6 +7,7 @@ import {
   buildFaqSchema,
   localBusinessSchema,
   organizationSchema,
+  warehousingWorldSchema,
 } from '../../utils/seoSchemas';
 import { getSeoLandingPage, seoLandingPages } from '../../utils/seoLandingPages';
 import './SeoLandingPage.css';
@@ -27,7 +28,18 @@ const SEO_OVERRIDES = {
   },
 };
 
-const buildProcurementDepth = (page) => [
+const buildProcurementDepth = (page) => page.locationPage ? [
+  {
+    title: 'Leading Trading Est inside Warehousing World Bahrain',
+    body:
+      'Leading Trading Est operates from Office 109, Building 658, Road 16, Block 616, inside Warehousing World in Um Al-Baidh, Sitra. This location page connects the LTE business name, office address, map location, medical and industrial supply activity, and Bahrain service area in one crawlable source.',
+  },
+  {
+    title: 'A local point of contact for Bahrain procurement teams',
+    body:
+      'Customers searching for Warehousing World, Warehouse World, Sitra suppliers, or the LTE office can use the contact and map links to reach the correct location. LTE supports medical, dental, laboratory, safety, and industrial procurement enquiries from this Bahrain office.',
+  },
+] : [
   {
     title: `${page.categoryLabel} procurement standards in Bahrain`,
     body:
@@ -85,6 +97,7 @@ const SeoLandingPage = () => {
         structuredData={[
           organizationSchema,
           localBusinessSchema,
+          ...(page.locationPage ? [warehousingWorldSchema] : []),
           buildBreadcrumbSchema([
             { name: 'Home', path: '/' },
             { name: 'Solutions', path: '/categories' },
@@ -111,7 +124,7 @@ const SeoLandingPage = () => {
       <section className="seo-landing-hero">
         <div className="seo-landing-shell seo-landing-hero-grid">
           <div className="seo-landing-copy">
-            <span className="seo-landing-eyebrow">Bahrain Supply Guide</span>
+            <span className="seo-landing-eyebrow">{page.locationPage ? 'Bahrain Business Location' : 'Bahrain Supply Guide'}</span>
             <h1>{page.title}</h1>
             <p>{page.description}</p>
             <div className="seo-landing-actions">

@@ -17,7 +17,7 @@ import { existsSync } from 'node:fs';
 import { seoLandingPages } from '../src/utils/seoLandingPages.js';
 import { resourceGuides } from '../src/utils/resourceGuides.js';
 import { buildProductPath } from '../src/utils/productUrls.js';
-import { normalizeCanonicalPath } from '../src/utils/seoSchemas.js';
+import { localBusinessSchema, normalizeCanonicalPath, warehousingWorldSchema } from '../src/utils/seoSchemas.js';
 
 const SITE = 'https://www.lte-bh.com';
 const root  = resolve(new URL('..', import.meta.url).pathname);
@@ -250,6 +250,7 @@ const genSolution = (landingPage, viteHead, viteBody) => {
   const canonical = `${SITE}${normalizeCanonicalPath(`/solutions/${landingPage.slug}`)}`;
 
   const schemas = [];
+  if (landingPage.locationPage) schemas.push(localBusinessSchema, warehousingWorldSchema);
   if (landingPage.faqs?.length) schemas.push(faqSchema(landingPage.faqs));
   schemas.push(
     breadcrumb([

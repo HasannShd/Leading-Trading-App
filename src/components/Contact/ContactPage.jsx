@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import Seo from '../Common/Seo';
 import { buildBreadcrumbSchema, localBusinessSchema, medicalOrganizationSchema, organizationSchema } from '../../utils/seoSchemas';
 import { useLanguage } from '../../context/LanguageContext';
@@ -445,6 +445,9 @@ const ContactPage = () => {
               Warehousing World, Um Al-Baidh<br />
               Sitra, Capital Governorate BH
             </a>
+          </div>
+          <div>
+            <Link to="/solutions/warehousing-world-bahrain">View LTE at Warehousing World Bahrain</Link>
           </div>
           <div className="contact-info-title">{t('Hours')}</div>
           <table className="contact-info-hours">
