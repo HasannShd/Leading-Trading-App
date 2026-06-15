@@ -519,7 +519,7 @@ const HomePage = () => {
             </div>
           </div>
           <div className="trust-stage__brands-cta animate-on-scroll">
-            <Link className="home-btn home-btn--ghost" to="/brands">{t('View all brand profiles')} →</Link>
+            <Link className="home-btn home-btn--primary" to="/brands">{t('View all brand profiles')} →</Link>
           </div>
 
           <div className="logo-marquee logo-marquee--reverse animate-on-scroll">

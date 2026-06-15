@@ -241,21 +241,18 @@
 }
 
 .brand-tile__logo {
-  display: flex;
+  position: relative;
   height: 174px;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
   overflow: hidden;
   border-bottom: 1px solid rgba(15, 39, 65, 0.08);
   background: #f8fafc;
 }
 
 .brand-tile__logo img {
-  max-width: 100%;
-  max-height: 126px;
-  width: auto;
-  height: auto;
+  position: absolute;
+  inset: 24px;
+  width: calc(100% - 48px);
+  height: calc(100% - 48px);
   object-fit: contain;
 }
 
