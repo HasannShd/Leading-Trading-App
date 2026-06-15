@@ -531,11 +531,6 @@
   gap: 16px;
 }
 
-.category-details-product-price {
-  color: var(--navy-900);
-  font-weight: 800;
-}
-
 .category-details-product-cta {
   color: #1d4ed8;
   font-weight: 700;

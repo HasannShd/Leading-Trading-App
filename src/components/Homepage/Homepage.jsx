@@ -382,7 +382,6 @@ const HomePage = () => {
                     )}
                   </div>
                   <div className="fast-mover-card__body">
-                    {product.brand && <span className="fast-mover-card__brand">{product.brand}</span>}
                     <h3 className="fast-mover-card__name">{product.name}</h3>
                     {product.categorySlug?.name && (
                       <span className="fast-mover-card__cat">{categoryName(product.categorySlug.name)}</span>

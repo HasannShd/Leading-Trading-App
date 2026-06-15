@@ -76,8 +76,6 @@ const buildCategoryPath = (product) =>
 const ProductCard = ({ product }) => {
   const image = product.image || product.images?.[0] || '';
   const details = [
-    ['Brand', product.brand],
-    ['SKU', product.sku || product.variants?.find((v) => v.sku)?.sku],
     ['Spec', buildSpecText(product)],
     ['Packing', findPacking(product)],
   ].filter(([, v]) => clean(v));

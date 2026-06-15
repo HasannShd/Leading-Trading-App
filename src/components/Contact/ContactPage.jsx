@@ -346,7 +346,6 @@ const ContactPage = () => {
             <div className="contact-quote-context" aria-live="polite">
               <span>{t('Interested in')}</span>
               <strong>{quoteLabel}</strong>
-              {quoteContext.sku ? <small>{t('SKU')}: {quoteContext.sku}</small> : null}
             </div>
           ) : null}
           {Object.entries(quoteContext).map(([key, value]) => (

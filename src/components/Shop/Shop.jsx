@@ -44,14 +44,6 @@ const setSessionCache = (key, value) => {
   }
 };
 
-const getProductPrice = (product) => {
-  const firstVariantPrice = Number(product.variants?.[0]?.price);
-  const basePrice = Number(product.basePrice || 0);
-  if (Number.isFinite(firstVariantPrice) && firstVariantPrice > 0) return firstVariantPrice;
-  if (Number.isFinite(basePrice) && basePrice > 0) return basePrice;
-  return 0;
-};
-
 const suggestionText = (value) => String(value || '').trim();
 
 const productDescription = (product, t) => {
@@ -208,9 +200,7 @@ const Shop = () => {
     : 'Browse Leading Trading Est products for Bahrain healthcare, dental, laboratory, CSSD, safety, and industrial procurement with quotation support.';
   const sortedProducts = useMemo(() => {
     const next = asProductArray(products);
-    if (sort === 'price') {
-      next.sort((a, b) => getProductPrice(a) - getProductPrice(b));
-    } else if (sort === 'name') {
+    if (sort === 'name') {
       next.sort((a, b) => String(a.name || '').localeCompare(String(b.name || '')));
     } else if (sort === 'featured') {
       next.sort((a, b) => Number(b.featured === true) - Number(a.featured === true));
@@ -242,11 +232,11 @@ const Shop = () => {
 
     products.forEach((product) => {
       if (
-        [product.name, product.brand, product.sku, product.description]
+        [product.name, product.description]
           .filter(Boolean)
           .some((field) => String(field).toLowerCase().includes(term))
       ) {
-        addSuggestion(product.name, product.brand || product.sku || t('Product'));
+        addSuggestion(product.name, t('Product'));
       }
     });
 
@@ -373,11 +363,11 @@ const Shop = () => {
           <form onSubmit={handleSearch} className="shop-search">
             <div className="shop-search-field animate-on-scroll">
               <Input
-                placeholder={t('Search products by name, brand, or SKU')}
+                placeholder={t('Search products by name or description')}
                 value={q}
                 onChange={(e) => setQ(e.target.value)}
                 autoComplete="off"
-                aria-label={t('Search products by name, brand, or SKU')}
+                aria-label={t('Search products by name or description')}
               />
               {searchSuggestions.length ? (
                 <div className="shop-search-suggestions">
@@ -416,7 +406,6 @@ const Shop = () => {
             <select className="animate-on-scroll" value={sort} onChange={(e) => setSort(e.target.value)}>
               <option value="featured">{t('Sort: Featured')}</option>
               <option value="name">{t('Sort: Name')}</option>
-              <option value="price">{t('Sort: Price')}</option>
             </select>
             <button className="btn primary animate-on-scroll" type="submit">{t('Apply')}</button>
           </form>
@@ -460,7 +449,6 @@ const Shop = () => {
           <div className="shop-grid animate-stagger" data-stagger-step="90ms">
             {sortedProducts.map((product, index) => {
               const productImage = product.image || product.images?.[0] || '';
-              const price = getProductPrice(product);
               const productId = getProductId(product, index);
               const productName = product.name || 'Catalog product';
               const imageFailed = brokenImages[productId] === true;
@@ -489,15 +477,9 @@ const Shop = () => {
                       )}
                     </div>
                     <div className="shop-card-body">
-                      <div className="shop-card-kicker">
-                        <span>{product.brand || t('Sourcing item')}</span>
-                      </div>
                       <h3>{productName}</h3>
                       <p>{productDescription(product, t)}</p>
                       <div className="shop-card-footer">
-                        <span className="shop-card-price">
-                          {price > 0 ? `${price.toFixed(3)} BHD` : t('Quote on request')}
-                        </span>
                         <span className="shop-card-cta">{t('View details')}</span>
                       </div>
                     </div>

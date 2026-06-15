@@ -720,14 +720,6 @@
   flex: 1;
 }
 
-.fast-mover-card__brand {
-  font-size: 0.64rem;
-  font-weight: 800;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: rgba(37, 99, 235, 0.65);
-}
-
 .fast-mover-card__name {
   margin: 0;
   font-size: 0.82rem;

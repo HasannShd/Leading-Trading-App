@@ -168,7 +168,7 @@ const CatalogPage = () => {
                           )}
                           <span>
                             <strong>{product.name}</strong>
-                            <small>{product.brand || product.categorySlug?.name || t('Catalog item')}</small>
+                            <small>{product.categorySlug?.name || t('Catalog item')}</small>
                           </span>
                         </Link>
                       );

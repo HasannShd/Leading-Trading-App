@@ -17,5 +17,5 @@ export const buildProductPath = (productOrId, fallbackName = '') => {
     ? productOrId?.name || productOrId?.slug || productOrId?.sku || fallbackName
     : fallbackName;
   const slug = slugify(name);
-  return slug ? `/product/${id}/${slug}` : `/product/${id}`;
+  return slug ? `/product/${id}/${slug}/` : `/product/${id}/`;
 };

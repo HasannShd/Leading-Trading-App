@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState, startTransition, useRef } from 'react';
 import { useParams, useNavigate, Link, useLocation } from 'react-router-dom';
 import StatePanel from '../Common/StatePanel';
 import Seo from '../Common/Seo';
-import { buildBreadcrumbSchema, buildFaqSchema, buildProductSchema } from '../../utils/seoSchemas';
+import { buildBreadcrumbSchema, buildFaqSchema } from '../../utils/seoSchemas';
 import { buildSeoFaqs, buildSeoKeywords } from '../../utils/searchSeo';
 import { useLanguage } from '../../context/LanguageContext';
 import { normalizeImageSrc } from '../../utils/normalizeImageSrc';
@@ -29,11 +29,6 @@ const CATEGORY_SOLUTION_MAP = {
 };
 
 const buildSizeLabel = (entry) => [entry.size, entry.inches, entry.color].filter(Boolean).join(' / ');
-
-const getSizePrice = (entry) => {
-  const priceValue = Number(entry?.price);
-  return Number.isFinite(priceValue) && priceValue > 0 ? priceValue : null;
-};
 
 const productDetailCache = new Map();
 const relatedProductsCache = new Map();
@@ -179,18 +174,6 @@ const ProductDetails = () => {
   }, [selectedVariant, selectedSizeIndex]);
 
   const selectedEntry = sizeOptions[Number(selectedSizeIndex)];
-  const selectedSizePrice = getSizePrice(selectedEntry);
-  const variantPriceValue = Number(selectedVariant?.price);
-  const fallbackVariantPrice = Number(variants[0]?.price);
-  const basePriceValue = Number(product?.basePrice || 0);
-  const displayPrice = Number.isFinite(selectedSizePrice) && selectedSizePrice > 0
-    ? selectedSizePrice
-    : (Number.isFinite(variantPriceValue) && variantPriceValue > 0
-        ? variantPriceValue
-        : (Number.isFinite(fallbackVariantPrice) && fallbackVariantPrice > 0
-            ? fallbackVariantPrice
-            : basePriceValue));
-
   const gallery = useMemo(
     () => Array.from(new Set([product?.image, ...(product?.images || []), selectedVariant?.image].filter(Boolean))),
     [product, selectedVariant]
@@ -212,18 +195,14 @@ const ProductDetails = () => {
       productName: product.name || '',
       pageUrl: typeof window !== 'undefined' ? `${window.location.origin}${buildProductPath(product)}` : buildProductPath(product),
     });
-    const sku = selectedVariant?.sku || product.sku || product.variants?.[0]?.sku || '';
     const categoryId = product.categorySlug?._id || '';
     const categoryLabel = product.categorySlug?.name || '';
-    if (sku) params.set('sku', sku);
     if (categoryId) params.set('category', categoryId);
     if (categoryLabel) params.set('categoryName', categoryLabel);
     return `/contact?${params.toString()}`;
-  }, [product, selectedVariant]);
+  }, [product]);
   const productSeoText = [
     product?.name,
-    product?.brand,
-    product?.sku,
     product?.categorySlug?.name,
     product?.categorySlug?.parent?.name,
     product?.description,
@@ -353,12 +332,10 @@ const ProductDetails = () => {
         description={productSeoDescription}
         canonicalPath={buildProductPath(product)}
         image={activeImage || product.image || product.images?.[0] || undefined}
-        type="product"
+        type="website"
         keywords={buildSeoKeywords(
           productSeoText,
           product.name,
-          product.brand || '',
-          product.sku || '',
           `${product.categorySlug?.name || 'medical supplies'} Bahrain`,
           'product quotation Bahrain',
           'Leading Trading Est'
@@ -372,16 +349,12 @@ const ProductDetails = () => {
               : []),
             { name: product.name, path: buildProductPath(product) },
           ]),
-          buildProductSchema(product, {
-            image: activeImage || product.image || product.images?.[0],
-            categoryName: product.categorySlug?.name,
-          }),
           buildFaqSchema([
             ...buildSeoFaqs(productSeoText),
             {
               question: `How can buyers request a quotation for ${product.name}?`,
               answer:
-                'Use the Request Quotation button on the product page to send the product name, page URL, category, and available SKU context to Leading Trading Est for follow-up.',
+                'Use the Request Quotation button on the product page to send the product name, page URL, category, and requirement context to Leading Trading Est for follow-up.',
             },
           ]),
         ]}
@@ -419,7 +392,7 @@ const ProductDetails = () => {
               />
             ) : (
               <div className="product-media-empty">
-                <span>{product.brand || t('Leading Trading Est')}</span>
+                <span>{t('Catalog product')}</span>
                 <strong>{t('Image available on request')}</strong>
                 <p>{t('Contact our team for visuals, specifications, and availability details.')}</p>
               </div>
@@ -451,10 +424,9 @@ const ProductDetails = () => {
             <span className="product-kicker animate-on-scroll">
               {product.categorySlug?.parent?.name
                 ? `${categoryName(product.categorySlug.parent.name)} / ${categoryName(product.categorySlug?.name || '')}`
-                : (product.categorySlug?.name ? categoryName(product.categorySlug.name) : (product.brand || t('Catalog product')))}
+                : (product.categorySlug?.name ? categoryName(product.categorySlug.name) : t('Catalog product'))}
             </span>
             <h1 className="animate-on-scroll">{product.name}</h1>
-            <p className="product-brand animate-on-scroll">{product.brand || t('Leading Trading Est')}</p>
             <p className="product-desc animate-on-scroll">
               {product.description?.trim() || t('Contact our team for product specifications, availability, and commercial support.')}
             </p>
@@ -484,11 +456,8 @@ const ProductDetails = () => {
             )}
 
             <div className="product-purchase-card animate-on-scroll">
-              <div className="product-price-row">
-                <div>
-                  <span className="product-price-label">{t('Current price')}</span>
-                  <p className="product-price">{displayPrice > 0 ? `${Number(displayPrice).toFixed(3)} BHD` : t('Quote on request')}</p>
-                </div>
+              <div className="product-quote-row">
+                <strong>{t('Request product availability and quotation')}</strong>
                 <a
                   className="btn"
                   href="https://wa.me/97317210665"
@@ -506,11 +475,9 @@ const ProductDetails = () => {
                       <label>{t('Choose Type')}</label>
                       <select value={variantId} onChange={(e) => handleTypeChange(e.target.value)}>
                         {variants.map((v) => {
-                          const priceTag = Number(v.price);
                           return (
                             <option key={v._id} value={v._id}>
-                              {v.type || v.name || v.sku}
-                              {Number.isFinite(priceTag) && priceTag > 0 ? ` — ${priceTag.toFixed(3)} BHD` : ''}
+                              {v.type || v.name || t('Product option')}
                             </option>
                           );
                         })}
@@ -527,11 +494,9 @@ const ProductDetails = () => {
                       >
                         {sizeOptions.map((entry, idx) => {
                           const label = buildSizeLabel(entry);
-                          const priceTag = getSizePrice(entry);
                           return (
                             <option key={`${label}-${idx}`} value={String(idx)} disabled={entry.outOfStock}>
                               {label}
-                              {priceTag ? ` — ${priceTag.toFixed(3)} BHD` : ''}
                               {entry.outOfStock ? ' (Out of stock)' : ''}
                             </option>
                           );
@@ -595,7 +560,6 @@ const ProductDetails = () => {
             <div className="product-related-grid">
               {relatedProducts.map((item) => {
                 const image = item.image || item.images?.[0] || '';
-                const price = Number(item.basePrice || item.variants?.[0]?.price || 0);
                 const imageFailed = brokenRelatedImages[item._id] === true;
 
                 return (
@@ -616,9 +580,8 @@ const ProductDetails = () => {
                       )}
                     </div>
                     <div className="product-related-copy">
-                      <span>{item.brand || t('Catalog product')}</span>
+                      <span>{categoryName(item.categorySlug?.name || product.categorySlug?.name || t('Catalog product'))}</span>
                       <strong>{item.name}</strong>
-                      <p>{price > 0 ? `${price.toFixed(3)} BHD` : t('Quote on request')}</p>
                     </div>
                   </Link>
                 );

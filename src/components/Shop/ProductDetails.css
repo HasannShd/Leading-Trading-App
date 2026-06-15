@@ -203,22 +203,6 @@
   color: var(--navy-900);
 }
 
-/* Brand badge */
-.product-brand {
-  display: inline-flex;
-  align-items: center;
-  width: fit-content;
-  margin: 0;
-  min-height: 28px;
-  padding: 0 12px;
-  border-radius: 999px;
-  background: rgba(19, 48, 78, 0.06);
-  border: 1px solid rgba(19, 48, 78, 0.1);
-  color: var(--navy-700);
-  font-size: 0.82rem;
-  font-weight: 700;
-}
-
 .product-desc {
   color: var(--ink);
   line-height: 1.84;
@@ -251,7 +235,7 @@
   gap: 16px;
 }
 
-.product-price-row {
+.product-quote-row {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
@@ -260,23 +244,11 @@
   border-bottom: 1px solid rgba(248, 243, 235, 0.1);
 }
 
-.product-price-label {
-  display: block;
-  color: rgba(231, 218, 201, 0.6);
-  font-size: 0.72rem;
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
+.product-quote-row strong {
   font-weight: 700;
-}
-
-.product-price {
-  font-family: 'Cormorant Garamond', Georgia, serif;
-  font-weight: 600;
   color: #ffffff;
-  margin: 6px 0 0;
-  font-size: 2.2rem;
-  letter-spacing: -0.03em;
-  line-height: 1;
+  font-size: 1rem;
+  line-height: 1.4;
 }
 
 .product-variant,
@@ -536,12 +508,12 @@
     gap: 14px;
   }
 
-  .product-price-row {
+  .product-quote-row {
     flex-direction: column;
     gap: 14px;
   }
 
-  .product-price-row .btn { width: 100%; }
+  .product-quote-row .btn { width: 100%; }
 
   .product-actions { grid-template-columns: 1fr; }
 

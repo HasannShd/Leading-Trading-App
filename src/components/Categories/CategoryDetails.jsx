@@ -45,7 +45,7 @@ const productDescription = (product, category, categoryName, t) => {
 const productMatchesSearch = (product, search = '') => {
   const term = String(search).toLowerCase().trim();
   if (!term) return false;
-  return [product?.name, product?.description, product?.brand, product?.sku]
+  return [product?.name, product?.description]
     .filter(Boolean)
     .some((field) => String(field).toLowerCase().includes(term));
 };
@@ -122,7 +122,7 @@ const CategoryDetails = () => {
     const s = deferredQuery.toLowerCase().trim();
     if (!s) return products;
     return products.filter((p) =>
-      [p.name, p.description, p.brand, p.sku]
+      [p.name, p.description]
         .filter(Boolean)
         .some((field) => field.toLowerCase().includes(s))
       );
@@ -134,13 +134,13 @@ const CategoryDetails = () => {
     const seen = new Set();
     return products
       .filter((product) =>
-        [product.name, product.description, product.brand, product.sku]
+        [product.name, product.description]
           .filter(Boolean)
           .some((field) => String(field).toLowerCase().includes(term))
       )
       .map((product) => ({
         label: product.name,
-        meta: product.brand || product.sku || t('Product'),
+        meta: t('Product'),
       }))
       .filter((suggestion) => {
         const key = String(suggestion.label || '').toLowerCase();
@@ -321,8 +321,8 @@ const CategoryDetails = () => {
                   <span>{t('products currently listed')}</span>
                 </div>
                 <div className="category-details-meta-card animate-on-scroll">
-                  <StatCount value={new Set(products.map((product) => product.brand).filter(Boolean)).size || 1} />
-                  <span>{t('brands represented')}</span>
+                  <StatCount value={category.children?.length || 1} />
+                  <span>{t('product groups')}</span>
                 </div>
                 <Link className="btn primary animate-on-scroll" to={quoteHref}>{t('Request sourcing support')}</Link>
               </div>
@@ -394,7 +394,7 @@ const CategoryDetails = () => {
                   {category.children?.length ? t('Products across this main category') : t('Products in this category')}
                 </h2>
                 <p className="category-details-products-copy">
-                  {t('Filter by name, brand, description, or SKU to narrow the relevant products quickly.')}
+                  {t('Filter by product name or description to narrow the relevant products quickly.')}
                 </p>
               </div>
               <div className="category-details-products-spacer" />
@@ -442,7 +442,6 @@ const CategoryDetails = () => {
               <ul className="category-details-products-list">
                 {filteredProducts.map((p) => {
                   const productImage = p.image || p.images?.[0] || '';
-                  const price = Number(p.basePrice || p.variants?.[0]?.price || 0);
                   const imageFailed = brokenImages[p._id] === true;
 
                   return (
@@ -471,16 +470,13 @@ const CategoryDetails = () => {
                           <span>
                             {p.categorySlug?.parent?.name
                               ? `${categoryName(p.categorySlug.parent.name)} / ${categoryName(p.categorySlug?.name || '')}`
-                              : (p.brand || t('Catalog item'))}
+                              : categoryName(p.categorySlug?.name || category.name)}
                           </span>
                           <strong>{p.name}</strong>
                           <p>{productDescription(p, category, categoryName, t)}</p>
                         </div>
 
                         <div className="category-details-product-footer">
-                          <span className="category-details-product-price">
-                            {Number.isFinite(price) && price > 0 ? `${price.toFixed(3)} BHD` : t('Quote on request')}
-                          </span>
                           <span className="category-details-product-cta">{t('Open product')}</span>
                         </div>
                       </Link>

@@ -128,41 +128,6 @@ const breadcrumb = (items) => ({
   })),
 });
 
-const productSchema = (product, categoryName, canonicalUrl) => {
-  const priceValue = Number(
-    product?.price || product?.basePrice || product?.variants?.[0]?.price || product?.variants?.[0]?.sizes?.[0]?.price || 0,
-  );
-  const hasPrice = Number.isFinite(priceValue) && priceValue > 0;
-  const productSku = product?.sku || product?._id;
-  const schema = {
-    '@context': 'https://schema.org',
-    '@type': 'Product',
-    name: product.name,
-    ...(product.description ? { description: product.description } : {}),
-    ...(productSku ? { sku: productSku, mpn: productSku } : {}),
-    brand: { '@type': 'Brand', name: product.brand || 'Leading Trading Est' },
-    ...(product.image
-      ? { image: [product.image.startsWith('http') ? product.image : `${SITE}${product.image}`] }
-      : {}),
-    category: categoryName,
-    url: canonicalUrl,
-  };
-
-  if (hasPrice) {
-    schema.offers = {
-      '@type': 'Offer',
-      price: priceValue.toFixed(3),
-      priceCurrency: 'BHD',
-      availability: 'https://schema.org/InStock',
-      itemCondition: 'https://schema.org/NewCondition',
-      url: canonicalUrl,
-      seller: { '@type': 'Organization', name: 'Leading Trading Est', url: SITE },
-    };
-  }
-
-  return schema;
-};
-
 const faqSchema = (faqs) => ({
   '@context': 'https://schema.org',
   '@type': 'FAQPage',
@@ -191,7 +156,6 @@ const genProduct = (product, catMap, viteHead, viteBody) => {
     .filter(Boolean).join(', ');
 
   const schemas = [
-    productSchema(product, catName, canonical),
     breadcrumb([
       { name: 'Home', url: `${SITE}/` },
       { name: 'Categories', url: `${SITE}/categories/` },
@@ -204,13 +168,12 @@ const genProduct = (product, catMap, viteHead, viteBody) => {
     `<h1>${esc(product.name)}</h1>`,
     product.description ? `<p>${esc(product.description.slice(0, 300))}</p>` : '',
     `<p>Category: ${esc(catName)}</p>`,
-    product.brand ? `<p>Brand: ${esc(product.brand)}</p>` : '',
     `<nav><a href="/categories">Browse categories</a> <a href="/contact">Request a quote</a></nav>`,
   ].filter(Boolean).join('');
 
   return {
     filePath: resolve(dist, ...path.replace(/^\//, '').split('/'), 'index.html'),
-    html: page({ title, description, keywords, canonical, ogType: 'product', schemas, fallback, viteHead, viteBody }),
+    html: page({ title, description, keywords, canonical, schemas, fallback, viteHead, viteBody }),
   };
 };
 
