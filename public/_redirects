@@ -1,9 +1,5 @@
 http://lte-bh.com/* https://www.lte-bh.com/:splat 301!
 https://lte-bh.com/* https://www.lte-bh.com/:splat 301!
-/Brands /categories 301
-/Brands/ /categories 301
-/brands /categories 301
-/brands/ /categories 301
 /Products /categories 301
 /Products/ /categories 301
 /products /categories 301
