@@ -20,7 +20,7 @@
   color: var(--muted);
   margin: 0;
 }
-.brands-grid {
+.homepage-brands-grid {
   max-width: 1200px;
   margin: 0 auto 32px auto;
   display: grid;
@@ -87,7 +87,7 @@
 }
 
 @media (max-width: 700px) {
-  .brands-grid,
+  .homepage-brands-grid,
   .brands-secondary-grid {
     grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   }

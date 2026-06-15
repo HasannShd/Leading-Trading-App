@@ -27,7 +27,7 @@ const Brands = () => (
       <p className="brands-subtitle">Main partners and our trusted secondary brands.</p>
     </div>
 
-    <div className="brands-grid">
+    <div className="homepage-brands-grid">
       {mainBrands.map(brand => (
         <a className="brand-card" href={brand.url} key={brand.name} target="_blank" rel="noopener noreferrer">
           {brand.logo ? (
