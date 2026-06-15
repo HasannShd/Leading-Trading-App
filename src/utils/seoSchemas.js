@@ -65,12 +65,12 @@ export const organizationSchema = {
     {
       '@type': 'Brand',
       name: 'ROMSONS',
-      description: 'ROMSONS brand support through Leading Trading Est in Bahrain.',
+      description: 'ROMSONS sole-agent support through Leading Trading Est in Bahrain for disposable medical device enquiries.',
     },
     {
       '@type': 'Brand',
       name: 'SMI',
-      description: 'SMI brand support through Leading Trading Est in Bahrain.',
+      description: 'SMI sole-agent support through Leading Trading Est in Bahrain for surgical suture and wound closure enquiries.',
     },
   ],
   sameAs: [

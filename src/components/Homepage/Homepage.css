@@ -1253,6 +1253,10 @@
   will-change: transform;
 }
 
+.logo-chip--brand {
+  text-decoration: none;
+}
+
 /* Pause on hover — both track variants */
 @media (pointer: fine) {
   .logo-marquee:hover .logo-marquee__track {

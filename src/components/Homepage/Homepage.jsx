@@ -166,16 +166,17 @@ const credibilityPillars = [
 ];
 
 const mainBrands = [
-  { name: 'Medstar', logo: 'Brands/medstar.jpg' },
-  { name: 'Rogin', logo: 'Brands/rogin.png' },
-  { name: 'SMI', logo: 'Brands/Smi.png' },
-  { name: 'ROMSONS', logo: 'Brands/romsons.png' },
-  { name: 'Hermann Meditech', logo: 'Brands/Hermann.png' },
-  { name: 'Zogear', logo: 'Brands/Zogear.png' },
-  { name: 'ADC', logo: 'Brands/adc.png' },
-  { name: 'Osseous', logo: 'Brands/osseous.png' },
-  { name: 'Berger', logo: 'Brands/berger.jpg' },
-  { name: 'Bastos-Viegas', logo: 'Brands/bastosviegas.webp' },
+  { name: 'Medstar', logo: 'Brands/medstar.jpg', slug: 'medstar' },
+  { name: 'Rogin Dental', logo: 'Brands/rogin.png', slug: 'rogin-dental' },
+  { name: 'SMI', logo: 'Brands/Smi.png', slug: 'smi' },
+  { name: 'ROMSONS', logo: 'Brands/romsons.png', slug: 'romsons' },
+  { name: 'Hermann Meditech', logo: 'Brands/Hermann.png', slug: 'hermann-meditech' },
+  { name: 'Zogear', logo: 'Brands/Zogear.png', slug: 'zogear' },
+  { name: 'ADC', logo: 'Brands/adc.png', slug: 'adc' },
+  { name: 'Osseous', logo: 'Brands/osseous.png', slug: 'osseous' },
+  { name: 'Berger', logo: 'Brands/berger.jpg', slug: 'berger' },
+  { name: 'Bastos Viegas', logo: 'Brands/bastosviegas.webp', slug: 'bastos-viegas' },
+  { name: 'Optima Cast', logo: 'Brands/optimacast.png', slug: 'optima-cast' },
 ];
 
 const clients = [
@@ -504,16 +505,16 @@ const HomePage = () => {
               <span className="medstar-dark__eyebrow">{t('Our own brand')}</span>
               <h3>{t("Medstar is LTE's own trusted medical supply brand, built around consistency, practical quality, and dependable market confidence.")}</h3>
               <p>{t('Medstar supports day-to-day clinical purchasing with products selected for routine healthcare use, repeat procurement, and the service expectations of Bahrain medical and dental buyers.')}</p>
-              <Link className="medstar-dark__cta animate-on-scroll" to="/catalog">{t('Browse Medstar products')} →</Link>
+              <Link className="medstar-dark__cta animate-on-scroll" to="/brands/medstar">{t('Explore Medstar')} →</Link>
             </div>
           </div>
 
           <div className="logo-marquee animate-on-scroll">
             <div className="logo-marquee__track">
               {marqueeBrands.map((brand, index) => (
-                <div className={`logo-chip logo-chip--brand logo-chip--${brand.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`} key={`${brand.name}-${index}`}>
+                <Link className={`logo-chip logo-chip--brand logo-chip--${brand.slug}`} to={`/brands/${brand.slug}`} key={`${brand.name}-${index}`} aria-label={`View ${brand.name} brand profile`}>
                   <img src={`${baseUrl}${brand.logo}`} alt={brand.name} loading="lazy" decoding="async" />
-                </div>
+                </Link>
               ))}
             </div>
           </div>

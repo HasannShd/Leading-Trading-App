@@ -5,6 +5,7 @@ const cacheFile = resolve(new URL('..', import.meta.url).pathname, 'scripts/seo-
 import { seoLandingRoutes } from '../src/utils/seoLandingPages.js';
 import { buildProductPath } from '../src/utils/productUrls.js';
 import { resourceGuideRoutes } from '../src/utils/resourceGuides.js';
+import { brandRoutes } from '../src/utils/brandPages.js';
 import { normalizeCanonicalPath } from '../src/utils/seoSchemas.js';
 
 const root = resolve(new URL('..', import.meta.url).pathname);
@@ -26,6 +27,7 @@ const staticRoutes = [
   { path: '/privacy', changefreq: 'yearly', priority: '0.4' },
   ...seoLandingRoutes,
   ...resourceGuideRoutes,
+  ...brandRoutes,
 ];
 
 const blockedSitemapPrefixes = [

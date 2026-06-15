@@ -38,6 +38,8 @@ const ResourcesPage = lazy(() => import('./components/Resources/ResourcesPage'))
 const ResourceArticlePage = lazy(() => import('./components/Resources/ResourceArticlePage'));
 const CatalogPage = lazy(() => import('./components/Catalog/CatalogPage'));
 const PdfCatalogPage = lazy(() => import('./components/Catalog/PdfCatalogPage'));
+const BrandsPage = lazy(() => import('./components/Brands/BrandsPage'));
+const BrandDetailsPage = lazy(() => import('./components/Brands/BrandDetailsPage'));
 const Cart = lazy(() => import('./components/Cart/Cart'));
 const Checkout = lazy(() => import('./components/Checkout/Checkout'));
 const Orders = lazy(() => import('./components/Orders/Orders'));
@@ -121,6 +123,8 @@ const AppShell = () => {
             <Route path="/shop" element={<Shop />} />
             <Route path="/catalog" element={<CatalogPage />} />
             <Route path="/catalog/pdf" element={<PdfCatalogPage />} />
+            <Route path="/brands" element={<BrandsPage />} />
+            <Route path="/brands/:slug" element={<BrandDetailsPage />} />
             <Route path="/product/:id" element={<ProductDetails />} />
             <Route path="/product/:id/:slug" element={<ProductDetails />} />
             <Route path="/solutions/:slug" element={<SeoLandingPage />} />

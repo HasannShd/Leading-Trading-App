@@ -16,8 +16,9 @@ import { resolve, dirname } from 'node:path';
 import { existsSync } from 'node:fs';
 import { seoLandingPages } from '../src/utils/seoLandingPages.js';
 import { resourceGuides } from '../src/utils/resourceGuides.js';
+import { brandPages } from '../src/utils/brandPages.js';
 import { buildProductPath } from '../src/utils/productUrls.js';
-import { localBusinessSchema, normalizeCanonicalPath, warehousingWorldSchema } from '../src/utils/seoSchemas.js';
+import { localBusinessSchema, normalizeCanonicalPath, organizationSchema, warehousingWorldSchema } from '../src/utils/seoSchemas.js';
 
 const SITE = 'https://www.lte-bh.com';
 const root  = resolve(new URL('..', import.meta.url).pathname);
@@ -136,6 +137,16 @@ const faqSchema = (faqs) => ({
     name: f.question,
     acceptedAnswer: { '@type': 'Answer', text: f.answer },
   })),
+});
+
+const brandSchema = (brand, canonical) => ({
+  '@context': 'https://schema.org',
+  '@type': 'Brand',
+  '@id': `${canonical}#brand`,
+  name: brand.name,
+  logo: `${SITE}${brand.logo}`,
+  url: canonical,
+  description: brand.description,
 });
 
 // ─── page generators ─────────────────────────────────────────────────────────
@@ -290,6 +301,99 @@ const genResourceGuide = (guide, viteHead, viteBody) => {
   };
 };
 
+const genBrandDirectory = (viteHead, viteBody) => {
+  const canonical = `${SITE}/brands/`;
+  const schemas = [
+    organizationSchema,
+    localBusinessSchema,
+    breadcrumb([
+      { name: 'Home', url: `${SITE}/` },
+      { name: 'Brands', url: canonical },
+    ]),
+    {
+      '@context': 'https://schema.org',
+      '@type': 'CollectionPage',
+      name: 'Brands supported by Leading Trading Est',
+      description: 'Medical, dental, surgical, diagnostic, ENT and orthopaedic brand lines supported in Bahrain.',
+      url: canonical,
+      mainEntity: {
+        '@type': 'ItemList',
+        itemListElement: brandPages.map((brand, index) => ({
+          '@type': 'ListItem',
+          position: index + 1,
+          name: brand.name,
+          url: `${SITE}${normalizeCanonicalPath(`/brands/${brand.slug}`)}`,
+        })),
+      },
+    },
+  ];
+  const fallback = [
+    '<h1>Medical, dental and specialist brands in Bahrain</h1>',
+    '<p>Explore Medstar, ROMSONS, SMI and specialist medical, dental, ENT, orthopaedic and diagnostic brand lines supported by Leading Trading Est.</p>',
+    '<ul>',
+    ...brandPages.map((brand) => `<li><a href="/brands/${esc(brand.slug)}">${esc(brand.name)}</a> - ${esc(brand.specialty)}</li>`),
+    '</ul>',
+  ].join('');
+
+  return {
+    filePath: resolve(dist, 'brands', 'index.html'),
+    html: page({
+      title: 'Medical, Dental & Surgical Brands Bahrain | Leading Trading Est',
+      description: 'Explore Medstar, ROMSONS, SMI and specialist medical, dental, ENT, orthopaedic and diagnostic brand lines supported by Leading Trading Est in Bahrain.',
+      keywords: 'medical brands Bahrain, Medstar Bahrain, ROMSONS Bahrain, SMI Bahrain, dental brands Bahrain, orthopedic brands Bahrain, ENT instruments Bahrain',
+      canonical,
+      schemas,
+      fallback,
+      viteHead,
+      viteBody,
+    }),
+  };
+};
+
+const genBrand = (brand, viteHead, viteBody) => {
+  const canonical = `${SITE}${normalizeCanonicalPath(`/brands/${brand.slug}`)}`;
+  const schemas = [
+    organizationSchema,
+    localBusinessSchema,
+    brandSchema(brand, canonical),
+    breadcrumb([
+      { name: 'Home', url: `${SITE}/` },
+      { name: 'Brands', url: `${SITE}/brands/` },
+      { name: brand.name, url: canonical },
+    ]),
+    ...(brand.faqs?.length ? [faqSchema(brand.faqs)] : []),
+  ];
+  const fallback = [
+    `<h1>${esc(brand.title)}</h1>`,
+    `<p>${esc(brand.description)}</p>`,
+    `<p>${esc(brand.intro)}</p>`,
+    `<h2>${esc(brand.specialty)}</h2>`,
+    '<ul>',
+    ...brand.focusAreas.map((area) => `<li><strong>${esc(area.title)}</strong>: ${esc(area.body)}</li>`),
+    '</ul>',
+    '<nav>',
+    ...brand.categoryLinks.map((item) => `<a href="${esc(item.path)}">${esc(item.label)}</a> `),
+    `<a href="/shop?q=${encodeURIComponent(brand.searchQuery)}">Search ${esc(brand.name)}</a> `,
+    '<a href="/contact">Request a quotation</a>',
+    '</nav>',
+  ].join('');
+
+  return {
+    filePath: resolve(dist, 'brands', brand.slug, 'index.html'),
+    html: page({
+      title: `${brand.title} | Leading Trading Est`,
+      description: brand.description,
+      keywords: brand.keywords,
+      canonical,
+      ogImage: `${SITE}${brand.logo}`,
+      schemas,
+      fallback,
+      viteHead,
+      viteBody,
+    }),
+  };
+};
+
 const STATIC_ROUTES = [
   {
     path: '/categories',
@@ -424,6 +528,12 @@ const main = async () => {
   // Resource guides
   for (const guide of resourceGuides) {
     jobs.push(genResourceGuide(guide, viteHead, viteBody));
+  }
+
+  // Brand directory and individual brand profiles
+  jobs.push(genBrandDirectory(viteHead, viteBody));
+  for (const brand of brandPages) {
+    jobs.push(genBrand(brand, viteHead, viteBody));
   }
 
   // Static routes

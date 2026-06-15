@@ -56,6 +56,7 @@ const Footer = () => {
               <p className="footer-info-label">{t('Navigate')}</p>
               <Link to="/categories">{t('Categories')}</Link>
               <Link to="/catalog">{t('Catalog')}</Link>
+              <Link to="/brands">{t('Brands')}</Link>
               <Link to="/resources">{t('Resources')}</Link>
               <Link to="/about">{t('About')}</Link>
               <Link to="/careers">{t('Careers')}</Link>
