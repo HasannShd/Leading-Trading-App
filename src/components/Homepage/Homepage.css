@@ -1079,6 +1079,12 @@
   font-size: 0.97rem;
 }
 
+.trust-stage__brands-cta {
+  display: flex;
+  justify-content: center;
+  margin-top: 32px;
+}
+
 .trust-stage__badges {
   display: flex;
   flex-wrap: wrap;

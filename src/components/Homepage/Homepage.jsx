@@ -518,6 +518,9 @@ const HomePage = () => {
               ))}
             </div>
           </div>
+          <div className="trust-stage__brands-cta animate-on-scroll">
+            <Link className="home-btn home-btn--ghost" to="/brands">{t('View all brand profiles')} →</Link>
+          </div>
 
           <div className="logo-marquee logo-marquee--reverse animate-on-scroll">
             <div className="logo-marquee__track">
@@ -574,6 +577,7 @@ const HomePage = () => {
               <Link className="home-btn home-btn--primary animate-on-scroll" to="/contact?source=home">{t('Request a Quote')}</Link>
               <Link className="home-btn home-btn--ghost-light animate-on-scroll" to="/categories">{t('Explore Categories')}</Link>
               <Link className="home-btn home-btn--ghost-light animate-on-scroll" to="/catalog">{t('Open Catalog')}</Link>
+              <Link className="home-btn home-btn--ghost-light animate-on-scroll" to="/brands">{t('Our Brands')}</Link>
             </div>
             <div className="final-cta-centered__trust animate-on-scroll">
               <span>{t('NHRA Certified')}</span>
