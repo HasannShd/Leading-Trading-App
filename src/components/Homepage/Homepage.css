@@ -1242,6 +1242,71 @@
   color: #bfdbfe;
 }
 
+/* ── Trust showcase category headers ─────────────── */
+.trust-showcase-category {
+  display: grid;
+  gap: 10px;
+  margin-top: 52px;
+  margin-bottom: 4px;
+}
+
+.trust-showcase-rule {
+  height: 1px;
+  border-radius: 1px;
+  margin-bottom: 2px;
+}
+
+.trust-showcase-rule--brands {
+  background: linear-gradient(90deg, #2563eb, rgba(96, 165, 250, 0.3), transparent);
+}
+
+.trust-showcase-rule--clients {
+  background: linear-gradient(90deg, #0d9488, rgba(45, 212, 191, 0.3), transparent);
+}
+
+.trust-showcase-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.trust-showcase-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 13px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.trust-showcase-badge--brands {
+  color: #3b82f6;
+  background: rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.24);
+}
+
+.trust-showcase-badge--clients {
+  color: #0d9488;
+  background: rgba(13, 148, 136, 0.09);
+  border: 1px solid rgba(13, 148, 136, 0.22);
+}
+
+.trust-showcase-count {
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.trust-showcase-desc {
+  color: var(--muted);
+  font-size: 0.92rem;
+  line-height: 1.68;
+  max-width: 600px;
+  margin: 0;
+}
+
 .logo-marquee {
   position: relative;
   overflow: hidden;

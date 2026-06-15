@@ -509,6 +509,15 @@ const HomePage = () => {
             </div>
           </div>
 
+          <div className="trust-showcase-category animate-on-scroll">
+            <div className="trust-showcase-rule trust-showcase-rule--brands" />
+            <div className="trust-showcase-meta">
+              <span className="trust-showcase-badge trust-showcase-badge--brands">{t('Brand Portfolio')}</span>
+              <span className="trust-showcase-count">{mainBrands.length} {t('manufacturers')}</span>
+            </div>
+            <p className="trust-showcase-desc">{t('Selected manufacturers we carry, supply, and represent — including sole-agent brands available exclusively through LTE in Bahrain.')}</p>
+          </div>
+
           <div className="logo-marquee animate-on-scroll">
             <div className="logo-marquee__track">
               {marqueeBrands.map((brand, index) => (
@@ -520,6 +529,15 @@ const HomePage = () => {
           </div>
           <div className="trust-stage__brands-cta animate-on-scroll">
             <Link className="home-btn home-btn--primary" to="/brands">{t('View all brand profiles')} →</Link>
+          </div>
+
+          <div className="trust-showcase-category animate-on-scroll">
+            <div className="trust-showcase-rule trust-showcase-rule--clients" />
+            <div className="trust-showcase-meta">
+              <span className="trust-showcase-badge trust-showcase-badge--clients">{t('Our Clients')}</span>
+              <span className="trust-showcase-count">{clients.length}+ {t('institutions')}</span>
+            </div>
+            <p className="trust-showcase-desc">{t('Hospitals, government health authorities, and major care institutions across Bahrain that rely on LTE for consistent medical and industrial supply.')}</p>
           </div>
 
           <div className="logo-marquee logo-marquee--reverse animate-on-scroll">
