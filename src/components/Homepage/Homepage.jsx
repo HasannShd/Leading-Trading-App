@@ -358,10 +358,9 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* Reserve space even before products load to prevent CLS from section appearing */}
       <section
         className="home-section fast-movers"
-        style={featuredProducts.length === 0 ? { minHeight: 420, visibility: 'hidden' } : undefined}
+        style={featuredProducts.length === 0 ? { display: 'none' } : undefined}
       >
         {featuredProducts.length > 0 && (
           <div className="home-shell">
@@ -478,11 +477,6 @@ const HomePage = () => {
             </div>
             <div className="trust-stage__intro-body animate-on-scroll">
               <p>{t('LTE works with selected manufacturers and supports institutions that require reliability, product quality, and professional service standards — including sole-agent representation for ROMSONS and SMI in Bahrain.')}</p>
-              <div className="trust-stage__badges">
-                <span>ROMSONS</span>
-                <span>SMI</span>
-                <span>{t('Sole Agent — Bahrain')}</span>
-              </div>
             </div>
           </div>
 
