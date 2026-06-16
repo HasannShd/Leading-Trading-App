@@ -65,7 +65,6 @@ const BrandsPage = () => {
           <p>{medstar.description}</p>
           <div className="brands-actions">
             <Link className="brands-button brands-button--primary" to="/brands/medstar">Explore Medstar</Link>
-            <Link className="brands-button brands-button--secondary" to="/shop?q=Medstar">Search Medstar range</Link>
           </div>
         </div>
       </section>

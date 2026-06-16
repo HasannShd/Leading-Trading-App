@@ -71,10 +71,7 @@ const BrandDetailsPage = () => {
             name: `${brand.name} supply focus in Bahrain`,
             description: brand.description,
             path: canonicalPath,
-            items: [
-              ...brand.categoryLinks.map((item) => ({ name: item.label, path: item.path })),
-              { name: `Search ${brand.name}`, path: `/shop?q=${encodeURIComponent(brand.searchQuery)}` },
-            ],
+            items: brand.categoryLinks.map((item) => ({ name: item.label, path: item.path })),
           }),
           buildFaqSchema(brand.faqs),
         ]}
@@ -88,10 +85,7 @@ const BrandDetailsPage = () => {
             <h1>{brand.title}</h1>
             <p>{brand.description}</p>
             <div className="brands-actions">
-              <Link className="brands-button brands-button--primary" to={`/shop?q=${encodeURIComponent(brand.searchQuery)}`}>
-                Search {brand.name}
-              </Link>
-              <Link className="brands-button brands-button--secondary brands-button--on-dark" to={`/contact?source=brand&brand=${encodeURIComponent(brand.name)}`}>
+              <Link className="brands-button brands-button--primary" to={`/contact?source=brand&brand=${encodeURIComponent(brand.name)}`}>
                 Request a quotation
               </Link>
             </div>
@@ -111,28 +105,31 @@ const BrandDetailsPage = () => {
         <p>{brand.intro}</p>
       </section>
 
-      <section className="brands-shell brand-detail__focus">
-        <div className="brands-section-heading">
-          <span className="brands-eyebrow">Supply Focus</span>
-          <h2>Relevant products and procurement paths.</h2>
-        </div>
-        <div className="brand-focus-grid">
-          {brand.focusAreas.map((area) => (
-            <article key={area.title}>
-              <h3>{area.title}</h3>
-              <p>{area.body}</p>
-            </article>
-          ))}
-        </div>
-      </section>
+      {!!brand.focusAreas?.length && (
+        <section className="brands-shell brand-detail__focus">
+          <div className="brands-section-heading">
+            <span className="brands-eyebrow">Brand Focus</span>
+            <h2>Official portfolio context for Bahrain buyers.</h2>
+          </div>
+          <div className="brand-focus-grid">
+            {brand.focusAreas.map((area) => (
+              <article key={area.title}>
+                <h3>{area.title}</h3>
+                <p>{area.body}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+      )}
 
       <section className="brands-shell brand-detail__paths">
         <div className="brand-detail__terms">
-          <span className="brands-eyebrow">Common Enquiries</span>
-          <h2>Search terms buyers use for {brand.name}.</h2>
-          <div className="brand-term-list">
-            {brand.productTerms.map((term) => <span key={term}>{term}</span>)}
-          </div>
+          <span className="brands-eyebrow">LTE Support Route</span>
+          <h2>Send the brand requirement directly to our team.</h2>
+          <p>
+            Share the item name, catalogue reference, quantity, pack size, clinical use,
+            or any tender document. LTE will confirm the suitable supply path and quotation details.
+          </p>
         </div>
         <aside className="brand-detail__categories">
           <span>Relevant categories</span>

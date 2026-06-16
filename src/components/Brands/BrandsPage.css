@@ -386,6 +386,14 @@
   margin-top: 24px;
 }
 
+.brand-detail__terms p {
+  max-width: 68ch;
+  margin: 18px 0 0;
+  color: #64748b;
+  font-size: 1rem;
+  line-height: 1.72;
+}
+
 .brand-term-list span {
   display: inline-flex;
   min-height: 42px;

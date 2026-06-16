@@ -373,7 +373,6 @@ const genBrand = (brand, viteHead, viteBody) => {
     '</ul>',
     '<nav>',
     ...brand.categoryLinks.map((item) => `<a href="${esc(item.path)}">${esc(item.label)}</a> `),
-    `<a href="/shop?q=${encodeURIComponent(brand.searchQuery)}">Search ${esc(brand.name)}</a> `,
     '<a href="/contact">Request a quotation</a>',
     '</nav>',
   ].join('');
