@@ -205,6 +205,8 @@
   gap: 12px;
   align-items: center;
   flex-wrap: wrap;
+  position: relative;
+  z-index: 2;
 }
 
 .shop-search-field {
@@ -618,9 +620,10 @@
   }
 
   .shop-search-suggestions {
-    position: static;
-    margin-top: 8px;
-    box-shadow: none;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(100% + 6px);
   }
 
   .shop-search select,
