@@ -10,6 +10,7 @@ import Seo from './components/Common/Seo.jsx';
 import PageTransition from './components/Common/PageTransition.jsx';
 import BackToTop from './components/Common/BackToTop.jsx';
 import MobileActionBar from './components/MobileActionBar.jsx';
+import FloatingWhatsApp from './components/FloatingWhatsApp.jsx';
 import NotFoundPage from './components/NotFoundPage.jsx';
 import ProtectedAdminRoute from './components/ProtectedAdminRoute';
 import { AdminContext, AdminProvider } from './context/AdminContext';
@@ -207,6 +208,7 @@ const AppShell = () => {
       {showStaffChat ? <PortalChatWidget role="sales_staff" /> : null}
       {!isPortalRoute && <Footer />}
       {!isPortalRoute && <MobileActionBar />}
+      {!isPortalRoute && <FloatingWhatsApp />}
       {(!isPortalRoute || isAdminRoute) && <BackToTop variant={isAdminRoute ? 'admin' : 'default'} />}
     </div>
   );
