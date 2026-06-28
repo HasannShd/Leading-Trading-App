@@ -336,3 +336,302 @@
     gap: 0;
   }
 }
+
+/* ══════════════════════════════════════════════
+   MULTI-STEP PROGRESS BAR
+══════════════════════════════════════════════ */
+.contact-steps {
+  display: flex;
+  align-items: flex-start;
+  gap: 0;
+  margin-bottom: 28px;
+  padding: 20px 0 16px;
+  border-bottom: 1px solid rgba(37, 99, 235, 0.1);
+  overflow: hidden;
+}
+
+.contact-step {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+  opacity: 0.42;
+  transition: opacity 0.22s ease;
+}
+
+.contact-step--active,
+.contact-step--done {
+  opacity: 1;
+}
+
+.contact-step__dot {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid rgba(37, 99, 235, 0.22);
+  background: #f8faff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #6b7280;
+  transition: background 0.22s ease, border-color 0.22s ease, color 0.22s ease;
+}
+
+.contact-step--active .contact-step__dot {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.38);
+}
+
+.contact-step--done .contact-step__dot {
+  background: #16a34a;
+  border-color: #16a34a;
+  color: #fff;
+}
+
+.contact-step__labels {
+  display: grid;
+  gap: 1px;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.contact-step__name {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #0f1c2e;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.contact-step__desc {
+  font-size: 0.72rem;
+  color: #9ca3af;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.contact-step--active .contact-step__name {
+  color: #1d4ed8;
+}
+
+.contact-step__line {
+  flex: 1;
+  height: 2px;
+  background: rgba(37, 99, 235, 0.14);
+  margin: 0 8px;
+  border-radius: 1px;
+  transition: background 0.22s ease;
+}
+
+.contact-step__line--done {
+  background: #16a34a;
+}
+
+/* ══════════════════════════════════════════════
+   STEP FORM LAYOUT
+══════════════════════════════════════════════ */
+.contact-form--step {
+  display: grid;
+  gap: 16px;
+  animation: stepFadeIn 0.24s ease;
+}
+
+@keyframes stepFadeIn {
+  from { opacity: 0; transform: translateX(10px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+.contact-form-nav {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding-top: 4px;
+}
+
+.contact-form-back {
+  appearance: none;
+  background: none;
+  border: 1px solid rgba(19, 48, 78, 0.14);
+  border-radius: 12px;
+  padding: 12px 20px;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #374151;
+  cursor: pointer;
+  transition: background 0.18s ease, border-color 0.18s ease;
+}
+
+.contact-form-back:hover {
+  background: rgba(19, 48, 78, 0.05);
+  border-color: rgba(19, 48, 78, 0.22);
+}
+
+/* ══════════════════════════════════════════════
+   DRAG-AND-DROP FILE ZONE
+══════════════════════════════════════════════ */
+.contact-drop-zone {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 20px 22px;
+  border-radius: 16px;
+  border: 2px dashed rgba(37, 99, 235, 0.22);
+  background: rgba(248, 251, 255, 0.7);
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease;
+  position: relative;
+  user-select: none;
+}
+
+.contact-drop-zone:hover,
+.contact-drop-zone:focus {
+  border-color: rgba(37, 99, 235, 0.44);
+  background: rgba(248, 251, 255, 1);
+  outline: none;
+}
+
+.contact-drop-zone--over {
+  border-color: #2563eb;
+  background: rgba(37, 99, 235, 0.06);
+}
+
+.contact-drop-zone--filled {
+  border-color: rgba(22, 163, 74, 0.44);
+  background: rgba(22, 163, 74, 0.04);
+  border-style: solid;
+}
+
+.contact-drop-zone__icon {
+  font-size: 1.8rem;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.contact-drop-zone__text {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+.contact-drop-zone__text strong {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #0f1c2e;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.contact-drop-zone__text span {
+  font-size: 0.78rem;
+  color: #6b7280;
+}
+
+.contact-drop-zone__remove {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  background: rgba(239, 68, 68, 0.08);
+  color: #ef4444;
+  font-size: 1rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.contact-drop-zone__remove:hover {
+  background: rgba(239, 68, 68, 0.18);
+}
+
+/* ══════════════════════════════════════════════
+   REVIEW SUMMARY (STEP 3)
+══════════════════════════════════════════════ */
+.contact-review {
+  border-radius: 16px;
+  border: 1px solid rgba(37, 99, 235, 0.12);
+  background: rgba(248, 251, 255, 0.8);
+  padding: 18px 20px;
+  display: grid;
+  gap: 14px;
+  position: relative;
+}
+
+.contact-review__group {
+  display: grid;
+  gap: 4px;
+  font-size: 0.9rem;
+  color: #374151;
+}
+
+.contact-review__label {
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #2563eb;
+  margin-bottom: 2px;
+}
+
+.contact-review__msg {
+  color: #4b5563;
+  font-size: 0.86rem;
+  line-height: 1.5;
+}
+
+.contact-review__edit {
+  align-self: start;
+  background: none;
+  border: 1px solid rgba(37, 99, 235, 0.2);
+  border-radius: 8px;
+  padding: 5px 12px;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #2563eb;
+  cursor: pointer;
+  transition: background 0.15s ease;
+  width: fit-content;
+}
+
+.contact-review__edit:hover {
+  background: rgba(37, 99, 235, 0.07);
+}
+
+/* ── Mobile step labels (hide description on small screens) ── */
+@media (max-width: 520px) {
+  .contact-step__desc {
+    display: none;
+  }
+
+  .contact-step__line {
+    margin: 0 4px;
+  }
+
+  .contact-form-nav {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+
+  .contact-form-back,
+  .contact-form-submit {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+  }
+}

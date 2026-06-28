@@ -1,5 +1,6 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import Seo from '../Common/Seo';
 import { normalizeImageSrc } from '../../utils/normalizeImageSrc';
 import { buildProductPath } from '../../utils/productUrls';
@@ -10,9 +11,11 @@ import {
   medicalOrganizationSchema,
   medstarBrandSchema,
   organizationSchema,
+  roginDentalBrandSchema,
   romsonsBrandSchema,
   smiSuturesBrandSchema,
   webSiteSchema,
+  zogearBrandSchema,
 } from '../../utils/seoSchemas';
 import { useLanguage } from '../../context/LanguageContext';
 import { useHomepageScroll } from './useHomepageScroll';
@@ -175,6 +178,90 @@ const credibilityPillars = [
   },
 ];
 
+const brandAuthority = [
+  {
+    slug: 'medstar',
+    name: 'Medstar',
+    badge: 'LTE Own Brand',
+    tagline: 'Proprietary wholesale consumables',
+    body: 'Exclusively sourced and distributed by Leading Trading Est. Hospitals and clinics purchase Medstar consumables through LTE as the sole authorised channel — with full import clearance and batch documentation.',
+    logo: 'Brands/medstar.jpg',
+    solutionPath: '/solutions/medstar-wholesale-consumables-bahrain',
+    color: '#1a4fd8',
+  },
+  {
+    slug: 'smi',
+    name: 'SMI Sutures',
+    badge: 'Exclusive Licensed Distributor',
+    tagline: 'Surgical sutures — absorbable, non-absorbable, specialty',
+    body: 'LTE holds the exclusive Bahrain distribution licence for SMI AG. Full suture portfolio — PGA, chromic catgut, polypropylene, nylon, silk — with ISO 13485 and certified clearance on every order.',
+    logo: 'Brands/Smi.png',
+    solutionPath: '/solutions/smi-sutures-distributor-bahrain',
+    color: '#0e5c3b',
+  },
+  {
+    slug: 'romsons',
+    name: 'Romsons',
+    badge: 'Sole Agent — Bahrain',
+    tagline: 'Medical devices bulk sourcing',
+    body: 'LTE is the authorised Bahrain sole-agent for Romsons. Catheters, IV sets, urine bags, oxygen therapy, and neonatal care — bulk inventory with direct import traceability and batch clearance on every order.',
+    logo: 'Brands/romsons.png',
+    solutionPath: '/solutions/romsons-medical-devices-bahrain',
+    color: '#7c2d12',
+  },
+  {
+    slug: 'rogin-dental',
+    name: 'Rogin Dental',
+    badge: 'Exclusive Licensed Distributor',
+    tagline: 'Endodontic files, burs, obturation & dental consumables',
+    body: 'LTE is the exclusive Bahrain distributor for Rogin Dental. Clinics source K-files, H-files, reamers, rotary systems, gutta percha, paper points, carbide and diamond burs through LTE with full batch traceability.',
+    logo: 'Brands/rogin.png',
+    solutionPath: '/brands/rogin-dental',
+    color: '#7e3af2',
+  },
+  {
+    slug: 'zogear',
+    name: 'Zogear Dental',
+    badge: 'Exclusive Distributor',
+    tagline: 'Dental disposable, ortho, material & rotary systems',
+    body: 'LTE distributes Zogear dental consumables exclusively across Bahrain. The portfolio covers dental disposables, endodontic systems, orthodontic accessories, dental materials, rotary instruments, and lab supplies for clinics and specialists.',
+    logo: 'Brands/Zogear.png',
+    solutionPath: '/brands/zogear',
+    color: '#0891b2',
+  },
+];
+
+const homepageFaqs = [
+  {
+    q: 'What is Leading Trading Est and where is it located?',
+    a: 'Leading Trading Est (LTE) is a certified medical wholesaler operating across the Kingdom of Bahrain. LTE supplies hospitals, clinics, dental centres, laboratories, and procurement teams nationwide from its Bahrain base.',
+  },
+  {
+    q: 'Is LTE an NHRA approved medical wholesaler in Bahrain?',
+    a: 'Yes. LTE holds NHRA approved and certified status, authorising wholesale distribution of medical consumables, surgical sutures, and medical devices to MOH-regulated Bahrain healthcare facilities.',
+  },
+  {
+    q: 'What is Medstar and who supplies it?',
+    a: 'Medstar is Leading Trading Est\'s proprietary wholesale consumable brand. LTE is the exclusive Bahrain source for Medstar disposables, PPE, and infection-control products — not available through retail or secondary channels.',
+  },
+  {
+    q: 'Who is the exclusive SMI Sutures distributor in Bahrain?',
+    a: 'Leading Trading Est (LTE) holds the exclusive Bahrain distribution licence for SMI AG surgical sutures. All SMI suture procurement — absorbable, non-absorbable, dental, and ophthalmic — is sourced through LTE.',
+  },
+  {
+    q: 'Who is the Romsons sole agent in Bahrain?',
+    a: 'LTE (Leading Trading Est) is the authorised Bahrain sole-agent for Romsons medical devices. All Romsons procurement — catheters, IV sets, urine bags, oxygen masks, neonatal care — is directed through LTE.',
+  },
+  {
+    q: 'How do procurement teams submit an RFQ to LTE?',
+    a: 'Buyers can submit requirements through the online contact form with product name, quantity, brand preference, and any RFQ spreadsheet attachment. The LTE sales team responds with pricing, availability, and NHRA-compliant documentation.',
+  },
+  {
+    q: 'Does LTE supply both medical and industrial products in Bahrain?',
+    a: 'Yes. LTE covers medical, dental, laboratory, PPE, safety, and industrial supply categories under one certified wholesale entity operating across Bahrain.',
+  },
+];
+
 const mainBrands = [
   { name: 'Medstar', logo: 'Brands/medstar.jpg', slug: 'medstar' },
   { name: 'Rogin Dental', logo: 'Brands/rogin.png', slug: 'rogin-dental' },
@@ -210,6 +297,8 @@ const HomePage = () => {
   useHomepageScroll(rootRef, true);
 
   const [featuredProducts, setFeaturedProducts] = useState([]);
+  const [openFaq, setOpenFaq] = useState(null);
+  const toggleFaq = useCallback((i) => setOpenFaq((prev) => (prev === i ? null : i)), []);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -226,8 +315,8 @@ const HomePage = () => {
   return (
     <main className="cinematic-home" ref={rootRef}>
       <Seo
-        title="Leading Trading Est | Bahrain Medical & Industrial Supplies"
-        description="LTE, legally Leading Trading Est, is a Bahrain medical business in Sitra handling B2B procurement, Medstar wholesale consumables, SMI Sutures exclusive Bahrain distributorship, and Romsons authorized regional supply support."
+        title="Leading Trading Est | Medical, Dental & Industrial Wholesale Bahrain"
+        description="Leading Trading Est (LTE) — Bahrain's certified wholesale partner for medical, dental, laboratory, PPE, and industrial supply. Exclusive distributor for Medstar, SMI Sutures, Rogin Dental, and Zogear across Bahrain."
         canonicalPath="/"
         keywords="LTE, Leading Trading Est, Leading Trading Est Bahrain, LTE Bahrain medical business, medical suppliers in Bahrain, Bahrain medical supplier, Leading Trading Est owner, Shahid Majeed, Medstar Bahrain, Medstar medical supplies, SMI Sutures Bahrain, ROMSONS Bahrain, medical distributors Bahrain, medical supplies Bahrain, dental supplies Bahrain, laboratory equipment Bahrain, industrial supplies Bahrain, safety supplies Bahrain, hospital supplies Bahrain, Bahrain procurement"
         structuredData={[
@@ -239,6 +328,8 @@ const HomePage = () => {
           medstarBrandSchema,
           smiSuturesBrandSchema,
           romsonsBrandSchema,
+          roginDentalBrandSchema,
+          zogearBrandSchema,
           buildFaqSchema([
             {
               question: 'What is the purpose of the Leading Trading Est website and app?',
@@ -310,7 +401,7 @@ const HomePage = () => {
                     <span className="home-hero__cert-dot" />
                     {t('NHRA Certified')}
                   </span>
-                  <span className="home-hero__since-cert-l">{t('National Health Regulatory Authority — Bahrain')}</span>
+                  <span className="home-hero__since-cert-l">{t('All products & portfolio lines — fully certified in Bahrain')}</span>
                 </div>
               </div>
               <div className="home-hero__portfolio animate-on-scroll">
@@ -346,6 +437,54 @@ const HomePage = () => {
           </div>
         </div>
       </div>
+
+      {/* ── Brand Authority Roster ── */}
+      <section className="home-brand-roster">
+        <div className="home-shell">
+          <div className="home-brand-roster__head">
+            <div className="home-brand-roster__head-left">
+              <span className="home-eyebrow">{t('Exclusive portfolio')}</span>
+              <h2>{t('Five brand lines. One wholesale entity.')}</h2>
+            </div>
+            <p className="home-brand-roster__head-note">{t('LTE and all distributed product lines are fully certified and approved across Bahrain.')}</p>
+          </div>
+
+          <div className="home-brand-roster__list">
+            {brandAuthority.map((brand, index) => (
+              <motion.div
+                key={brand.slug}
+                className="brand-roster-row"
+                initial={{ opacity: 0, x: -24 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, margin: '-40px' }}
+                transition={{ duration: 0.45, delay: index * 0.07, ease: [0.22, 1, 0.36, 1] }}
+              >
+                <div className="brand-roster-row__logo">
+                  <img src={`${baseUrl}${brand.logo}`} alt={brand.name} loading="lazy" decoding="async" width="120" height="50" />
+                </div>
+                <div className="brand-roster-row__meta">
+                  <span className="brand-roster-row__badge" style={{ '--rc': brand.color }}>{brand.badge}</span>
+                  <strong className="brand-roster-row__name">{brand.name}</strong>
+                </div>
+                <p className="brand-roster-row__desc">{t(brand.body)}</p>
+                <div className="brand-roster-row__actions">
+                  <Link to={brand.slug === 'lte-originals' ? '/brands' : `/brands/${brand.slug}`} className="brand-roster-row__cta">{t('Brand profile')} →</Link>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          <motion.div
+            className="home-brand-roster__foot"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4, delay: 0.45 }}
+          >
+            <Link className="home-btn home-btn--ghost" to="/brands">{t('View all brand profiles')} →</Link>
+          </motion.div>
+        </div>
+      </section>
 
       <section className="home-section business-model">
         <div className="home-shell">
@@ -590,6 +729,41 @@ const HomePage = () => {
                 <h3>{t(pillar.title)}</h3>
                 <p>{t(pillar.body)}</p>
               </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── FAQ Accordion ── */}
+      <section className="home-section home-faq">
+        <div className="home-shell">
+          <div className="home-faq__head animate-stagger" data-stagger-step="110ms">
+            <span className="home-eyebrow home-eyebrow--ink animate-on-scroll">{t('Common questions')}</span>
+            <h2 className="animate-on-scroll">{t('B2B procurement answers for Bahrain buyers.')}</h2>
+          </div>
+          <div className="home-faq__list animate-stagger" data-stagger-step="80ms">
+            {homepageFaqs.map((item, i) => (
+              <div key={i} className={`home-faq__item animate-on-scroll${openFaq === i ? ' home-faq__item--open' : ''}`}>
+                <button
+                  className="home-faq__q"
+                  onClick={() => toggleFaq(i)}
+                  aria-expanded={openFaq === i}
+                  aria-controls={`faq-answer-${i}`}
+                >
+                  <span>{t(item.q)}</span>
+                  <svg className="home-faq__chevron" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                    <path d="M5 7.5l5 5 5-5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </button>
+                <div
+                  id={`faq-answer-${i}`}
+                  className="home-faq__a"
+                  role="region"
+                  aria-hidden={openFaq !== i}
+                >
+                  <p>{t(item.a)}</p>
+                </div>
+              </div>
             ))}
           </div>
         </div>

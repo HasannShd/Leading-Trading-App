@@ -51,7 +51,7 @@ export const organizationSchema = {
   url: SITE_ORIGIN,
   logo: `${SITE_ORIGIN}/company-logo.png`,
   description:
-    'LTE, legally Leading Trading Est, is an NHRA approved and certified Bahrain medical business operating from Sitra. LTE manages B2B medical procurement, quotation workflows, and brand-led supply across its Medstar proprietary wholesale consumables portfolio, SMI Sutures exclusive licensed distributorship in Bahrain, and Romsons authorized regional supply partnership.',
+    'LTE (Leading Trading Est) is a certified medical wholesale business operating across the Kingdom of Bahrain. LTE manages B2B medical and dental procurement under one licensed entity: Medstar proprietary wholesale consumables, SMI Sutures exclusive licensed distributorship, Rogin Dental exclusive licensed distributorship, Zogear Dental exclusive distributorship, and Romsons authorised regional supply partnership.',
   founder: { '@id': `${SITE_ORIGIN}/#shahid-majeed` },
   employee: [shahidMajeedSchema],
   hasCredential: companyCertificationSchema,
@@ -81,6 +81,21 @@ export const organizationSchema = {
       description:
         'SMI Sutures is represented by LTE as the exclusive licensed distributor in Bahrain for surgical suture and wound-closure procurement.',
     },
+    {
+      '@id': `${SITE_ORIGIN}/brands/rogin-dental/#brand`,
+      '@type': 'Brand',
+      name: 'Rogin Dental',
+      description:
+        'Rogin Dental is distributed exclusively in Bahrain by LTE, covering endodontic files, rotary systems, burs, gutta percha, obturation, and dental consumables.',
+    },
+    {
+      '@id': `${SITE_ORIGIN}/brands/zogear/#brand`,
+      '@type': 'Brand',
+      name: 'Zogear',
+      alternateName: ['Zogear Dental'],
+      description:
+        'Zogear Dental consumables are distributed exclusively in Bahrain by LTE, covering dental disposables, endodontic systems, orthodontic accessories, rotary instruments, and lab supplies.',
+    },
   ],
   sameAs: [
     'https://www.instagram.com/leadingtradingest/',
@@ -101,8 +116,8 @@ export const organizationSchema = {
   knowsAbout: [
     'Leading Trading Est Bahrain',
     'LTE Bahrain medical wholesaler',
-    'LTE Sitra medical supply',
-    'LTE NHRA approved wholesaler',
+    'LTE Bahrain medical supply wholesale',
+    'LTE NHRA certified wholesaler Bahrain',
     'NHRA approved medical supplier Bahrain',
     'medical supplies Bahrain',
     'medical suppliers in Bahrain',
@@ -132,6 +147,12 @@ export const organizationSchema = {
     'healthcare procurement Bahrain',
     'bulk medical supply Bahrain',
     'wholesale medical consumables Bahrain',
+    'Rogin Dental Bahrain exclusive distributor',
+    'Rogin Dental endodontic files Bahrain',
+    'Zogear Dental Bahrain exclusive distributor',
+    'Zogear dental consumables Bahrain',
+    'dental supplies wholesale Bahrain',
+    'endodontic supplies Bahrain',
   ],
 };
 
@@ -172,7 +193,7 @@ export const warehousingWorldSchema = {
 
 export const localBusinessSchema = {
   '@context': 'https://schema.org',
-  '@type': ['LocalBusiness', 'MedicalBusiness'],
+  '@type': ['LocalBusiness', 'MedicalBusiness', 'Wholesaler'],
   '@id': `${SITE_ORIGIN}/#local-business`,
   name: 'LTE',
   alternateName: ['Leading Trading Est', 'LTE Bahrain'],
@@ -207,6 +228,8 @@ export const localBusinessSchema = {
     { '@id': `${SITE_ORIGIN}/brands/medstar/#brand` },
     { '@id': `${SITE_ORIGIN}/brands/smi/#brand` },
     { '@id': `${SITE_ORIGIN}/brands/romsons/#brand` },
+    { '@id': `${SITE_ORIGIN}/brands/rogin-dental/#brand` },
+    { '@id': `${SITE_ORIGIN}/brands/zogear/#brand` },
   ],
   priceRange: '$$',
   openingHoursSpecification: BUSINESS_HOURS.map((item) => ({
@@ -272,7 +295,34 @@ export const romsonsBrandSchema = {
   url: `${SITE_ORIGIN}/brands/romsons/`,
   logo: `${SITE_ORIGIN}/Brands/romsons.png`,
   description:
-    'Romsons is supplied by LTE as an authorized regional supply partner for Bahrain healthcare buyers seeking hospital care and disposable medical products.',
+    'Romsons is supplied by LTE as the authorised sole-agent for Bahrain, covering catheters, IV sets, urine bags, oxygen therapy, and neonatal care products.',
+  isBrandOf: { '@id': `${SITE_ORIGIN}/#local-business` },
+  distributor: { '@id': `${SITE_ORIGIN}/#organization` },
+};
+
+export const roginDentalBrandSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Brand',
+  '@id': `${SITE_ORIGIN}/brands/rogin-dental/#brand`,
+  name: 'Rogin Dental',
+  url: `${SITE_ORIGIN}/brands/rogin-dental/`,
+  logo: `${SITE_ORIGIN}/Brands/rogin.png`,
+  description:
+    'Rogin Dental is exclusively distributed in Bahrain by LTE. The portfolio covers endodontic files, reamers, rotary systems, gutta percha, paper points, burs, and dental consumables for clinics across Bahrain.',
+  isBrandOf: { '@id': `${SITE_ORIGIN}/#local-business` },
+  distributor: { '@id': `${SITE_ORIGIN}/#organization` },
+};
+
+export const zogearBrandSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Brand',
+  '@id': `${SITE_ORIGIN}/brands/zogear/#brand`,
+  name: 'Zogear',
+  alternateName: ['Zogear Dental'],
+  url: `${SITE_ORIGIN}/brands/zogear/`,
+  logo: `${SITE_ORIGIN}/Brands/Zogear.png`,
+  description:
+    'Zogear Dental consumables are exclusively distributed in Bahrain by LTE, covering dental disposables, endodontic systems, orthodontic accessories, dental materials, rotary instruments, and lab supplies.',
   isBrandOf: { '@id': `${SITE_ORIGIN}/#local-business` },
   distributor: { '@id': `${SITE_ORIGIN}/#organization` },
 };

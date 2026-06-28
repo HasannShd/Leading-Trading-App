@@ -1,6 +1,7 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { FiBookOpen, FiFileText } from 'react-icons/fi';
+import { FiBookOpen, FiFileText, FiFilter, FiX } from 'react-icons/fi';
 import Seo from '../Common/Seo';
 import StatePanel from '../Common/StatePanel';
 import {
@@ -22,6 +23,8 @@ const CatalogPage = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [activeCategory, setActiveCategory] = useState('all');
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -57,20 +60,40 @@ const CatalogPage = () => {
   }, [API_URL, t]);
 
   const topCategories = useMemo(
-    () => categories.filter((category) => !category.parent).slice(0, 12),
+    () => categories.filter((c) => !c.parent).slice(0, 12),
     [categories]
   );
 
   const groupedProducts = useMemo(() => {
     const groups = new Map();
     products.forEach((product) => {
-      const groupName = product.categorySlug?.parent?.name || product.categorySlug?.name || 'Catalog';
-      if (!groups.has(groupName)) groups.set(groupName, []);
-      groups.get(groupName).push(product);
+      const parentName = product.categorySlug?.parent?.name || product.categorySlug?.name || 'Catalog';
+      if (!groups.has(parentName)) groups.set(parentName, []);
+      groups.get(parentName).push(product);
     });
     return Array.from(groups.entries()).slice(0, 10);
   }, [products]);
 
+  const filteredGroups = useMemo(() => {
+    if (activeCategory === 'all') return groupedProducts;
+    return groupedProducts.filter(([group]) =>
+      group.toLowerCase().replace(/[^a-z0-9]+/g, '-') === activeCategory ||
+      group === activeCategory
+    );
+  }, [groupedProducts, activeCategory]);
+
+  const sidebarCategories = useMemo(() => {
+    const names = groupedProducts.map(([group]) => group);
+    return [{ key: 'all', label: t('All categories') }, ...names.map((n) => ({
+      key: n.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+      label: n,
+    }))];
+  }, [groupedProducts, t]);
+
+  const selectCategory = useCallback((key) => {
+    setActiveCategory(key);
+    setSidebarOpen(false);
+  }, []);
 
   return (
     <main className="catalog-page">
@@ -146,36 +169,128 @@ const CatalogPage = () => {
             </div>
           </section>
 
-          {/* ── Products ── */}
-          <section className="catalog-section">
+          {/* ── Products with sidebar ── */}
+          <section className="catalog-section catalog-section--products">
             <div className="catalog-section-head">
               <span className="catalog-eyebrow catalog-eyebrow--ink">{t('Representative products')}</span>
               <h2>{t('A product sample for fast procurement review.')}</h2>
             </div>
-            <div className="catalog-product-groups">
-              {groupedProducts.map(([group, items]) => (
-                <article key={group} className="catalog-product-group">
-                  <h3>{categoryName(group)}</h3>
-                  <div className="catalog-product-list">
-                    {items.slice(0, 8).map((product) => {
-                      const image = product.image || product.images?.[0] || '';
-                      return (
-                        <Link key={product._id} to={buildProductPath(product)} className="catalog-product-row">
-                          {image ? (
-                            <img src={normalizeImageSrc(image, { width: 180 })} alt={product.name} loading="lazy" decoding="async" />
-                          ) : (
-                            <span className="catalog-product-initial">{product.name?.[0] || 'P'}</span>
-                          )}
-                          <span>
-                            <strong>{product.name}</strong>
-                            <small>{product.categorySlug?.name || t('Catalog item')}</small>
-                          </span>
-                        </Link>
-                      );
-                    })}
-                  </div>
-                </article>
-              ))}
+
+            <div className="catalog-layout">
+              {/* Mobile filter toggle */}
+              <button
+                className="catalog-filter-toggle"
+                onClick={() => setSidebarOpen((v) => !v)}
+                aria-expanded={sidebarOpen}
+                aria-controls="catalog-sidebar"
+              >
+                {sidebarOpen ? <FiX aria-hidden="true" /> : <FiFilter aria-hidden="true" />}
+                {sidebarOpen ? t('Close filter') : t('Filter by category')}
+                {activeCategory !== 'all' && (
+                  <span className="catalog-filter-badge">1</span>
+                )}
+              </button>
+
+              {/* Sidebar */}
+              <aside
+                id="catalog-sidebar"
+                className={`catalog-sidebar${sidebarOpen ? ' catalog-sidebar--open' : ''}`}
+                aria-label={t('Category filter')}
+              >
+                <div className="catalog-sidebar__head">
+                  <span>{t('Filter')}</span>
+                  {activeCategory !== 'all' && (
+                    <button className="catalog-sidebar__clear" onClick={() => selectCategory('all')}>
+                      {t('Clear')}
+                    </button>
+                  )}
+                </div>
+                <ul className="catalog-sidebar__list" role="list">
+                  {sidebarCategories.map(({ key, label }) => (
+                    <li key={key}>
+                      <button
+                        className={`catalog-sidebar__item${activeCategory === key ? ' catalog-sidebar__item--active' : ''}`}
+                        onClick={() => selectCategory(key)}
+                        aria-current={activeCategory === key ? 'true' : undefined}
+                      >
+                        {categoryName(label)}
+                        {activeCategory === key && <span className="catalog-sidebar__tick" aria-hidden="true">✓</span>}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </aside>
+
+              {/* Product grid */}
+              <div className="catalog-main">
+                {filteredGroups.length === 0 ? (
+                  <StatePanel
+                    eyebrow={t('No results')}
+                    title={t('No products in this category')}
+                    description={t('Select a different category or reset the filter.')}
+                  />
+                ) : (
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={activeCategory}
+                      className="catalog-product-matrix"
+                      initial={{ opacity: 0, y: 16 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                    >
+                    {filteredGroups.map(([group, items]) => (
+                      <article key={group} className="catalog-product-group">
+                        <h3>{categoryName(group)}</h3>
+                        <div className="catalog-product-grid-inner">
+                          {items.slice(0, 8).map((product, pIdx) => {
+                            const image = product.image || product.images?.[0] || '';
+                            return (
+                              <motion.div
+                                key={product._id}
+                                initial={{ opacity: 0, scale: 0.94 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                transition={{ duration: 0.28, delay: pIdx * 0.04, ease: 'easeOut' }}
+                                whileHover={{ y: -4, boxShadow: '0 12px 32px rgba(15,28,46,0.12)' }}
+                              >
+                                <Link to={buildProductPath(product)} className="catalog-product-card">
+                                  <div className="catalog-product-card__media">
+                                    {image ? (
+                                      <img
+                                        src={normalizeImageSrc(image, { width: 200 })}
+                                        alt={product.name}
+                                        width="200"
+                                        height="200"
+                                        loading="lazy"
+                                        decoding="async"
+                                      />
+                                    ) : (
+                                      <span className="catalog-product-card__initial">{product.name?.[0] || 'P'}</span>
+                                    )}
+                                  </div>
+                                  <div className="catalog-product-card__body">
+                                    <strong>{product.name}</strong>
+                                    {product.sku && <code className="catalog-product-card__sku">{product.sku}</code>}
+                                    <small>{product.categorySlug?.name || t('Catalog item')}</small>
+                                  </div>
+                                  <Link
+                                    to={`/contact?source=catalog&product=${product._id}&productName=${encodeURIComponent(product.name)}`}
+                                    className="catalog-product-card__rfq"
+                                    onClick={(e) => e.stopPropagation()}
+                                  >
+                                    {t('Add to RFQ')} +
+                                  </Link>
+                                </Link>
+                              </motion.div>
+                            );
+                          })}
+                        </div>
+                      </article>
+                    ))}
+                    </motion.div>
+                  </AnimatePresence>
+                )}
+              </div>
             </div>
           </section>
         </>

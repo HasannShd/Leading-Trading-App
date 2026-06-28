@@ -1332,23 +1332,23 @@ export const seoLandingPages = [
     title: 'Leading Trading Est -- NHRA Approved Medical Wholesaler Bahrain',
     shortTitle: 'LTE NHRA wholesaler',
     description:
-      'Leading Trading Est (LTE) is an NHRA approved and certified medical wholesaler in Bahrain, operating from Sitra and supplying hospitals, clinics, and procurement teams with Medstar consumables, SMI Sutures, and Romsons medical devices.',
+      'Leading Trading Est (LTE) is a certified medical wholesaler in Bahrain, supplying hospitals, clinics, and procurement teams with Medstar consumables, SMI Sutures, Rogin Dental, Zogear Dental, and Romsons medical devices.',
     keywords:
-      'Leading Trading Est Bahrain, LTE Bahrain, LTE Sitra medical supply, LTE NHRA approved wholesaler, NHRA approved medical supplier Bahrain, Leading Trading Est NHRA, medical wholesaler Bahrain, LTE medical distributor Bahrain, Medstar LTE, SMI Sutures LTE, Romsons LTE',
+      'Leading Trading Est Bahrain, LTE Bahrain, LTE medical wholesale Bahrain, LTE NHRA approved wholesaler, NHRA approved medical supplier Bahrain, Leading Trading Est NHRA, medical wholesaler Bahrain, LTE medical distributor Bahrain, Medstar LTE, SMI Sutures LTE, Romsons LTE',
     categoryPath: '/categories/medical-equipment',
     categoryLabel: 'Medical Equipment',
     shopQuery: 'medical supplies',
-    buyerTerms: ['Leading Trading Est Bahrain', 'LTE Sitra medical supply', 'NHRA approved wholesaler', 'LTE multi-brand portfolio'],
+    buyerTerms: ['Leading Trading Est Bahrain', 'LTE medical wholesale Bahrain', 'NHRA approved wholesaler', 'LTE multi-brand portfolio'],
     sections: [
       {
         title: 'Leading Trading Est -- licensed and NHRA certified in Bahrain',
         body:
-          'Leading Trading Est (LTE) holds NHRA approved and certified status for medical wholesale distribution in the Kingdom of Bahrain. Operating from Sitra Industrial Area, LTE serves hospitals, government health facilities, private clinics, and corporate procurement teams as a single-source licensed channel for medical consumables, surgical sutures, and disposable medical devices.',
+          'Leading Trading Est (LTE) holds NHRA approved and certified status for medical wholesale distribution across the Kingdom of Bahrain. LTE serves hospitals, government health facilities, private clinics, and corporate procurement teams as a single-source licensed channel for medical consumables, surgical sutures, and disposable medical devices.',
       },
       {
-        title: 'LTE Sitra: Bahrain\'s structured medical supply hub',
+        title: 'LTE: Bahrain\'s structured medical supply hub',
         body:
-          'LTE Sitra medical supply operations cover bulk order fulfillment, NHRA-compliant documentation, product traceability, and verified batch records across all distributed brands. Procurement officers sourcing high-volume repeat supply or tender quantities transact through Leading Trading Est as the authorised Bahrain wholesale channel.',
+          'LTE medical supply operations cover bulk order fulfillment, compliant documentation, product traceability, and verified batch records across all distributed brands. Procurement officers sourcing high-volume repeat supply or tender quantities transact through Leading Trading Est as the authorised Bahrain wholesale channel.',
       },
       {
         title: 'Multi-brand portfolio under one licensed entity',
@@ -1368,7 +1368,7 @@ export const seoLandingPages = [
           'Yes. Leading Trading Est holds NHRA approved and certified status, authorizing LTE to wholesale medical consumables, surgical sutures, and medical devices to Bahrain healthcare facilities.',
       },
       {
-        question: 'Where is LTE Sitra medical supply located?',
+        question: 'Where is Leading Trading Est located in Bahrain?',
         answer:
           'Leading Trading Est operates from Office 109, Building 658, Road 16, Block 616, Warehousing World, Um Al-Baidh, Sitra, Bahrain.',
       },
