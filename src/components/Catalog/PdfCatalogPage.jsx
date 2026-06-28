@@ -37,7 +37,7 @@ const catalogueBrands = [
 ];
 
 const contactRows = [
-  ['Phone', '+973 17210665'],
+  ['Phone', '+973 39939582 / +973 33708928'],
   ['WhatsApp', '+973 17210665'],
   ['Email', 'admin@lte-bh.com'],
   ['Website', 'www.lte-bh.com'],
@@ -305,7 +305,7 @@ const PdfCatalogPage = () => {
         </div>
         <div className="pdf-cover-meta">
           <span>Bahrain-based procurement and quotation support</span>
-          <span>www.lte-bh.com · admin@lte-bh.com · +973 17210665</span>
+          <span>www.lte-bh.com · admin@lte-bh.com · +973 39939582 / +973 33708928</span>
         </div>
       </section>
 
@@ -392,7 +392,7 @@ const PdfCatalogPage = () => {
         </div>
         <div className="pdf-profile-contact-strip">
           <span>admin@lte-bh.com</span>
-          <span>+973 17210665</span>
+          <span>+973 39939582 / +973 33708928</span>
           <span>www.lte-bh.com</span>
           <span>Warehousing World, Sitra, Bahrain</span>
         </div>

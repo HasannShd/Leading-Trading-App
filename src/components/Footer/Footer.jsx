@@ -44,7 +44,8 @@ const Footer = () => {
             <div className="footer-info-group">
               <p className="footer-info-label">{t('Contact')}</p>
               <a href="mailto:admin@lte-bh.com">admin@lte-bh.com</a>
-              <a href="tel:+97317210665">+973 1721 0665</a>
+              <a href="tel:+97339939582">+973 3993 9582</a>
+              <a href="tel:+97333708928">+973 3370 8928</a>
               <a href="https://wa.me/97317210665" target="_blank" rel="noopener noreferrer">{t('WhatsApp')}</a>
             </div>
             <div className="footer-info-group">

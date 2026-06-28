@@ -20,7 +20,7 @@ const MobileActionBar = () => {
 
   return (
     <nav className="mobile-action-bar" aria-label="Quick actions">
-      <a href="tel:+97317210665">
+      <a href="tel:+97339939582" aria-label="Call LTE">
         <FiPhone aria-hidden="true" />
         <span>{t('Call')}</span>
       </a>

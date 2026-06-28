@@ -582,7 +582,8 @@ const ContactPage = () => {
         )}
         <div className="contact-info-details">
           <div className="contact-info-title">{t('Get in touch')}</div>
-          <div><a href="tel:+97339939582">+97339939582</a></div>
+          <div><a href="tel:+97339939582">+973 3993 9582</a></div>
+          <div><a href="tel:+97333708928">+973 3370 8928</a></div>
           <div><a href="mailto:admin@lte-bh.com">admin@lte-bh.com</a></div>
           <div className="contact-info-socials">
             <a href="https://www.instagram.com/leadingtradingest/" target="_blank" rel="noopener noreferrer">Instagram</a> &nbsp;

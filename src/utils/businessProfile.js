@@ -16,6 +16,8 @@ export const businessAddress = {
 
 export const businessContact = {
   telephone: '+97339939582',
+  telephone2: '+97333708928',
+  whatsapp: '+97317210665',
   email: 'admin@lte-bh.com',
 };
 
