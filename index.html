@@ -5,6 +5,7 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
     <link rel="apple-touch-icon" href="/company-logo.png" />
     <link rel="manifest" href="/site.webmanifest" />
+    <link rel="preload" as="image" href="/company-logo.png" fetchpriority="high" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
@@ -53,11 +54,11 @@
     <title>Leading Trading Est | Bahrain Medical & Industrial Supplies</title>
     <meta
       name="description"
-      content="Leading Trading Est is an NHRA approved and certified Bahrain supplier for medical, dental, laboratory, PPE, safety, and industrial supply enquiries, quotation support, and procurement coordination."
+      content="LTE, legally Leading Trading Est, is a Bahrain medical business in Sitra handling B2B procurement, Medstar wholesale consumables, SMI Sutures exclusive Bahrain distributorship, and Romsons authorized regional supply support."
     />
     <meta
       name="keywords"
-      content="Leading Trading Est, Shahid Majeed, Leading Trading Est owner, Leading Trading Est CEO, LTE Bahrain, Medstar Bahrain, Medstar medical supplies, Bahrain medical supplies, Bahrain dental supplies, medical gloves Bahrain, nitrile gloves Bahrain, latex gloves Bahrain, examination gloves Bahrain, PPE supplier Bahrain, laboratory equipment Bahrain, surgical instruments Bahrain, disposable medical supplies Bahrain, industrial safety supplies Bahrain, healthcare procurement Bahrain"
+      content="LTE, Leading Trading Est, Leading Trading Est Bahrain, LTE Bahrain medical business, medical suppliers in Bahrain, Bahrain medical supplier, Leading Trading Est owner, Shahid Majeed, Medstar Bahrain, Medstar medical supplies, SMI Sutures Bahrain, ROMSONS Bahrain, medical distributors Bahrain, medical supplies Bahrain, dental supplies Bahrain, laboratory equipment Bahrain, industrial supplies Bahrain, safety supplies Bahrain, hospital supplies Bahrain, Bahrain procurement"
     />
     <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1" />
     <meta name="googlebot" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1" />
@@ -71,7 +72,7 @@
     <meta property="og:title" content="Leading Trading Est | Bahrain Medical & Industrial Supplies" />
     <meta
       property="og:description"
-      content="Leading Trading Est is an NHRA approved and certified Bahrain supplier for medical, dental, laboratory, PPE, safety, and industrial supply enquiries, quotation support, and procurement coordination."
+      content="LTE, legally Leading Trading Est, is a Bahrain medical business in Sitra handling B2B procurement, Medstar wholesale consumables, SMI Sutures exclusive Bahrain distributorship, and Romsons authorized regional supply support."
     />
     <meta property="og:url" content="https://www.lte-bh.com/" />
     <meta property="og:image" content="https://www.lte-bh.com/company-logo.png" />
@@ -80,7 +81,7 @@
     <meta name="twitter:title" content="Leading Trading Est | Bahrain Medical & Industrial Supplies" />
     <meta
       name="twitter:description"
-      content="Leading Trading Est is an NHRA approved and certified Bahrain supplier for medical, dental, laboratory, PPE, safety, and industrial supply enquiries, quotation support, and procurement coordination."
+      content="LTE, legally Leading Trading Est, is a Bahrain medical business in Sitra handling B2B procurement, Medstar wholesale consumables, SMI Sutures exclusive Bahrain distributorship, and Romsons authorized regional supply support."
     />
     <meta name="twitter:image" content="https://www.lte-bh.com/company-logo.png" />
     <script type="application/ld+json">
@@ -89,11 +90,12 @@
           "@context": "https://schema.org",
           "@type": "Organization",
           "@id": "https://www.lte-bh.com/#organization",
-          "name": "Leading Trading Est",
-          "alternateName": ["LTE Bahrain", "Leading Trading Establishment"],
+          "name": "LTE",
+          "legalName": "Leading Trading Est",
+          "alternateName": ["Leading Trading Est", "LTE Bahrain", "Leading Trading Establishment"],
           "url": "https://www.lte-bh.com",
           "logo": "https://www.lte-bh.com/company-logo.png",
-          "description": "Leading Trading Est is an NHRA approved and certified Bahrain medical, dental, laboratory, safety, and industrial supplier led by Shahid Majeed. The company provides structured sourcing, quotation support, Medstar own-brand supply, and local service.",
+          "description": "LTE, legally Leading Trading Est, is an NHRA approved and certified Bahrain medical business operating from Sitra. LTE manages B2B medical procurement, quotation workflows, and brand-led supply across its Medstar proprietary wholesale consumables portfolio, SMI Sutures exclusive licensed distributorship in Bahrain, and Romsons authorized regional supply partnership.",
           "founder": { "@id": "https://www.lte-bh.com/#shahid-majeed" },
           "employee": [
             {
@@ -115,11 +117,29 @@
             "https://www.linkedin.com/company/leading-trading-est/"
           ],
           "foundingDate": "2012",
-          "brand": {
-            "@type": "Brand",
-            "name": "Medstar",
-            "description": "Medstar is Leading Trading Est's own medical supply brand, developed around practical quality, repeat healthcare procurement, and dependable local support."
-          },
+          "owns": [{ "@id": "https://www.lte-bh.com/brands/medstar/#brand" }],
+          "brand": [
+            {
+              "@id": "https://www.lte-bh.com/brands/medstar/#brand",
+              "@type": "Brand",
+              "name": "Medstar",
+              "description": "Medstar is LTE's proprietary wholesale consumables brand for recurring healthcare procurement and local Bahrain supply accountability."
+            },
+            {
+              "@id": "https://www.lte-bh.com/brands/smi/#brand",
+              "@type": "Brand",
+              "name": "SMI Sutures",
+              "alternateName": ["SMI", "SMI AG"],
+              "description": "SMI Sutures is represented by LTE as the exclusive licensed distributor in Bahrain for surgical suture and wound-closure procurement."
+            },
+            {
+              "@id": "https://www.lte-bh.com/brands/romsons/#brand",
+              "@type": "Brand",
+              "name": "Romsons",
+              "alternateName": ["ROMSONS"],
+              "description": "Romsons is supplied by LTE as an authorized regional supply partner for Bahrain healthcare buyers seeking hospital care and disposable medical products."
+            }
+          ],
           "areaServed": [{ "@type": "Country", "name": "Bahrain" }],
           "department": [
             { "@type": "Organization", "name": "Sales Department" },
@@ -145,11 +165,13 @@
           "@context": "https://schema.org",
           "@type": ["LocalBusiness", "MedicalBusiness"],
           "@id": "https://www.lte-bh.com/#local-business",
-          "name": "Leading Trading Est",
+          "name": "LTE",
+          "alternateName": ["Leading Trading Est", "LTE Bahrain"],
           "url": "https://www.lte-bh.com",
           "image": "https://www.lte-bh.com/company-logo.png",
           "logo": "https://www.lte-bh.com/company-logo.png",
-          "description": "Leading Trading Est is led by Shahid Majeed and operates as an NHRA approved and certified Bahrain supplier for medical, dental, laboratory, safety, and industrial supply.",
+          "description": "LTE, legally Leading Trading Est, is an NHRA approved and certified Bahrain medical business operating from Sitra. LTE manages B2B medical procurement, quotation workflows, and brand-led supply across its Medstar proprietary wholesale consumables portfolio, SMI Sutures exclusive licensed distributorship in Bahrain, and Romsons authorized regional supply partnership.",
+          "parentOrganization": { "@id": "https://www.lte-bh.com/#organization" },
           "founder": { "@id": "https://www.lte-bh.com/#shahid-majeed" },
           "hasCredential": {
             "@type": "Certification",
@@ -177,6 +199,11 @@
             "addressRegion": "Capital Governorate"
           },
           "areaServed": { "@type": "Country", "name": "Bahrain" },
+          "brand": [
+            { "@id": "https://www.lte-bh.com/brands/medstar/#brand" },
+            { "@id": "https://www.lte-bh.com/brands/smi/#brand" },
+            { "@id": "https://www.lte-bh.com/brands/romsons/#brand" }
+          ],
           "priceRange": "$$",
           "openingHoursSpecification": [
             {
@@ -186,6 +213,41 @@
               "closes": "16:00"
             }
           ]
+        },
+        {
+          "@context": "https://schema.org",
+          "@type": "Brand",
+          "@id": "https://www.lte-bh.com/brands/medstar/#brand",
+          "name": "Medstar",
+          "url": "https://www.lte-bh.com/brands/medstar/",
+          "logo": "https://www.lte-bh.com/Brands/medstar.jpg",
+          "description": "Medstar is LTE's proprietary wholesale consumables brand for routine healthcare procurement and repeat B2B medical supply demand in Bahrain.",
+          "isBrandOf": { "@id": "https://www.lte-bh.com/#local-business" },
+          "owner": { "@id": "https://www.lte-bh.com/#organization" }
+        },
+        {
+          "@context": "https://schema.org",
+          "@type": "Brand",
+          "@id": "https://www.lte-bh.com/brands/smi/#brand",
+          "name": "SMI Sutures",
+          "alternateName": ["SMI", "SMI AG"],
+          "url": "https://www.lte-bh.com/brands/smi/",
+          "logo": "https://www.lte-bh.com/Brands/Smi.png",
+          "description": "SMI Sutures is represented by LTE as the exclusive licensed distributor in Bahrain for surgical suture and wound-closure procurement.",
+          "isBrandOf": { "@id": "https://www.lte-bh.com/#local-business" },
+          "distributor": { "@id": "https://www.lte-bh.com/#organization" }
+        },
+        {
+          "@context": "https://schema.org",
+          "@type": "Brand",
+          "@id": "https://www.lte-bh.com/brands/romsons/#brand",
+          "name": "Romsons",
+          "alternateName": ["ROMSONS"],
+          "url": "https://www.lte-bh.com/brands/romsons/",
+          "logo": "https://www.lte-bh.com/Brands/romsons.png",
+          "description": "Romsons is supplied by LTE as an authorized regional supply partner for Bahrain healthcare buyers seeking hospital care and disposable medical products.",
+          "isBrandOf": { "@id": "https://www.lte-bh.com/#local-business" },
+          "distributor": { "@id": "https://www.lte-bh.com/#organization" }
         },
         {
           "@context": "https://schema.org",
@@ -222,13 +284,13 @@
       <main data-seo-fallback>
         <h1>Leading Trading Est</h1>
         <p>
-          Leading Trading Est is an NHRA approved and certified Bahrain supplier supporting medical, dental, laboratory, PPE, safety, and industrial supply enquiries with quotation support and procurement coordination.
+          LTE, legally Leading Trading Est, is a Bahrain medical business in Sitra handling B2B procurement, Medstar wholesale consumables, SMI Sutures exclusive Bahrain distributorship, and Romsons authorized regional supply support.
         </p>
         <p>
           Purpose: Leading Trading Est is the official business website and operations app for Bahrain supply enquiries and authorized staff workflows. It helps buyers browse products and request quotations while staff and admins manage catalog workflows, orders, clients, attendance, messages, notifications, and Google Drive backup operations.
         </p>
         <p>
-          LTE provides Medstar own-brand supply, ROMSONS and SMI sole-agent support in Bahrain, international supplier access, quotation handling, product sourcing, local delivery coordination, and repeat procurement support.
+          LTE provides Medstar owned-brand supply, SMI Sutures exclusive licensed Bahrain distribution, Romsons authorized regional supply support, international supplier access, quotation handling, product sourcing, local delivery coordination, and repeat procurement support.
         </p>
         <p>
           Buyers can browse medical equipment, diagnostic devices, laboratory supplies, dental products, PPE gloves, face masks, sutures, sterile surgical consumables, wound dressings, surgical instruments, and industrial safety categories.

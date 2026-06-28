@@ -927,7 +927,7 @@ export const seoLandingPages = [
       {
         title: 'The same procurement discipline as healthcare',
         body:
-          'LTE applies the same structured approach to industrial supply that it uses for healthcare procurement — supplier assessment, availability review, specification matching, and coordinated delivery — so operational buyers get dependable follow-through rather than fragmented vendor management.',
+          'LTE applies the same structured approach to industrial supply that it uses for healthcare procurement -- supplier assessment, availability review, specification matching, and coordinated delivery -- so operational buyers get dependable follow-through rather than fragmented vendor management.',
       },
       {
         title: 'PPE and safety consumables for high-demand environments',
@@ -1101,7 +1101,7 @@ export const seoLandingPages = [
       {
         title: 'Disposable consumables support daily clinical workflow',
         body:
-          'Routine disposables — examination gloves, face masks, syringes, swabs, dressings, tapes, and related items — sit at the heart of clinical supply continuity. LTE supports Bahrain buyers with catalog visibility and quotation follow-up for both one-time and repeat requirements.',
+          'Routine disposables -- examination gloves, face masks, syringes, swabs, dressings, tapes, and related items -- sit at the heart of clinical supply continuity. LTE supports Bahrain buyers with catalog visibility and quotation follow-up for both one-time and repeat requirements.',
       },
       {
         title: 'Organized for mixed procurement lists',
@@ -1183,7 +1183,7 @@ export const seoLandingPages = [
     title: 'Beauty Care Supplies Bahrain',
     shortTitle: 'Beauty care supplies',
     description:
-      'Beauty salon, beauty clinic, and aesthetic care supply sourcing in Bahrain — disposable consumables, PPE, skin-prep items, and salon-grade tools from the LTE medical and clinical catalog.',
+      'Beauty salon, beauty clinic, and aesthetic care supply sourcing in Bahrain -- disposable consumables, PPE, skin-prep items, and salon-grade tools from the LTE medical and clinical catalog.',
     keywords:
       'beauty supplies Bahrain, beauty salon supplies Bahrain, beauty care products Bahrain, salon consumables Bahrain, beauty clinic supplies Bahrain, aesthetic care supplies Bahrain, nail salon supplies Bahrain',
     categoryPath: '/categories/consumables-disposables',
@@ -1194,7 +1194,7 @@ export const seoLandingPages = [
       {
         title: 'Clinical-grade consumables for beauty and salon use',
         body:
-          'Beauty salons, nail studios, aesthetic clinics, and spa facilities share many of the same consumable needs as clinical environments — disposable gloves, protective masks, cotton, skin-prep items, razors, and hygiene supplies. LTE stocks clinic-grade versions of these products for buyers who need consistent quality and repeat availability.',
+          'Beauty salons, nail studios, aesthetic clinics, and spa facilities share many of the same consumable needs as clinical environments -- disposable gloves, protective masks, cotton, skin-prep items, razors, and hygiene supplies. LTE stocks clinic-grade versions of these products for buyers who need consistent quality and repeat availability.',
       },
       {
         title: 'PPE and hygiene items for client-facing environments',
@@ -1325,6 +1325,258 @@ export const seoLandingPages = [
         answer:
           'Yes. Buyers can request quotations for sterile procedure packs, surgical gowns, surgeon caps, sterile gloves, and related OT consumables.',
       },
+    ],
+  },
+  {
+    slug: 'lte-nhra-approved-wholesaler-bahrain',
+    title: 'Leading Trading Est -- NHRA Approved Medical Wholesaler Bahrain',
+    shortTitle: 'LTE NHRA wholesaler',
+    description:
+      'Leading Trading Est (LTE) is an NHRA approved and certified medical wholesaler in Bahrain, operating from Sitra and supplying hospitals, clinics, and procurement teams with Medstar consumables, SMI Sutures, and Romsons medical devices.',
+    keywords:
+      'Leading Trading Est Bahrain, LTE Bahrain, LTE Sitra medical supply, LTE NHRA approved wholesaler, NHRA approved medical supplier Bahrain, Leading Trading Est NHRA, medical wholesaler Bahrain, LTE medical distributor Bahrain, Medstar LTE, SMI Sutures LTE, Romsons LTE',
+    categoryPath: '/categories/medical-equipment',
+    categoryLabel: 'Medical Equipment',
+    shopQuery: 'medical supplies',
+    buyerTerms: ['Leading Trading Est Bahrain', 'LTE Sitra medical supply', 'NHRA approved wholesaler', 'LTE multi-brand portfolio'],
+    sections: [
+      {
+        title: 'Leading Trading Est -- licensed and NHRA certified in Bahrain',
+        body:
+          'Leading Trading Est (LTE) holds NHRA approved and certified status for medical wholesale distribution in the Kingdom of Bahrain. Operating from Sitra Industrial Area, LTE serves hospitals, government health facilities, private clinics, and corporate procurement teams as a single-source licensed channel for medical consumables, surgical sutures, and disposable medical devices.',
+      },
+      {
+        title: 'LTE Sitra: Bahrain\'s structured medical supply hub',
+        body:
+          'LTE Sitra medical supply operations cover bulk order fulfillment, NHRA-compliant documentation, product traceability, and verified batch records across all distributed brands. Procurement officers sourcing high-volume repeat supply or tender quantities transact through Leading Trading Est as the authorised Bahrain wholesale channel.',
+      },
+      {
+        title: 'Multi-brand portfolio under one licensed entity',
+        body:
+          'LTE (Leading Trading Est) distributes three primary brand lines from a single NHRA-approved wholesale entity: Medstar proprietary consumables, SMI Sutures (exclusive licensed distributor), and Romsons medical devices (sole-agent Bahrain). Buyers receive consistent documentation, regulatory clearance, and commercial follow-up for all three lines through one LTE account.',
+      },
+      {
+        title: 'NHRA documentation and compliance on all orders',
+        body:
+          'Every product supplied through Leading Trading Est Bahrain carries NHRA import clearance, manufacturer batch documentation, and shelf-life traceability. Procurement departments requiring MOH-compliant vendor registration can request LTE\'s NHRA certification, trade license, and product approval records through the standard quotation workflow.',
+      },
+    ],
+    faqs: [
+      {
+        question: 'Is Leading Trading Est NHRA approved in Bahrain?',
+        answer:
+          'Yes. Leading Trading Est holds NHRA approved and certified status, authorizing LTE to wholesale medical consumables, surgical sutures, and medical devices to Bahrain healthcare facilities.',
+      },
+      {
+        question: 'Where is LTE Sitra medical supply located?',
+        answer:
+          'Leading Trading Est operates from Office 109, Building 658, Road 16, Block 616, Warehousing World, Um Al-Baidh, Sitra, Bahrain.',
+      },
+      {
+        question: 'What brands does Leading Trading Est distribute in Bahrain?',
+        answer:
+          'LTE distributes Medstar (own brand consumables), SMI Sutures (exclusive licensed distributor), and Romsons medical devices (sole-agent Bahrain) under one NHRA-approved wholesale entity.',
+      },
+      {
+        question: 'How do procurement teams register with LTE as a vendor?',
+        answer:
+          'Contact Leading Trading Est through the online quotation form or by phone. LTE can provide NHRA certification, trade license, and approved vendor documentation required for institutional procurement registration in Bahrain.',
+      },
+    ],
+    catalogPicksTitle: 'Key LTE supply categories',
+    catalogPicks: [
+      { name: 'Medstar Consumables', category: 'LTE own brand', useCase: 'Proprietary wholesale consumables supplied directly by Leading Trading Est.', query: 'medstar' },
+      { name: 'Surgical Sutures', category: 'SMI licensed supply', useCase: 'SMI Sutures through LTE exclusive licensed distributor channel in Bahrain.', query: 'sutures' },
+      { name: 'Romsons Devices', category: 'Sole-agent Bahrain', useCase: 'Romsons medical devices bulk sourcing through LTE sole-agent Bahrain.', query: 'romsons' },
+    ],
+  },
+  {
+    slug: 'medstar-wholesale-consumables-bahrain',
+    title: 'Medstar Brand Wholesale Consumables Bahrain -- LTE',
+    shortTitle: 'Medstar consumables',
+    description:
+      'Medstar brand proprietary wholesale consumables by LTE. Leading Trading Est is the exclusive source for Medstar medical consumables in Bahrain, supplying hospitals, clinics, and procurement teams with NHRA-compliant disposables, PPE, and infection-control products.',
+    keywords:
+      'Medstar Bahrain, Medstar brand proprietary wholesale consumables by LTE, Medstar medical supplies Bahrain, Medstar consumables wholesale Bahrain, Medstar supplier Bahrain, Leading Trading Est Medstar, Medstar PPE Bahrain, Medstar gloves Bahrain, Medstar distributor Bahrain',
+    categoryPath: '/categories/consumables-disposables',
+    categoryLabel: 'Consumables & Disposables',
+    shopQuery: 'medstar',
+    buyerTerms: ['Medstar consumables Bahrain', 'Medstar wholesale by LTE', 'Medstar proprietary brand', 'NHRA compliant consumables'],
+    sections: [
+      {
+        title: 'Medstar: LTE\'s proprietary wholesale consumable brand',
+        body:
+          'Medstar brand proprietary wholesale consumables are developed, sourced, and distributed exclusively by Leading Trading Est (LTE) in Bahrain. Clinics and hospitals searching for Medstar consumables purchase through LTE as the single authorised channel -- not retail pharmacies, not third-party resellers. Bulk pricing, MOH-compliant labelling, and verified Medstar batch documentation are supplied with every order.',
+      },
+      {
+        title: 'Medstar product range for Bahrain healthcare buyers',
+        body:
+          'The Medstar wholesale catalogue through LTE covers disposable gloves (nitrile, vinyl, latex), syringes and needles, IV sets and infusion accessories, wound care consumables, surgical drapes and gowns, face masks, infection-control products, and general medical disposables suited to high-rotation healthcare procurement.',
+      },
+      {
+        title: 'Why Medstar through LTE outperforms secondary channels',
+        body:
+          'Buyers sourcing Medstar consumables directly through Leading Trading Est Bahrain receive product that is traceable to the original batch, accompanied by full NHRA import documentation, and priced for institutional wholesale volumes. Secondary market product lacks LTE-issued traceability and NHRA clearance documentation.',
+      },
+      {
+        title: 'Procurement continuity for repeat Medstar orders',
+        body:
+          'LTE maintains Medstar inventory in Sitra to support repeat procurement cycles for hospitals and clinics operating on consumption-based ordering. Standing purchase agreements, RFQ response, and scheduled delivery coordination are handled by the LTE sales and accounts team directly.',
+      },
+    ],
+    faqs: [
+      {
+        question: 'What is Medstar and who supplies it in Bahrain?',
+        answer:
+          'Medstar is Leading Trading Est\'s proprietary wholesale consumable brand. LTE is the exclusive source for Medstar medical consumables in Bahrain.',
+      },
+      {
+        question: 'Are Medstar consumables NHRA approved?',
+        answer:
+          'Yes. Medstar consumables supplied through LTE carry full NHRA import clearance, batch documentation, and MOH-compliant labelling for Bahrain healthcare procurement.',
+      },
+      {
+        question: 'Can clinics buy Medstar directly from retail?',
+        answer:
+          'Medstar brand proprietary wholesale consumables are supplied exclusively by LTE (Leading Trading Est). Institutional buyers and clinics should transact through Leading Trading Est for verified product and correct documentation.',
+      },
+      {
+        question: 'What Medstar consumables does LTE stock?',
+        answer:
+          'LTE stocks Medstar gloves, syringes, IV sets, wound care, surgical drapes, face masks, and infection-control disposables for bulk wholesale supply to Bahrain healthcare facilities.',
+      },
+    ],
+    catalogPicksTitle: 'Medstar consumable categories via LTE',
+    catalogPicks: [
+      { name: 'Medstar Gloves', category: 'Disposables', useCase: 'Nitrile, vinyl, and latex examination gloves in bulk wholesale volumes.', query: 'medstar gloves' },
+      { name: 'Medstar Syringes & IV Sets', category: 'Infusion consumables', useCase: 'Disposable syringes, needles, and IV administration sets in hospital volumes.', query: 'medstar syringes' },
+      { name: 'Medstar Wound Care', category: 'Sterile consumables', useCase: 'Wound dressings, gauze, and infection-control consumables for daily clinical use.', query: 'medstar wound care' },
+    ],
+  },
+  {
+    slug: 'smi-sutures-distributor-bahrain',
+    title: 'SMI Sutures Exclusive Licensed Distributor Bahrain -- LTE',
+    shortTitle: 'SMI Sutures Bahrain',
+    description:
+      'SMI Sutures exclusive licensed distributor Bahrain LTE. Leading Trading Est is the sole licensed channel for SMI surgical sutures in Bahrain, supplying absorbable, non-absorbable, dental, and ophthalmic sutures to MOH-registered facilities.',
+    keywords:
+      'SMI Sutures Bahrain, SMI Sutures exclusive licensed distributor Bahrain LTE, SMI sutures distributor Bahrain, SMI surgical sutures Bahrain, Leading Trading Est SMI, SMI sole agent Bahrain, absorbable sutures Bahrain, non-absorbable sutures Bahrain, surgical sutures Bahrain',
+    categoryPath: '/categories/sutures',
+    categoryLabel: 'Sutures',
+    shopQuery: 'sutures smi',
+    buyerTerms: ['SMI Sutures exclusive distributor', 'Licensed suture channel Bahrain', 'SMI absorbable sutures LTE', 'SMI dental ophthalmic sutures'],
+    sections: [
+      {
+        title: 'SMI Sutures: LTE is the exclusive licensed distributor in Bahrain',
+        body:
+          'SMI Sutures exclusive licensed distributor Bahrain LTE -- Leading Trading Est holds the exclusive Bahrain distribution licence for SMI AG surgical sutures. Operating theatres, surgical centres, government hospital procurement desks, and MOH-registered facilities purchase SMI sutures through LTE as the sole licensed channel. No secondary channels, no grey-market product.',
+      },
+      {
+        title: 'Full SMI suture range available through LTE',
+        body:
+          'LTE stocks and supplies the complete SMI suture portfolio: absorbable sutures (polyglycolic acid, chromic catgut, fast-absorbing plain gut), non-absorbable sutures (polypropylene, nylon, silk, polyester), dental sutures, ophthalmic sutures, and specialty wound-closure configurations. Full gauge and needle selection, including conventional cutting, reverse cutting, taper cut, and atraumatic needle profiles.',
+      },
+      {
+        title: 'SMI suture documentation through LTE',
+        body:
+          'All SMI sutures supplied through Leading Trading Est come with sterility certification, shelf-life documentation, ISO 13485 compliance records, and NHRA Bahrain import clearance. Procurement departments requiring CE mark documentation or product technical files can request these through the LTE quotation workflow.',
+      },
+      {
+        title: 'Specification-led SMI quotation handling',
+        body:
+          'Send SMI suture requirements by material type, USP size, needle profile, needle curvature, suture length, pack configuration, and intended clinical use. LTE reviews specification fit and confirms the correct SMI catalogue reference before quotation, reducing error in tender and order documentation.',
+      },
+    ],
+    faqs: [
+      {
+        question: 'Who is the exclusive SMI Sutures distributor in Bahrain?',
+        answer:
+          'Leading Trading Est (LTE) holds the exclusive licensed distribution rights for SMI Sutures in Bahrain. All institutional SMI suture procurement in Bahrain should be directed to LTE.',
+      },
+      {
+        question: 'What SMI suture types does LTE distribute?',
+        answer:
+          'LTE distributes the full SMI AG range: absorbable (PGA, chromic catgut, plain gut), non-absorbable (polypropylene, nylon, silk, polyester), dental sutures, ophthalmic sutures, and specialty configurations.',
+      },
+      {
+        question: 'Is SMI an NHRA-approved suture in Bahrain?',
+        answer:
+          'Yes. SMI sutures supplied through LTE carry NHRA Bahrain import clearance, ISO 13485 documentation, and CE mark records available on request.',
+      },
+      {
+        question: 'How do I request an SMI Sutures quotation from LTE?',
+        answer:
+          'Submit the suture material, USP size, needle profile, suture length, pack size, and quantity. LTE will confirm the SMI catalogue reference and prepare a quotation with full documentation.',
+      },
+    ],
+    catalogPicksTitle: 'SMI suture categories via LTE',
+    catalogPicks: [
+      { name: 'Absorbable Sutures', category: 'SMI surgical sutures', useCase: 'PGA, chromic catgut, and fast-absorbing sutures for internal and surface wound closure.', query: 'absorbable sutures smi' },
+      { name: 'Non-Absorbable Sutures', category: 'SMI surgical sutures', useCase: 'Polypropylene, nylon, silk, and polyester permanent sutures for surgical procedures.', query: 'non-absorbable sutures smi' },
+      { name: 'Dental & Ophthalmic Sutures', category: 'SMI specialty sutures', useCase: 'Specialty suture configurations for dental and ophthalmic clinical applications.', query: 'dental ophthalmic sutures smi' },
+    ],
+  },
+  {
+    slug: 'romsons-medical-devices-bahrain',
+    title: 'Romsons Medical Devices Bulk Sourcing Bahrain -- LTE',
+    shortTitle: 'Romsons devices Bahrain',
+    description:
+      'Romsons medical devices bulk sourcing LTE. Leading Trading Est is the Bahrain sole-agent for Romsons, supplying catheters, urine bags, feeding tubes, blood transfusion sets, oxygen therapy, and IV therapy products to hospitals and clinics in bulk wholesale volumes.',
+    keywords:
+      'Romsons Bahrain, Romsons medical devices bulk sourcing LTE, Romsons sole agent Bahrain, Romsons distributor Bahrain, Leading Trading Est Romsons, Romsons catheter Bahrain, Romsons urine bags Bahrain, Romsons hospital supplies, Romsons IV sets Bahrain',
+    categoryPath: '/categories/consumables-disposables',
+    categoryLabel: 'Consumables & Disposables',
+    shopQuery: 'romsons',
+    buyerTerms: ['Romsons Bahrain sole agent', 'Romsons bulk sourcing LTE', 'Romsons catheters Bahrain', 'Romsons hospital devices LTE'],
+    sections: [
+      {
+        title: 'Romsons medical devices: LTE is the Bahrain sole-agent',
+        body:
+          'Romsons medical devices bulk sourcing in Bahrain is handled exclusively through Leading Trading Est (LTE) as the authorised sole-agent. Procurement officers sourcing Romsons products in Bahrain -- including catheters, urine bags, feeding tubes, blood transfusion sets, and IV therapy -- transact through LTE as the direct importer with NHRA-cleared stock held in Sitra.',
+      },
+      {
+        title: 'Full Romsons catalogue available for bulk order through LTE',
+        body:
+          'LTE maintains bulk inventory of core Romsons lines: urological catheters (Foley, straight, three-way), urine drainage bags, nasogastric and enteral feeding tubes, blood transfusion sets, burette sets for paediatric IV therapy, oxygen masks, nebuliser masks, adult care underpads, and neonatal care products. Bulk purchase orders, scheduled deliveries, and RFQ responses handled by the LTE team.',
+      },
+      {
+        title: 'NHRA-cleared Romsons supply with full traceability',
+        body:
+          'All Romsons devices supplied through Leading Trading Est carry NHRA Bahrain import clearance, manufacturer batch documentation, and product regulatory files available to procurement departments. Direct import status means LTE can provide verified product traceability without secondary-market supply chain risk.',
+      },
+      {
+        title: 'Bulk pricing for Romsons hospital procurement in Bahrain',
+        body:
+          'LTE supports Romsons hospital procurement with bulk pricing tiers, standing order agreements, and delivery coordination for high-volume Bahrain facilities. No minimum order delays on stocked Romsons lines. Tender pricing, framework agreements, and procurement schedule support available from the LTE accounts team.',
+      },
+    ],
+    faqs: [
+      {
+        question: 'Who is the Romsons sole agent in Bahrain?',
+        answer:
+          'Leading Trading Est (LTE) is the authorised Bahrain sole-agent for Romsons medical devices. All Romsons procurement in Bahrain is directed through LTE.',
+      },
+      {
+        question: 'What Romsons products does LTE stock in Bahrain?',
+        answer:
+          'LTE stocks Romsons catheters, urine bags, feeding tubes, blood transfusion sets, burette sets, oxygen masks, underpads, neonatal care products, and IV therapy lines for bulk hospital supply.',
+      },
+      {
+        question: 'Can hospitals buy Romsons in bulk from LTE?',
+        answer:
+          'Yes. LTE supports Romsons bulk sourcing with wholesale pricing, standing orders, scheduled delivery, and tender framework support for Bahrain hospital procurement.',
+      },
+      {
+        question: 'Are Romsons products from LTE NHRA approved?',
+        answer:
+          'Yes. All Romsons products supplied through Leading Trading Est hold NHRA Bahrain import clearance and full manufacturer batch documentation.',
+      },
+    ],
+    catalogPicksTitle: 'Romsons product categories via LTE',
+    catalogPicks: [
+      { name: 'Romsons Catheters & Urine Bags', category: 'Urology', useCase: 'Foley, straight, and three-way catheters with drainage bags in bulk hospital volumes.', query: 'romsons catheter' },
+      { name: 'Romsons IV & Transfusion Sets', category: 'IV therapy', useCase: 'Blood transfusion sets, burette sets, and IV therapy accessories for hospital use.', query: 'romsons iv sets' },
+      { name: 'Romsons Respiratory & Care', category: 'Patient care', useCase: 'Oxygen masks, nebulisers, underpads, and neonatal care products from Romsons.', query: 'romsons oxygen care' },
     ],
   },
   {

@@ -2554,6 +2554,19 @@
   gap: 16px;
 }
 
+.home-hero__brand-lockup {
+  display: inline-flex;
+  width: fit-content;
+  text-decoration: none;
+}
+
+.home-hero__brand-logo {
+  display: block;
+  width: 220px;
+  height: 84px;
+  object-fit: contain;
+}
+
 .home-hero__editorial .home-hero__copy::before {
   content: none;
 }
@@ -2951,6 +2964,16 @@
     border-bottom: 0;
   }
 
+  .home-hero__portfolio {
+    grid-template-columns: 1fr;
+    max-width: 100%;
+  }
+
+  .home-hero__brand-logo {
+    width: 184px;
+    height: 70px;
+  }
+
   .home-hero__procurement-card {
     width: 100%;
     justify-self: stretch;
@@ -3036,6 +3059,11 @@
   .home-hero__editorial .home-eyebrow::before {
     width: 22px;
     flex-basis: 22px;
+  }
+
+  .home-hero__brand-logo {
+    width: 168px;
+    height: 64px;
   }
 
   .home-hero__since {
@@ -3188,6 +3216,45 @@
 .home-hero__since-cert-l {
   font-size: 0.74rem;
   color: rgba(255, 255, 255, 0.42);
+}
+
+.home-hero__portfolio {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  max-width: 1040px;
+  margin-top: 8px;
+}
+
+.home-hero__portfolio-card {
+  display: grid;
+  gap: 6px;
+  min-height: 92px;
+  padding: 15px 16px;
+  border: 1px solid rgba(248, 243, 235, 0.12);
+  border-radius: 18px;
+  background: rgba(248, 243, 235, 0.06);
+  color: #f8f3eb;
+  text-decoration: none;
+  backdrop-filter: blur(10px);
+  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.home-hero__portfolio-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(96, 165, 250, 0.3);
+  background: rgba(37, 99, 235, 0.12);
+}
+
+.home-hero__portfolio-card strong {
+  font-size: 0.98rem;
+  line-height: 1.2;
+}
+
+.home-hero__portfolio-card span {
+  color: rgba(248, 243, 235, 0.72);
+  font-size: 0.79rem;
+  line-height: 1.5;
 }
 
 .home-hero__editorial .home-hero__copy h1 em {

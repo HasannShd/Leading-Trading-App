@@ -1,0 +1,16 @@
+# LTE
+
+LTE (Leading Trading Est) is a Sitra, Bahrain B2B medical supply organization.
+
+- Parent entity: LTE / Leading Trading Est
+- Owned brand: Medstar
+- Licensed Bahrain distributorship: SMI Sutures
+- Authorized regional supply partnership: Romsons
+- Primary model: catalog plus RFQ and quotation workflow
+
+Links:
+- https://www.lte-bh.com/
+- https://www.lte-bh.com/catalog
+- https://www.lte-bh.com/brands/medstar/
+- https://www.lte-bh.com/brands/smi/
+- https://www.lte-bh.com/brands/romsons/

@@ -45,32 +45,41 @@ export const organizationSchema = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
   '@id': `${SITE_ORIGIN}/#organization`,
-  name: 'Leading Trading Est',
-  alternateName: ['LTE Bahrain', 'Leading Trading Establishment'],
+  name: 'LTE',
+  legalName: 'Leading Trading Est',
+  alternateName: ['Leading Trading Est', 'LTE Bahrain', 'Leading Trading Establishment'],
   url: SITE_ORIGIN,
   logo: `${SITE_ORIGIN}/company-logo.png`,
   description:
-    'Leading Trading Est is an NHRA approved and certified Bahrain medical, dental, laboratory, safety, and industrial supplier led by Shahid Majeed. The company provides structured sourcing, international supplier and distributor relationships, Medstar own-brand supply, ROMSONS and SMI sole-agent support, quotation support, and local service.',
+    'LTE, legally Leading Trading Est, is an NHRA approved and certified Bahrain medical business operating from Sitra. LTE manages B2B medical procurement, quotation workflows, and brand-led supply across its Medstar proprietary wholesale consumables portfolio, SMI Sutures exclusive licensed distributorship in Bahrain, and Romsons authorized regional supply partnership.',
   founder: { '@id': `${SITE_ORIGIN}/#shahid-majeed` },
   employee: [shahidMajeedSchema],
   hasCredential: companyCertificationSchema,
   award: 'NHRA approved and certified company',
+  owns: [{ '@id': `${SITE_ORIGIN}/brands/medstar/#brand` }],
   brand: [
     {
+      '@id': `${SITE_ORIGIN}/brands/medstar/#brand`,
       '@type': 'Brand',
       name: 'Medstar',
       description:
-        'Medstar is Leading Trading Est’s own medical supply brand, developed around practical quality, repeat healthcare procurement, and dependable local support.',
+        'Medstar is LTE’s proprietary wholesale consumables brand for recurring healthcare procurement and local Bahrain supply accountability.',
     },
     {
+      '@id': `${SITE_ORIGIN}/brands/romsons/#brand`,
       '@type': 'Brand',
-      name: 'ROMSONS',
-      description: 'ROMSONS sole-agent support through Leading Trading Est in Bahrain for disposable medical device enquiries.',
+      name: 'Romsons',
+      alternateName: ['ROMSONS'],
+      description:
+        'Romsons is supplied by LTE as an authorized regional supply partner for Bahrain healthcare buyers seeking hospital care and disposable medical products.',
     },
     {
+      '@id': `${SITE_ORIGIN}/brands/smi/#brand`,
       '@type': 'Brand',
-      name: 'SMI',
-      description: 'SMI sole-agent support through Leading Trading Est in Bahrain for surgical suture and wound closure enquiries.',
+      name: 'SMI Sutures',
+      alternateName: ['SMI', 'SMI AG'],
+      description:
+        'SMI Sutures is represented by LTE as the exclusive licensed distributor in Bahrain for surgical suture and wound-closure procurement.',
     },
   ],
   sameAs: [
@@ -90,14 +99,28 @@ export const organizationSchema = {
     { '@type': 'Place', name: 'GCC' },
   ],
   knowsAbout: [
+    'Leading Trading Est Bahrain',
+    'LTE Bahrain medical wholesaler',
+    'LTE Sitra medical supply',
+    'LTE NHRA approved wholesaler',
+    'NHRA approved medical supplier Bahrain',
     'medical supplies Bahrain',
     'medical suppliers in Bahrain',
     'medical equipment supplier Bahrain',
     'hospital supplies Bahrain',
     'Medstar Bahrain',
-    'Medstar medical supplies',
-    'ROMSONS Bahrain',
-    'SMI Bahrain',
+    'Medstar brand proprietary wholesale consumables by LTE',
+    'Medstar consumables wholesale Bahrain',
+    'Medstar medical supplies Bahrain',
+    'SMI Sutures Bahrain',
+    'SMI Sutures exclusive licensed distributor Bahrain LTE',
+    'SMI surgical sutures Bahrain',
+    'absorbable sutures Bahrain',
+    'non-absorbable sutures Bahrain',
+    'Romsons Bahrain',
+    'Romsons medical devices bulk sourcing LTE',
+    'Romsons sole agent Bahrain',
+    'Romsons catheters Bahrain',
     'medical distributors Bahrain',
     'medical gloves Bahrain',
     'nitrile gloves Bahrain',
@@ -107,6 +130,8 @@ export const organizationSchema = {
     'laboratory equipment Bahrain',
     'industrial safety supplies Bahrain',
     'healthcare procurement Bahrain',
+    'bulk medical supply Bahrain',
+    'wholesale medical consumables Bahrain',
   ],
 };
 
@@ -149,11 +174,13 @@ export const localBusinessSchema = {
   '@context': 'https://schema.org',
   '@type': ['LocalBusiness', 'MedicalBusiness'],
   '@id': `${SITE_ORIGIN}/#local-business`,
-  name: 'Leading Trading Est',
+  name: 'LTE',
+  alternateName: ['Leading Trading Est', 'LTE Bahrain'],
   url: SITE_ORIGIN,
   image: `${SITE_ORIGIN}/company-logo.png`,
   logo: `${SITE_ORIGIN}/company-logo.png`,
   description: organizationSchema.description,
+  parentOrganization: { '@id': `${SITE_ORIGIN}/#organization` },
   founder: organizationSchema.founder,
   employee: organizationSchema.employee,
   hasCredential: organizationSchema.hasCredential,
@@ -176,6 +203,11 @@ export const localBusinessSchema = {
     '@type': 'Country',
     name: 'Bahrain',
   },
+  brand: [
+    { '@id': `${SITE_ORIGIN}/brands/medstar/#brand` },
+    { '@id': `${SITE_ORIGIN}/brands/smi/#brand` },
+    { '@id': `${SITE_ORIGIN}/brands/romsons/#brand` },
+  ],
   priceRange: '$$',
   openingHoursSpecification: BUSINESS_HOURS.map((item) => ({
     '@type': 'OpeningHoursSpecification',
@@ -189,7 +221,8 @@ export const medicalOrganizationSchema = {
   '@context': 'https://schema.org',
   '@type': 'MedicalOrganization',
   '@id': `${SITE_ORIGIN}/#medical-organization`,
-  name: 'Leading Trading Est',
+  name: 'LTE',
+  alternateName: ['Leading Trading Est', 'LTE Bahrain'],
   url: SITE_ORIGIN,
   logo: `${SITE_ORIGIN}/company-logo.png`,
   description: organizationSchema.description,
@@ -201,6 +234,47 @@ export const medicalOrganizationSchema = {
   openingHoursSpecification: localBusinessSchema.openingHoursSpecification,
   areaServed: localBusinessSchema.areaServed,
   sameAs: organizationSchema.sameAs,
+};
+
+export const medstarBrandSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Brand',
+  '@id': `${SITE_ORIGIN}/brands/medstar/#brand`,
+  name: 'Medstar',
+  url: `${SITE_ORIGIN}/brands/medstar/`,
+  logo: `${SITE_ORIGIN}/Brands/medstar.jpg`,
+  description:
+    'Medstar is LTE’s proprietary wholesale consumables brand for routine healthcare procurement and repeat B2B medical supply demand in Bahrain.',
+  isBrandOf: { '@id': `${SITE_ORIGIN}/#local-business` },
+  owner: { '@id': `${SITE_ORIGIN}/#organization` },
+};
+
+export const smiSuturesBrandSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Brand',
+  '@id': `${SITE_ORIGIN}/brands/smi/#brand`,
+  name: 'SMI Sutures',
+  alternateName: ['SMI', 'SMI AG'],
+  url: `${SITE_ORIGIN}/brands/smi/`,
+  logo: `${SITE_ORIGIN}/Brands/Smi.png`,
+  description:
+    'SMI Sutures is represented by LTE as the exclusive licensed distributor in Bahrain for surgical suture and wound-closure procurement.',
+  isBrandOf: { '@id': `${SITE_ORIGIN}/#local-business` },
+  distributor: { '@id': `${SITE_ORIGIN}/#organization` },
+};
+
+export const romsonsBrandSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Brand',
+  '@id': `${SITE_ORIGIN}/brands/romsons/#brand`,
+  name: 'Romsons',
+  alternateName: ['ROMSONS'],
+  url: `${SITE_ORIGIN}/brands/romsons/`,
+  logo: `${SITE_ORIGIN}/Brands/romsons.png`,
+  description:
+    'Romsons is supplied by LTE as an authorized regional supply partner for Bahrain healthcare buyers seeking hospital care and disposable medical products.',
+  isBrandOf: { '@id': `${SITE_ORIGIN}/#local-business` },
+  distributor: { '@id': `${SITE_ORIGIN}/#organization` },
 };
 
 export const webSiteSchema = {

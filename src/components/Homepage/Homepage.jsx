@@ -3,7 +3,17 @@ import { Link } from 'react-router-dom';
 import Seo from '../Common/Seo';
 import { normalizeImageSrc } from '../../utils/normalizeImageSrc';
 import { buildProductPath } from '../../utils/productUrls';
-import { buildFaqSchema, businessApplicationSchema, localBusinessSchema, organizationSchema, webSiteSchema } from '../../utils/seoSchemas';
+import {
+  buildFaqSchema,
+  businessApplicationSchema,
+  localBusinessSchema,
+  medicalOrganizationSchema,
+  medstarBrandSchema,
+  organizationSchema,
+  romsonsBrandSchema,
+  smiSuturesBrandSchema,
+  webSiteSchema,
+} from '../../utils/seoSchemas';
 import { useLanguage } from '../../context/LanguageContext';
 import { useHomepageScroll } from './useHomepageScroll';
 import './Homepage.css';
@@ -217,14 +227,18 @@ const HomePage = () => {
     <main className="cinematic-home" ref={rootRef}>
       <Seo
         title="Leading Trading Est | Bahrain Medical & Industrial Supplies"
-        description="Leading Trading Est is an NHRA approved and certified Bahrain supplier for medical, dental, laboratory, PPE, safety, and industrial supply enquiries, quotation support, and procurement coordination."
+        description="LTE, legally Leading Trading Est, is a Bahrain medical business in Sitra handling B2B procurement, Medstar wholesale consumables, SMI Sutures exclusive Bahrain distributorship, and Romsons authorized regional supply support."
         canonicalPath="/"
-        keywords="Leading Trading Est, Leading Trading Est Bahrain, medical suppliers in Bahrain, Bahrain medical supplier, Leading Trading Est owner, Shahid Majeed, LTE Bahrain, Medstar Bahrain, Medstar medical supplies, ROMSONS Bahrain, SMI Bahrain, medical distributors Bahrain, medical supplies Bahrain, dental supplies Bahrain, laboratory equipment Bahrain, industrial supplies Bahrain, safety supplies Bahrain, hospital supplies Bahrain, Bahrain procurement"
+        keywords="LTE, Leading Trading Est, Leading Trading Est Bahrain, LTE Bahrain medical business, medical suppliers in Bahrain, Bahrain medical supplier, Leading Trading Est owner, Shahid Majeed, Medstar Bahrain, Medstar medical supplies, SMI Sutures Bahrain, ROMSONS Bahrain, medical distributors Bahrain, medical supplies Bahrain, dental supplies Bahrain, laboratory equipment Bahrain, industrial supplies Bahrain, safety supplies Bahrain, hospital supplies Bahrain, Bahrain procurement"
         structuredData={[
           organizationSchema,
           localBusinessSchema,
+          medicalOrganizationSchema,
           businessApplicationSchema,
           webSiteSchema,
+          medstarBrandSchema,
+          smiSuturesBrandSchema,
+          romsonsBrandSchema,
           buildFaqSchema([
             {
               question: 'What is the purpose of the Leading Trading Est website and app?',
@@ -255,6 +269,18 @@ const HomePage = () => {
         <div className="home-shell home-hero__layout">
           <div className="home-hero__editorial">
             <div className="home-hero__copy animate-stagger" data-stagger-step="120ms">
+              <Link className="home-hero__brand-lockup animate-on-scroll" to="/" aria-label="LTE homepage">
+                <img
+                  className="home-hero__brand-logo"
+                  src={`${baseUrl}company-logo.png`}
+                  width="220"
+                  height="84"
+                  alt="LTE Leading Trading Est"
+                  loading="eager"
+                  fetchPriority="high"
+                  decoding="async"
+                />
+              </Link>
               <span className="home-eyebrow animate-on-scroll">{t('Leading Trading Est. | Bahrain')}</span>
               <h1 className="animate-on-scroll">Medical, Dental &amp; Industrial Supply.</h1>
               <p className="home-hero__lead animate-on-scroll">
@@ -286,6 +312,20 @@ const HomePage = () => {
                   </span>
                   <span className="home-hero__since-cert-l">{t('National Health Regulatory Authority — Bahrain')}</span>
                 </div>
+              </div>
+              <div className="home-hero__portfolio animate-on-scroll">
+                <Link className="home-hero__portfolio-card" to="/brands/medstar">
+                  <strong>Medstar</strong>
+                  <span>{t('LTE proprietary wholesale consumables')}</span>
+                </Link>
+                <Link className="home-hero__portfolio-card" to="/brands/smi">
+                  <strong>SMI Sutures</strong>
+                  <span>{t('Exclusive licensed distributor in Bahrain')}</span>
+                </Link>
+                <Link className="home-hero__portfolio-card" to="/brands/romsons">
+                  <strong>Romsons</strong>
+                  <span>{t('Authorized regional supply partner')}</span>
+                </Link>
               </div>
             </div>
           </div>
