@@ -90,7 +90,7 @@ const Footer = () => {
 
         {/* ── Bottom bar ── */}
         <div className="footer-bottom">
-          <span>© {new Date().getFullYear()} {t('Leading Trading Est')}. {t('All rights reserved.')}</span>
+          <span>© {new Date().getFullYear()} {t('Leading Trading Est')}. {t('All rights reserved.')} · <a href="https://www.webiqq.com" target="_blank" rel="noopener noreferrer" style={{color:'inherit',opacity:0.6}}>Built by Webiqq</a></span>
           <div className="footer-bottom-right">
             <a href="/privacy">{t('Privacy Policy')}</a>
             <div className="footer-socials">
