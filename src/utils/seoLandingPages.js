@@ -1638,6 +1638,155 @@ export const seoLandingPages = [
       },
     ],
   },
+
+  // ── Programmatic brand + product landing pages ──────────────────────────
+
+  {
+    slug: 'medstar-nitrile-gloves-bahrain',
+    title: 'Medstar Nitrile Gloves Wholesale Bahrain -- LTE',
+    shortTitle: 'Medstar nitrile gloves',
+    description: 'Wholesale Medstar nitrile examination gloves in Bahrain through Leading Trading Est. Powder-free, latex-free, sizes S/M/L/XL, boxes of 100. Bulk procurement with NHRA-compliant documentation.',
+    keywords: 'Medstar nitrile gloves Bahrain, nitrile gloves wholesale Bahrain, examination gloves Bahrain, PPE gloves Bahrain, nitrile gloves bulk Bahrain',
+    categoryPath: '/categories/consumables-disposables',
+    categoryLabel: 'Consumables & Disposables',
+    shopQuery: 'nitrile gloves',
+    buyerTerms: ['Medstar nitrile gloves Bahrain', 'nitrile gloves wholesale Bahrain', 'PPE gloves bulk Bahrain'],
+    sections: [
+      { title: 'Medstar nitrile gloves -- LTE own brand wholesale supply', body: 'Medstar nitrile examination gloves are sourced and distributed exclusively through Leading Trading Est. Powder-free, latex-free formulation in sizes S, M, L, and XL in boxes of 100. Available for bulk procurement by hospitals, clinics, laboratories, and industrial buyers across Bahrain.' },
+      { title: 'NHRA-compliant batch documentation on every order', body: 'Every Medstar glove order through LTE includes import clearance records, manufacturer batch documentation, and shelf-life traceability to satisfy MOH vendor registration and procurement audit requirements.' },
+    ],
+    faqs: [
+      { question: 'Who supplies Medstar nitrile gloves in Bahrain?', answer: 'Leading Trading Est (LTE) is the exclusive Bahrain source for Medstar nitrile examination gloves. Contact LTE for pricing, availability, and bulk order quotations.' },
+      { question: 'What sizes are Medstar nitrile gloves available in?', answer: 'Medstar nitrile gloves are available in S, M, L, and XL, packed 100 gloves per box. Minimum order quantities and case pricing are confirmed through the LTE quotation process.' },
+    ],
+    catalogPicks: [{ name: 'Examination Glove', query: 'gloves' }, { name: 'Vinyl Gloves', query: 'gloves' }, { name: 'Nitrile Gloves', query: 'gloves' }],
+  },
+
+  {
+    slug: 'smi-absorbable-sutures-bahrain',
+    title: 'SMI Absorbable Sutures Wholesale Bahrain -- LTE Exclusive Distributor',
+    shortTitle: 'SMI absorbable sutures',
+    description: 'Wholesale SMI absorbable surgical sutures in Bahrain through LTE -- exclusive licensed distributor. PGA, chromic catgut, poliglecaprone. ISO 13485 certified. NHRA-cleared on every shipment.',
+    keywords: 'SMI absorbable sutures Bahrain, PGA sutures Bahrain, chromic catgut Bahrain, absorbable surgical sutures Bahrain, SMI sutures distributor Bahrain',
+    categoryPath: '/categories/sutures',
+    categoryLabel: 'Sutures',
+    shopQuery: 'sutures absorbable',
+    buyerTerms: ['SMI absorbable sutures Bahrain', 'PGA sutures Bahrain', 'absorbable sutures wholesale Bahrain'],
+    sections: [
+      { title: 'SMI absorbable suture portfolio through LTE', body: 'LTE distributes the full SMI AG absorbable suture range in Bahrain: PGA (polyglycolic acid), chromic catgut, and poliglecaprone in all needle types, gauges, and lengths. All orders carry ISO 13485 and NHRA import clearance.' },
+      { title: 'Bulk suture procurement for Bahrain hospitals and surgical centres', body: 'Procurement teams can source SMI absorbable sutures in bulk through LTE with tender quantities, batch records, and shelf-life documentation included. LTE is the only authorised Bahrain distributor for SMI AG sutures.' },
+    ],
+    faqs: [
+      { question: 'Who is the exclusive SMI sutures distributor in Bahrain?', answer: 'Leading Trading Est (LTE) holds the exclusive Bahrain distribution licence for SMI AG surgical sutures, including all absorbable, non-absorbable, and specialty lines.' },
+      { question: 'What SMI absorbable sutures does LTE supply?', answer: 'LTE supplies SMI PGA, chromic catgut, and poliglecaprone sutures in all gauges and needle configurations. Contact LTE with your specification and quantity for a quotation.' },
+    ],
+    catalogPicks: [{ name: 'PGA Sutures', query: 'sutures' }, { name: 'Chromic Catgut', query: 'sutures' }],
+  },
+
+  {
+    slug: 'rogin-dental-endodontic-files-bahrain',
+    title: 'Rogin Dental Endodontic Files Bahrain -- LTE Exclusive Distributor',
+    shortTitle: 'Rogin Dental files Bahrain',
+    description: 'Rogin Dental endodontic files in Bahrain through LTE -- exclusive licensed distributor. K-files, H-files, reamers, rotary systems, Recip-One, Sup-Taper. All ISO sizes. Clinic and bulk procurement.',
+    keywords: 'Rogin Dental endodontic files Bahrain, Rogin Dental K-files Bahrain, endodontic files Bahrain, rotary files Bahrain, dental files distributor Bahrain',
+    categoryPath: '/categories/dental',
+    categoryLabel: 'Dental',
+    shopQuery: 'endodontic files',
+    buyerTerms: ['Rogin Dental files Bahrain', 'endodontic files Bahrain', 'K-files Bahrain'],
+    sections: [
+      { title: 'Rogin Dental endodontic file systems -- exclusive LTE Bahrain', body: 'LTE is the exclusive Bahrain distributor for Rogin Dental endodontic instruments. The portfolio includes K-files, H-files, reamers, Recip-One, Sup-Taper, Super Flexi, retreatment files, and INO-Shaper rotary systems in all ISO sizes and working lengths.' },
+      { title: 'Dental clinic procurement for Rogin files in Bahrain', body: 'Bahrain dental clinics source Rogin Dental files through LTE with product reference, ISO size, working length, and taper confirmed before order. Bulk pack pricing and regular procurement schedules available through the LTE quotation workflow.' },
+    ],
+    faqs: [
+      { question: 'Who distributes Rogin Dental products in Bahrain?', answer: 'Leading Trading Est (LTE) is the exclusive licensed distributor for Rogin Dental in Bahrain. All endodontic files, rotary systems, burs, and dental consumables are sourced through LTE.' },
+      { question: 'What Rogin Dental file systems does LTE carry?', answer: 'LTE carries the Rogin Dental K-file, H-file, reamer, Recip-One, Sup-Taper, Super Flexi, and INO-Shaper rotary systems in all ISO sizes. Contact LTE with your specification for availability and pricing.' },
+    ],
+    catalogPicks: [{ name: 'Endodontic Files', query: 'endodontic' }],
+  },
+
+  {
+    slug: 'zogear-dental-consumables-bahrain',
+    title: 'Zogear Dental Consumables Bahrain -- LTE Exclusive Distributor',
+    shortTitle: 'Zogear dental Bahrain',
+    description: 'Zogear dental consumables in Bahrain through LTE -- exclusive distributor. Dental disposables, endodontic systems, orthodontic accessories, dental materials, rotary instruments, lab supplies.',
+    keywords: 'Zogear dental Bahrain, Zogear consumables Bahrain, dental disposables Bahrain, orthodontic supplies Bahrain, dental materials Bahrain, dental rotary Bahrain',
+    categoryPath: '/categories/dental',
+    categoryLabel: 'Dental',
+    shopQuery: 'dental consumables',
+    buyerTerms: ['Zogear dental Bahrain', 'Zogear consumables distributor Bahrain', 'dental disposables wholesale Bahrain'],
+    sections: [
+      { title: 'Zogear dental product range through LTE Bahrain', body: 'LTE distributes Zogear dental consumables exclusively across Bahrain. The portfolio covers dental disposables, endodontic systems, orthodontic accessories, dental materials, rotary instruments, dental laboratory supplies, equipment, oral care, and teeth model product lines.' },
+      { title: 'Procurement support for Zogear dental products in Bahrain', body: 'Dental clinics and specialists source Zogear products through LTE with quotation support, availability confirmation, and batch documentation. Contact LTE with your product reference, category, and quantity to begin the procurement process.' },
+    ],
+    faqs: [
+      { question: 'Who is the Zogear exclusive distributor in Bahrain?', answer: 'Leading Trading Est (LTE) is the exclusive distributor for Zogear dental consumables in Bahrain, covering the full Zogear product portfolio for dental clinics and specialists.' },
+      { question: 'What Zogear dental products can LTE supply?', answer: 'LTE supports Zogear dental disposables, endodontic systems, orthodontic accessories, dental materials, rotary instruments, laboratory supplies, and equipment for Bahrain dental buyers.' },
+    ],
+    catalogPicks: [{ name: 'Dental Consumables', query: 'dental' }],
+  },
+
+  {
+    slug: 'romsons-catheters-bahrain',
+    title: 'Romsons Catheters Wholesale Bahrain -- LTE Sole Agent',
+    shortTitle: 'Romsons catheters Bahrain',
+    description: 'Wholesale Romsons catheters in Bahrain through LTE -- authorised sole agent. Foley catheters, urinary catheters, IV cannulas, feeding tubes. Bulk hospital procurement with full batch traceability.',
+    keywords: 'Romsons catheters Bahrain, Foley catheter Bahrain, urinary catheter wholesale Bahrain, Romsons sole agent Bahrain, catheters supplier Bahrain',
+    categoryPath: '/categories/medical-equipment',
+    categoryLabel: 'Medical Equipment',
+    shopQuery: 'catheter',
+    buyerTerms: ['Romsons catheters Bahrain', 'Foley catheter Bahrain', 'catheter wholesale Bahrain'],
+    sections: [
+      { title: 'Romsons catheter range through LTE Bahrain sole agent', body: 'LTE is the authorised Bahrain sole-agent for Romsons, supplying the complete catheter range: Foley catheters (2-way and 3-way), urinary catheters, nasogastric feeding tubes, IV cannulas, and urology drainage products. Bulk inventory maintained with direct import traceability and batch documentation.' },
+      { title: 'Hospital and clinical procurement for Romsons catheters', body: 'Bahrain hospitals, urology departments, and clinical buyers source Romsons catheters through LTE with standard MOH documentation, shelf-life records, and competitive tender pricing. Contact LTE for availability and bulk quotations.' },
+    ],
+    faqs: [
+      { question: 'Who is the Romsons sole agent in Bahrain?', answer: 'Leading Trading Est (LTE) is the authorised Bahrain sole-agent for Romsons. All Romsons catheters, IV sets, urine bags, and medical devices are sourced through LTE.' },
+      { question: 'What Romsons catheter products does LTE supply in Bahrain?', answer: 'LTE supplies Romsons Foley catheters, urinary catheters, nasogastric tubes, IV cannulas, and urology drainage accessories. Contact LTE with your size, material, and quantity for a quotation.' },
+    ],
+    catalogPicks: [{ name: 'Foley Catheter', query: 'catheter' }, { name: 'IV Cannula', query: 'cannula' }],
+  },
+
+  {
+    slug: 'nhra-approved-medical-gloves-bahrain',
+    title: 'NHRA Approved Medical Gloves Wholesale Bahrain -- LTE',
+    shortTitle: 'Medical gloves Bahrain',
+    description: 'NHRA-approved medical gloves wholesale in Bahrain through Leading Trading Est. Nitrile, vinyl, and latex examination gloves in bulk. Hospital, clinic, and laboratory procurement with full documentation.',
+    keywords: 'medical gloves Bahrain, NHRA approved gloves Bahrain, nitrile gloves wholesale Bahrain, vinyl gloves Bahrain, examination gloves Bahrain, PPE supplier Bahrain',
+    categoryPath: '/categories/consumables-disposables',
+    categoryLabel: 'Consumables & Disposables',
+    shopQuery: 'gloves',
+    buyerTerms: ['medical gloves Bahrain', 'NHRA approved gloves Bahrain', 'gloves wholesale Bahrain'],
+    sections: [
+      { title: 'Wholesale medical gloves for Bahrain healthcare buyers', body: 'Leading Trading Est supplies examination gloves to hospitals, clinics, laboratories, and corporate safety buyers across Bahrain. The range includes Medstar nitrile (powder-free, latex-free), vinyl, and standard examination gloves with full NHRA-compliant batch documentation on every shipment.' },
+      { title: 'Bulk glove procurement with documented supply chain', body: 'LTE procurement workflows cover quotation, availability check, and delivery planning for bulk glove orders. All products include import clearance records and manufacturer documentation to satisfy MOH-regulated purchasing requirements.' },
+    ],
+    faqs: [
+      { question: 'Where can hospitals buy wholesale medical gloves in Bahrain?', answer: 'Leading Trading Est (LTE) supplies wholesale medical gloves — nitrile, vinyl, and examination — to Bahrain hospitals, clinics, and laboratories with NHRA-compliant documentation. Contact LTE for pricing and availability.' },
+      { question: 'Are LTE medical gloves NHRA approved?', answer: 'All medical products supplied through LTE, including examination gloves, carry NHRA import clearance and manufacturer batch documentation as standard with every order.' },
+    ],
+    catalogPicks: [{ name: 'Examination Glove', query: 'gloves' }, { name: 'Vinyl Gloves', query: 'gloves' }],
+  },
+
+  {
+    slug: 'dental-supplies-wholesale-bahrain',
+    title: 'Dental Supplies Wholesale Bahrain -- LTE',
+    shortTitle: 'Dental supplies Bahrain',
+    description: 'Wholesale dental supplies in Bahrain through Leading Trading Est. Endodontic files, burs, sutures, consumables, materials, and equipment from Rogin Dental, Zogear, and SMI through one licensed wholesaler.',
+    keywords: 'dental supplies Bahrain, dental wholesale Bahrain, dental consumables Bahrain, endodontic supplies Bahrain, dental materials Bahrain, dental equipment supplier Bahrain',
+    categoryPath: '/categories/dental',
+    categoryLabel: 'Dental',
+    shopQuery: 'dental',
+    buyerTerms: ['dental supplies Bahrain', 'dental wholesale Bahrain', 'dental consumables wholesale Bahrain'],
+    sections: [
+      { title: 'Dental supply wholesale through LTE Bahrain', body: 'Leading Trading Est is the exclusive Bahrain distributor for Rogin Dental (endodontic files, rotary systems, burs) and Zogear (dental disposables, orthodontic, materials, rotary, lab equipment). Dental sutures from SMI AG are also available through LTE for oral and surgical use. All product lines under one licensed wholesale entity.' },
+      { title: 'Clinic procurement support for dental supplies in Bahrain', body: 'Bahrain dental clinics, specialists, and procurement teams source supplies through LTE with product confirmation, batch documentation, and delivery coordination. Submit product references, quantities, and specifications to begin the quotation process.' },
+    ],
+    faqs: [
+      { question: 'Who supplies wholesale dental products in Bahrain?', answer: 'Leading Trading Est (LTE) is the exclusive Bahrain distributor for Rogin Dental and Zogear dental consumables, and the exclusive distributor of SMI dental sutures, providing a full dental supply portfolio through one licensed wholesale entity.' },
+      { question: 'What dental brands does LTE distribute in Bahrain?', answer: 'LTE exclusively distributes Rogin Dental (endodontic, burs, obturation) and Zogear (dental disposables, orthodontic, materials, rotary, lab) in Bahrain, plus SMI dental sutures for oral surgery procurement.' },
+    ],
+    catalogPicks: [{ name: 'Dental Supplies', query: 'dental' }],
+  },
 ];
 
 export const seoLandingRoutes = seoLandingPages.map((page) => ({

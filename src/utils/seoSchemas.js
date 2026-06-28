@@ -395,3 +395,26 @@ export const buildFaqSchema = (questions = []) => {
     mainEntity,
   };
 };
+
+export const buildProductSchema = (product, baseUrl = SITE_ORIGIN) => {
+  if (!product) return null;
+  const image = product.image ? absoluteUrl(product.image.startsWith('/') ? product.image : `/${product.image}`) : undefined;
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: product.name,
+    description: product.description || `${product.name} — available for bulk procurement from Leading Trading Est, Bahrain.`,
+    ...(image ? { image } : {}),
+    ...(product.sku ? { sku: product.sku } : {}),
+    brand: { '@type': 'Brand', name: 'Leading Trading Est' },
+    offers: {
+      '@type': 'Offer',
+      priceCurrency: 'BHD',
+      price: '0',
+      priceSpecification: { '@type': 'PriceSpecification', description: 'Contact for wholesale pricing' },
+      availability: 'https://schema.org/InStock',
+      seller: { '@id': `${baseUrl}/#organization` },
+      areaServed: { '@type': 'Country', name: 'Bahrain' },
+    },
+  };
+};

@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState, startTransition, useRef } from 'react';
 import { useParams, useNavigate, Link, useLocation } from 'react-router-dom';
 import StatePanel from '../Common/StatePanel';
 import Seo from '../Common/Seo';
-import { buildBreadcrumbSchema, buildFaqSchema } from '../../utils/seoSchemas';
+import { buildBreadcrumbSchema, buildFaqSchema, buildProductSchema } from '../../utils/seoSchemas';
 import { buildSeoFaqs, buildSeoKeywords } from '../../utils/searchSeo';
 import { useLanguage } from '../../context/LanguageContext';
 import { normalizeImageSrc } from '../../utils/normalizeImageSrc';
@@ -341,6 +341,7 @@ const ProductDetails = () => {
           'Leading Trading Est'
         )}
         structuredData={[
+          buildProductSchema(product),
           buildBreadcrumbSchema([
             { name: 'Home', path: '/' },
             { name: 'Products', path: '/shop' },
@@ -460,7 +461,7 @@ const ProductDetails = () => {
                 <strong>{t('Request product availability and quotation')}</strong>
                 <a
                   className="btn"
-                  href="https://wa.me/97317210665"
+                  href={`https://wa.me/97339939582?text=${encodeURIComponent(`Hi LTE, I'd like a quote for: ${product.name}`)}`}
                   target="_blank"
                   rel="noreferrer"
                 >
